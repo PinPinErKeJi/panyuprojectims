@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IcLightDistriputionNumberDao">
+    <!-- IcLightDistriputionNumber的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IcLightDistriputionNumber_Map" type="com.panyu.panyuprojectims.entity.IcLightDistriputionNumber">
+        <id column="LIGHT_NUMBER_ID" property="lightNumberId" />
+        <result column="EASY_MACRO" property="easyMacro" />
+        <result column="BOOKRRU_NOT_INTEGRATED_ANTENNA" property="bookrruNotIntegratedAntenna" />
+        <result column="BOOKRRU_INTEGRATED_ANTENNA" property="bookrruIntegratedAntenna" />
+        <result column="HUB" property="hub" />
+        <result column="PRU_INTEGRATED_ANTENNA" property="pruIntegratedAntenna" />
+        <result column="PRU_NOT_INTEGRATED_ANTENNA" property="pruNotIntegratedAntenna" />
+        <result column="ACCESS_UNIT" property="accessUnit" />
+        <result column="EXTENSION_UNIT" property="extensionUnit" />
+        <result column="REMOTE_DEVICE_INDOOR" property="remoteDeviceIndoor" />
+        <result column="REMOTE_DEVICE_OUTDOOR" property="remoteDeviceOutdoor" />
+    </resultMap>
+
+    <!-- 数据库中表名为:IC_LIGHT_DISTRIPUTION_NUMBER的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="IC_LIGHT_DISTRIPUTION_NUMBER_Column">
+        IC_LIGHT_DISTRIPUTION_NUMBER.LIGHT_NUMBER_ID as LIGHT_NUMBER_ID
+        ,IC_LIGHT_DISTRIPUTION_NUMBER.EASY_MACRO as EASY_MACRO
+        ,IC_LIGHT_DISTRIPUTION_NUMBER.BOOKRRU_NOT_INTEGRATED_ANTENNA as BOOKRRU_NOT_INTEGRATED_ANTENNA
+        ,IC_LIGHT_DISTRIPUTION_NUMBER.BOOKRRU_INTEGRATED_ANTENNA as BOOKRRU_INTEGRATED_ANTENNA
+        ,IC_LIGHT_DISTRIPUTION_NUMBER.HUB as HUB
+        ,IC_LIGHT_DISTRIPUTION_NUMBER.PRU_INTEGRATED_ANTENNA as PRU_INTEGRATED_ANTENNA
+        ,IC_LIGHT_DISTRIPUTION_NUMBER.PRU_NOT_INTEGRATED_ANTENNA as PRU_NOT_INTEGRATED_ANTENNA
+        ,IC_LIGHT_DISTRIPUTION_NUMBER.ACCESS_UNIT as ACCESS_UNIT
+        ,IC_LIGHT_DISTRIPUTION_NUMBER.EXTENSION_UNIT as EXTENSION_UNIT
+        ,IC_LIGHT_DISTRIPUTION_NUMBER.REMOTE_DEVICE_INDOOR as REMOTE_DEVICE_INDOOR
+        ,IC_LIGHT_DISTRIPUTION_NUMBER.REMOTE_DEVICE_OUTDOOR as REMOTE_DEVICE_OUTDOOR
+    </sql>
+
+
+    <!--跟据信息id查询光分布设备对象-->
+    <select id="selectIcLightDistriputionNumberByIndoorInformationId" resultMap="result_IcLightDistriputionNumber_Map">
+        select ic.* from Indoor_Coverage_information in1 left join IC_light_distripution_number ic on
+        in1.light_number_id = ic.light_number_id  where in1.indoor_information_id =
+        #{indoorInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertIcLightDistriputionNumber">
+        insert into IC_light_distripution_number values(
+        #{lightNumberId,jdbcType=VARCHAR},
+        #{easyMacro,jdbcType=VARCHAR},
+        #{bookrruNotIntegratedAntenna,jdbcType=VARCHAR},
+        #{bookrruIntegratedAntenna,jdbcType=VARCHAR},
+        #{hub,jdbcType=VARCHAR},
+        #{pruIntegratedAntenna,jdbcType=VARCHAR},
+        #{pruNotIntegratedAntenna,jdbcType=VARCHAR},
+        #{accessUnit,jdbcType=VARCHAR},
+        #{extensionUnit,jdbcType=VARCHAR},
+        #{remoteDeviceIndoor,jdbcType=VARCHAR},
+        #{remoteDeviceOutdoor,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 通过IcLightDistriputionNumber的id将数据库表中对应的数据删除-->
+    <delete id="deleteIcLightDistriputionNumberById" parameterType="java.lang.String">
+        delete from IC_LIGHT_DISTRIPUTION_NUMBER
+        where LIGHT_NUMBER_ID = #{lightNumberId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

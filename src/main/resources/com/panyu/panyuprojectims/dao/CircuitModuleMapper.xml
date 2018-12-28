@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.CircuitModuleDao">
+    <!-- CircuitModule的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_CircuitModule_Map" type="com.panyu.panyuprojectims.entity.CircuitModule">
+        <id column="CIRCUIT_MODULE_ID" property="circuitModuleId" />
+        <result column="CIRCUIT_MODULE_NAME" property="circuitModuleName" />
+    </resultMap>
+
+
+    <!--查询所有模块信息-->
+    <select id="selectAllCircuitModule" resultMap="result_CircuitModule_Map">
+        select * from circuit_module
+    </select>
+
+    <!--根据名字插询总数，判断是否存在-->
+    <select id="getCountByCircuitModuleName" resultType="java.lang.Long">
+        select count(*) from circuit_module where circuit_module_name = #{circuitModuleName,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加模块-->
+    <insert id="insertCircuitModule">
+        insert into circuit_module values(
+        sys_guid(),
+        #{circuitModuleName,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据模块名字查询模块对象-->
+    <select id="selectCircuitModuleByCircuitModuleName" resultMap="result_CircuitModule_Map">
+        select * from circuit_module where circuit_module_name = #{circuitModuleName,jdbcType=VARCHAR}
+    </select>
+
+    <!--修改-->
+    <update id="updateCircuitModule">
+        update circuit_module set circuit_module_name =
+        #{circuitModuleName,jdbcType=VARCHAR} where circuit_module_id =
+        #{circuitModuleId,jdbcType=VARCHAR}
+    </update>
+
+    <!--删除-->
+    <delete id="deleteCircuitModule">
+        delete from circuit_module where circuit_module_id =#{circuitModuleId,jdbcType=VARCHAR}
+    </delete>
+
+
+
+
+
+</mapper>

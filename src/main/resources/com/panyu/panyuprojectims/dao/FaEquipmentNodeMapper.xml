@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaEquipmentNodeDao">
+    <!-- FaEquipmentNode的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaEquipmentNode_Map" type="com.panyu.panyuprojectims.entity.FaEquipmentNode">
+        <id column="EQUIPMENT_NODE_ID" property="equipmentNodeId" />
+        <result column="EQUIPMENT_NODE_NAME" property="equipmentNodeName" />
+        <result column="PARENT_ID" property="parentId" />
+    </resultMap>
+
+    <resultMap id="treeNode" type="com.panyu.panyuprojectims.entity.TreeNode">
+        <id column="EQUIPMENT_NODE_ID" property="id" />
+        <result column="EQUIPMENT_NODE_NAME" property="text" />
+        <collection property="children" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.TreeNode">
+            <id column="equipment_node_id_" property="id" />
+            <result column="equipment_node_name_" property="text" />
+        </collection>
+    </resultMap>
+
+    <!--根据TreeNodeID查询子级菜单所属父级的ID集合-->
+    <select id="getEquipmentTreeNode" resultType="String">
+        select fa.EQUIPMENT_NODE_ID equipment_node_id_
+        from Fa_equipment_node eq
+        left join Fa_equipment_node fa
+        on eq.EQUIPMENT_NODE_ID = fa.EQUIPMENT_NODE_ID
+        where eq.PARENT_ID = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据节点ID查询一级菜单模块名称-->
+    <select id="getFirstEquipmentSpecialityName" resultType="String">
+        select EQUIPMENT_NODE_NAME
+        from Fa_equipment_node
+        where EQUIPMENT_NODE_ID = #{equipmentNodeId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据节点ID查询二级菜单模块名称-->
+    <select id="getSecondEquipmentNodeName" resultType="String">
+        select EQUIPMENT_NODE_NAME
+        from Fa_equipment_node
+        where EQUIPMENT_NODE_ID = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 数据库中表名为:FA_EQUIPMENT_NODE的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="FA_EQUIPMENT_NODE_Column">
+        FA_EQUIPMENT_NODE.EQUIPMENT_NODE_ID as EQUIPMENT_NODE_ID
+        ,FA_EQUIPMENT_NODE.EQUIPMENT_NODE_NAME as EQUIPMENT_NODE_NAME
+        ,FA_EQUIPMENT_NODE.PARENT_ID as PARENT_ID
+    </sql>
+</mapper>

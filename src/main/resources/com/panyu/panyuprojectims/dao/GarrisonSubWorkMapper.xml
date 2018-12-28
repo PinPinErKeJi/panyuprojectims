@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.GarrisonSubWorkDao">
+    <!-- GarrisonSubWork的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_GarrisonSubWork_Map" type="com.panyu.panyuprojectims.entity.GarrisonSubWork">
+        <id column="GARRISON_SUB_WORK_ID" property="garrisonSubWorkId" />
+        <result column="GARRISON_SUB_WORK_NAME" property="garrisonSubWorkName" />
+        <result column="GARRISON_ID" property="garrisonId" />
+        <collection property="garrisonInspectionProjectList" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.GarrisonInspectionProject">
+            <result column="GARRISON_PROJECT_ID" property="garrisonProjectId" />
+            <result column="GARRISON_PROJECT_NAME" property="garrisonProjectName" />
+            <result column="GARRISON_SUB_WORK_ID" property="garrisonSubWorkId" />
+        </collection>
+    </resultMap>
+
+    <!-- 数据库中表名为:GARRISON_SUB_WORK的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="GARRISON_SUB_WORK_Column">
+        GARRISON_SUB_WORK.GARRISON_SUB_WORK_ID as GARRISON_SUB_WORK_ID
+        ,GARRISON_SUB_WORK.GARRISON_SUB_WORK_NAME as GARRISON_SUB_WORK_NAME
+        ,GARRISON_SUB_WORK.GARRISON_ID as GARRISON_ID
+    </sql>
+
+    <!--根据分项工程id和名字查询分项工程对象-->
+    <select id="getGarrisonSubWork" resultMap="result_GarrisonSubWork_Map">
+        select * from Garrison_sub_work where GARRISON_SUB_WORK_ID =
+        #{garrisonSubWorkId,jdbcType=VARCHAR} and GARRISON_SUB_WORK_NAME =
+        #{garrisonSubWorkName,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据模块id查询他包含的分项工程-->
+    <select id="selectAllGarrisonSubWorkByGarrisonId" resultMap="result_GarrisonSubWork_Map">
+        select * from Garrison_sub_work where garrison_id = #{garrisonId,jdbcType=VARCHAR}
+    </select>
+    <!--添加-->
+    <insert id="insertGarrisonSubWork">
+        insert into Garrison_sub_work values(
+        sys_guid(),
+        #{garrisonSubWorkName,jdbcType=VARCHAR},
+        #{garrisonId,jdbcType=VARCHAR})
+    </insert>
+    <!--添加前根据名字查询个数，判断这个名字是否存在-->
+    <select id="countByGarrisonSubWorkName" resultType="java.lang.Long">
+        select count(garrison_sub_work_name)
+        from Garrison_sub_work
+        where garrison_sub_work_name = #{garrisonSubWorkName,jdbcType=VARCHAR}
+        and GARRISON_ID = #{garrisonId,jdbcType=VARCHAR}
+    </select>
+    <!--根据分项工程的名字查询分项工程-->
+    <select id="selectGarrisonSubWorkByGarrisonSubWorkName" resultMap="result_GarrisonSubWork_Map">
+        select * from Garrison_sub_work
+        where garrison_sub_work_name = #{garrisonSubWorkName,jdbcType=VARCHAR}
+        and GARRISON_ID = #{garrisonId,jdbcType=VARCHAR}
+    </select>
+    <!--修改-->
+    <update id="updateGarrisonSubWork">
+        update Garrison_sub_work set garrison_sub_work_name = #{garrisonSubWorkName,jdbcType=VARCHAR}
+        where garrison_sub_work_id = #{garrisonSubWorkId,jdbcType=VARCHAR}
+    </update>
+    <!--删除-->
+    <delete id="deleteGarrisonSubWork">
+        delete from Garrison_sub_work where garrison_sub_work_id = #{garrisonSubWorkId,jdbcType=VARCHAR}
+    </delete>
+    <!--根据模块id查询包含的分项工程的id-->
+    <select id="selectAllGarrisonSubWorkIdByGarrisonId" resultType="java.lang.String">
+        select garrison_sub_work_id from Garrison_sub_work where garrison_id = #{garrisonId,jdbcType=VARCHAR}
+    </select>
+</mapper>

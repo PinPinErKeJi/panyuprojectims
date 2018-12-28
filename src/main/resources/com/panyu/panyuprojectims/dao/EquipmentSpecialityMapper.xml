@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.EquipmentSpecialityDao">
+    <!-- EquipmentSpeciality的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_EquipmentSpeciality_Map" type="com.panyu.panyuprojectims.entity.EquipmentSpeciality">
+        <id column="EQUIPMENT_SPECIALITY_ID" property="equipmentSpecialityId" />
+        <result column="EQUIPMENT_SPECIALITY_NAME" property="equipmentSpecialityName" />
+    </resultMap>
+
+    <!-- 数据库中表名为:EQUIPMENT_SPECIALITY的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="EQUIPMENT_SPECIALITY_Column">
+        EQUIPMENT_SPECIALITY.EQUIPMENT_SPECIALITY_ID as EQUIPMENT_SPECIALITY_ID
+        ,EQUIPMENT_SPECIALITY.EQUIPMENT_SPECIALITY_NAME as EQUIPMENT_SPECIALITY_NAME
+    </sql>
+
+    <!--根据名字插询个数-->
+    <select id="getCountByEquipmentSpecialityName" resultType="int">
+        select count(*) from Equipment_speciality where equipment_speciality_name = #{equipmentSpecialityName,jdbcType=VARCHAR}
+    </select>
+
+    <!--查询下拉框所有模块名称 -->
+    <select id="getEquipmentSpecialityRowCount" resultType="java.lang.Long">
+        select count(EQUIPMENT_SPECIALITY_ID) from EQUIPMENT_SPECIALITY
+    </select>
+    <select id="selectEquipmentSpeciality" resultMap="result_EquipmentSpeciality_Map">
+        select * from
+        (
+            select result.* from
+            (
+                select 
+                <include refid="EQUIPMENT_SPECIALITY_Column" /> 
+                from EQUIPMENT_SPECIALITY
+            ) result 
+        )
+    </select>
+
+    <!-- 通过EquipmentSpeciality的id获得对应数据库中表的数据对象-->
+    <select id="selectEquipmentSpecialityById" parameterType="java.lang.String" resultMap="result_EquipmentSpeciality_Map">
+        select 
+            <include refid="EQUIPMENT_SPECIALITY_Column" /> 
+        from EQUIPMENT_SPECIALITY
+        where EQUIPMENT_SPECIALITY.EQUIPMENT_SPECIALITY_ID = #{id}
+    </select> 
+
+    <!--添加模块数据之后根据名称查询返回对象-->
+    <select id="selectEquipmentSpecialityBySpecialityName" resultMap="result_EquipmentSpeciality_Map">
+        select
+        <include refid="EQUIPMENT_SPECIALITY_Column" />
+        from EQUIPMENT_SPECIALITY
+        where EQUIPMENT_SPECIALITY_NAME = #{equipmentSpecialityName,jdbcType=VARCHAR}
+    </select>
+    <!-- 导入设备专业模块信息数据时调用添加方法-->
+    <insert id="insertEquipmentSpeciality" parameterType="com.panyu.panyuprojectims.entity.EquipmentSpeciality">
+        insert into EQUIPMENT_SPECIALITY(EQUIPMENT_SPECIALITY_ID,EQUIPMENT_SPECIALITY_NAME)
+        values(sys_guid(),#{equipmentSpecialityName})
+    </insert>
+    <!--导入设备专业模块信息数据时调用查询方法根据模块名称查询模块ID-->
+    <select id="selectEquipmentSpecialityByName" resultType="String">
+          select EQUIPMENT_SPECIALITY_ID
+          from EQUIPMENT_SPECIALITY
+          where EQUIPMENT_SPECIALITY_NAME = #{equipmentSpecialityName,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 通过EquipmentSpeciality的id将数据库表中对应的数据删除-->
+    <delete id="deleteEquipmentSpecialityById" parameterType="java.lang.String">
+        delete from EQUIPMENT_SPECIALITY
+        where EQUIPMENT_SPECIALITY_ID = #{equipmentSpecialityId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--修改-->
+    <update id="updateEquipmentSpecialityById" parameterType="com.panyu.panyuprojectims.entity.EquipmentSpeciality">
+        update EQUIPMENT_SPECIALITY set
+        EQUIPMENT_SPECIALITY_NAME=#{equipmentSpecialityName,jdbcType=VARCHAR}
+        where EQUIPMENT_SPECIALITY_ID=#{equipmentSpecialityId,jdbcType=VARCHAR}
+    </update>
+
+    <!--根据设备模块名查询设备模块的id-->
+    <select id="selectEquipmentSpecialityId" resultType="String">
+        select EQUIPMENT_SPECIALITY_ID
+        from EQUIPMENT_SPECIALITY
+        where EQUIPMENT_SPECIALITY_NAME = #{equipmentSpecialityName,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

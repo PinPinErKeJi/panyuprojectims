@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IndoorCoveragePhotoDao">
+    <!-- IndoorCoveragePhoto的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IndoorCoveragePhoto_Map" type="com.panyu.panyuprojectims.entity.IndoorCoveragePhoto">
+        <id column="INDOOR_PHOTO_ID" property="indoorPhotoId" />
+        <result column="INDOOR_NAME" property="indoorName" />
+        <result column="PHOTO_UPLOAD_PEOPLE" property="photoUploadPeople" />
+        <result column="QUALIFIED" property="qualified" />
+        <result column="PROBLEM_DESCRIPTION" property="problemDescription" />
+        <result column="INDOOR_COVERAGE_ID" property="indoorCoverageId" />
+        <result column="INDOOR_SUB_WORK_ID" property="indoorSubWorkId" />
+        <result column="INDOOR_PROJECT_ID" property="indoorProjectId" />
+        <result column="INDOOR_INFORMATION_ID" property="indoorInformationId" />
+    </resultMap>
+
+    <!--根据模块ID和分项工程ID查询检查项目ID集合-->
+    <select id="selectIndoorProjectIdList" resultType="String">
+        select i2.indoor_project_id   from
+        Indoor_coverage_module i left join Indoor_coverage_sub_work i1 on
+        i.indoor_coverage_id = i1.indoor_coverage_id
+        left join Indoor_coverage_project i2 on
+        i1.indoor_sub_work_id = i2.indoor_sub_work_id
+        where i.indoor_coverage_id =
+        #{indoorCoverageId,jdbcType=VARCHAR} and i1.indoor_sub_work_id =
+        #{indoorSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加图片-->
+    <insert id="insertIndoorCoveragePhoto">
+        insert into Indoor_Coverage_Photo values(
+        sys_guid(),
+        #{indoorName},null,
+        #{qualified},
+        #{problemDescription},null,null,
+        #{indoorProjectId},
+        #{indoorInformationId})
+    </insert>
+
+    <!--根据检查项目id查询图片信息个数-->
+    <select id="getCountIndoorCoveragePhotoByIndoorProjectId" resultType="java.lang.Long">
+        select count(indoor_photo_id) from Indoor_Coverage_Photo
+        where indoor_project_id=
+        #{indoorProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据检查项目ID和导入信息id查询图片资源ID集合-->
+    <select id="selectIndoorPhotoIdList" resultType="String">
+        select indoor_photo_id from Indoor_Coverage_Photo
+        where indoor_project_id=
+        #{indoorProjectId,jdbcType=VARCHAR} and indoor_information_id =
+        #{indoorInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据图片资源ID和导入信息id查询图片对象-->
+    <select id="selectIndoorCoveragePhoto" resultMap="result_IndoorCoveragePhoto_Map">
+        select * from Indoor_Coverage_Photo
+        where indoor_photo_id= #{indoorPhotoId,jdbcType=VARCHAR} and indoor_project_id=
+        #{indoorProjectId,jdbcType=VARCHAR} and indoor_information_id =
+        #{indoorInformationId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

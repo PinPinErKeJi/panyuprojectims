@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.LlNewLineLengthDao">
+    <!-- LlNewLineLength的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_LlNewLineLength_Map" type="com.panyu.panyuprojectims.entity.LlNewLineLength">
+        <id column="NEW_LINE_LENGTH_ID" property="newLineLengthId" />
+        <result column="NEW_POLE_LINE" property="newPoleLine" />
+        <result column="NEW_PIPE" property="newPipe" />
+        <result column="DIRECT_BURIAL_OPTICAL_CABLE" property="directBurialOpticalCable" />
+        <result column="PUSH_PIPE" property="pushPipe" />
+    </resultMap>
+
+    <!-- 数据库中表名为:LL_NEW_LINE_LENGTH的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="LL_NEW_LINE_LENGTH_Column">
+        LL_NEW_LINE_LENGTH.NEW_LINE_LENGTH_ID as NEW_LINE_LENGTH_ID
+        ,LL_NEW_LINE_LENGTH.NEW_POLE_LINE as NEW_POLE_LINE
+        ,LL_NEW_LINE_LENGTH.NEW_PIPE as NEW_PIPE
+        ,LL_NEW_LINE_LENGTH.DIRECT_BURIAL_OPTICAL_CABLE as DIRECT_BURIAL_OPTICAL_CABLE
+        ,LL_NEW_LINE_LENGTH.PUSH_PIPE as PUSH_PIPE
+    </sql>
+
+    <!--根据信息id查询新建线路长度对象-->
+    <select id="selectLlNewLineLengthByCircuitInformationId" resultMap="result_LlNewLineLength_Map">
+        select ll.* from LL_circuit_information l left join LL_New_line_length ll
+        on l.new_line_length_id = ll.new_line_length_id
+        where l.circuit_information_id = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+
+
+    <!--根据新建线路长度ID删除选中项-->
+    <delete id="deleteLlNewLineLength">
+        delete from LL_NEW_LINE_LENGTH
+        where NEW_LINE_LENGTH_ID = #{newLineLengthId,jdbcType=VARCHAR}
+    </delete>
+    <!--添加-->
+    <insert id="insertLlNewLineLength">
+        insert into LL_NEW_LINE_LENGTH values (
+            #{newLineLengthId,jdbcType=VARCHAR},
+            #{newPoleLine,jdbcType=VARCHAR},
+            #{newPipe,jdbcType=VARCHAR},
+            #{directBurialOpticalCable,jdbcType=VARCHAR},
+            #{pushPipe,jdbcType=VARCHAR}
+        )
+    </insert>
+</mapper>

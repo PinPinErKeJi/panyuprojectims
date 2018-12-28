@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IcAntennaNumberDao">
+    <!-- IcAntennaNumber的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IcAntennaNumber_Map" type="com.panyu.panyuprojectims.entity.IcAntennaNumber">
+        <result column="ANTENNA_NUMBER_ID" property="antennaNumberId" />
+        <result column="INDOOR_ANTENNA" property="indoorAntenna" />
+        <result column="OUTDOOR_ANTENNA" property="outdoorAntenna" />
+        <result column="ELEVATOR_ANTENNA" property="elevatorAntenna" />
+        <result column="GPS_ANTENNA" property="gpsAntenna" />
+    </resultMap>
+
+    <!-- 数据库中表名为:IC_ANTENNA_NUMBER的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="IC_ANTENNA_NUMBER_Column">
+        IC_ANTENNA_NUMBER.ANTENNA_NUMBER_ID as ANTENNA_NUMBER_ID
+        ,IC_ANTENNA_NUMBER.INDOOR_ANTENNA as INDOOR_ANTENNA
+        ,IC_ANTENNA_NUMBER.OUTDOOR_ANTENNA as OUTDOOR_ANTENNA
+        ,IC_ANTENNA_NUMBER.ELEVATOR_ANTENNA as ELEVATOR_ANTENNA
+        ,IC_ANTENNA_NUMBER.GPS_ANTENNA as GPS_ANTENNA
+    </sql>
+
+    <!--根据信息id查询天线对象-->
+    <select id="selectIcAntennaNumberByIndoorInformationId" resultMap="result_IcAntennaNumber_Map">
+        select ic.* from Indoor_Coverage_information in1 left join IC_antenna_number ic on
+        in1.antenna_number_id = ic.antenna_number_id  where in1.indoor_information_id =
+        #{indoorInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 添加-->
+    <insert id="insertIcAntennaNumber" parameterType="com.panyu.panyuprojectims.entity.IcAntennaNumber">
+        insert into IC_ANTENNA_NUMBER
+        values(
+        #{antennaNumberId,jdbcType=VARCHAR},
+        #{indoorAntenna,jdbcType=VARCHAR},
+        #{outdoorAntenna,jdbcType=VARCHAR},
+        #{elevatorAntenna,jdbcType=VARCHAR},
+        #{gpsAntenna,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据天线数量ID删除选中项-->
+    <delete id="deleteAntennaNumberId">
+        delete from IC_ANTENNA_NUMBER
+        where ANTENNA_NUMBER_ID = #{antennaNumberId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

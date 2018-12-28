@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaBoardcardDilatationDao">
+    <!-- FaBoardcardDilatation的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaBoardcardDilatation_Map" type="com.panyu.panyuprojectims.entity.FaBoardcardDilatation">
+        <id column="BOARD_CARD_DILATATION_ID" property="boardCardDilatationId" />
+        <result column="BOARD_CARD_NUMBER" property="boardCardNumber" />
+        <result column="BOARD_CARD_NAME" property="boardCardName" />
+        <result column="VENEER_FUNCTION" property="veneerFunction" />
+        <result column="PLACE_EQUIPMENT" property="placeEquipment" />
+        <result column="BOARD_CARD_DESIGN_QUANTITY" property="boardCardDesignQuantity" />
+        <result column="BOARD_CARD_SUPPLIER" property="boardCardSupplier" />
+        <result column="BOARD_CARD_CONTACTS" property="boardCardContacts" />
+    </resultMap>
+
+    <!--添加-->
+    <insert id="insertFaBoardcardDilatation" parameterType="com.panyu.panyuprojectims.entity.FaBoardcardDilatation">
+        insert into FA_BOARDCARD_DILATATION
+        values(
+        #{boardCardDilatationId,jdbcType=VARCHAR},
+        #{boardCardNumber,jdbcType=VARCHAR},
+        #{boardCardName,jdbcType=VARCHAR},
+        #{veneerFunction,jdbcType=VARCHAR},
+        #{placeEquipment,jdbcType=VARCHAR},
+        #{boardCardDesignQuantity,jdbcType=VARCHAR},
+        #{boardCardSupplier,jdbcType=VARCHAR},
+        #{boardCardContacts,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 通过FaBoardcardDilatation的id将数据库表中对应的数据删除-->
+    <delete id="deleteFaBoardcardDilatationById" parameterType="java.lang.String">
+        delete from FA_BOARDCARD_DILATATION
+        where BOARD_CARD_DILATATION_ID = #{boardCardDilatationId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--根据设备信息的id查询FaBoardcardDilatation-->
+    <select id="getFaBoardcardDilatation" resultMap="result_FaBoardcardDilatation_Map">
+        select bd.* from FA_equipment_information ei left join FA_boardCard_dilatation bd on
+        ei.board_card_dilatation_id = bd.board_card_dilatation_id
+        where ei.equipment_information_id = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

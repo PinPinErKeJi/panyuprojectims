@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PsNewEquipmentDao">
+    <!-- PsNewEquipment的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PsNewEquipment_Map" type="com.panyu.panyuprojectims.entity.PsNewEquipment">
+        <id column="POWER_EQUIPMENT_ID" property="powerEquipmentId" />
+        <result column="POWER_EQUIPMENT_NUMBER" property="powerEquipmentNumber" />
+        <result column="POWER_EQUIPMENT_TYPE" property="powerEquipmentType" />
+        <result column="POWER_EQUIPMENT_MODEL" property="powerEquipmentModel" />
+        <result column="EQUIPMENT_DESIGN_START" property="equipmentDesignStart" />
+        <result column="POWER_EQUIPMENT_SIZE" property="powerEquipmentSize" />
+        <result column="POWER_EQUIPMENT_SUPPLIER" property="powerEquipmentSupplier" />
+        <result column="POWER_EQUIPMENT_LINKMAN" property="powerEquipmentLinkman" />
+    </resultMap>
+
+
+    <!--根据信息id查询新增设备对象-->
+    <select id="selectPsNewEquipmentByPowerInformationId" resultMap="result_PsNewEquipment_Map">
+        select ps.* from power_supply_information p
+        left join PS_new_equipment ps on
+        p.power_equipment_id = ps.power_equipment_id
+        where p.power_information_id = #{powerInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertPsNewEquipment">
+        insert into PS_new_equipment values(
+        #{powerEquipmentId,jdbcType=VARCHAR},
+        #{powerEquipmentNumber,jdbcType=VARCHAR},
+        #{powerEquipmentType,jdbcType=VARCHAR},
+        #{powerEquipmentModel,jdbcType=VARCHAR},
+        #{equipmentDesignStart,jdbcType=VARCHAR},
+        #{powerEquipmentSize,jdbcType=VARCHAR},
+        #{powerEquipmentSupplier,jdbcType=VARCHAR},
+        #{powerEquipmentLinkman,jdbcType=VARCHAR})
+    </insert>
+
+    <!--删除-->
+    <delete id="deletePsNewEquipment">
+        delete from PS_NEW_EQUIPMENT
+        where POWER_EQUIPMENT_ID = #{powerEquipmentId,jdbcType=VARCHAR}
+    </delete>
+
+
+
+</mapper>

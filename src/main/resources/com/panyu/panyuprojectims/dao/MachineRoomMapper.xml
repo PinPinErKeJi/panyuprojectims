@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.MachineRoomDao">
+    <!-- MachineRoom的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_MachineRoom_Map" type="com.panyu.panyuprojectims.entity.MachineRoom">
+        <id column="MACHINE_ROOM_ID" property="machineRoomId" />
+        <result column="MACHINE_ROOM_CONSTRUCTION_MODE" property="machineRoomConstructionMode" />
+        <result column="MACHINE_ROOM_TYPE_NAME" property="machineRoomTypeName" />
+        <result column="MACHINE_ROOM_CONSTRUCTION_NAME" property="machineRoomConstructionName" />
+        <result column="CIVIL_ENGINEERING_CONTACTS" property="civilEngineeringContacts" />
+        <result column="MACHINE_ROOM_DECORATE_NAME" property="machineRoomDecorateName" />
+        <result column="DECORATION_UNIT_CONTACTS" property="decorationUnitContacts" />
+    </resultMap>
+
+
+
+
+
+
+    <!--添加-->
+    <insert id="insertMachineRoom" parameterType="com.panyu.panyuprojectims.entity.MachineRoom">
+        insert into MACHINE_ROOM(MACHINE_ROOM_ID,MACHINE_ROOM_CONSTRUCTION_MODE,MACHINE_ROOM_TYPE_NAME,MACHINE_ROOM_CONSTRUCTION_NAME,CIVIL_ENGINEERING_CONTACTS,MACHINE_ROOM_DECORATE_NAME,DECORATION_UNIT_CONTACTS)
+        values(
+        #{machineRoomId,jdbcType=VARCHAR},
+        #{machineRoomConstructionMode,jdbcType=VARCHAR},
+        #{machineRoomTypeName,jdbcType=VARCHAR},
+        #{machineRoomConstructionName,jdbcType=VARCHAR},
+        #{civilEngineeringContacts,jdbcType=VARCHAR},
+        #{machineRoomDecorateName,jdbcType=VARCHAR},
+        #{decorationUnitContacts,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 通过MachineRoom的id将数据库表中对应的数据删除-->
+    <delete id="deleteMachineRoomById" parameterType="java.lang.String">
+        delete from MACHINE_ROOM
+        where MACHINE_ROOM_ID = #{machineRoomId,jdbcType=VARCHAR}
+    </delete>
+<!--删除结束-->
+
+<!--查询机房ID-->
+    <select id="selectBymachineRoomId" resultMap="result_MachineRoom_Map">
+        select
+        MACHINE_ROOM_ID
+        from MACHINE_ROOM
+    </select>
+<!--  根据机房ID查询建设方式、机房类型  -->
+    <select id="SelectByMachineRoomId" resultMap="result_MachineRoom_Map">
+                select machine_room_construction_mode,machine_room_type_name from
+                project_progress p left join machine_room M
+                on p.machine_room_id = m.machine_room_id
+                where project_progress_id = #{projectProgressId,jdbcType=VARCHAR}
+    </select>
+</mapper>

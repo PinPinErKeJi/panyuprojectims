@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/easyui/easyui.css">
+    <link rel="stylesheet" href="../static/css/icon.css">
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/jquery.easyui.min.js"></script>
+    <script src="../static/js/easyui-lang-zh_CN.js"></script>
+    <style>
+        .box{
+            width: 80%;
+            margin: 100px auto;
+            border:1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+
+</div>
+
+<script>
+    $(function () {
+        $('.box').pagination({
+            total:100,
+            pageSize:20,
+            pageNumber:2,
+            pageList:[10,20,50]
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaArrivalPowerCordDao">
+    <!-- FaArrivalPowerCord的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaArrivalPowerCord_Map" type="com.panyu.panyuprojectims.entity.FaArrivalPowerCord">
+        <id column="ARRIVAL_POWER_CORD_ID" property="arrivalPowerCordId" />
+        <result column="ARRIVAL_POWER_CORD_NUMBER" property="arrivalPowerCordNumber" />
+        <result column="ARRIVAL_CABLE_TYPE" property="arrivalCableType" />
+        <result column="ARRIVAL_SPECIFICATION_MODEL" property="arrivalSpecificationModel" />
+        <result column="ARRIVAL_DESIGN_LENGTH" property="arrivalDesignLength" />
+        <result column="ARRIVAL_LENGTH" property="arrivalLength" />
+        <result column="ARRIVAL_TIME" property="arrivalTime" />
+        <result column="POWER_CORD_VERIFYING_PHOTOS" property="powerCordVerifyingPhotos" />
+    </resultMap>
+
+
+    <!--到货信息表、电源表、网线、2M线表链表查询 到货图片-->
+    <select id="selectPowerCordVerifyingPhotos" resultType="java.lang.String">
+        select fa2.power_cord_verifying_photos from FA_arrival_statistics fa1 left join FA_arrival_power_cord fa2
+        on fa1.arrival_power_cord_id = fa2.arrival_power_cord_id
+        where fa1.arrival_statistics_id=#{arrivalStatisticsId}
+    </select>
+
+</mapper>

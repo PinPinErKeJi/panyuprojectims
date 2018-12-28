@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.LlCircuitNodeDao">
+    <!-- LlCircuitNode的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_LlCircuitNode_Map" type="com.panyu.panyuprojectims.entity.LlCircuitNode">
+        <id column="CIRCUIT_NODE_ID" property="circuitNodeId" />
+        <result column="CIRCUIT_NODE_NAME" property="circuitNodeName" />
+        <result column="PARENT_ID" property="parentId" />
+    </resultMap>
+    <resultMap id="treeNode" type="com.panyu.panyuprojectims.entity.LlCircuitNode">
+        <id column="CIRCUIT_NODE_ID" property="id" />
+        <result column="CIRCUIT_NODE_NAME" property="text" />
+        <collection property="children" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.LlCircuitNode">
+            <id column="CIRCUIT_NODE_ID_" property="id" />
+            <result column="CIRCUIT_NODE_NAME_" property="text" />
+        </collection>
+    </resultMap>
+
+    <!--根据treenode的id查询子级菜单的父级id-->
+    <select id="selectCircuitTreeNode" resultType="String">
+        select l1.circuit_node_id circuit_node_id_
+        from LL_circuit_node l1
+        left join LL_circuit_node l2
+        on l1.circuit_node_id = l2.circuit_node_id
+        where l1.PARENT_ID = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据节点id查询一级菜单对应的模块名-->
+    <select id="selectFirstCircuitName" resultType="String">
+        select circuit_node_name from LL_circuit_node where circuit_node_id = #{circuitNodeId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据节点id查询二级菜单对应的分型工程名-->
+    <select id="selectSecondSubWorkName" resultType="String">
+        select circuit_node_name from LL_circuit_node where circuit_node_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

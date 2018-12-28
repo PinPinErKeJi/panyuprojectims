@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.HnSecondSplitterNumberDao">
+    <!-- HnSecondSplitterNumber的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_HnSecondSplitterNumber_Map" type="com.panyu.panyuprojectims.entity.HnSecondSplitterNumber">
+        <id column="SECOND_SPLITTER_NUMBER_ID" property="secondSplitterNumberId" />
+        <result column="SECOND_ONE_TO_FOUR" property="secondOneToFour" />
+        <result column="SECOND_ONE_TO_EIGHT" property="secondOneToEight" />
+        <result column="SECOND_ONE_TO_SIXTEEN" property="secondOneToSixteen" />
+        <result column="ONE_TO_THIRTY_TWO" property="oneToThirtyTwo" />
+        <result column="ONE_TO_SIXTY_FOUR" property="oneToSixtyFour" />
+    </resultMap>
+
+
+
+    <!--根据二级分光器设计数量表ID字段删除数据-->
+    <delete id="deleteHnSecondSplitterNumberBySecondSplitterNumberId" parameterType="java.lang.String">
+        delete from HN_SECOND_SPLITTER_NUMBER
+        where SECOND_SPLITTER_NUMBER_ID = #{secondSplitterNumberId,jdbcType=VARCHAR}
+    </delete>
+
+
+    <!--添加-->
+    <insert id="insertHnSecondSplitterNumber">
+        insert into HN_Second_Splitter_Number values(
+        #{secondSplitterNumberId,jdbcType=VARCHAR},
+        #{secondOneToFour,jdbcType=VARCHAR},
+        #{secondOneToEight,jdbcType=VARCHAR},
+        #{secondOneToSixteen,jdbcType=VARCHAR},
+        #{oneToThirtyTwo,jdbcType=VARCHAR},
+        #{oneToSixtyFour,jdbcType=VARCHAR})
+    </insert>
+
+
+</mapper>

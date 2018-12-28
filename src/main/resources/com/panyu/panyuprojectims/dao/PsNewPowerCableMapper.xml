@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PsNewPowerCableDao">
+    <!-- PsNewPowerCable的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PsNewPowerCable_Map" type="com.panyu.panyuprojectims.entity.PsNewPowerCable">
+        <id column="NEW_POWER_CABLE_ID" property="newPowerCableId" />
+        <result column="NEW_POWER_CABLE_NUMBER" property="newPowerCableNumber" />
+        <result column="NEW_POWER_CABLE_MODEL" property="newPowerCableModel" />
+        <result column="NEW_POWER_CABLE_ROW" property="newPowerCableRow" />
+        <result column="POWER_SINGLE_LENGTH" property="powerSingleLength" />
+        <result column="POWER_TOTAL_LENGTH" property="powerTotalLength" />
+        <result column="BE_FROM" property="beFrom" />
+        <result column="BE_TO" property="beTo" />
+        <result column="CABLE_EQUIPMENT_SUPPLIER" property="cableEquipmentSupplier" />
+        <result column="CABLE_EQUIPMENT_LINKMAN" property="cableEquipmentLinkman" />
+    </resultMap>
+
+    <!--根据信息id查询对应的新增电力电缆对象-->
+    <select id="selectPsNewPowerCableByPowerInformationId" resultMap="result_PsNewPowerCable_Map">
+            select ps.* from power_supply_information p
+            left join PS_new_power_cable ps on
+            p.new_power_cable_id = ps.new_power_cable_id
+            where p.power_information_id = #{powerInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertPsNewPowerCable">
+        insert into PS_new_power_cable values(
+        #{newPowerCableId,jdbcType=VARCHAR},
+        #{newPowerCableNumber,jdbcType=VARCHAR},
+        #{newPowerCableModel,jdbcType=VARCHAR},
+        #{newPowerCableRow,jdbcType=VARCHAR},
+        #{powerSingleLength,jdbcType=VARCHAR},
+        #{powerTotalLength,jdbcType=VARCHAR},
+        #{beFrom,jdbcType=VARCHAR},
+        #{beTo,jdbcType=VARCHAR},
+        #{cableEquipmentSupplier,jdbcType=VARCHAR},
+        #{cableEquipmentLinkman,jdbcType=VARCHAR})
+    </insert>
+
+    <!--删除-->
+    <delete id="deletePsNewPowerCable">
+        delete from PS_NEW_POWER_CABLE
+        where NEW_POWER_CABLE_ID = #{newPowerCableId,jdbcType=VARCHAR}
+    </delete>
+
+
+</mapper>

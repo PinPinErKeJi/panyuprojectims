@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaArrivalStatisticsDao">
+    <!-- FaArrivalStatistics的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaArrivalStatistics_Map" type="com.panyu.panyuprojectims.entity.FaArrivalStatistics">
+        <id column="ARRIVAL_STATISTICS_ID" property="arrivalStatisticsId" />
+        <result column="OPERATOR" property="operator" />
+        <result column="BUILD_YEAR" property="buildYear" />
+        <result column="BUILDING_PROJECT" property="buildingProject" />
+        <result column="MOTOR_ROOM_NAME" property="motorRoomName" />
+        <result column="MOTOR_ROOM_LONGITUDE" property="motorRoomLongitude" />
+        <result column="MOTOR_ROOM_LATITUDE" property="motorRoomLatitude" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="COUNTY" property="county" />
+        <result column="ON_SITE_SUPERVISION" property="onSiteSupervision" />
+        <result column="PROJECT_LEADER" property="projectLeader" />
+        <result column="STATISTICS_NEW_EQUIPMENT_ID" property="statisticsNewEquipmentId" />
+        <result column="STATISTICS_VENEER_EXPANSION_ID" property="statisticsVeneerExpansionId" />
+        <result column="ARRIVAL_POWER_CORD_ID" property="arrivalPowerCordId" />
+        <result column="ARRIVAL_PIGTAIL_ID" property="arrivalPigtailId" />
+        <!--1.新增设备到货统计-->
+        <result column="STATISTICS_EQUIPMENT_NUMBER" property="statisticsEquipmentNumber" />
+        <result column="STATISTICS_EQUIPMENT_TYPE" property="statisticsEquipmentType" />
+        <result column="STATISTICS_EQUIPMENT_MODEL" property="statisticsEquipmentModel" />
+        <result column="EQUIPMENT_CABINET_SIZE" property="equipmentCabinetSize" />
+        <result column="EQUIPMENT_ARRIVAL_TIME" property="equipmentArrivalTime" />
+        <result column="EQUIPMENT_VERIFYING_PHOTOS" property="equipmentVerifyingPhotos" />
+        <!--2.单板扩容到货统计-->
+        <result column="VENEER_EXPANSION_NUMBER" property="veneerExpansionNumber" />
+        <result column="VENEER_EXPANSION_NAME" property="veneerExpansionName" />
+        <result column="VENEER_DESIGN_QUANTITY" property="veneerDesignQuantity" />
+        <result column="VENEER_ARRIVAL_NUMBER" property="veneerArrivalNumber" />
+        <result column="VENEER_ARRIVAL_TIME" property="veneerArrivalTime" />
+        <result column="VENEER_VERIFYING_PHOTOS" property="veneerVerifyingPhotos" />
+        <!--3.电缆类型到货统计-->
+        <result column="ARRIVAL_POWER_CORD_NUMBER" property="arrivalPowerCordNumber" />
+        <result column="ARRIVAL_CABLE_TYPE" property="arrivalCableType" />
+        <result column="ARRIVAL_SPECIFICATION_MODEL" property="arrivalSpecificationModel" />
+        <result column="ARRIVAL_DESIGN_LENGTH" property="arrivalDesignLength" />
+        <result column="ARRIVAL_LENGTH" property="arrivalLength" />
+        <result column="ARRIVAL_TIME" property="arrivalTime" />
+        <result column="POWER_CORD_VERIFYING_PHOTOS" property="powerCordVerifyingPhotos" />
+        <!--4.尾纤、跳纤到货统计-->
+        <result column="ARRIVAL_PIGTAIL_NUMBER" property="arrivalPigtailNumber" />
+        <result column="PIGTAIL_CABLE_TYPE" property="pigtailCableType" />
+        <result column="PIGTAIL_SPECIFICATION_MODEL" property="pigtailSpecificationModel" />
+        <result column="PIGTAIL_DESIGN_BARS" property="pigtailDesignBars" />
+        <result column="DESIGN_SINGLE_LENGTH" property="designSingleLength" />
+        <result column="PIGTAIL_ARRIVALS_NUMBER" property="pigtailArrivalsNumber" />
+        <result column="ARRIVAL_SINGLE_LENGTH" property="arrivalSingleLength" />
+        <result column="PIGTAIL_ARRIVAL_TIME" property="pigtailArrivalTime" />
+        <result column="PIGTAIL_VERIFYING_PHOTOS" property="pigtailVerifyingPhotos" />
+    </resultMap>
+
+    <!--数据导出-->
+    <select id="FaArrivalStatisticsExcel" resultMap="result_FaArrivalStatistics_Map">
+        select ars.arrival_statistics_id,ars.operator,ars.build_year,ars.building_project,ars.motor_room_name,
+        ars.motor_room_longitude,ars.motor_room_latitude,ars.province,ars.city,ars.county,ars.on_site_Supervision,
+        ars.project_leader,
+        se.statistics_equipment_number,se.statistics_equipment_type,se.statistics_equipment_model,
+        se.equipment_cabinet_size,se.equipment_arrival_time,se.equipment_verifying_photos,
+        ve.veneer_expansion_number,ve.veneer_expansion_name,ve.veneer_design_quantity,ve.veneer_arrival_number,
+        ve.veneer_arrival_time,ve.veneer_verifying_photos,
+        apc.arrival_power_cord_number,apc.arrival_cable_type,apc.arrival_specification_model,apc.arrival_design_length,
+        apc.arrival_length,apc.arrival_time,apc.power_cord_verifying_photos,
+        ap.arrival_pigtail_number,ap.pigtail_cable_type,ap.pigtail_specification_model,ap.pigtail_design_bars,
+        ap.design_single_length,ap.pigtail_arrivals_number,ap.arrival_single_length,ap.pigtail_arrival_time,
+        ap.pigtail_verifying_photos
+        from FA_arrival_statistics ars
+        left join FA_statistics_new_equipment se
+        on ars.statistics_new_equipment_id = se.statistics_new_equipment_id
+        left join FA_veneer_expansion ve
+        on ars.statistics_veneer_expansion_id = ve.statistics_veneer_expansion_id
+        left join FA_arrival_power_cord apc
+        on ars.arrival_power_cord_id = apc.arrival_power_cord_id
+        left join FA_arrival_pigtail ap
+        on ars.arrival_pigtail_id = ap.arrival_pigtail_id
+        where ars.arrival_statistics_id in
+        <foreach collection="array" open="(" separator="," close=")" item="arrivalStatisticsId">
+            #{arrivalStatisticsId}
+        </foreach>
+    </select>
+
+    <!--数据总行数 -->
+    <select id="getFaArrivalStatisticsRowCount" resultType="java.lang.Long">
+        select count(*) from (
+        select ars.arrival_statistics_id,ars.operator,ars.build_year,ars.building_project,ars.motor_room_name,
+        ars.motor_room_longitude,ars.motor_room_latitude,ars.province,ars.city,ars.county,ars.on_site_Supervision,
+        ars.project_leader,
+        se.statistics_equipment_number,se.statistics_equipment_type,se.statistics_equipment_model,
+        se.equipment_cabinet_size,se.equipment_arrival_time,se.equipment_verifying_photos,
+        ve.veneer_expansion_number,ve.veneer_expansion_name,ve.veneer_design_quantity,ve.veneer_arrival_number,
+        ve.veneer_arrival_time,ve.veneer_verifying_photos,
+        apc.arrival_power_cord_number,apc.arrival_cable_type,apc.arrival_specification_model,apc.arrival_design_length,
+        apc.arrival_length,apc.arrival_time,apc.power_cord_verifying_photos,
+        ap.arrival_pigtail_number,ap.pigtail_cable_type,ap.pigtail_specification_model,ap.pigtail_design_bars,
+        ap.design_single_length,ap.pigtail_arrivals_number,ap.arrival_single_length,ap.pigtail_arrival_time,
+        ap.pigtail_verifying_photos
+        from FA_arrival_statistics ars
+        left join FA_statistics_new_equipment se
+        on ars.statistics_new_equipment_id = se.statistics_new_equipment_id
+        left join FA_veneer_expansion ve
+        on ars.statistics_veneer_expansion_id = ve.statistics_veneer_expansion_id
+        left join FA_arrival_power_cord apc
+        on ars.arrival_power_cord_id = apc.arrival_power_cord_id
+        left join FA_arrival_pigtail ap
+        on ars.arrival_pigtail_id = ap.arrival_pigtail_id
+        <where>
+            <if test="province !=null and province !=''">
+                and PROVINCE like #{province}
+            </if>
+            <if test="city !=null and city !=''">
+                and CITY like #{city}
+            </if>
+            <if test="county !=null and county !=''">
+                and COUNTY like #{county}
+            </if>
+            <if test="buildYear !=null and buildYear !=''">
+                and BUILD_YEAR like #{buildYear}
+            </if>
+            <if test="buildingProject !=null and buildingProject !=''">
+                and BUILDING_PROJECT like #{buildingProject}
+            </if>
+            <if test="operator !=null and operator !=''">
+                and OPERATOR like #{operator}
+            </if>
+            <if test="keyword !=null and keyword !=''">
+                and (ON_SITE_SUPERVISION like #{keyword}
+                or  PROJECT_LEADER like #{keyword}
+                )
+            </if>
+        </where>
+        )
+    </select>
+    <!-- 数据展示和模糊查询 -->
+    <select id="selectFaArrivalStatistics" resultMap="result_FaArrivalStatistics_Map">
+        select * from(
+        select t.*,rownum r from(
+        select ars.arrival_statistics_id,ars.operator,ars.build_year,ars.building_project,ars.motor_room_name,
+        ars.motor_room_longitude,ars.motor_room_latitude,ars.province,ars.city,ars.county,ars.on_site_Supervision,
+        ars.project_leader,
+        se.statistics_equipment_number,se.statistics_equipment_type,se.statistics_equipment_model,
+        se.equipment_cabinet_size,se.equipment_arrival_time,se.equipment_verifying_photos,
+        ve.veneer_expansion_number,ve.veneer_expansion_name,ve.veneer_design_quantity,ve.veneer_arrival_number,
+        ve.veneer_arrival_time,ve.veneer_verifying_photos,
+        apc.arrival_power_cord_number,apc.arrival_cable_type,apc.arrival_specification_model,apc.arrival_design_length,
+        apc.arrival_length,apc.arrival_time,apc.power_cord_verifying_photos,
+        ap.arrival_pigtail_number,ap.pigtail_cable_type,ap.pigtail_specification_model,ap.pigtail_design_bars,
+        ap.design_single_length,ap.pigtail_arrivals_number,ap.arrival_single_length,ap.pigtail_arrival_time,
+        ap.pigtail_verifying_photos
+        from FA_arrival_statistics ars
+        left join FA_statistics_new_equipment se
+        on ars.statistics_new_equipment_id = se.statistics_new_equipment_id
+        left join FA_veneer_expansion ve
+        on ars.statistics_veneer_expansion_id = ve.statistics_veneer_expansion_id
+        left join FA_arrival_power_cord apc
+        on ars.arrival_power_cord_id = apc.arrival_power_cord_id
+        left join FA_arrival_pigtail ap
+        on ars.arrival_pigtail_id = ap.arrival_pigtail_id
+        <where>
+            <if test="province !=null and province !=''">
+                and PROVINCE like #{province}
+            </if>
+            <if test="city !=null and city !=''">
+                and CITY like #{city}
+            </if>
+            <if test="county !=null and county !=''">
+                and COUNTY like #{county}
+            </if>
+            <if test="buildYear !=null and buildYear !=''">
+                and BUILD_YEAR like #{buildYear}
+            </if>
+            <if test="buildingProject !=null and buildingProject !=''">
+                and BUILDING_PROJECT like #{buildingProject}
+            </if>
+            <if test="operator !=null and operator !=''">
+                and OPERATOR like #{operator}
+            </if>
+            <if test="keyword !=null and keyword !=''">
+                and (ON_SITE_SUPERVISION like #{keyword}
+                or  PROJECT_LEADER like #{keyword}
+                )
+            </if>
+        </where>
+        )t
+        )where r between #{start} and #{end}
+    </select> 
+
+
+
+</mapper>

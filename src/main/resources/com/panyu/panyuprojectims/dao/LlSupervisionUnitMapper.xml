@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.LlSupervisionUnitDao">
+    <!-- LlSupervisionUnit的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_LlSupervisionUnit_Map" type="com.panyu.panyuprojectims.entity.LlSupervisionUnit">
+        <id column="SUPERVISION_UNIT_ID" property="supervisionUnitId" />
+        <result column="SITE_LEADER" property="siteLeader" />
+        <result column="PROFESSION_RESPONSIBLE_PERSON" property="professionResponsiblePerson" />
+        <result column="DISTRICT_HEAD" property="districtHead" />
+    </resultMap>
+
+    <!-- 数据库中表名为:LL_SUPERVISION_UNIT的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="LL_SUPERVISION_UNIT_Column">
+        LL_SUPERVISION_UNIT.SUPERVISION_UNIT_ID as SUPERVISION_UNIT_ID
+        ,LL_SUPERVISION_UNIT.SITE_LEADER as SITE_LEADER
+        ,LL_SUPERVISION_UNIT.PROFESSION_RESPONSIBLE_PERSON as PROFESSION_RESPONSIBLE_PERSON
+        ,LL_SUPERVISION_UNIT.DISTRICT_HEAD as DISTRICT_HEAD
+    </sql>
+    <!--根据线路监理单位表ID删除选中项-->
+    <delete id="deleteLlSupervisionUnit">
+        delete from LL_SUPERVISION_UNIT
+        where SUPERVISION_UNIT_ID = #{supervisionUnitId,jdbcType=VARCHAR}
+    </delete>
+    <!--添加-->
+    <insert id="insertLlSupervisionUnit">
+        insert into LL_SUPERVISION_UNIT values (
+          #{supervisionUnitId,jdbcType=VARCHAR},
+          #{siteLeader,jdbcType=VARCHAR},
+          #{professionResponsiblePerson,jdbcType=VARCHAR},
+          #{districtHead,jdbcType=VARCHAR}
+        )
+    </insert>
+</mapper>

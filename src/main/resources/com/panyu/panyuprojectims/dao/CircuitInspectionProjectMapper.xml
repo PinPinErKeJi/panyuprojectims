@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.CircuitInspectionProjectDao">
+    <!-- CircuitInspectionProject的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_CircuitInspectionProject_Map" type="com.panyu.panyuprojectims.entity.CircuitInspectionProject">
+        <id column="CIRCUIT_PROJECT_ID" property="circuitProjectId" />
+        <result column="CIRCUIT_PROJECT_NAME" property="circuitProjectName" />
+        <result column="CIRCUIT_SUB_WORK_ID" property="circuitSubWorkId" />
+        <result column="CIRCUIT_CRITERION_NAME" property="circuitCriterionName" />
+        <collection property="circuitPhotoResourcesList" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.CircuitPhotoResources">
+            <result column="CIRCUIT_PHOTO_ID" property="circuitPhotoId" />
+            <result column="CIRCUIT_PHOTO_NAME" property="circuitPhotoName" />
+            <result column="PHOTO_UPLOAD_PEOPLE" property="photoUploadPeople" />
+            <result column="QUALIFIED" property="qualified" />
+            <result column="PROBLEM_DESCRIPTION" property="problemDescription" />
+            <result column="CIRCUIT_MODULE_ID" property="circuitModuleId" />
+            <result column="CIRCUIT_SUB_WORK_ID" property="circuitSubWorkId" />
+            <result column="CIRCUIT_PROJECT_ID" property="circuitProjectId" />
+            <result column="CIRCUIT_INFORMATION_ID" property="circuitInformationId" />
+        </collection>
+    </resultMap>
+
+
+
+
+    <!--根据检查项目id和名字查询检查项目对象-->
+    <select id="getCircuitInspectionProject" resultMap="result_CircuitInspectionProject_Map">
+        select * from circuit_inspection_project where CIRCUIT_PROJECT_ID =
+        #{circuitProjectId,jdbcType=VARCHAR} and CIRCUIT_PROJECT_NAME =
+        #{circuitProjectName,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据分项工程id查询包含的检查项目-->
+    <select id="selectCircuitInspectionProjectBySubWorkId" resultMap="result_CircuitInspectionProject_Map">
+        select * from circuit_inspection_project where circuit_sub_work_id = #{circuitSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据检查项目名和分项工程id查询检查项目数量，判断检查项目是否存在-->
+    <select id="getCountCircuitProjectNameByCircuitProjectNameAndCircuitSubWorkId" resultType="java.lang.Long">
+        select count(*) from circuit_inspection_project where circuit_project_name =
+        #{circuitProjectName,jdbcType=VARCHAR} and  circuit_sub_work_id =
+        #{circuitSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertCircuitInspectionProject">
+        insert into circuit_inspection_project values(
+        sys_guid(),
+        #{circuitProjectName,jdbcType=VARCHAR},
+        #{circuitSubWorkId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据检查项目名和分项工程id查询检查项目-->
+    <select id="selectCircuitInspectionProjectByCircuitProjectNameAndCircuitSubWorkId" resultMap="result_CircuitInspectionProject_Map">
+        select * from circuit_inspection_project where circuit_project_name =
+        #{circuitProjectName,jdbcType=VARCHAR} and  circuit_sub_work_id =
+        #{circuitSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--修改-->
+    <update id="updateCircuitInspectionProject">
+        update circuit_inspection_project set circuit_project_name =
+        #{circuitProjectName,jdbcType=VARCHAR} where circuit_project_id =
+        #{circuitProjectId,jdbcType=VARCHAR}
+    </update>
+
+    <!--根据分项工程id查询包含的检查项目id-->
+    <select id="selectCircuitProjectIdBySubWorkId" resultType="String">
+        select circuit_project_id from circuit_inspection_project where  circuit_sub_work_id = #{circuitSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--删除-->
+    <delete id="deleteCircuitInspectionProject">
+        delete from circuit_inspection_project where circuit_project_id = #{circuitProjectId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--根据检查项目id查询检查项目对象-->
+    <select id="selectCircuitInspectionProjectBycircuitProjectId" resultMap="result_CircuitInspectionProject_Map">
+        select p.circuit_project_name,i.circuit_criterion_name
+        from circuit_inspection_project p
+        left join circuit_inspection_criterion i
+        on p.circuit_project_id = i.circuit_project_id
+        where i.circuit_project_id = #{circuitProjectId,jdbcType=VARCHAR}
+
+    </select>
+
+</mapper>

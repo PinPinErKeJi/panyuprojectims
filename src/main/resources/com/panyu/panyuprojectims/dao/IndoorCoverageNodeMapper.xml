@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IndoorCoverageNodeDao">
+    <!-- IndoorCoverageNode的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IndoorCoverageNode_Map" type="com.panyu.panyuprojectims.entity.IndoorCoverageNode">
+        <id column="INDOOR_NODE_ID" property="indoorNodeId" />
+        <result column="INDOOR_NODE_NAME" property="indoorNodeName" />
+        <result column="PARENT_ID" property="parentId" />
+    </resultMap>
+
+    <resultMap id="treeNode" type="com.panyu.panyuprojectims.entity.TreeNode">
+        <id column="INDOOR_NODE_ID" property="id" />
+        <result column="INDOOR_NODE_NAME" property="text" />
+        <collection property="children" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.TreeNode">
+            <id column="indoor_node_id_" property="id" />
+            <result column="indoor_node_name_" property="text" />
+        </collection>
+    </resultMap>
+    <!-- 数据库中表名为:INDOOR_COVERAGE_NODE的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="INDOOR_COVERAGE_NODE_Column">
+        INDOOR_COVERAGE_NODE.INDOOR_NODE_ID as INDOOR_NODE_ID
+        ,INDOOR_COVERAGE_NODE.INDOOR_NODE_NAME as INDOOR_NODE_NAME
+        ,INDOOR_COVERAGE_NODE.PARENT_ID as PARENT_ID
+    </sql>
+    <!--根据TreeNodeID查询子级菜单所属父级的ID集合-->
+    <select id="getIndoorCoverageNode" resultType="String">
+        select fa.INDOOR_NODE_ID indoor_node_id_
+        from INDOOR_COVERAGE_NODE eq
+        left join INDOOR_COVERAGE_NODE fa
+        on eq.INDOOR_NODE_ID = fa.INDOOR_NODE_ID
+        where eq.PARENT_ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <!--根据节点ID查询一级菜单模块名称-->
+    <select id="selectAllFirstIndoorCoverageModuleName" resultType="String">
+        select INDOOR_NODE_NAME
+        from INDOOR_COVERAGE_NODE
+        where INDOOR_NODE_ID = #{indoorNodeId,jdbcType=VARCHAR}
+    </select>
+    <!--根据节点ID查询二级菜单模块名称-->
+    <select id="selectSecondIndoorCoverageNodeName" resultType="String">
+        select INDOOR_NODE_NAME
+        from INDOOR_COVERAGE_NODE
+        where INDOOR_NODE_ID = #{id,jdbcType=VARCHAR}
+    </select>
+</mapper>

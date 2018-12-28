@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.MainEquipmentDao">
+    <!-- MainEquipment的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_MainEquipment_Map" type="com.panyu.panyuprojectims.entity.MainEquipment">
+        <id column="MAIN_EQUIPMENT_ID" property="mainEquipmentId" />
+        <result column="EQUIPMENT_CONSTRUCTION_MODE" property="equipmentConstructionMode" />
+        <result column="EQUIPMENT_TYPE_NAME" property="equipmentTypeName" />
+        <result column="EQUIPMENT_SUPPLIER_NAME" property="equipmentSupplierName" />
+        <result column="EQUIPMENT_SUPPLIER_CONTACTS" property="equipmentSupplierContacts" />
+        <result column="EQUIPMENT_UNIT_NAME" property="equipmentUnitName" />
+        <result column="EQUIPMENT_UNIT_CONTACTS" property="equipmentUnitContacts" />
+    </resultMap>
+
+    <!--添加-->
+    <insert id="insertMainEquipment" parameterType="com.panyu.panyuprojectims.entity.MainEquipment">
+        insert into MAIN_EQUIPMENT(MAIN_EQUIPMENT_ID,EQUIPMENT_CONSTRUCTION_MODE,EQUIPMENT_TYPE_NAME,EQUIPMENT_SUPPLIER_NAME,EQUIPMENT_SUPPLIER_CONTACTS,EQUIPMENT_UNIT_NAME,EQUIPMENT_UNIT_CONTACTS)
+        values(
+        #{mainEquipmentId,jdbcType=VARCHAR},
+        #{equipmentConstructionMode,jdbcType=VARCHAR},
+        #{equipmentTypeName,jdbcType=VARCHAR},
+        #{equipmentSupplierName,jdbcType=VARCHAR},
+        #{equipmentSupplierContacts,jdbcType=VARCHAR},
+        #{equipmentUnitName,jdbcType=VARCHAR},
+        #{equipmentUnitContacts,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 通过MainEquipment的id将数据库表中对应的数据删除-->
+    <delete id="deleteMainEquipmentById" parameterType="java.lang.String">
+        delete from MAIN_EQUIPMENT
+        where MAIN_EQUIPMENT_ID = #{mainEquipmentId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--查询主设备ID-->
+    <select id="selectmainEquipmentId" resultMap="result_MainEquipment_Map">
+        select
+        MAIN_EQUIPMENT_ID
+        from MAIN_EQUIPMENT
+    </select>
+    <!--根据主设备ID查询建设方式、、主设备类型-->
+    <select id="SelectByMainEquipmentId" resultMap="result_MainEquipment_Map">
+        select equipment_construction_mode,equipment_type_name from
+        project_progress p left join main_equipment m
+        on p.main_equipment_id = m.main_equipment_id
+        where project_progress_id = #{projectProgressId,jdbcType=VARCHAR}
+    </select>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.LlConstructionUnitDao">
+    <!-- LlConstructionUnit的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_LlConstructionUnit_Map" type="com.panyu.panyuprojectims.entity.LlConstructionUnit">
+        <id column="CONSTRUCTION_UNIT_ID" property="constructionUnitId" />
+        <result column="CORPORATE_NAME" property="corporateName" />
+        <result column="PERSON_IN_CHARGE" property="personInCharge" />
+    </resultMap>
+
+    <!-- 数据库中表名为:LL_CONSTRUCTION_UNIT的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="LL_CONSTRUCTION_UNIT_Column">
+        LL_CONSTRUCTION_UNIT.CONSTRUCTION_UNIT_ID as CONSTRUCTION_UNIT_ID
+        ,LL_CONSTRUCTION_UNIT.CORPORATE_NAME as CORPORATE_NAME
+        ,LL_CONSTRUCTION_UNIT.PERSON_IN_CHARGE as PERSON_IN_CHARGE
+    </sql>
+    <!--根据线路施工单位表ID删除选中项-->
+    <delete id="deleteLlConstructionUnit">
+        delete from LL_CONSTRUCTION_UNIT
+        where CONSTRUCTION_UNIT_ID = #{constructionUnitId,jdbcType=VARCHAR}
+    </delete>
+    <!--添加线路施工单位表-->
+    <insert id="insertLlConstructionUnit">
+        insert into LL_CONSTRUCTION_UNIT values (
+            #{constructionUnitId,jdbcType=VARCHAR},
+            #{corporateName,jdbcType=VARCHAR},
+            #{personInCharge,jdbcType=VARCHAR}
+        )
+    </insert>
+</mapper>

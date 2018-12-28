@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.EquipmentSubWorkDao">
+    <!-- EquipmentSubWork的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_EquipmentSubWork_Map" type="com.panyu.panyuprojectims.entity.EquipmentSubWork">
+        <id column="EQUIPMENT_SUB_WORK_ID" property="equipmentSubWorkId" />
+        <result column="EQUIPMENT_SUB_WORK_NAME" property="equipmentSubWorkName" />
+        <result column="EQUIPMENT_SPECIALITY_ID" property="equipmentSpecialityId" />
+        <collection property="equipmentInspectionProjectList" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.EquipmentInspectionProject">
+            <id column="EQUIPMENT_PROJECT_ID" property="equipmentProjectId" />
+            <result column="EQUIPMENT_PROJECT_NAME" property="equipmentProjectName" />
+            <result column="EQUIPMENT_SUB_WORK_ID" property="equipmentSubWorkId" />
+        </collection>
+    </resultMap>
+
+    <!-- 数据库中表名为:EQUIPMENT_SUB_WORK的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="EQUIPMENT_SUB_WORK_Column">
+        EQUIPMENT_SUB_WORK.EQUIPMENT_SUB_WORK_ID as EQUIPMENT_SUB_WORK_ID
+        ,EQUIPMENT_SUB_WORK.EQUIPMENT_SUB_WORK_NAME as EQUIPMENT_SUB_WORK_NAME
+        ,EQUIPMENT_SUB_WORK.EQUIPMENT_SPECIALITY_ID as EQUIPMENT_SPECIALITY_ID
+    </sql>
+
+
+    <!--根据分项工程id和名字查询对象-->
+    <select id="getEquipmentSubWork" resultMap="result_EquipmentSubWork_Map">
+        select * from EQUIPMENT_SUB_WORK where EQUIPMENT_SUB_WORK_ID =
+        #{equipmentSubWorkId}and EQUIPMENT_SUB_WORK_NAME =
+        #{equipmentSubWorkName}
+    </select>
+
+    <!--根据名字查询个数-->
+    <select id="getCountByEquipmentSubWorkId" resultType="int">
+        select count(*) from equipment_sub_work where equipment_sub_work_name = #{equipmentSubWorkName,jdbcType=VARCHAR}and
+        EQUIPMENT_SPECIALITY_ID = #{equipmentSpecialityId,jdbcType=VARCHAR}
+    </select>
+    <!--根据模块ID查询分项工程-->
+    <select id="selectAllEquipmentSubWorkByEquipmentSpecialityId" parameterType="java.lang.String" resultMap="result_EquipmentSubWork_Map">
+        select
+        <include refid="EQUIPMENT_SUB_WORK_Column" />
+        from EQUIPMENT_SUB_WORK
+        where EQUIPMENT_SPECIALITY_ID = #{equipmentSpecialityId,jdbcType=VARCHAR}
+    </select>
+    <!--导入设备专业模块信息数据时调用分项工程添加方法-->
+    <insert id="insertEquipmentSubWork" parameterType="com.panyu.panyuprojectims.entity.EquipmentSubWork">
+        insert into EQUIPMENT_SUB_WORK(EQUIPMENT_SUB_WORK_ID,EQUIPMENT_SUB_WORK_NAME,EQUIPMENT_SPECIALITY_ID) 
+        values(sys_guid(),#{equipmentSubWorkName,jdbcType=VARCHAR},#{equipmentSpecialityId,jdbcType=VARCHAR})
+    </insert>
+    <!--导入设备专业模块信息数据时调用查询方法根据分项工程名称和模块ID查询分项工程ID-->
+    <select id="selectSubWorkIdBySubWorkNameAndSpecialityId" resultType="String">
+        select EQUIPMENT_SUB_WORK_ID
+        from EQUIPMENT_SUB_WORK
+        where EQUIPMENT_SUB_WORK_NAME = #{equipmentSubWorkName,jdbcType=VARCHAR}
+        and EQUIPMENT_SPECIALITY_ID = #{equipmentSpecialityId,jdbcType=VARCHAR}
+    </select>
+    <!--添加分项工程数据之后根据名称查询返回对象-->
+    <select id="selectEquipmentSubWorkBySubWorkName" resultMap="result_EquipmentSubWork_Map">
+        select
+        <include refid="EQUIPMENT_SUB_WORK_Column" />
+        from EQUIPMENT_SUB_WORK
+        where EQUIPMENT_SUB_WORK_NAME = #{equipmentSubWorkName,jdbcType=VARCHAR} and
+        EQUIPMENT_SPECIALITY_ID = #{equipmentSpecialityId,jdbcType=VARCHAR}
+    </select>
+    <!--根据moduleID查询subID-->
+    <select id="selectAllSubWorkIdByModuleId" parameterType="java.lang.String" resultType="String">
+        select EQUIPMENT_SUB_WORK_ID
+        from EQUIPMENT_SUB_WORK
+        where EQUIPMENT_SPECIALITY_ID = #{equipmentSpecialityId,jdbcType=VARCHAR}
+    </select>
+    <!-- 通过EquipmentSubWork的id将数据库表中对应的数据删除-->
+    <delete id="deleteEquipmentSubWorkById" parameterType="java.lang.String">
+        delete from EQUIPMENT_SUB_WORK
+        where EQUIPMENT_SUB_WORK_ID = #{equipmentSubWorkId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--修改-->
+    <update id="updateEquipmentSubWorkById" parameterType="com.panyu.panyuprojectims.entity.EquipmentSubWork">
+        update EQUIPMENT_SUB_WORK set
+        EQUIPMENT_SUB_WORK_NAME=#{equipmentSubWorkName}
+        where EQUIPMENT_SUB_WORK_ID=#{equipmentSubWorkId}
+    </update>
+</mapper>

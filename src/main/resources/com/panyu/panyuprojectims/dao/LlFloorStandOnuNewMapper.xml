@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.LlFloorStandOnuNewDao">
+    <!-- LlFloorStandOnuNew的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_LlFloorStandOnuNew_Map" type="com.panyu.panyuprojectims.entity.LlFloorStandOnuNew">
+        <id column="NEW_FLOOR_STAND_ID" property="newFloorStandId" />
+        <result column="NEW_FLOOR_STAND_NUMBER" property="newFloorStandNumber" />
+        <result column="NEW_FLOOR_STAND_SIZE" property="newFloorStandSize" />
+    </resultMap>
+
+    <!-- 数据库中表名为:LL_FLOOR_STAND_ONU_NEW的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="LL_FLOOR_STAND_ONU_NEW_Column">
+        LL_FLOOR_STAND_ONU_NEW.NEW_FLOOR_STAND_ID as NEW_FLOOR_STAND_ID
+        ,LL_FLOOR_STAND_ONU_NEW.NEW_FLOOR_STAND_NUMBER as NEW_FLOOR_STAND_NUMBER
+        ,LL_FLOOR_STAND_ONU_NEW.NEW_FLOOR_STAND_SIZE as NEW_FLOOR_STAND_SIZE
+    </sql>
+
+    <!--根据信息id查询落地式光交箱（新建）对象-->
+    <select id="selectLlFloorStandOnuNewByCircuitInformationId" resultMap="result_LlFloorStandOnuNew_Map">
+        select ll.* from LL_circuit_information l left join LL_floor_stand_onu_new ll
+        on l.new_floor_stand_id = ll.new_floor_stand_id
+        where l.circuit_information_id = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据落地式光交箱（新建）ID删除选中项-->
+    <delete id="deleteLlFloorStandOnuNew">
+        delete from LL_FLOOR_STAND_ONU_NEW
+        where NEW_FLOOR_STAND_ID = #{newFloorStandId,jdbcType=VARCHAR}
+    </delete>
+    <!--添加-->
+    <insert id="insertLlFloorStandOnuNew">
+        insert into LL_FLOOR_STAND_ONU_NEW values (
+            #{newFloorStandId,jdbcType=VARCHAR},
+            #{newFloorStandNumber,jdbcType=VARCHAR},
+            #{newFloorStandSize,jdbcType=VARCHAR}
+        )
+    </insert>
+</mapper>

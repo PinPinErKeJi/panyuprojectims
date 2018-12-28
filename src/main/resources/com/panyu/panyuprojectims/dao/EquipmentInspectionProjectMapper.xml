@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.EquipmentInspectionProjectDao">
+    <!-- EquipmentInspectionProject的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_EquipmentInspectionProject_Map" type="com.panyu.panyuprojectims.entity.EquipmentInspectionProject">
+        <id column="EQUIPMENT_PROJECT_ID" property="equipmentProjectId" />
+        <result column="EQUIPMENT_PROJECT_NAME" property="equipmentProjectName" />
+        <result column="EQUIPMENT_SUB_WORK_ID" property="equipmentSubWorkId" />
+        <result column="EQUIPMENT_CRITERION_NAME" property="equipmentCriterionName" />
+        <collection property="equipmentPhotoResourcesList" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.EquipmentPhotoResources">
+            <id column="EQUIPMENT_PHOTO_ID" property="equipmentPhotoId" />
+            <result column="EQUIPMENT_PHOTO_NAME" property="equipmentPhotoName" />
+            <result column="PHOTO_UPLOAD_PEOPLE" property="photoUploadPeople" />
+            <result column="QUALIFIED" property="qualified" />
+            <result column="PROBLEM_DESCRIPTION" property="problemDescription" />
+            <result column="EQUIPMENT_SPECIALITY_ID" property="equipmentSpecialityId" />
+            <result column="EQUIPMENT_SUB_WORK_ID" property="equipmentSubWorkId" />
+            <result column="EQUIPMENT_PROJECT_ID" property="equipmentProjectId" />
+        </collection>
+    </resultMap>
+
+
+
+    <!-- 数据库中表名为:EQUIPMENT_INSPECTION_PROJECT的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="EQUIPMENT_INSPECTION_PROJECT_Column">
+        EQUIPMENT_INSPECTION_PROJECT.EQUIPMENT_PROJECT_ID as EQUIPMENT_PROJECT_ID
+        ,EQUIPMENT_INSPECTION_PROJECT.EQUIPMENT_PROJECT_NAME as EQUIPMENT_PROJECT_NAME
+        ,EQUIPMENT_INSPECTION_PROJECT.EQUIPMENT_SUB_WORK_ID as EQUIPMENT_SUB_WORK_ID
+    </sql>
+
+
+    <!--根据检查项目id和名字查询对象-->
+    <select id="getEquipmentInspectionProject" resultMap="result_EquipmentInspectionProject_Map">
+        select * from EQUIPMENT_INSPECTION_PROJECT where EQUIPMENT_PROJECT_ID =
+        #{equipmentProjectId,jdbcType=VARCHAR} and EQUIPMENT_PROJECT_NAME =
+        #{equipmentProjectName,jdbcType=VARCHAR}
+    </select>
+
+    <!--数据填报的时候根据检查项目ID查询项目名称通过对象接收-->
+    <select id="selectEquipmentInspectionProjectByName" resultMap="result_EquipmentInspectionProject_Map">
+        select p.equipment_project_name,i.equipment_criterion_name
+        from equipment_inspection_project p
+        left join equipment_inspection_criterion i
+        on p.equipment_project_id = i.equipment_project_id
+        where i.equipment_project_id = #{equipmentProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据名字查询个数-->
+    <select id="getCountByEquipmentProjectName" resultType="int">
+        select count(*) from equipment_inspection_project where
+        equipment_project_name = #{equipmentProjectName} and
+        equipment_sub_work_id = #{equipmentSubWorkId,jdbcType=VARCHAR}
+    </select>
+    <!--根据分项工程ID查询检查项目-->
+    <select id="selectEquipmentInspectionProjectByEquipmentSubWorkId" parameterType="java.lang.String" resultMap="result_EquipmentInspectionProject_Map">
+        select
+        <include refid="EQUIPMENT_INSPECTION_PROJECT_Column" />
+        from EQUIPMENT_INSPECTION_PROJECT
+        where EQUIPMENT_SUB_WORK_ID = #{equipmentSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--导入设备专业模块信息数据时调用检查项目添加方法-->
+    <insert id="insertEquipmentInspectionProject" parameterType="com.panyu.panyuprojectims.entity.EquipmentInspectionProject">
+        insert into EQUIPMENT_INSPECTION_PROJECT(EQUIPMENT_PROJECT_ID,EQUIPMENT_PROJECT_NAME,EQUIPMENT_SUB_WORK_ID) 
+        values(sys_guid(),#{equipmentProjectName,jdbcType=VARCHAR},#{equipmentSubWorkId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--导入设备专业模块信息数据时调用查询方法根据分项工程ID和检查项目名称查询检查项目ID-->
+    <select id="selectProjectIdBySubWorkIdAndProjectName" resultType="String">
+        select EQUIPMENT_PROJECT_ID
+        from EQUIPMENT_INSPECTION_PROJECT
+        where EQUIPMENT_PROJECT_NAME = #{equipmentProjectName,jdbcType=VARCHAR}
+        and EQUIPMENT_SUB_WORK_ID = #{equipmentSubWorkId,jdbcType=VARCHAR}
+    </select>
+    <!--添加检查项目数据之后根据名称查询返回对象-->
+    <select id="selectEquipmentInspectionProjectByProjectName" parameterType="java.lang.String" resultMap="result_EquipmentInspectionProject_Map">
+        select
+        <include refid="EQUIPMENT_INSPECTION_PROJECT_Column" />
+        from EQUIPMENT_INSPECTION_PROJECT
+        where EQUIPMENT_PROJECT_NAME = #{equipmentProjectName,jdbcType=VARCHAR}
+        and EQUIPMENT_SUB_WORK_ID = #{equipmentSubWorkId,jdbcType=VARCHAR}
+    </select>
+    <!--根据检查项目ID查询出所有相应的标准规范ID-->
+    <select id="selectAllEquipmentProjectIdBySubWorkId" parameterType="java.lang.String" resultType="String">
+        select EQUIPMENT_PROJECT_ID
+        from EQUIPMENT_INSPECTION_PROJECT
+        where EQUIPMENT_SUB_WORK_ID = #{equipmentSubWorkId,jdbcType=VARCHAR}
+    </select>
+    <!-- 根据检查项目ID删除相应检查项目数据的同时删除对应的标准规范数据-->
+    <delete id="deleteEquipmentInspectionProjectById" parameterType="java.lang.String">
+        delete from EQUIPMENT_INSPECTION_PROJECT
+        where EQUIPMENT_PROJECT_ID = #{equipmentProjectId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--修改-->
+    <update id="updateEquipmentInspectionProjectById" parameterType="com.panyu.panyuprojectims.entity.EquipmentInspectionProject">
+        update EQUIPMENT_INSPECTION_PROJECT set
+        EQUIPMENT_PROJECT_NAME=#{equipmentProjectName}
+        where EQUIPMENT_PROJECT_ID=#{equipmentProjectId}
+    </update>
+</mapper>

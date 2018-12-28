@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PowerMonitoringDao">
+    <!-- PowerMonitoring的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PowerMonitoring_Map" type="com.panyu.panyuprojectims.entity.PowerMonitoring">
+        <id column="POWER_MONITORING_ID" property="powerMonitoringId" />
+        <result column="POWER_CONSTRUCTION_MODE" property="powerConstructionMode" />
+        <result column="POWER_SUPPLIER_NAME" property="powerSupplierName" />
+        <result column="POWER_SUPPLIER_CONTACTS" property="powerSupplierContacts" />
+        <result column="POWER_UNIT_NAME" property="powerUnitName" />
+        <result column="POWER_UNIT_CONTACTS" property="powerUnitContacts" />
+    </resultMap>
+
+
+    <!-- 添加-->
+    <insert id="insertPowerMonitoring" parameterType="com.panyu.panyuprojectims.entity.PowerMonitoring">
+        insert into POWER_MONITORING(POWER_MONITORING_ID,POWER_CONSTRUCTION_MODE,POWER_SUPPLIER_NAME,POWER_SUPPLIER_CONTACTS,POWER_UNIT_NAME,POWER_UNIT_CONTACTS)
+        values(
+        #{powerMonitoringId,jdbcType=VARCHAR},
+        #{powerConstructionMode,jdbcType=VARCHAR},
+        #{powerSupplierName,jdbcType=VARCHAR},
+        #{powerSupplierContacts,jdbcType=VARCHAR},
+        #{powerUnitName,jdbcType=VARCHAR},
+        #{powerUnitContacts,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 通过PowerMonitoring的id将数据库表中对应的数据删除-->
+    <delete id="deletePowerMonitoringById" parameterType="java.lang.String">
+        delete from POWER_MONITORING
+        where POWER_MONITORING_ID = #{powerMonitoringId,jdbcType=VARCHAR}
+    </delete>
+
+<!--查询动力监控ID-->
+    <select id="selectBypowerMonitoringId" resultMap="result_PowerMonitoring_Map">
+        select
+        POWER_MONITORING_ID
+        from POWER_MONITORING
+    </select>
+<!--根据动力监控ID查询建设方式-->
+    <select id="SelectByPowerMonitoringId" resultMap="result_PowerMonitoring_Map">
+        select power_construction_mode from
+        project_progress p left join power_monitoring po
+        on p.power_monitoring_id = po.power_monitoring_id
+        where project_progress_id = #{projectProgressId,jdbcType=VARCHAR}
+    </select>
+</mapper>

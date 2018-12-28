@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.HnCableLengthDao">
+    <!-- HnCableLength的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_HnCableLength_Map" type="com.panyu.panyuprojectims.entity.HnCableLength">
+        <id column="CABLE_LENGTH_ID" property="cableLengthId" />
+        <result column="GYSTS" property="gysts" />
+        <result column="GYSTA" property="gysta" />
+        <result column="BURIED_SERVICE_LIGHTGUIDE" property="buriedServiceLightguide" />
+        <result column="WALL_CABLE" property="wallCable" />
+        <result column="IN_BRIDGE_CABLE" property="inBridgeCable" />
+        <result column="GYFXTS" property="gyfxts" />
+    </resultMap>
+
+    <!--根据驻地网信息id查询 光缆长度对象-->
+    <select id="selectHnCableLengthByGarrisonInformationId" resultMap="result_HnCableLength_Map">
+        select h2.* from HN_Garrison_information h1 left join HN_Cable_length h2 on
+        h1.cable_length_id = h2.cable_length_id
+        where h1.garrison_information_id=#{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据光缆长度表ID字段删除数据-->
+    <delete id="deleteHnCableLengthByCableLengthId" parameterType="java.lang.String">
+        delete from HN_CABLE_LENGTH
+        where CABLE_LENGTH_ID = #{cableLengthId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--添加-->
+    <insert id="insertHnCableLength">
+        insert into HN_Cable_length values(
+        #{cableLengthId,jdbcType=VARCHAR},
+        #{gysts,jdbcType=VARCHAR},
+        #{gysta,jdbcType=VARCHAR},
+        #{buriedServiceLightguide,jdbcType=VARCHAR},
+        #{wallCable,jdbcType=VARCHAR},
+        #{inBridgeCable,jdbcType=VARCHAR},
+        #{gyfxts,jdbcType=VARCHAR})
+    </insert>
+
+
+</mapper>

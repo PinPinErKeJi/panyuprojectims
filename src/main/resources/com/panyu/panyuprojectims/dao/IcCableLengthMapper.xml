@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IcCableLengthDao">
+    <!-- IcCableLength的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IcCableLength_Map" type="com.panyu.panyuprojectims.entity.IcCableLength">
+        <id column="CABLE_LENGTH_ID" property="cableLengthId" />
+        <result column="NETWORK_LINE" property="networkLine" />
+        <result column="PHOTOELECTRIC_COMPOSITE_CABLE" property="photoelectricCompositeCable" />
+        <result column="SEVEN_EIGHTHS_FEEDER" property="sevenEighthsFeeder" />
+        <result column="A_HALF_FEEDER" property="ahalfFeeder" />
+    </resultMap>
+
+    <!-- 数据库中表名为:IC_CABLE_LENGTH的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="IC_CABLE_LENGTH_Column">
+        IC_CABLE_LENGTH.CABLE_LENGTH_ID as CABLE_LENGTH_ID
+        ,IC_CABLE_LENGTH.NETWORK_LINE as NETWORK_LINE
+        ,IC_CABLE_LENGTH.PHOTOELECTRIC_COMPOSITE_CABLE as PHOTOELECTRIC_COMPOSITE_CABLE
+        ,IC_CABLE_LENGTH.SEVEN_EIGHTHS_FEEDER as SEVEN_EIGHTHS_FEEDER
+        ,IC_CABLE_LENGTH.A_HALF_FEEDER as A_HALF_FEEDER
+    </sql>
+
+    <!--根据信息id查询线缆长度对象-->
+    <select id="selectIcCableLengthByIndoorInformationId" resultMap="result_IcCableLength_Map">
+        select ic.* from Indoor_Coverage_information in1 left join IC_Cable_length ic on
+        in1.cable_length_id = ic.cable_length_id  where in1.indoor_information_id =
+        #{indoorInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 添加-->
+    <insert id="insertIcCableLength" parameterType="com.panyu.panyuprojectims.entity.IcCableLength">
+        insert into IC_CABLE_LENGTH
+        values(
+        #{cableLengthId,jdbcType=VARCHAR},
+        #{networkLine,jdbcType=VARCHAR},
+        #{photoelectricCompositeCable,jdbcType=VARCHAR},
+        #{sevenEighthsFeeder,jdbcType=VARCHAR},
+        #{ahalfFeeder,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 通过IcCableLength的id将数据库表中对应的数据删除-->
+    <delete id="deleteIcCableLengthById" parameterType="java.lang.String">
+        delete from IC_CABLE_LENGTH
+        where CABLE_LENGTH_ID = #{cableLengthId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

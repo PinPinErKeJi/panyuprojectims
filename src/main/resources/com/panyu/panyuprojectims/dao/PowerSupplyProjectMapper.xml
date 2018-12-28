@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PowerSupplyProjectDao">
+    <!-- PowerSupplyProject的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PowerSupplyProject_Map" type="com.panyu.panyuprojectims.entity.PowerSupplyProject">
+        <id column="POWER_PROJECT_ID" property="powerProjectId" />
+        <result column="POWER_PROJECT_NAME" property="powerProjectName" />
+        <result column="POWER_SUB_WORK_ID" property="powerSubWorkId" />
+        <result column="POWER_CRITERION_NAME" property="powerCriterionName" />
+    </resultMap>
+    <!--根据分项工程id查询包含的检查项目-->
+    <select id="selectPowerSupplyProjectByPowerSubWorkId" resultMap="result_PowerSupplyProject_Map">
+        select * from Power_Supply_Project where power_sub_work_id = #{powerSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据检查项目名和分项工程id查询数量-->
+    <select id="getCountByPowerProjectNameAndPowerSubWorkId" resultType="Long">
+        select count(*) from Power_Supply_Project where  power_project_name =
+        #{powerProjectName,jdbcType=VARCHAR} and power_sub_work_id =
+        #{powerSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertPowerSupplyProject">
+        insert into Power_Supply_Project values(
+        sys_guid(),
+        #{powerProjectName,jdbcType=VARCHAR},
+        #{powerSubWorkId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据检查项目名和分项工程id查询检查项目-->
+    <select id="selectPowerSupplyProjectByPowerProjectNameAndPowerSubWorkId" resultMap="result_PowerSupplyProject_Map">
+         select * from Power_Supply_Project where  power_project_name =
+         #{powerProjectName,jdbcType=VARCHAR} and power_sub_work_id =
+         #{powerSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--修改-->
+    <update id="updatePowerSupplyProject">
+        update Power_Supply_Project set power_project_name =
+        #{powerProjectName,jdbcType=VARCHAR} where power_project_id =
+        #{powerProjectId,jdbcType=VARCHAR}
+    </update>
+
+    <!--根据检查项目名和id查询检查项目-->
+    <select id="selectPowerSupplyProjectByPowerProjectNameAndPowerProjectId" resultMap="result_PowerSupplyProject_Map">
+        select * from Power_Supply_Project where  power_project_name =
+        #{powerProjectName,jdbcType=VARCHAR} and power_project_id =
+        #{powerProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据分项工程ID查询检查项目ID-->
+    <select id="selectPowerProjectId" resultType="String">
+        select POWER_PROJECT_ID
+        from POWER_SUPPLY_PROJECT
+        where POWER_SUB_WORK_ID = #{powerSubWorkId,jdbcType=VARCHAR}
+    </select>
+    <!--删除-->
+    <delete id="deletePowerSupplyProject">
+        delete from POWER_SUPPLY_PROJECT
+        where POWER_PROJECT_ID = #{powerProjectId,jdbcType=VARCHAR}
+    </delete>
+    <!--根据检查项目id查询检查项目对象-->
+    <select id="selectPowerSupplyProjectByProjectId" resultMap="result_PowerSupplyProject_Map">
+        select
+        p.power_project_name,
+        c.power_criterion_name
+        from Power_Supply_Project p
+        left join Power_Supply_Criterion c
+        on p.power_project_id = c.power_project_id
+        where c.power_project_id = #{powerProjectId,jdbcType=VARCHAR}
+    </select>
+</mapper>

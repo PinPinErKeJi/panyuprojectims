@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IndoorCoverageProjectDao">
+    <!-- IndoorCoverageProject的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IndoorCoverageProject_Map" type="com.panyu.panyuprojectims.entity.IndoorCoverageProject">
+        <id column="INDOOR_PROJECT_ID" property="indoorProjectId" />
+        <result column="INDOOR_PROJECT_NAME" property="indoorProjectName" />
+        <result column="INDOOR_SUB_WORK_ID" property="indoorSubWorkId" />
+        <result column="INDOOR_SPECIFICATION_NAME" property="indoorSpecificationName" />
+        <collection property="indoorCoveragePhotoList" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.IndoorCoveragePhoto" >
+            <id column="INDOOR_PHOTO_ID" property="indoorPhotoId" />
+            <result column="INDOOR_NAME" property="indoorName" />
+            <result column="PHOTO_UPLOAD_PEOPLE" property="photoUploadPeople" />
+            <result column="QUALIFIED" property="qualified" />
+            <result column="PROBLEM_DESCRIPTION" property="problemDescription" />
+            <result column="INDOOR_COVERAGE_ID" property="indoorCoverageId" />
+            <result column="INDOOR_SUB_WORK_ID" property="indoorSubWorkId" />
+            <result column="INDOOR_PROJECT_ID" property="indoorProjectId" />
+            <result column="INDOOR_INFORMATION_ID" property="indoorInformationId" />
+        </collection>
+    </resultMap>
+
+
+    <!--根据检查项目id和名字查询检查项目对象-->
+    <select id="getIndoorCoverageProject" resultMap="result_IndoorCoverageProject_Map">
+        select * from Indoor_coverage_project where INDOOR_PROJECT_ID =
+        #{indoorProjectId,jdbcType=VARCHAR} and INDOOR_PROJECT_NAME =
+        #{indoorProjectName,jdbcType=VARCHAR}
+    </select>
+
+
+
+    <!--根据分项工程id查询分项工程名和标准规范-->
+    <select id="selectIndoorProjectNameAndIndoorSpecificationName" resultMap="result_IndoorCoverageProject_Map">
+        select  i1.indoor_project_name,i2.indoor_specification_name from Indoor_coverage_project i1
+        left join Indoor_coverage_specification i2
+        on i1.indoor_project_id = i2.indoor_project_id
+        where i1.indoor_project_id =
+        #{indoorProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据分项工程id查询包含的检查项目-->
+    <select id="selectAllIndoorCoverageProjectByIndoorSubWorkId" resultMap="result_IndoorCoverageProject_Map">
+        select * from Indoor_coverage_project where indoor_sub_work_id = #{indoorSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据检查项目名和分项工程id查询个数-->
+    <select id="getCountByIndoorProjectNameAndIndoorSubWorkId" resultType="Long">
+        select count(*) from Indoor_coverage_project where indoor_project_name =
+        #{indoorProjectName,jdbcType=VARCHAR} and indoor_sub_work_id =
+        #{indoorSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 添加-->
+    <insert id="insertIndoorCoverageProject">
+        insert into Indoor_coverage_project values(
+        sys_guid(),
+        #{indoorProjectName,jdbcType=VARCHAR},
+        #{indoorSubWorkId,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 根据检查项目名和分项工程id查询检查项目-->
+    <select id="selectIndoorCoverageProjectByIndoorProjectNameAndIndoorSubWorkId" resultMap="result_IndoorCoverageProject_Map">
+        select * from Indoor_coverage_project where indoor_project_name =
+         #{indoorProjectName,jdbcType=VARCHAR} and indoor_sub_work_id =
+         #{indoorSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 修改-->
+    <update id="updateIndoorCoverageProject">
+        update Indoor_coverage_project set indoor_project_name =
+        #{indoorProjectName,jdbcType=VARCHAR} where  indoor_project_id=
+        #{indoorProjectId,jdbcType=VARCHAR}
+    </update>
+
+    <!-- 删除-->
+    <delete id="deleteIndoorCoverageProject">
+        delete from Indoor_coverage_project where  indoor_project_id=#{indoorProjectId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--根据分项工程id查询检查项目id-->
+    <select id="selectIndoorProjectIdByIndoorSubWorkId" resultType="String">
+        select indoor_project_id from Indoor_coverage_project where indoor_sub_work_id = #{indoorSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

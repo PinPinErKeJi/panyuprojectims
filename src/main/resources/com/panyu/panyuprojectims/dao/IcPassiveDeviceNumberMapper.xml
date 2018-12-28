@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IcPassiveDeviceNumberDao">
+    <!-- IcPassiveDeviceNumber的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IcPassiveDeviceNumber_Map" type="com.panyu.panyuprojectims.entity.IcPassiveDeviceNumber">
+        <id column="PASSIVE_DEVICE_NUMBER_ID" property="passiveDeviceNumberId" />
+        <result column="POWER_DIVIDER" property="powerDivider" />
+        <result column="COUPLER" property="coupler" />
+        <result column="ROAD_CONNECTOR" property="roadConnector" />
+        <result column="LOAD_NUMBER" property="loadNumber" />
+    </resultMap>
+
+    <!-- 数据库中表名为:IC_PASSIVE_DEVICE_NUMBER的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="IC_PASSIVE_DEVICE_NUMBER_Column">
+        IC_PASSIVE_DEVICE_NUMBER.PASSIVE_DEVICE_NUMBER_ID as PASSIVE_DEVICE_NUMBER_ID
+        ,IC_PASSIVE_DEVICE_NUMBER.POWER_DIVIDER as POWER_DIVIDER
+        ,IC_PASSIVE_DEVICE_NUMBER.COUPLER as COUPLER
+        ,IC_PASSIVE_DEVICE_NUMBER.ROAD_CONNECTOR as ROAD_CONNECTOR
+        ,IC_PASSIVE_DEVICE_NUMBER.LOAD_NUMBER as LOAD_NUMBER
+    </sql>
+
+
+    <!--根据信息id查询无源器件对象-->
+    <select id="selectIcPassiveDeviceNumberByIndoorInformationId" resultMap="result_IcPassiveDeviceNumber_Map">
+        select ic.* from Indoor_Coverage_information in1 left join IC_passive_device_number ic on
+        in1.passive_device_number_id = ic.passive_device_number_id  where in1.indoor_information_id =
+        #{indoorInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertIcPassiveDeviceNumber">
+        insert into IC_passive_device_number values(
+        #{passiveDeviceNumberId,jdbcType=VARCHAR},
+        #{powerDivider,jdbcType=VARCHAR},
+        #{coupler,jdbcType=VARCHAR},
+        #{roadConnector,jdbcType=VARCHAR},
+        #{loadNumber,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 根据无源器件数量ID删除选中项-->
+    <delete id="deleteIcPassiveDeviceNumberById" parameterType="java.lang.String">
+        delete from IC_PASSIVE_DEVICE_NUMBER
+        where PASSIVE_DEVICE_NUMBER_ID = #{passiveDeviceNumberId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

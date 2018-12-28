@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IcConstructionOrganizationDao">
+    <!-- IcConstructionOrganization的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IcConstructionOrganization_Map" type="com.panyu.panyuprojectims.entity.IcConstructionOrganization">
+        <id column="IC_CONSTRUCTION_ID" property="icConstructionId" />
+        <result column="IC_CORPORATE_NAME" property="icCorporateName" />
+        <result column="PERSON_IN_CHARGE" property="personInCharge" />
+    </resultMap>
+
+    <!-- 数据库中表名为:IC_CONSTRUCTION_ORGANIZATION的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="IC_CONSTRUCTION_ORGANIZATION_Column">
+        IC_CONSTRUCTION_ORGANIZATION.IC_CONSTRUCTION_ID as IC_CONSTRUCTION_ID
+        ,IC_CONSTRUCTION_ORGANIZATION.IC_CORPORATE_NAME as IC_CORPORATE_NAME
+        ,IC_CONSTRUCTION_ORGANIZATION.PERSON_IN_CHARGE as PERSON_IN_CHARGE
+    </sql>
+
+
+    <!--添加-->
+    <insert id="insertIcConstructionOrganization">
+        insert into IC_construction_organization values(
+        #{icConstructionId,jdbcType=VARCHAR},
+        #{icCorporateName,jdbcType=VARCHAR},
+        #{personInCharge,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 通过IcConstructionOrganization的id将数据库表中对应的数据删除-->
+    <delete id="deleteIcConstructionOrganizationById" parameterType="java.lang.String">
+        delete from IC_CONSTRUCTION_ORGANIZATION
+        where IC_CONSTRUCTION_ID = #{icConstructionId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

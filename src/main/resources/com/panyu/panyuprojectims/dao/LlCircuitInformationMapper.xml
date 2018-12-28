@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.LlCircuitInformationDao">
+    <!-- LlCircuitInformation的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_LlCircuitInformation_Map" type="com.panyu.panyuprojectims.entity.LlCircuitInformation">
+        <id column="CIRCUIT_INFORMATION_ID" property="circuitInformationId" />
+        <result column="OPERATOR" property="operator" />
+        <result column="BUILDING_PROJECT" property="buildingProject" />
+        <result column="BUILD_YEAR" property="buildYear" />
+        <result column="HOP_NAME" property="hopName" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="COUNTY" property="county" />
+        <result column="AREA" property="area" />
+        <result column="SUBORDINATE_DEPARTMENT" property="subordinateDepartment" />
+        <result column="DESIGN_INSTITUTE_ID" property="designInstituteId" />
+        <result column="SUPERVISION_UNIT_ID" property="supervisionUnitId" />
+        <result column="CONSTRUCTION_UNIT_ID" property="constructionUnitId" />
+        <result column="NEW_LINE_LENGTH_ID" property="newLineLengthId" />
+        <result column="CABLE_TYPE" property="cableType" />
+        <result column="CABLE_LENGTH_DESIGN_ID" property="cableLengthDesignId" />
+        <result column="NEW_FLOOR_STAND_ID" property="newFloorStandId" />
+        <result column="WORN_FLOOR_STAND_ID" property="wornFloorStandId" />
+        <result column="NEW_WALL_MOUNTED_ONU_ID" property="newWallMountedOnuId" />
+        <result column="WORN_WALL_MOUNTED_ONU_ID" property="wornWallMountedOnuId" />
+        <result column="COMPANY_NAME" property="companyName" />
+        <result column="DESIGN_PERSONNEL" property="designPersonnel" />
+        <result column="SITE_LEADER" property="siteLeader" />
+        <result column="PROFESSION_RESPONSIBLE_PERSON" property="professionResponsiblePerson" />
+        <result column="DISTRICT_HEAD" property="districtHead" />
+        <result column="CORPORATE_NAME" property="corporateName" />
+        <result column="PERSON_IN_CHARGE" property="personInCharge" />
+        <result column="NEW_POLE_LINE" property="newPoleLine" />
+        <result column="NEW_PIPE" property="newPipe" />
+        <result column="DIRECT_BURIAL_OPTICAL_CABLE" property="directBurialOpticalCable" />
+        <result column="PUSH_PIPE" property="pushPipe" />
+        <result column="GYSTS_SUSPENDED" property="gystsSuspended" />
+        <result column="GYSTS_SUSPENSION_WIRE" property="gystsSuspensionWire" />
+        <result column="GYSTA" property="gysta" />
+        <result column="PLOW_IN_OPTICAL_CABLE" property="plowInOpticalCable" />
+        <result column="WALL_CABLE" property="wallCable" />
+        <result column="IN_BRIDGE_CABLE" property="inBridgeCable" />
+        <result column="GYFXTS" property="gyfxts" />
+        <result column="NEW_FLOOR_STAND_NUMBER" property="newFloorStandNumber" />
+        <result column="NEW_FLOOR_STAND_SIZE" property="newFloorStandSize" />
+        <result column="WORN_FLOOR_STAND_NUMBER" property="wornFloorStandNumber" />
+        <result column="WORN_FLOOR_STAND_SIZE" property="wornFloorStandSize" />
+        <result column="NEW_WALL_MOUNTED_ONU_NUMBER" property="newWallMountedOnuNumber" />
+        <result column="NEW_WALL_MOUNTED_ONU_SIZE" property="newWallMountedOnuSize" />
+        <result column="WORN_WALL_MOUNTED_ONU_NUMBER" property="wornWallMountedOnuNumber" />
+        <result column="WORN_WALL_MOUNTED_ONU_SIZE" property="wornWallMountedOnuSize" />
+    </resultMap>
+
+    <!-- 数据库中表名为:LL_CIRCUIT_INFORMATION的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="LL_CIRCUIT_INFORMATION_Column">
+        LL_CIRCUIT_INFORMATION.CIRCUIT_INFORMATION_ID as CIRCUIT_INFORMATION_ID
+        ,LL_CIRCUIT_INFORMATION.OPERATOR as OPERATOR
+        ,LL_CIRCUIT_INFORMATION.BUILDING_PROJECT as BUILDING_PROJECT
+        ,LL_CIRCUIT_INFORMATION.BUILD_YEAR as BUILD_YEAR
+        ,LL_CIRCUIT_INFORMATION.HOP_NAME as HOP_NAME
+        ,LL_CIRCUIT_INFORMATION.PROVINCE as PROVINCE
+        ,LL_CIRCUIT_INFORMATION.CITY as CITY
+        ,LL_CIRCUIT_INFORMATION.COUNTY as COUNTY
+        ,LL_CIRCUIT_INFORMATION.AREA as AREA
+        ,LL_CIRCUIT_INFORMATION.SUBORDINATE_DEPARTMENT as SUBORDINATE_DEPARTMENT
+        ,LL_CIRCUIT_INFORMATION.DESIGN_INSTITUTE_ID as DESIGN_INSTITUTE_ID
+        ,LL_CIRCUIT_INFORMATION.SUPERVISION_UNIT_ID as SUPERVISION_UNIT_ID
+        ,LL_CIRCUIT_INFORMATION.CONSTRUCTION_UNIT_ID as CONSTRUCTION_UNIT_ID
+        ,LL_CIRCUIT_INFORMATION.NEW_LINE_LENGTH_ID as NEW_LINE_LENGTH_ID
+        ,LL_CIRCUIT_INFORMATION.CABLE_TYPE as CABLE_TYPE
+        ,LL_CIRCUIT_INFORMATION.CABLE_LENGTH_DESIGN_ID as CABLE_LENGTH_DESIGN_ID
+        ,LL_CIRCUIT_INFORMATION.NEW_FLOOR_STAND_ID as NEW_FLOOR_STAND_ID
+        ,LL_CIRCUIT_INFORMATION.WORN_FLOOR_STAND_ID as WORN_FLOOR_STAND_ID
+        ,LL_CIRCUIT_INFORMATION.NEW_WALL_MOUNTED_ONU_ID as NEW_WALL_MOUNTED_ONU_ID
+        ,LL_CIRCUIT_INFORMATION.WORN_WALL_MOUNTED_ONU_ID as WORN_WALL_MOUNTED_ONU_ID
+    </sql>
+
+    <!--模糊匹配查询展示线路基本信息总条数-->
+    <select id="getCircuitInformationCount" resultType="java.lang.Long">
+        select count(*) from (
+            select
+            ci.circuit_information_id,ci.operator,ci.building_project,ci.build_year,ci.hop_name,ci.province,
+            ci.city,ci.county,ci.area,ci.subordinate_department,
+            di.company_name,di.design_personnel,
+            su.site_leader,su.profession_responsible_person,su.district_head,
+            cu.corporate_name,cu.person_in_charge,
+            ll.new_pole_line,ll.new_pipe,ll.direct_burial_optical_cable,ll.push_pipe,
+            ci.cable_type,
+            cl.gysts_suspended,cl.gysts_suspension_wire,cl.gysta,cl.plow_in_optical_cable,cl.wall_cable,
+            cl.in_bridge_cable,cl.gyfxts,
+            fn.new_floor_stand_number,fn.new_floor_stand_size,
+            fw.worn_floor_stand_number,fw.worn_floor_stand_size,
+            mn.new_wall_mounted_onu_number,mn.new_wall_mounted_onu_size,
+            ww.worn_wall_mounted_onu_number,ww.worn_wall_mounted_onu_size
+            from LL_circuit_information ci
+            left join LL_design_institute di
+            on ci.design_institute_id = di.design_institute_id
+            left join LL_supervision_unit su
+            on ci.supervision_unit_id = su.supervision_unit_id
+            left join LL_construction_unit cu
+            on ci.construction_unit_id = cu.construction_unit_id
+            left join LL_New_line_length ll
+            on ci.new_line_length_id = ll.new_line_length_id
+            left join LL_cable_length_design cl
+            on ci.cable_length_design_id = cl.cable_length_design_id
+            left join LL_floor_stand_onu_new fn
+            on ci.new_floor_stand_id = fn.new_floor_stand_id
+            left join LL_floor_stand_onu_worn fw
+            on ci.worn_floor_stand_id = fw.worn_floor_stand_id
+            left join LL_wall_mounted_onu_new mn
+            on ci.new_wall_mounted_onu_id = mn.new_wall_mounted_onu_id
+            left join LL_wall_mounted_onu_worn ww
+            on ci.worn_wall_mounted_onu_id = ww.worn_wall_mounted_onu_id
+            <where>
+                <if test="province !=null and province !='' ">
+                    and PROVINCE like #{province}
+                </if>
+                <if test="city !=null and city !='' ">
+                    and CITY like #{city}
+                </if>
+                <if test="county !=null and county !='' ">
+                    and COUNTY like #{county}
+                </if>
+                <if test="buildYear !=null and buildYear !='' ">
+                    and BUILD_YEAR like #{buildYear}
+                </if>
+                <if test="buildingProject !=null and buildingProject !='' ">
+                    and BUILDING_PROJECT like #{buildingProject}
+                </if>
+                <if test="operator !=null and operator !='' ">
+                    and OPERATOR like #{operator}
+                </if>
+                <if test="keyword !=null and keyword !='' ">
+                    and (SITE_LEADER like #{keyword}
+                    or PROFESSION_RESPONSIBLE_PERSON like #{keyword}
+                    or DISTRICT_HEAD like #{keyword})
+                </if>
+            </where>
+        )
+    </select>
+    <!--分页模糊匹配查询展示线路基本信息数据-->
+    <select id="selectAllLlCircuitInformation" resultMap="result_LlCircuitInformation_Map">
+        select * from (
+            select t.*,rownum r from(
+                select
+                ci.circuit_information_id,ci.operator,ci.building_project,ci.build_year,ci.hop_name,ci.province,
+                ci.city,ci.county,ci.area,ci.subordinate_department,
+                di.company_name,di.design_personnel,
+                su.site_leader,su.profession_responsible_person,su.district_head,
+                cu.corporate_name,cu.person_in_charge,
+                ll.new_pole_line,ll.new_pipe,ll.direct_burial_optical_cable,ll.push_pipe,
+                ci.cable_type,
+                cl.gysts_suspended,cl.gysts_suspension_wire,cl.gysta,cl.plow_in_optical_cable,cl.wall_cable,
+                cl.in_bridge_cable,cl.gyfxts,
+                fn.new_floor_stand_number,fn.new_floor_stand_size,
+                fw.worn_floor_stand_number,fw.worn_floor_stand_size,
+                mn.new_wall_mounted_onu_number,mn.new_wall_mounted_onu_size,
+                ww.worn_wall_mounted_onu_number,ww.worn_wall_mounted_onu_size
+                from LL_circuit_information ci
+                left join LL_design_institute di
+                on ci.design_institute_id = di.design_institute_id
+                left join LL_supervision_unit su
+                on ci.supervision_unit_id = su.supervision_unit_id
+                left join LL_construction_unit cu
+                on ci.construction_unit_id = cu.construction_unit_id
+                left join LL_New_line_length ll
+                on ci.new_line_length_id = ll.new_line_length_id
+                left join LL_cable_length_design cl
+                on ci.cable_length_design_id = cl.cable_length_design_id
+                left join LL_floor_stand_onu_new fn
+                on ci.new_floor_stand_id = fn.new_floor_stand_id
+                left join LL_floor_stand_onu_worn fw
+                on ci.worn_floor_stand_id = fw.worn_floor_stand_id
+                left join LL_wall_mounted_onu_new mn
+                on ci.new_wall_mounted_onu_id = mn.new_wall_mounted_onu_id
+                left join LL_wall_mounted_onu_worn ww
+                on ci.worn_wall_mounted_onu_id = ww.worn_wall_mounted_onu_id
+                <where>
+                    <if test="province !=null and province !='' ">
+                        and PROVINCE like #{province}
+                    </if>
+                    <if test="city !=null and city !='' ">
+                        and CITY like #{city}
+                    </if>
+                    <if test="county !=null and county !='' ">
+                        and COUNTY like #{county}
+                    </if>
+                    <if test="buildYear !=null and buildYear !='' ">
+                        and BUILD_YEAR like #{buildYear}
+                    </if>
+                    <if test="buildingProject !=null and buildingProject !='' ">
+                        and BUILDING_PROJECT like #{buildingProject}
+                    </if>
+                    <if test="operator !=null and operator !='' ">
+                        and OPERATOR like #{operator}
+                    </if>
+                    <if test="keyword !=null and keyword !='' ">
+                        and (SITE_LEADER like #{keyword}
+                        or PROFESSION_RESPONSIBLE_PERSON like #{keyword}
+                        or DISTRICT_HEAD like #{keyword})
+                    </if>
+                </where>
+            )t
+        )where r between #{start} and #{end}
+    </select>
+    <!--根据线路基本信息ID查询关联的小表ID（基于删除大表必须先删除小表的规则）-->
+    <!--根据线路基本信息ID查询线路设计单位表-->
+    <select id="selectDesignInstituteId" resultType="String">
+        select DESIGN_INSTITUTE_ID
+        from LL_CIRCUIT_INFORMATION
+        where CIRCUIT_INFORMATION_ID = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据线路基本信息ID查询线路监理单位表-->
+    <select id="selectSupervisionUnitId" resultType="String">
+        select SUPERVISION_UNIT_ID
+        from LL_CIRCUIT_INFORMATION
+        where CIRCUIT_INFORMATION_ID = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据线路基本信息ID查询线路施工单位表-->
+    <select id="selectConstructionUnitId" resultType="String">
+        select CONSTRUCTION_UNIT_ID
+        from LL_CIRCUIT_INFORMATION
+        where CIRCUIT_INFORMATION_ID = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据线路基本信息ID查询新建线路长度-->
+    <select id="selectNewLineLengthId" resultType="String">
+        select NEW_LINE_LENGTH_ID
+        from LL_CIRCUIT_INFORMATION
+        where CIRCUIT_INFORMATION_ID = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据线路基本信息ID查询光缆设计皮长公里-->
+    <select id="selectCableLengthDesignId" resultType="String">
+        select CABLE_LENGTH_DESIGN_ID
+        from LL_CIRCUIT_INFORMATION
+        where CIRCUIT_INFORMATION_ID = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据线路基本信息ID查询落地式光交箱（新建）-->
+    <select id="selectNewFloorStandId" resultType="String">
+        select NEW_FLOOR_STAND_ID
+        from LL_CIRCUIT_INFORMATION
+        where CIRCUIT_INFORMATION_ID = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据线路基本信息ID查询落地式光交箱（利旧）-->
+    <select id="selectWornFloorStandId" resultType="String">
+        select WORN_FLOOR_STAND_ID
+        from LL_CIRCUIT_INFORMATION
+        where CIRCUIT_INFORMATION_ID = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据线路基本信息ID查询壁挂式光交箱（新建）-->
+    <select id="selectNewWallMountedOnuId" resultType="String">
+        select NEW_WALL_MOUNTED_ONU_ID
+        from LL_CIRCUIT_INFORMATION
+        where CIRCUIT_INFORMATION_ID = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据线路基本信息ID查询壁挂式光交箱（利旧）-->
+    <select id="selectWornWallMountedOnuId" resultType="String">
+        select WORN_WALL_MOUNTED_ONU_ID
+        from LL_CIRCUIT_INFORMATION
+        where CIRCUIT_INFORMATION_ID = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据线路基本信息ID删除选中项-->
+    <delete id="deleteLlCircuitInformation">
+        delete from LL_CIRCUIT_INFORMATION
+        where CIRCUIT_INFORMATION_ID = #{circuitInformationId,jdbcType=VARCHAR}
+    </delete>
+    <!--添加线路基本信息数据-->
+    <insert id="insertLlCircuitInformation">
+        insert into LL_CIRCUIT_INFORMATION values (
+            #{circuitInformationId,jdbcType=VARCHAR},
+            #{operator,jdbcType=VARCHAR},
+            #{buildingProject,jdbcType=VARCHAR},
+            #{buildYear,jdbcType=VARCHAR},
+            #{hopName,jdbcType=VARCHAR},
+            #{province,jdbcType=VARCHAR},
+            #{city,jdbcType=VARCHAR},
+            #{county,jdbcType=VARCHAR},
+            #{area,jdbcType=VARCHAR},
+            #{subordinateDepartment,jdbcType=VARCHAR},
+
+            #{designInstituteId,jdbcType=VARCHAR},
+            #{supervisionUnitId,jdbcType=VARCHAR},
+            #{constructionUnitId,jdbcType=VARCHAR},
+            #{newLineLengthId,jdbcType=VARCHAR},
+
+            #{cableType,jdbcType=VARCHAR},
+
+            #{cableLengthDesignId,jdbcType=VARCHAR},
+            #{newFloorStandId,jdbcType=VARCHAR},
+            #{wornFloorStandId,jdbcType=VARCHAR},
+            #{newWallMountedOnuId,jdbcType=VARCHAR},
+            #{wornWallMountedOnuId,jdbcType=VARCHAR}
+        )
+    </insert>
+    <!--导出线路基本信息Excel空表格-->
+    <select id="importLlCircuitInformationNullExcel" resultMap="result_LlCircuitInformation_Map">
+        select
+        ci.circuit_information_id,ci.operator,ci.building_project,ci.build_year,ci.hop_name,ci.province,
+        ci.city,ci.county,ci.area,ci.subordinate_department,
+        di.company_name,di.design_personnel,
+        su.site_leader,su.profession_responsible_person,su.district_head,
+        cu.corporate_name,cu.person_in_charge,
+        ll.new_pole_line,ll.new_pipe,ll.direct_burial_optical_cable,ll.push_pipe,
+        ci.cable_type,
+        cl.gysts_suspended,cl.gysts_suspension_wire,cl.gysta,cl.plow_in_optical_cable,cl.wall_cable,
+        cl.in_bridge_cable,cl.gyfxts,
+        fn.new_floor_stand_number,fn.new_floor_stand_size,
+        fw.worn_floor_stand_number,fw.worn_floor_stand_size,
+        mn.new_wall_mounted_onu_number,mn.new_wall_mounted_onu_size,
+        ww.worn_wall_mounted_onu_number,ww.worn_wall_mounted_onu_size
+        from LL_circuit_information ci
+        left join LL_design_institute di
+        on ci.design_institute_id = di.design_institute_id
+        left join LL_supervision_unit su
+        on ci.supervision_unit_id = su.supervision_unit_id
+        left join LL_construction_unit cu
+        on ci.construction_unit_id = cu.construction_unit_id
+        left join LL_New_line_length ll
+        on ci.new_line_length_id = ll.new_line_length_id
+        left join LL_cable_length_design cl
+        on ci.cable_length_design_id = cl.cable_length_design_id
+        left join LL_floor_stand_onu_new fn
+        on ci.new_floor_stand_id = fn.new_floor_stand_id
+        left join LL_floor_stand_onu_worn fw
+        on ci.worn_floor_stand_id = fw.worn_floor_stand_id
+        left join LL_wall_mounted_onu_new mn
+        on ci.new_wall_mounted_onu_id = mn.new_wall_mounted_onu_id
+        left join LL_wall_mounted_onu_worn ww
+        on ci.worn_wall_mounted_onu_id = ww.worn_wall_mounted_onu_id
+    </select>
+    <!--导出线路基本信息Excel表格数据-->
+    <select id="importLlCircuitInformationExcel" resultMap="result_LlCircuitInformation_Map">
+        select
+        ci.circuit_information_id,ci.operator,ci.building_project,ci.build_year,ci.hop_name,ci.province,
+        ci.city,ci.county,ci.area,ci.subordinate_department,
+        di.company_name,di.design_personnel,
+        su.site_leader,su.profession_responsible_person,su.district_head,
+        cu.corporate_name,cu.person_in_charge,
+        ll.new_pole_line,ll.new_pipe,ll.direct_burial_optical_cable,ll.push_pipe,
+        ci.cable_type,
+        cl.gysts_suspended,cl.gysts_suspension_wire,cl.gysta,cl.plow_in_optical_cable,cl.wall_cable,
+        cl.in_bridge_cable,cl.gyfxts,
+        fn.new_floor_stand_number,fn.new_floor_stand_size,
+        fw.worn_floor_stand_number,fw.worn_floor_stand_size,
+        mn.new_wall_mounted_onu_number,mn.new_wall_mounted_onu_size,
+        ww.worn_wall_mounted_onu_number,ww.worn_wall_mounted_onu_size
+        from LL_circuit_information ci
+        left join LL_design_institute di
+        on ci.design_institute_id = di.design_institute_id
+        left join LL_supervision_unit su
+        on ci.supervision_unit_id = su.supervision_unit_id
+        left join LL_construction_unit cu
+        on ci.construction_unit_id = cu.construction_unit_id
+        left join LL_New_line_length ll
+        on ci.new_line_length_id = ll.new_line_length_id
+        left join LL_cable_length_design cl
+        on ci.cable_length_design_id = cl.cable_length_design_id
+        left join LL_floor_stand_onu_new fn
+        on ci.new_floor_stand_id = fn.new_floor_stand_id
+        left join LL_floor_stand_onu_worn fw
+        on ci.worn_floor_stand_id = fw.worn_floor_stand_id
+        left join LL_wall_mounted_onu_new mn
+        on ci.new_wall_mounted_onu_id = mn.new_wall_mounted_onu_id
+        left join LL_wall_mounted_onu_worn ww
+        on ci.worn_wall_mounted_onu_id = ww.worn_wall_mounted_onu_id
+        where ci.circuit_information_id in
+        <foreach collection="array" open="(" separator="," close=")" item="ids">
+            #{ids}
+        </foreach>
+    </select>
+</mapper>

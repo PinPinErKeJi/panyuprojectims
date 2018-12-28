@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.ModuleDao">
+
+    <!-- Module的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_Module_Map" type="com.panyu.panyuprojectims.entity.Module">
+        <id column="MODULE_ID" property="moduleId" />
+        <result column="MODULE_NAME" property="moduleName" />
+    </resultMap>
+    <!-- 数据库中表名为:MODULE的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="MODULE_Column">
+        MODULE.MODULE_ID as MODULE_ID
+        ,MODULE.MODULE_NAME as MODULE_NAME
+    </sql>
+
+    <!-- 获得类名为:Module对应数据库中表的数据集合 -->
+    <select id="selectModule" resultMap="result_Module_Map">
+        select * from
+        (
+            select result.* from
+            (
+                select 
+                <include refid="MODULE_Column" /> 
+                from MODULE 
+
+            ) result 
+        )
+    </select>
+
+    <!--根据名字查询个数-->
+    <select id="getCountModuleName" resultType="int">
+        select count(*) from module where module_name = #{moduleName,jdbcType=VARCHAR}
+    </select>
+
+
+
+<!--添加模块选项框开始-->
+    <!-- 添加选项框内容时查询所有模块名称 -->
+    <select id="selectAllModule" resultMap="result_Module_Map">
+        select * from
+        (
+            select result.* from
+            (
+                select
+                <include refid="MODULE_Column" />
+                from MODULE
+            ) result
+        )
+    </select>
+    <!-- 根据选项框中的内容，添加没有的模块名信息-->
+    <insert id="insertModule" parameterType="com.panyu.panyuprojectims.entity.Module">
+        insert into MODULE(MODULE_ID,MODULE_NAME) 
+        values(sys_guid(),#{moduleName,jdbcType=VARCHAR})
+    </insert>
+    <!-- 通过Module的name获得对应数据库中表的数据对象-->
+    <select id="selectModuleByName" parameterType="java.lang.String" resultMap="result_Module_Map">
+        select
+        <include refid="MODULE_Column" />
+        from MODULE
+        where MODULE.MODULE_NAME = #{moduleName,jdbcType=VARCHAR}
+    </select>
+
+<!--添加模块选项框结束-->
+<!--删除模块选项框中的内容开始-->
+    <delete id="deleteModuleById">
+        delete from MODULE where module_id = #{moduleId,jdbcType=VARCHAR}
+    </delete>
+<!--删除模块选项框中的内容结束-->
+
+<!--修改模块选项框中的内容开始-->
+    <update id="updateModule">
+        update MODULE set module_name = #{moduleName,jdbcType=VARCHAR}
+        where module_id = #{moduleId,jdbcType=VARCHAR}
+    </update>
+<!--修改模块选项框中的内容结束-->
+    <select id="selectModuleId" resultType="java.lang.String">
+        select module_id from Module where module_name = #{moduleName,jdbcType=VARCHAR}
+    </select>
+</mapper>

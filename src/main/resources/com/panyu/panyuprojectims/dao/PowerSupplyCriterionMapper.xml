@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PowerSupplyCriterionDao">
+    <!-- PowerSupplyCriterion的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PowerSupplyCriterion_Map" type="com.panyu.panyuprojectims.entity.PowerSupplyCriterion">
+        <id column="POWER_CRITERION_ID" property="powerCriterionId" />
+        <result column="POWER_CRITERION_NAME" property="powerCriterionName" />
+        <result column="POWER_QUALIFIED" property="powerQualified" />
+        <result column="POWER_PROBLEM" property="powerProblem" />
+        <result column="POWER_PHOTO" property="powerPhoto" />
+        <result column="POWER_PROJECT_ID" property="powerProjectId" />
+    </resultMap>
+
+
+    <!--根据检查项目id查询包含的标准规范-->
+    <select id="selectPowerSupplyCriterionByPowerProjectId" resultMap="result_PowerSupplyCriterion_Map">
+        select * from Power_Supply_Criterion where power_project_id = #{powerProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据标准规范和检查项目id查询个数-->
+    <select id="getCountByPowerCriterionNameAndPowerProjectId" resultType="Long">
+        select count(*) from Power_Supply_Criterion where power_criterion_name =
+        #{powerCriterionName,jdbcType=VARCHAR} and power_project_id =
+        #{powerProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertPowerSupplyCriterion">
+        insert into Power_Supply_Criterion values(
+        sys_guid(),
+        #{powerCriterionName,jdbcType=VARCHAR},'','','',
+        #{powerProjectId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据标准规范和检查项目id查询标准规范-->
+    <select id="selectPowerSupplyCriterionByPowerCriterionNameAndPowerProjectId" resultMap="result_PowerSupplyCriterion_Map">
+        select * from Power_Supply_Criterion where power_criterion_name =
+        #{powerCriterionName,jdbcType=VARCHAR} and power_project_id =
+        #{powerProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--修改-->
+    <update id="updatePowerSupplyCriterion">
+        update Power_Supply_Criterion set power_criterion_name =
+        #{powerCriterionName,jdbcType=VARCHAR} where power_criterion_id =
+        #{powerCriterionId,jdbcType=VARCHAR}
+    </update>
+
+    <!--根据标准规范和id查询标准规范-->
+    <select id="selectPowerSupplyCriterionByPowerCriterionNameAndPowerCriterionId" resultMap="result_PowerSupplyCriterion_Map">
+        select * from Power_Supply_Criterion where power_criterion_name =
+        #{powerCriterionName,jdbcType=VARCHAR} and power_criterion_id =
+        #{powerCriterionId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据检查项目ID查询检查标准规范ID-->
+    <select id="selectPowerCriterionId" resultType="String">
+        select POWER_CRITERION_ID
+        from POWER_SUPPLY_CRITERION
+        where POWER_PROJECT_ID = #{powerProjectId,jdbcType=VARCHAR}
+    </select>
+    <!--删除-->
+    <delete id="deletePowerSupplyCriterion">
+        delete from POWER_SUPPLY_CRITERION
+        where POWER_CRITERION_ID = #{powerCriterionId,jdbcType=VARCHAR}
+    </delete>
+
+
+
+</mapper>

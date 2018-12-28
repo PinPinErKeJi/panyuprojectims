@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PowerSupplyProgressDao">
+    <!-- PowerSupplyProgress的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PowerSupplyProgress_Map" type="com.panyu.panyuprojectims.entity.PowerSupplyProgress">
+        <id column="POWER_PROGRESS_ID" property="powerProgressId" />
+        <result column="OPERATOR" property="operator" />
+        <result column="BUILD_YEAR" property="buildYear" />
+        <result column="BUILDING_PROJECT" property="buildingProject" />
+        <result column="MOTOR_ROOM_NAME" property="motorRoomName" />
+        <result column="MOTOR_ROOM_LONGITUDE" property="motorRoomLongitude" />
+        <result column="MOTOR_ROOM_LATITUDE" property="motorRoomLatitude" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="COUNTY" property="county" />
+        <result column="SITE_SUPERVISION" property="siteSupervision" />
+        <result column="PROJECT_LEADER" property="projectLeader" />
+        <result column="PROGRESS_EQUIPMENT_ID" property="progressEquipmentId" />
+        <result column="PROGRESS_POWER_CABLE_ID" property="progressPowerCableId" />
+        <result column="PROGRESS_CABLING_RACK_ID" property="progressCablingRackId" />
+        <result column="PROGRESS_EQUIPMENT_NUMBER" property="progressEquipmentNumber" />
+        <result column="PROGRESS_EQUIPMENT_TYPE" property="progressEquipmentType" />
+        <result column="PROGRESS_EQUIPMENT_MODEL" property="progressEquipmentModel" />
+        <result column="PROGRESS_EQUIPMENT_SIZE" property="progressEquipmentSize" />
+        <result column="CONSTRUCTION_PROGRESS" property="constructionProgress" />
+        <result column="EQUIPMENT_ARRIVAL_TIME" property="equipmentArrivalTime" />
+        <result column="INSTALLATION_TIME" property="installationTime" />
+        <result column="CHARGING_TIME" property="chargingTime" />
+        <result column="PROGRESS_POWER_CABLE_NUMBER" property="progressPowerCableNumber" />
+        <result column="PROGRESS_POWER_CABLE_MODEL" property="progressPowerCableModel" />
+        <result column="PROGRESS_POWER_LENGTH" property="progressPowerLength" />
+        <result column="BE_FROM" property="beFrom" />
+        <result column="BE_TO" property="beTo" />
+        <result column="CONSTRUCTION_SCHEDULE" property="constructionSchedule" />
+        <result column="POWER_CABLE_MAKESPAN" property="powerCableMakespan" />
+        <result column="PROGRESS_CABLING_RACK_NUMBER" property="progressCablingRackNumber" />
+        <result column="PROGRESS_RACK_LENGTH" property="progressRackLength" />
+        <result column="RACK_CONSTRUCTION_PROGRESS" property="rackConstructionProgress" />
+        <result column="CABLING_RACK_MAKESPAN" property="cablingRackMakespan" />
+    </resultMap>
+
+    <!-- 数据库中表名为:POWER_SUPPLY_PROGRESS的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="POWER_SUPPLY_PROGRESS_Column">
+        POWER_SUPPLY_PROGRESS.POWER_PROGRESS_ID as POWER_PROGRESS_ID
+        ,POWER_SUPPLY_PROGRESS.OPERATOR as OPERATOR
+        ,POWER_SUPPLY_PROGRESS.BUILD_YEAR as BUILD_YEAR
+        ,POWER_SUPPLY_PROGRESS.BUILDING_PROJECT as BUILDING_PROJECT
+        ,POWER_SUPPLY_PROGRESS.MOTOR_ROOM_NAME as MOTOR_ROOM_NAME
+        ,POWER_SUPPLY_PROGRESS.MOTOR_ROOM_LONGITUDE as MOTOR_ROOM_LONGITUDE
+        ,POWER_SUPPLY_PROGRESS.MOTOR_ROOM_LATITUDE as MOTOR_ROOM_LATITUDE
+        ,POWER_SUPPLY_PROGRESS.PROVINCE as PROVINCE
+        ,POWER_SUPPLY_PROGRESS.CITY as CITY
+        ,POWER_SUPPLY_PROGRESS.COUNTY as COUNTY
+        ,POWER_SUPPLY_PROGRESS.SITE_SUPERVISION as SITE_SUPERVISION
+        ,POWER_SUPPLY_PROGRESS.PROJECT_LEADER as PROJECT_LEADER
+        ,POWER_SUPPLY_PROGRESS.PROGRESS_EQUIPMENT_ID as PROGRESS_EQUIPMENT_ID
+        ,POWER_SUPPLY_PROGRESS.PROGRESS_POWER_CABLE_ID as PROGRESS_POWER_CABLE_ID
+        ,POWER_SUPPLY_PROGRESS.PROGRESS_CABLING_RACK_ID as PROGRESS_CABLING_RACK_ID
+    </sql>
+
+    <!--获得类名为:PowerSupplyProgress对应的数据库表的数据总行数 -->
+    <select id="getPowerSupplyProgressRowCount" resultType="java.lang.Long">
+        select count(*) from (
+            select
+            psp.power_progress_id,psp.operator,psp.build_year,psp.building_project,psp.motor_room_name,
+            psp.motor_room_longitude,psp.motor_room_latitude,psp.province,psp.city,psp.county,
+            psp.site_supervision,psp.project_leader,
+            pne.progress_equipment_number,pne.progress_equipment_type,pne.progress_equipment_model,
+            pne.progress_equipment_size,pne.construction_progress,pne.equipment_arrival_time,
+            pne.installation_time,pne.charging_time,
+            pnp.progress_power_cable_number,pnp.progress_power_cable_model,pnp.progress_power_length,
+            pnp.be_from,pnp.be_to,pnp.construction_schedule,pnp.power_cable_makespan,
+            pnc.progress_cabling_rack_number,pnc.progress_rack_length,pnc.rack_construction_progress,
+            pnc.cabling_rack_makespan
+            from power_supply_progress psp
+            left join PS_progress_new_equipment pne
+            on psp.progress_equipment_id = pne.progress_equipment_id
+            left join PS_progress_new_power_cable pnp
+            on psp.progress_power_cable_id = pnp.progress_power_cable_id
+            left join PS_progress_new_cabling_rack pnc
+            on psp.progress_cabling_rack_id = pnc.progress_cabling_rack_id
+            <where>
+                <if test="province !=null and province !='' ">
+                    and PROVINCE like #{province}
+                </if>
+                <if test="city !=null and city !='' ">
+                    and CITY like #{city}
+                </if>
+                <if test="county !=null and county !='' ">
+                    and COUNTY like #{county}
+                </if>
+                <if test="buildYear !=null and buildYear !='' ">
+                    and BUILD_YEAR like #{buildYear}
+                </if>
+                <if test="buildingProject !=null and buildingProject !='' ">
+                    and BUILDING_PROJECT like #{buildingProject}
+                </if>
+                <if test="operator !=null and operator !='' ">
+                    and OPERATOR like #{operator}
+                </if>
+                <if test="keyword !=null and keyword !='' ">
+                    and SITE_SUPERVISION like #{keyword}
+                    or PROJECT_LEADER like #{keyword}
+                </if>
+            </where>
+        )
+    </select>
+    <!-- 获得类名为:PowerSupplyProgress对应数据库中表的数据集合 -->
+    <select id="selectPowerSupplyProgress" resultMap="result_PowerSupplyProgress_Map">
+        select * from (
+            select t.*,rownum r from (
+                select
+                psp.power_progress_id,psp.operator,psp.build_year,psp.building_project,psp.motor_room_name,
+                psp.motor_room_longitude,psp.motor_room_latitude,psp.province,psp.city,psp.county,
+                psp.site_supervision,psp.project_leader,
+                pne.progress_equipment_number,pne.progress_equipment_type,pne.progress_equipment_model,
+                pne.progress_equipment_size,pne.construction_progress,pne.equipment_arrival_time,
+                pne.installation_time,pne.charging_time,
+                pnp.progress_power_cable_number,pnp.progress_power_cable_model,pnp.progress_power_length,
+                pnp.be_from,pnp.be_to,pnp.construction_schedule,pnp.power_cable_makespan,
+                pnc.progress_cabling_rack_number,pnc.progress_rack_length,pnc.rack_construction_progress,
+                pnc.cabling_rack_makespan
+                from power_supply_progress psp
+                left join PS_progress_new_equipment pne
+                on psp.progress_equipment_id = pne.progress_equipment_id
+                left join PS_progress_new_power_cable pnp
+                on psp.progress_power_cable_id = pnp.progress_power_cable_id
+                left join PS_progress_new_cabling_rack pnc
+                on psp.progress_cabling_rack_id = pnc.progress_cabling_rack_id
+                <where>
+                    <if test="province !=null and province !='' ">
+                        and PROVINCE like #{province}
+                    </if>
+                    <if test="city !=null and city !='' ">
+                        and CITY like #{city}
+                    </if>
+                    <if test="county !=null and county !='' ">
+                        and COUNTY like #{county}
+                    </if>
+                    <if test="buildYear !=null and buildYear !='' ">
+                        and BUILD_YEAR like #{buildYear}
+                    </if>
+                    <if test="buildingProject !=null and buildingProject !='' ">
+                        and BUILDING_PROJECT like #{buildingProject}
+                    </if>
+                    <if test="operator !=null and operator !='' ">
+                        and OPERATOR like #{operator}
+                    </if>
+                    <if test="keyword !=null and keyword !='' ">
+                        and SITE_SUPERVISION like #{keyword}
+                        or PROJECT_LEADER like #{keyword}
+                    </if>
+                </where>
+            )t
+        )where r between #{start} and #{end}
+    </select>
+    <!--导出进度Excel表格数据-->
+    <select id="importPowerSupplyProgressExcel" resultMap="result_PowerSupplyProgress_Map">
+        select
+        psp.power_progress_id,psp.operator,psp.build_year,psp.building_project,psp.motor_room_name,
+        psp.motor_room_longitude,psp.motor_room_latitude,psp.province,psp.city,psp.county,
+        psp.site_supervision,psp.project_leader,
+        pne.progress_equipment_number,pne.progress_equipment_type,pne.progress_equipment_model,
+        pne.progress_equipment_size,pne.construction_progress,pne.equipment_arrival_time,
+        pne.installation_time,pne.charging_time,
+        pnp.progress_power_cable_number,pnp.progress_power_cable_model,pnp.progress_power_length,
+        pnp.be_from,pnp.be_to,pnp.construction_schedule,pnp.power_cable_makespan,
+        pnc.progress_cabling_rack_number,pnc.progress_rack_length,pnc.rack_construction_progress,
+        pnc.cabling_rack_makespan
+        from power_supply_progress psp
+        left join PS_progress_new_equipment pne
+        on psp.progress_equipment_id = pne.progress_equipment_id
+        left join PS_progress_new_power_cable pnp
+        on psp.progress_power_cable_id = pnp.progress_power_cable_id
+        left join PS_progress_new_cabling_rack pnc
+        on psp.progress_cabling_rack_id = pnc.progress_cabling_rack_id
+        where psp.power_progress_id in
+        <foreach collection="array" open="(" separator="," close=")" item="ids">
+            #{ids}
+        </foreach>
+    </select>
+</mapper>

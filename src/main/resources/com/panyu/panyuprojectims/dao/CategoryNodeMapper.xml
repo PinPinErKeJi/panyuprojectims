@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.CategoryNodeDao">
+    <!-- CategoryNode的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_CategoryNode_Map" type="com.panyu.panyuprojectims.entity.CategoryNode">
+        <id column="CATEGORY_ID" property="categoryId" />
+        <result column="CATEGORY_NAME" property="categoryName" />
+        <result column="PARENT_ID" property="parentId" />
+    </resultMap>
+
+    <!-- 数据库中表名为:CATEGORY_NODE的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="CATEGORY_NODE_Column">
+        CATEGORY_NODE.CATEGORY_ID as CATEGORY_ID
+        ,CATEGORY_NODE.CATEGORY_NAME as CATEGORY_NAME
+        ,CATEGORY_NODE.CATEGORY_URL as CATEGORY_URL
+        ,CATEGORY_NODE.PARENT_ID as PARENT_ID
+    </sql>
+
+    <resultMap id="treeNode" type="com.panyu.panyuprojectims.entity.TreeNode">
+        <id column="CATEGORY_ID" property="id" />
+        <result column="CATEGORY_NAME" property="text" />
+        <collection property="children" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.TreeNode">
+            <id column="category_id_" property="id" />
+            <result column="category_name_" property="text" />
+        </collection>
+    </resultMap>
+
+
+    <select id="getSonTreeNode" resultType="String">
+        select p.category_id category_id_
+        from category_node c
+        left join category_node p
+        on c.category_id = p.category_id
+        where c.parent_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getModuleName" resultType="String">
+        select category_name from category_node where category_id = #{categoryId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getCategoryName" resultType="String">
+        select category_name from category_node where category_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+
+</mapper>

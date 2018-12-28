@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PowerArrivalStatisticsDao">
+    <!-- PowerArrivalStatistics的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PowerArrivalStatistics_Map" type="com.panyu.panyuprojectims.entity.PowerArrivalStatistics">
+        <id column="POWER_STATISTICS_ID" property="powerStatisticsId" />
+        <result column="OPERATOR" property="operator" />
+        <result column="BUILD_YEAR" property="buildYear" />
+        <result column="BUILDING_PROJECT" property="buildingProject" />
+        <result column="MOTOR_ROOM_NAME" property="motorRoomName" />
+        <result column="MOTOR_ROOM_LONGITUDE" property="motorRoomLongitude" />
+        <result column="MOTOR_ROOM_LATITUDE" property="motorRoomLatitude" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="COUNTY" property="county" />
+        <result column="SITE_SUPERVISION" property="siteSupervision" />
+        <result column="PROJECT_LEADER" property="projectLeader" />
+
+        <result column="POWER_STATISTICS_EQUIPMENT_ID" property="powerStatisticsEquipmentId" />
+        <result column="POWER_ARRIVAL_CABLE_ID" property="powerArrivalCableId" />
+        <result column="POWER_ARRIVAL_RACK_ID" property="powerArrivalRackId" />
+
+        <result column="POWER_STATISTICS_NUMBER" property="powerStatisticsNumber" />
+        <result column="POWER_STATISTICS_TYPE" property="powerStatisticsType" />
+        <result column="POWER_STATISTICS_MODEL" property="powerStatisticsModel" />
+        <result column="POWER_STATISTICS_SIZE" property="powerStatisticsSize" />
+        <result column="POWER_STATISTICS_TIME" property="powerStatisticsTime" />
+        <result column="POWER_EQUIPMENT_PHOTO" property="powerEquipmentPhoto" />
+
+        <result column="POWER_ARRIVAL_CABLE_NUMBER" property="powerArrivalCableNumber" />
+        <result column="POWER_ARRIVAL_CABLE_MODEL" property="powerArrivalCableModel" />
+        <result column="POWER_ARRIVAL_CABLE_LENGTH" property="powerArrivalCableLength" />
+        <result column="POWER_ARRIVAL_CABLE_TIME" property="powerArrivalCableTime" />
+        <result column="POWER_ARRIVAL_CABLE_PHOTO" property="powerArrivalCablePhoto" />
+
+        <result column="POWER_ARRIVAL_RACK_NUMBER" property="powerArrivalRackNumber" />
+        <result column="POWER_ARRIVAL_RACK_MODEL" property="powerArrivalRackModel" />
+        <result column="POWER_ARRIVAL_RACK_LENGTH" property="powerArrivalRackLength" />
+        <result column="POWER_ARRIVAL_RACK_TIME" property="powerArrivalRackTime" />
+        <result column="POWER_ARRIVAL_RACK_PHOTO" property="powerArrivalRackPhoto" />
+    </resultMap>
+
+    <!-- 数据库中表名为:POWER_ARRIVAL_STATISTICS的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="POWER_ARRIVAL_STATISTICS_Column">
+        POWER_ARRIVAL_STATISTICS.POWER_STATISTICS_ID as POWER_STATISTICS_ID
+        ,POWER_ARRIVAL_STATISTICS.OPERATOR as OPERATOR
+        ,POWER_ARRIVAL_STATISTICS.BUILD_YEAR as BUILD_YEAR
+        ,POWER_ARRIVAL_STATISTICS.BUILDING_PROJECT as BUILDING_PROJECT
+        ,POWER_ARRIVAL_STATISTICS.MOTOR_ROOM_NAME as MOTOR_ROOM_NAME
+        ,POWER_ARRIVAL_STATISTICS.MOTOR_ROOM_LONGITUDE as MOTOR_ROOM_LONGITUDE
+        ,POWER_ARRIVAL_STATISTICS.MOTOR_ROOM_LATITUDE as MOTOR_ROOM_LATITUDE
+        ,POWER_ARRIVAL_STATISTICS.PROVINCE as PROVINCE
+        ,POWER_ARRIVAL_STATISTICS.CITY as CITY
+        ,POWER_ARRIVAL_STATISTICS.COUNTY as COUNTY
+        ,POWER_ARRIVAL_STATISTICS.SITE_SUPERVISION as SITE_SUPERVISION
+        ,POWER_ARRIVAL_STATISTICS.PROJECT_LEADER as PROJECT_LEADER
+        ,POWER_ARRIVAL_STATISTICS.POWER_STATISTICS_EQUIPMENT_ID as POWER_STATISTICS_EQUIPMENT_ID
+        ,POWER_ARRIVAL_STATISTICS.POWER_ARRIVAL_CABLE_ID as POWER_ARRIVAL_CABLE_ID
+        ,POWER_ARRIVAL_STATISTICS.POWER_ARRIVAL_RACK_ID as POWER_ARRIVAL_RACK_ID
+    </sql>
+
+    <!--获得类名为:PowerArrivalStatistics对应的数据库表的数据总行数 -->
+    <select id="getPowerArrivalStatisticsRowCount" resultType="java.lang.Long">
+        select count(*) from (
+            select
+            pas.power_statistics_id,pas.operator,pas.build_year,pas.building_project,pas.motor_room_name,
+            pas.motor_room_longitude,pas.motor_room_latitude,pas.province,pas.city,pas.county,
+            pas.site_supervision,pas.project_leader,
+            pae.power_statistics_number,pae.power_statistics_type,pae.power_statistics_model,
+            pae.power_statistics_size,pae.power_statistics_time,pae.power_equipment_photo,
+            pac.power_arrival_cable_number,pac.power_arrival_cable_model,pac.power_arrival_cable_length,
+            pac.power_arrival_cable_time,pac.power_arrival_cable_photo,
+            par.power_arrival_rack_number,par.power_arrival_rack_model,par.power_arrival_rack_length,
+            par.power_arrival_rack_time,par.power_arrival_rack_photo
+            from power_arrival_statistics pas
+            left join power_arrival_equipment pae
+            on pas.power_statistics_equipment_id = pae.power_statistics_equipment_id
+            left join power_arrival_cable pac
+            on pas.power_arrival_cable_id = pac.power_arrival_cable_id
+            left join power_arrival_rack par
+            on pas.power_arrival_rack_id = par.power_arrival_rack_id
+            <where>
+                <if test="province !=null and province !='' ">
+                    and PROVINCE like #{province}
+                </if>
+                <if test="city !=null and city !='' ">
+                    and CITY like #{city}
+                </if>
+                <if test="county !=null and county !='' ">
+                    and COUNTY like #{county}
+                </if>
+                <if test="buildYear !=null and buildYear !='' ">
+                    and BUILD_YEAR like #{buildYear}
+                </if>
+                <if test="buildingProject !=null and buildingProject !='' ">
+                    and BUILDING_PROJECT like #{buildingProject}
+                </if>
+                <if test="operator !=null and operator !='' ">
+                    and OPERATOR like #{operator}
+                </if>
+                <if test="keyword !=null and keyword !='' ">
+                    and SITE_SUPERVISION like #{keyword}
+                    or PROJECT_LEADER like #{keyword}
+                </if>
+            </where>
+        )
+    </select>
+    <!-- 获得类名为:PowerArrivalStatistics对应数据库中表的数据集合 -->
+    <select id="selectPowerArrivalStatistics" resultMap="result_PowerArrivalStatistics_Map">
+        select * from (
+            select t.*,rownum r from (
+                select
+                pas.power_statistics_id,pas.operator,pas.build_year,pas.building_project,pas.motor_room_name,
+                pas.motor_room_longitude,pas.motor_room_latitude,pas.province,pas.city,pas.county,
+                pas.site_supervision,pas.project_leader,
+                pae.power_statistics_number,pae.power_statistics_type,pae.power_statistics_model,
+                pae.power_statistics_size,pae.power_statistics_time,pae.power_equipment_photo,
+                pac.power_arrival_cable_number,pac.power_arrival_cable_model,pac.power_arrival_cable_length,
+                pac.power_arrival_cable_time,pac.power_arrival_cable_photo,
+                par.power_arrival_rack_number,par.power_arrival_rack_model,par.power_arrival_rack_length,
+                par.power_arrival_rack_time,par.power_arrival_rack_photo
+                from power_arrival_statistics pas
+                left join power_arrival_equipment pae
+                on pas.power_statistics_equipment_id = pae.power_statistics_equipment_id
+                left join power_arrival_cable pac
+                on pas.power_arrival_cable_id = pac.power_arrival_cable_id
+                left join power_arrival_rack par
+                on pas.power_arrival_rack_id = par.power_arrival_rack_id
+                <where>
+                    <if test="province !=null and province !='' ">
+                        and PROVINCE like #{province}
+                    </if>
+                    <if test="city !=null and city !='' ">
+                        and CITY like #{city}
+                    </if>
+                    <if test="county !=null and county !='' ">
+                        and COUNTY like #{county}
+                    </if>
+                    <if test="buildYear !=null and buildYear !='' ">
+                        and BUILD_YEAR like #{buildYear}
+                    </if>
+                    <if test="buildingProject !=null and buildingProject !='' ">
+                        and BUILDING_PROJECT like #{buildingProject}
+                    </if>
+                    <if test="operator !=null and operator !='' ">
+                        and OPERATOR like #{operator}
+                    </if>
+                    <if test="keyword !=null and keyword !='' ">
+                        and SITE_SUPERVISION like #{keyword}
+                        or PROJECT_LEADER like #{keyword}
+                    </if>
+                </where>
+            )t
+        )where r between #{start} and #{end}
+    </select>
+
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.LlWallMountedOnuWornDao">
+    <!-- LlWallMountedOnuWorn的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_LlWallMountedOnuWorn_Map" type="com.panyu.panyuprojectims.entity.LlWallMountedOnuWorn">
+        <id column="WORN_WALL_MOUNTED_ONU_ID" property="wornWallMountedOnuId" />
+        <result column="WORN_WALL_MOUNTED_ONU_NUMBER" property="wornWallMountedOnuNumber" />
+        <result column="WORN_WALL_MOUNTED_ONU_SIZE" property="wornWallMountedOnuSize" />
+    </resultMap>
+
+    <!-- 数据库中表名为:LL_WALL_MOUNTED_ONU_WORN的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="LL_WALL_MOUNTED_ONU_WORN_Column">
+        LL_WALL_MOUNTED_ONU_WORN.WORN_WALL_MOUNTED_ONU_ID as WORN_WALL_MOUNTED_ONU_ID
+        ,LL_WALL_MOUNTED_ONU_WORN.WORN_WALL_MOUNTED_ONU_NUMBER as WORN_WALL_MOUNTED_ONU_NUMBER
+        ,LL_WALL_MOUNTED_ONU_WORN.WORN_WALL_MOUNTED_ONU_SIZE as WORN_WALL_MOUNTED_ONU_SIZE
+    </sql>
+
+    <!--根据信息id查询壁挂式光交箱（利旧）对象-->
+    <select id="selectLlWallMountedOnuWornDByCircuitInformationId" resultMap="result_LlWallMountedOnuWorn_Map">
+        select ll.* from LL_circuit_information l left join LL_wall_mounted_onu_worn ll
+        on l.worn_wall_mounted_onu_id = ll.worn_wall_mounted_onu_id
+        where l.circuit_information_id = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据利旧壁挂式光交箱ID删除选中项-->
+    <delete id="deleteLlWallMountedOnuWorn">
+        delete from LL_WALL_MOUNTED_ONU_WORN
+        where WORN_WALL_MOUNTED_ONU_ID = #{wornWallMountedOnuId,jdbcType=VARCHAR}
+    </delete>
+    <!--添加-->
+    <insert id="insertLlWallMountedOnuWorn">
+        insert into LL_WALL_MOUNTED_ONU_WORN values (
+            #{wornWallMountedOnuId,jdbcType=VARCHAR},
+            #{wornWallMountedOnuNumber,jdbcType=VARCHAR},
+            #{wornWallMountedOnuSize,jdbcType=VARCHAR}
+        )
+    </insert>
+</mapper>

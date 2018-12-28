@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.LlFloorStandOnuWornDao">
+    <!-- LlFloorStandOnuWorn的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_LlFloorStandOnuWorn_Map" type="com.panyu.panyuprojectims.entity.LlFloorStandOnuWorn">
+        <id column="WORN_FLOOR_STAND_ID" property="wornFloorStandId" />
+        <result column="WORN_FLOOR_STAND_NUMBER" property="wornFloorStandNumber" />
+        <result column="WORN_FLOOR_STAND_SIZE" property="wornFloorStandSize" />
+    </resultMap>
+
+    <!-- 数据库中表名为:LL_FLOOR_STAND_ONU_WORN的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="LL_FLOOR_STAND_ONU_WORN_Column">
+        LL_FLOOR_STAND_ONU_WORN.WORN_FLOOR_STAND_ID as WORN_FLOOR_STAND_ID
+        ,LL_FLOOR_STAND_ONU_WORN.WORN_FLOOR_STAND_NUMBER as WORN_FLOOR_STAND_NUMBER
+        ,LL_FLOOR_STAND_ONU_WORN.WORN_FLOOR_STAND_SIZE as WORN_FLOOR_STAND_SIZE
+    </sql>
+
+    <!--根据信息id查询落地式光交箱（利旧）-->
+    <select id="selectLlFloorStandOnuWornByCircuitInformationId" resultMap="result_LlFloorStandOnuWorn_Map">
+        select ll.* from LL_circuit_information l left join LL_floor_stand_onu_worn ll
+        on l.worn_floor_stand_id = ll.worn_floor_stand_id
+        where l.circuit_information_id = #{circuitInformationId}
+    </select>
+
+    <!--根据落地式光交箱（利旧）ID删除选中项-->
+    <delete id="deleteLlFloorStandOnuWorn">
+        delete from LL_FLOOR_STAND_ONU_WORN
+        where WORN_FLOOR_STAND_ID = #{wornFloorStandId,jdbcType=VARCHAR}
+    </delete>
+    <!--添加-->
+    <insert id="insertLlFloorStandOnuWorn">
+        insert into LL_FLOOR_STAND_ONU_WORN values (
+            #{wornFloorStandId,jdbcType=VARCHAR},
+            #{wornFloorStandNumber,jdbcType=VARCHAR},
+            #{wornFloorStandSize,jdbcType=VARCHAR}
+        )
+    </insert>
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.SkyBranchDao">
+    <!-- SkyBranch的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_SkyBranch_Map" type="com.panyu.panyuprojectims.entity.SkyBranch">
+        <id column="SKY_BRANCH_ID" property="skyBranchId" />
+        <result column="CONSTRUCTION_MODE" property="constructionMode" />
+        <result column="BASIC_TYPE" property="basicType" />
+        <result column="FOUNDATION_CONSTRUCTION_NAME" property="foundationConstructionName" />
+        <result column="BASIC_UNIT_CONTACTS" property="basicUnitContacts" />
+        <result column="SKY_BRANCH_TYPE_NAME" property="skyBranchTypeName" />
+        <result column="SKY_BRANCH_SUPPLIER_NAME" property="skyBranchSupplierName" />
+        <result column="SKY_BRANCH_SUPPLIER_CONTACTS" property="skyBranchSupplierContacts" />
+        <result column="SKY_BRANCH_UNIT_NAME" property="skyBranchUnitName" />
+        <result column="SKY_CONSTRUCTION_UNIT_CONTACTS" property="skyConstructionUnitContacts" />
+        <result column="SKY_BRANCH_HEIGHT" property="skyBranchHeight" />
+    </resultMap>
+
+
+    <insert id="insertSkyBranch" parameterType="com.panyu.panyuprojectims.entity.SkyBranch">
+        insert into SKY_BRANCH(
+        SKY_BRANCH_ID,CONSTRUCTION_MODE,BASIC_TYPE,
+        FOUNDATION_CONSTRUCTION_NAME,
+        BASIC_UNIT_CONTACTS,
+        SKY_BRANCH_TYPE_NAME,
+        SKY_BRANCH_SUPPLIER_NAME,
+        SKY_BRANCH_SUPPLIER_CONTACTS,
+        SKY_BRANCH_UNIT_NAME,
+        SKY_CONSTRUCTION_UNIT_CONTACTS,
+        SKY_BRANCH_HEIGHT)
+        values(#{skyBranchId,jdbcType=VARCHAR},
+        #{constructionMode,jdbcType=VARCHAR},
+        #{basicType,jdbcType=VARCHAR},
+        #{foundationConstructionName,jdbcType=VARCHAR},
+        #{basicUnitContacts,jdbcType=VARCHAR},
+        #{skyBranchTypeName,jdbcType=VARCHAR},
+        #{skyBranchSupplierName,jdbcType=VARCHAR},
+        #{skyBranchSupplierContacts,jdbcType=VARCHAR},
+        #{skyBranchUnitName,jdbcType=VARCHAR},
+        #{skyConstructionUnitContacts,jdbcType=VARCHAR},
+        #{skyBranchHeight,jdbcType=VARCHAR})
+    </insert>
+
+<!--删除开始-->
+    <!-- 通过SkyBranch的id将数据库表中对应的数据删除-->
+    <delete id="deleteSkyBranchById" parameterType="java.lang.String">
+        delete from SKY_BRANCH
+        where SKY_BRANCH_ID = #{skyBranchId,jdbcType=VARCHAR}
+    </delete>
+<!--删除结束-->
+
+<!--  根据天支ID查询建设方式、天支类型、基础类型  -->
+    <select id="selectByskyBranchId" resultMap="result_SkyBranch_Map">
+        select construction_mode,basic_type,sky_branch_type_name from
+            project_progress p left join Sky_branch sky
+            on p.sky_branch_id = sky.sky_branch_id
+            where project_progress_id = #{projectProgressId,jdbcType=VARCHAR}
+    </select>
+</mapper>

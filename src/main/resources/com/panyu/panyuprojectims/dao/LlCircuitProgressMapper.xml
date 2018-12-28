@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.LlCircuitProgressDao">
+    <!-- LlCircuitProgress的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_LlCircuitProgress_Map" type="com.panyu.panyuprojectims.entity.LlCircuitProgress">
+        <id column="CIRCUIT_PROGRESS_ID" property="circuitProgressId" />
+        <result column="OPERATOR" property="operator" />
+        <result column="BUILDING_PROJECT" property="buildingProject" />
+        <result column="BUILD_YEAR" property="buildYear" />
+        <result column="HOP_NAME" property="hopName" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="COUNTY" property="county" />
+        <result column="AREA" property="area" />
+
+        <result column="DESIGN_INSTITUTE_ID" property="designInstituteId" />
+        <result column="SUPERVISION_UNIT_ID" property="supervisionUnitId" />
+        <result column="CONSTRUCTION_UNIT_ID" property="constructionUnitId" />
+        <result column="NEW_LINE_LENGTHS_ID" property="newLineLengthsId" />
+
+        <result column="CABLE_TYPE" property="cableType" />
+
+        <result column="CABLE_LENGTH_DESIGNS_ID" property="cableLengthDesignsId" />
+        <result column="NEW_MODEL_ONU_ID" property="newModelOnuId" />
+        <result column="WORN_MODEL_ONU_ID" property="wornModelOnuId" />
+        <result column="NEW_WALL_TYPE_ID" property="newWallTypeId" />
+        <result column="WORN_WALL_TYPE_ID" property="wornWallTypeId" />
+
+        <result column="COMPANY_NAME" property="companyName" />
+        <result column="DESIGN_PERSONNEL" property="designPersonnel" />
+
+        <result column="SITE_LEADER" property="siteLeader" />
+        <result column="PROFESSION_RESPONSIBLE_PERSON" property="professionResponsiblePerson" />
+        <result column="DISTRICT_HEAD" property="districtHead" />
+
+        <result column="CORPORATE_NAME" property="corporateName" />
+        <result column="PERSON_IN_CHARGE" property="personInCharge" />
+
+        <result column="NEW_POLE_LINE_ID" property="newPoleLineId" />
+        <result column="NEW_PIPE_LINE_ID" property="newPipeLineId" />
+        <result column="BURIED_LIGHTGUIDE_ID" property="buriedLightguideId" />
+        <result column="PUSH_PIPE_ID" property="pushPipeId" />
+
+        <result column="POLE_DESIGN_LENGTH" property="poleDesignLength" />
+        <result column="POLE_COMPLETION_LENGTH" property="poleCompletionLength" />
+
+        <result column="PIPELINE_DESIGN_LENGTH" property="pipelineDesignLength" />
+        <result column="PIPELINE_COMPLETION_LENGTH" property="pipelineCompletionLength" />
+
+        <result column="BURIED_DESIGN_LENGTH" property="buriedDesignLength" />
+        <result column="BURIED_COMPLETION_LENGTH" property="buriedCompletionLength" />
+
+        <result column="PUSH_DESIGN_LENGTH" property="pushDesignLength" />
+        <result column="PUSH_COMPLETION_LENGTH" property="pushCompletionLength" />
+
+        <result column="SUSPENDED_ID" property="suspendedId" />
+        <result column="MESSENGER_WIRE_ID" property="messengerWireId" />
+        <result column="GYSTA_ID" property="gystaId" />
+        <result column="BURIED_SERVICE_LIGHTGUIDE_ID" property="buriedServiceLightguideId" />
+        <result column="WALL_CABLE_ID" property="wallCableId" />
+        <result column="BRIDGE_CABLE_ID" property="bridgeCableId" />
+        <result column="GYFXTS_ID" property="gyfxtsId" />
+
+        <result column="SUSPENDED_DESIGN_LENGTH" property="suspendedDesignLength" />
+        <result column="SUSPENDED_LAID_LENGTH" property="suspendedLaidLength" />
+
+        <result column="MESSENGER_DESIGN_LENGTH" property="messengerDesignLength" />
+        <result column="MESSENGER_LAID_LENGTH" property="messengerLaidLength" />
+
+        <result column="GYSTA_DESIGN_LENGTH" property="gystaDesignLength" />
+        <result column="GYSTA_LAID_LENGTH" property="gystaLaidLength" />
+
+        <result column="LIGHTGUIDE_DESIGN_LENGTH" property="lightguideDesignLength" />
+        <result column="LIGHTGUIDE_LAID_LENGTH" property="lightguideLaidLength" />
+
+        <result column="WALL_DESIGN_LENGTH" property="wallDesignLength" />
+        <result column="WALL_LAID_LENGTH" property="wallLaidLength" />
+
+        <result column="BRIDGE_DESIGN_LENGTH" property="bridgeDesignLength" />
+        <result column="BRIDGE_LAID_LENGTH" property="bridgeLaidLength" />
+
+        <result column="GYFXTS_DESIGN_LENGTH" property="gyfxtsDesignLength" />
+        <result column="GYFXTS_LAID_LENGTH" property="gyfxtsLaidLength" />
+
+        <result column="NEW_ONU_DESIGN_START" property="newOnuDesignStart" />
+        <result column="NEW_MODEL_ONU_SIZE" property="newModelOnuSize" />
+        <result column="NEW_ONU_INSTALLATION_NUMBER" property="newOnuInstallationNumber" />
+
+        <result column="WORN_ONU_DESIGN_START" property="wornOnuDesignStart" />
+        <result column="WORN_MODEL_ONU_SIZE" property="wornModelOnuSize" />
+        <result column="WORN_ONU_INSTALLATION_NUMBER" property="wornOnuInstallationNumber" />
+
+        <result column="NEW_WALL_DESIGN_START" property="newWallDesignStart" />
+        <result column="NEW_WALL_ONU_SIZE" property="newWallOnuSize" />
+        <result column="NEW_WALL_INSTALLATION_NUMBER" property="newWallInstallationNumber" />
+
+        <result column="WORN_WALL_DESIGN_START" property="wornWallDesignStart" />
+        <result column="WORN_WALL_ONU_SIZE" property="wornWallOnuSize" />
+        <result column="WORN_WALL_INSTALLATION_NUMBER" property="wornWallInstallationNumber" />
+
+    </resultMap>
+
+
+
+    <!--获得数据总行数 -->
+    <select id="getLlCircuitProgressRowCount" resultType="java.lang.Long">
+        select count(*) from (
+              select
+                cp.circuit_progress_id,cp.operator,cp.building_project,cp.build_year,cp.hop_name,cp.province,
+                cp.city,cp.county,cp.area,
+                di.company_name,di.design_personnel,
+                su.site_leader,su.profession_responsible_person,su.district_head,
+                cu.corporate_name,cu.person_in_charge,
+                po.pole_design_length,po.pole_completion_length,
+                pi.pipeline_design_length,pi.pipeline_completion_length,
+                bl.buried_design_length,bl.buried_completion_length,
+                pp.push_design_length,pp.push_completion_length,
+                cp.cable_type,
+                sus.suspended_design_length,sus.suspended_laid_length,
+                mes.messenger_design_length,mes.messenger_laid_length,
+                gys.gysta_design_length,gys.gysta_laid_length,
+                li.lightguide_design_length,li.lightguide_laid_length,
+                wa.wall_design_length,wa.wall_laid_length,
+                bdl.bridge_design_length,bdl.bridge_laid_length,
+                gyf.gyfxts_design_length,gyf.gyfxts_laid_length,
+                mon.new_onu_design_start,mon.new_model_onu_size,mon.new_onu_installation_number,
+                mow.worn_onu_design_start,mow.worn_model_onu_size,mow.worn_onu_installation_number,
+                wtn.new_wall_design_start,wtn.new_wall_onu_size,wtn.new_wall_installation_number,
+                wtw.worn_wall_design_start,wtw.worn_wall_onu_size,wtw.worn_wall_installation_number
+                from LL_circuit_progress cp
+                left join LL_design_institute di
+                on cp.design_institute_id = di.design_institute_id
+                left join LL_supervision_unit su
+                on cp.supervision_unit_id = su.supervision_unit_id
+                left join LL_construction_unit cu
+                on cp.construction_unit_id = cu.construction_unit_id
+                left join LL_New_line_lengths nll
+                on cp.new_line_lengths_id = nll.new_line_lengths_id
+                left join LL_new_pole_line po
+                on nll.new_pole_line_id = po.new_pole_line_id
+                left join LL_new_pipe_line pi
+                on nll.new_pipe_line_id = pi.new_pipe_line_id
+                left join LL_buried_lightguide bl
+                on nll.buried_lightguide_id = bl.buried_lightguide_id
+                left join LL_push_pipe pp
+                on nll.push_pipe_id = pp.push_pipe_id
+                left join LL_cable_length_designs cld
+                on cp.cable_length_designs_id = cld.cable_length_designs_id
+                left join LL_GYSTS_Suspended sus
+                on cld.suspended_id = sus.suspended_id
+                left join LL_GYSTS_messenger_wire mes
+                on cld.messenger_wire_id = mes.messenger_wire_id
+                left join LL_GYSTA gys
+                on cld.gysta_id = gys.gysta_id
+                left join LL_buried_service_lightguide li
+                on cld.buried_service_lightguide_id = li.buried_service_lightguide_id
+                left join LL_Wall_cable wa
+                on cld.wall_cable_id = wa.wall_cable_id
+                left join LL_in_bridge_cable bdl
+                on cld.bridge_cable_id = bdl.bridge_cable_id
+                left join LL_GYFXTS gyf
+                on cld.gyfxts_id = gyf.gyfxts_id
+                left join LL_floor_model_onu_new mon
+                on cp.new_model_onu_id = mon.new_model_onu_id
+                left join LL_floor_model_onu_worn mow
+                on cp.worn_model_onu_id = mow.worn_model_onu_id
+                left join LL_wall_type_new wtn
+                on cp.new_wall_type_id = wtn.new_wall_type_id
+                left join LL_wall_type_worn wtw
+                on cp.worn_wall_type_id = wtw.worn_wall_type_id
+                <where>
+                    <if test="province !=null and province !='' ">
+                        and PROVINCE like #{province}
+                    </if>
+                    <if test="city !=null and city !='' ">
+                        and CITY like #{city}
+                    </if>
+                    <if test="county !=null and county !='' ">
+                        and COUNTY like #{county}
+                    </if>
+                    <if test="buildYear !=null and buildYear !='' ">
+                        and BUILD_YEAR like #{buildYear}
+                    </if>
+                    <if test="operator !=null and operator !='' ">
+                        and OPERATOR like #{operator}
+                    </if>
+                    <if test="buildingProject !=null and buildingProject !='' ">
+                        and BUILDING_PROJECT like #{buildingProject}
+                    </if>
+                    <if test="keyword !=null and keyword !='' ">
+                        and SITE_LEADER like #{keyword}
+                        or PROFESSION_RESPONSIBLE_PERSON like #{keyword}
+                        or DISTRICT_HEAD like #{keyword}
+                    </if>
+                </where>
+        )
+    </select>
+    <!-- 获得数据集合 -->
+    <select id="selectLlCircuitProgress" resultMap="result_LlCircuitProgress_Map">
+        select * from (
+            select t.*,rownum r from(
+                select
+                cp.circuit_progress_id,cp.operator,cp.building_project,cp.build_year,cp.hop_name,cp.province,
+                cp.city,cp.county,cp.area,
+                di.company_name,di.design_personnel,
+                su.site_leader,su.profession_responsible_person,su.district_head,
+                cu.corporate_name,cu.person_in_charge,
+                po.pole_design_length,po.pole_completion_length,
+                pi.pipeline_design_length,pi.pipeline_completion_length,
+                bl.buried_design_length,bl.buried_completion_length,
+                pp.push_design_length,pp.push_completion_length,
+                cp.cable_type,
+                sus.suspended_design_length,sus.suspended_laid_length,
+                mes.messenger_design_length,mes.messenger_laid_length,
+                gys.gysta_design_length,gys.gysta_laid_length,
+                li.lightguide_design_length,li.lightguide_laid_length,
+                wa.wall_design_length,wa.wall_laid_length,
+                bdl.bridge_design_length,bdl.bridge_laid_length,
+                gyf.gyfxts_design_length,gyf.gyfxts_laid_length,
+                mon.new_onu_design_start,mon.new_model_onu_size,mon.new_onu_installation_number,
+                mow.worn_onu_design_start,mow.worn_model_onu_size,mow.worn_onu_installation_number,
+                wtn.new_wall_design_start,wtn.new_wall_onu_size,wtn.new_wall_installation_number,
+                wtw.worn_wall_design_start,wtw.worn_wall_onu_size,wtw.worn_wall_installation_number
+                from LL_circuit_progress cp
+                left join LL_design_institute di
+                on cp.design_institute_id = di.design_institute_id
+                left join LL_supervision_unit su
+                on cp.supervision_unit_id = su.supervision_unit_id
+                left join LL_construction_unit cu
+                on cp.construction_unit_id = cu.construction_unit_id
+                left join LL_New_line_lengths nll
+                on cp.new_line_lengths_id = nll.new_line_lengths_id
+                left join LL_new_pole_line po
+                on nll.new_pole_line_id = po.new_pole_line_id
+                left join LL_new_pipe_line pi
+                on nll.new_pipe_line_id = pi.new_pipe_line_id
+                left join LL_buried_lightguide bl
+                on nll.buried_lightguide_id = bl.buried_lightguide_id
+                left join LL_push_pipe pp
+                on nll.push_pipe_id = pp.push_pipe_id
+                left join LL_cable_length_designs cld
+                on cp.cable_length_designs_id = cld.cable_length_designs_id
+                left join LL_GYSTS_Suspended sus
+                on cld.suspended_id = sus.suspended_id
+                left join LL_GYSTS_messenger_wire mes
+                on cld.messenger_wire_id = mes.messenger_wire_id
+                left join LL_GYSTA gys
+                on cld.gysta_id = gys.gysta_id
+                left join LL_buried_service_lightguide li
+                on cld.buried_service_lightguide_id = li.buried_service_lightguide_id
+                left join LL_Wall_cable wa
+                on cld.wall_cable_id = wa.wall_cable_id
+                left join LL_in_bridge_cable bdl
+                on cld.bridge_cable_id = bdl.bridge_cable_id
+                left join LL_GYFXTS gyf
+                on cld.gyfxts_id = gyf.gyfxts_id
+                left join LL_floor_model_onu_new mon
+                on cp.new_model_onu_id = mon.new_model_onu_id
+                left join LL_floor_model_onu_worn mow
+                on cp.worn_model_onu_id = mow.worn_model_onu_id
+                left join LL_wall_type_new wtn
+                on cp.new_wall_type_id = wtn.new_wall_type_id
+                left join LL_wall_type_worn wtw
+                on cp.worn_wall_type_id = wtw.worn_wall_type_id
+                <where>
+                    <if test="province !=null and province !='' ">
+                        and PROVINCE like #{province}
+                    </if>
+                    <if test="city !=null and city !='' ">
+                        and CITY like #{city}
+                    </if>
+                    <if test="county !=null and county !='' ">
+                        and COUNTY like #{county}
+                    </if>
+                    <if test="buildYear !=null and buildYear !='' ">
+                        and BUILD_YEAR like #{buildYear}
+                    </if>
+                    <if test="operator !=null and operator !='' ">
+                        and OPERATOR like #{operator}
+                    </if>
+                    <if test="buildingProject !=null and buildingProject !='' ">
+                        and BUILDING_PROJECT like #{buildingProject}
+                    </if>
+                    <if test="keyword !=null and keyword !='' ">
+                        and SITE_LEADER like #{keyword}
+                        or PROFESSION_RESPONSIBLE_PERSON like #{keyword}
+                        or DISTRICT_HEAD like #{keyword}
+                    </if>
+                </where>
+            )t
+        )where r between #{start} and #{end}
+    </select>
+
+    <!--导出数据-->
+    <select id="importLlCircuitProgressExcel" resultMap="result_LlCircuitProgress_Map">
+        select
+                cp.circuit_progress_id,cp.operator,cp.building_project,cp.build_year,cp.hop_name,cp.province,
+                cp.city,cp.county,cp.area,
+                di.company_name,di.design_personnel,
+                su.site_leader,su.profession_responsible_person,su.district_head,
+                cu.corporate_name,cu.person_in_charge,
+                po.pole_design_length,po.pole_completion_length,
+                pi.pipeline_design_length,pi.pipeline_completion_length,
+                bl.buried_design_length,bl.buried_completion_length,
+                pp.push_design_length,pp.push_completion_length,
+                cp.cable_type,
+                sus.suspended_design_length,sus.suspended_laid_length,
+                mes.messenger_design_length,mes.messenger_laid_length,
+                gys.gysta_design_length,gys.gysta_laid_length,
+                li.lightguide_design_length,li.lightguide_laid_length,
+                wa.wall_design_length,wa.wall_laid_length,
+                bdl.bridge_design_length,bdl.bridge_laid_length,
+                gyf.gyfxts_design_length,gyf.gyfxts_laid_length,
+                mon.new_onu_design_start,mon.new_model_onu_size,mon.new_onu_installation_number,
+                mow.worn_onu_design_start,mow.worn_model_onu_size,mow.worn_onu_installation_number,
+                wtn.new_wall_design_start,wtn.new_wall_onu_size,wtn.new_wall_installation_number,
+                wtw.worn_wall_design_start,wtw.worn_wall_onu_size,wtw.worn_wall_installation_number
+                from LL_circuit_progress cp
+                left join LL_design_institute di
+                on cp.design_institute_id = di.design_institute_id
+                left join LL_supervision_unit su
+                on cp.supervision_unit_id = su.supervision_unit_id
+                left join LL_construction_unit cu
+                on cp.construction_unit_id = cu.construction_unit_id
+                left join LL_New_line_lengths nll
+                on cp.new_line_lengths_id = nll.new_line_lengths_id
+                left join LL_new_pole_line po
+                on nll.new_pole_line_id = po.new_pole_line_id
+                left join LL_new_pipe_line pi
+                on nll.new_pipe_line_id = pi.new_pipe_line_id
+                left join LL_buried_lightguide bl
+                on nll.buried_lightguide_id = bl.buried_lightguide_id
+                left join LL_push_pipe pp
+                on nll.push_pipe_id = pp.push_pipe_id
+                left join LL_cable_length_designs cld
+                on cp.cable_length_designs_id = cld.cable_length_designs_id
+                left join LL_GYSTS_Suspended sus
+                on cld.suspended_id = sus.suspended_id
+                left join LL_GYSTS_messenger_wire mes
+                on cld.messenger_wire_id = mes.messenger_wire_id
+                left join LL_GYSTA gys
+                on cld.gysta_id = gys.gysta_id
+                left join LL_buried_service_lightguide li
+                on cld.buried_service_lightguide_id = li.buried_service_lightguide_id
+                left join LL_Wall_cable wa
+                on cld.wall_cable_id = wa.wall_cable_id
+                left join LL_in_bridge_cable bdl
+                on cld.bridge_cable_id = bdl.bridge_cable_id
+                left join LL_GYFXTS gyf
+                on cld.gyfxts_id = gyf.gyfxts_id
+                left join LL_floor_model_onu_new mon
+                on cp.new_model_onu_id = mon.new_model_onu_id
+                left join LL_floor_model_onu_worn mow
+                on cp.worn_model_onu_id = mow.worn_model_onu_id
+                left join LL_wall_type_new wtn
+                on cp.new_wall_type_id = wtn.new_wall_type_id
+                left join LL_wall_type_worn wtw
+                on cp.worn_wall_type_id = wtw.worn_wall_type_id
+                where cp.circuit_progress_id in
+                <foreach collection="array" open="(" separator="," close=")" item="ids">
+                    #{ids}
+                </foreach>
+    </select>
+
+</mapper>

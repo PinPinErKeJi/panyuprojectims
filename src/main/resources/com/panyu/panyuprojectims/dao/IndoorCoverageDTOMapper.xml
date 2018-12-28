@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IndoorCoverageDTODao">
+    <!-- Module的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IndoorCoverageDTODao_Map" type="com.panyu.panyuprojectims.entity.IndoorCoverageDTO">
+        <result column="INDOOR_COVERAGE_ID" property="indoorCoverageIddto" />
+        <result column="INDOOR_PROJECT_ID" property="indoorProjectIddto" />
+        <result column="INDOOR_COVERAGE_NAME" property="indoorCoverageNamedto" />
+        <result column="INDOOR_SUB_WORK_NAME" property="indoorSubWorkNamedto" />
+        <result column="INDOOR_PROJECT_NAME" property="indoorProjectNamedto" />
+        <result column="INDOOR_SPECIFICATION_NAME" property="indoorSpecificationNamedto" />
+        <result column="INDOOR_QUALIFIED" property="indoorQualifieddto" />
+        <result column="INDOOR_PROBLEM" property="indoorProblemdto" />
+        <result column="INDOOR_PHOTO" property="indoorPhotodto" />
+    </resultMap>
+    <!--查询室内覆盖信息总条数-->
+    <select id="selectIndoorCoverageDTOCount" resultType="long">
+        select count(*) from(
+                select
+                p.indoor_project_id,m.indoor_coverage_name,s.indoor_sub_work_name,
+                p.indoor_project_name,
+                c.indoor_specification_name,c.indoor_qualified,c.indoor_problem,c.indoor_photo
+                from Indoor_coverage_module m
+                left join Indoor_coverage_sub_work s
+                on m.indoor_coverage_id = s.indoor_coverage_id
+                left join Indoor_coverage_project p
+                on s.indoor_sub_work_id = p.indoor_sub_work_id
+                left join Indoor_coverage_specification c
+                on p.indoor_project_id = c.indoor_project_id
+            )
+    </select>
+    <!--无条件分页查询展示室内覆盖信息数据-->
+    <select id="selectIndoorCoverageDTO" resultMap="result_IndoorCoverageDTODao_Map">
+     select * from
+        (select t.* ,rownum r from
+            (
+                select
+                p.indoor_project_id,m.indoor_coverage_name,s.indoor_sub_work_name,
+                p.indoor_project_name,
+                c.indoor_specification_name,c.indoor_qualified,c.indoor_problem,c.indoor_photo
+                from Indoor_coverage_module m
+                left join Indoor_coverage_sub_work s
+                on m.indoor_coverage_id = s.indoor_coverage_id
+                left join Indoor_coverage_project p
+                on s.indoor_sub_work_id = p.indoor_sub_work_id
+                left join Indoor_coverage_specification c
+                on p.indoor_project_id = c.indoor_project_id
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+    <!--根据检查项目名模糊匹配搜索查询信息总条数-->
+    <select id="getFuzzysearchIndoorCoverageDTOCount" resultType="long">
+        select count(*) from(
+            select
+            p.indoor_project_id,m.indoor_coverage_name,s.indoor_sub_work_name,
+            p.indoor_project_name,
+            c.indoor_specification_name,c.indoor_qualified,c.indoor_problem,c.indoor_photo
+            from Indoor_coverage_module m
+            left join Indoor_coverage_sub_work s
+            on m.indoor_coverage_id = s.indoor_coverage_id
+            left join Indoor_coverage_project p
+            on s.indoor_sub_work_id = p.indoor_sub_work_id
+            left join Indoor_coverage_specification c
+            on p.indoor_project_id = c.indoor_project_id
+            <where>
+                <if test="indoorProjectName !=null and indoorProjectName !='' ">
+                    and INDOOR_PROJECT_NAME like #{indoorProjectName}
+                </if>
+            </where>
+        )
+    </select>
+    <!--根据检查项目名模糊匹配搜索查询信息展示-->
+    <select id="selectFuzzysearchIndoorCoverageDTO" resultMap="result_IndoorCoverageDTODao_Map">
+     select * from
+        (select t.* ,rownum r from
+            (
+                select
+                p.indoor_project_id,m.indoor_coverage_name,s.indoor_sub_work_name,
+                p.indoor_project_name,
+                c.indoor_specification_name,c.indoor_qualified,c.indoor_problem,c.indoor_photo
+                from Indoor_coverage_module m
+                left join Indoor_coverage_sub_work s
+                on m.indoor_coverage_id = s.indoor_coverage_id
+                left join Indoor_coverage_project p
+                on s.indoor_sub_work_id = p.indoor_sub_work_id
+                left join Indoor_coverage_specification c
+                on p.indoor_project_id = c.indoor_project_id
+                <where>
+                    <if test="indoorProjectName !=null and indoorProjectName !='' ">
+                        and INDOOR_PROJECT_NAME like #{indoorProjectName}
+                    </if>
+                </where>
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+    <!--根据点击下拉框模块名以及搜索框内容模糊匹配查询信息总条数-->
+    <select id="getIndoorCoverageDTOByIdAndNameCount" resultType="long">
+        select count(*) from(
+            select
+            p.indoor_project_id,m.indoor_coverage_name,s.indoor_sub_work_name,
+            p.indoor_project_name,
+            c.indoor_specification_name,c.indoor_qualified,c.indoor_problem,c.indoor_photo
+            from Indoor_coverage_module m
+            left join Indoor_coverage_sub_work s
+            on m.indoor_coverage_id = s.indoor_coverage_id
+            left join Indoor_coverage_project p
+            on s.indoor_sub_work_id = p.indoor_sub_work_id
+            left join Indoor_coverage_specification c
+            on p.indoor_project_id = c.indoor_project_id
+            <where>
+                <if test="indoorProjectName !=null and indoorProjectName !='' ">
+                    and INDOOR_PROJECT_NAME like #{indoorProjectName}
+                </if>
+            </where>
+            and m.indoor_coverage_id = #{indoorCoverageId,jdbcType=VARCHAR}
+        )
+    </select>
+    <!--根据点击下拉框模块名以及搜索框内容模糊匹配查询信息展示-->
+    <select id="selectIndoorCoverageDTOByIdAndName" resultMap="result_IndoorCoverageDTODao_Map">
+        select * from
+            (select t.* ,rownum r from
+                (
+                select
+                p.indoor_project_id,m.indoor_coverage_name,s.indoor_sub_work_name,
+                p.indoor_project_name,
+                c.indoor_specification_name,c.indoor_qualified,c.indoor_problem,c.indoor_photo
+                from Indoor_coverage_module m
+                left join Indoor_coverage_sub_work s
+                on m.indoor_coverage_id = s.indoor_coverage_id
+                left join Indoor_coverage_project p
+                on s.indoor_sub_work_id = p.indoor_sub_work_id
+                left join Indoor_coverage_specification c
+                on p.indoor_project_id = c.indoor_project_id
+                <where>
+                    <if test="indoorProjectName !=null and indoorProjectName !='' ">
+                        and INDOOR_PROJECT_NAME like #{indoorProjectName}
+                    </if>
+                </where>
+                and m.indoor_coverage_id = #{indoorCoverageId,jdbcType=VARCHAR}
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+    <!--根据点击下拉框模块名分页查询总条数-->
+    <select id="getIndoorCoverageDTOByIdCount" resultType="long">
+        select count(*) from(
+            select
+            p.indoor_project_id,m.indoor_coverage_name,s.indoor_sub_work_name,
+            p.indoor_project_name,
+            c.indoor_specification_name,c.indoor_qualified,c.indoor_problem,c.indoor_photo
+            from Indoor_coverage_module m
+            left join Indoor_coverage_sub_work s
+            on m.indoor_coverage_id = s.indoor_coverage_id
+            left join Indoor_coverage_project p
+            on s.indoor_sub_work_id = p.indoor_sub_work_id
+            left join Indoor_coverage_specification c
+            on p.indoor_project_id = c.indoor_project_id
+            where m.indoor_coverage_id = #{indoorCoverageId,jdbcType=VARCHAR}
+        )
+    </select>
+    <!--根据点击下拉框模块名分页查询展示信息数据-->
+    <select id="selectAllIndoorCoverageDTOById" resultMap="result_IndoorCoverageDTODao_Map">
+        select * from
+            (select t.* ,rownum r from
+                (
+                    select
+                    p.indoor_project_id,m.indoor_coverage_name,s.indoor_sub_work_name,
+                    p.indoor_project_name,
+                    c.indoor_specification_name,c.indoor_qualified,c.indoor_problem,c.indoor_photo
+                    from Indoor_coverage_module m
+                    left join Indoor_coverage_sub_work s
+                    on m.indoor_coverage_id = s.indoor_coverage_id
+                    left join Indoor_coverage_project p
+                    on s.indoor_sub_work_id = p.indoor_sub_work_id
+                    left join Indoor_coverage_specification c
+                    on p.indoor_project_id = c.indoor_project_id
+                    where m.indoor_coverage_id = #{indoorCoverageId,jdbcType=VARCHAR}
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+
+
+    <!--导出空表格-->
+    <select id="exportExcelIndoorCoverage" resultMap="result_IndoorCoverageDTODao_Map">
+        select
+                    p.indoor_project_id,m.indoor_coverage_name,s.indoor_sub_work_name,
+                    p.indoor_project_name,
+                    c.indoor_specification_name,c.indoor_qualified,c.indoor_problem,c.indoor_photo
+                    from Indoor_coverage_module m
+                    left join Indoor_coverage_sub_work s
+                    on m.indoor_coverage_id = s.indoor_coverage_id
+                    left join Indoor_coverage_project p
+                    on s.indoor_sub_work_id = p.indoor_sub_work_id
+                    left join Indoor_coverage_specification c
+                    on p.indoor_project_id = c.indoor_project_id
+    </select>
+
+    <!--导出模块数据-->
+    <select id="exportIndoorCoverage" resultMap="result_IndoorCoverageDTODao_Map">
+        select
+        p.indoor_project_id,m.indoor_coverage_name,s.indoor_sub_work_name,
+        p.indoor_project_name,
+        c.indoor_specification_name,c.indoor_qualified,c.indoor_problem,c.indoor_photo
+        from Indoor_coverage_module m
+        left join Indoor_coverage_sub_work s
+        on m.indoor_coverage_id = s.indoor_coverage_id
+        left join Indoor_coverage_project p
+        on s.indoor_sub_work_id = p.indoor_sub_work_id
+        left join Indoor_coverage_specification c
+        on p.indoor_project_id = c.indoor_project_id
+        where p.indoor_project_id in
+        <foreach collection="array" open="(" separator="," close=")" item="ids">
+            #{ids}
+        </foreach>
+    </select>
+
+</mapper>

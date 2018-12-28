@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.HnPrimarySplitterBoxNumberDao">
+    <!-- HnPrimarySplitterBoxNumber的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_HnPrimarySplitterBoxNumber_Map" type="com.panyu.panyuprojectims.entity.HnPrimarySplitterBoxNumber">
+        <id column="PRIMARY_SPLITTER_BOX_ID" property="primarySplitterBoxId" />
+        <result column="PRIMARY_ANCHOREAR_TYPE" property="primaryAnchorearType" />
+        <result column="PRIMARY_WALL_MOUNTED" property="primaryWallMounted" />
+    </resultMap>
+
+    <!--根据驻地网信息id查询对应的一级分光器箱设计数量-->
+    <select id="selectHnPrimarySplitterBoxNumberByGarrisonInformationId" resultMap="result_HnPrimarySplitterBoxNumber_Map">
+        select h2.* from HN_Garrison_information h1 left join HN_Primary_Splitter_Box_Number h2 on
+        h1.primary_splitter_box_id = h2.primary_splitter_box_id
+        where h1.garrison_information_id=#{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据一级分光器箱设计数量表ID字段删除数据-->
+    <delete id="deleteHnPrimarySplitterBoxNumberByPrimarySplitterBoxId" parameterType="java.lang.String">
+        delete from HN_PRIMARY_SPLITTER_BOX_NUMBER
+        where PRIMARY_SPLITTER_BOX_ID = #{primarySplitterBoxId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--添加-->
+    <insert id="insertHnPrimarySplitterBoxNumber">
+        insert into HN_Primary_Splitter_Box_Number values(
+         #{primarySplitterBoxId,jdbcType=VARCHAR},
+         #{primaryAnchorearType,jdbcType=VARCHAR},
+         #{primaryWallMounted,jdbcType=VARCHAR})
+    </insert>
+
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.GarrisonPhotoResourcesDao">
+    <!-- GarrisonPhotoResources的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_GarrisonPhotoResources_Map" type="com.panyu.panyuprojectims.entity.GarrisonPhotoResources">
+        <id column="GARRISON_PHOTO_ID" property="garrisonPhotoId" />
+        <result column="GARRISON_PHOTO_NAME" property="garrisonPhotoName" />
+        <result column="PHOTO_UPLOAD_PEOPLE" property="photoUploadPeople" />
+        <result column="QUALIFIED" property="qualified" />
+        <result column="PROBLEM_DESCRIPTION" property="problemDescription" />
+        <result column="GARRISON_ID" property="garrisonId" />
+        <result column="GARRISON_SUB_WORK_ID" property="garrisonSubWorkId" />
+        <result column="GARRISON_PROJECT_ID" property="garrisonProjectId" />
+        <result column="GARRISON_INFORMATION_ID" property="garrisonInformationId" />
+    </resultMap>
+
+
+    <!--根据模块ID和分项工程ID查询检查项目ID集合-->
+    <select id="selectGarrisonInspectionProjectList" resultType="String">
+        select i.GARRISON_PROJECT_ID
+        from GARRISON g
+        left join Garrison_sub_work s
+        on g.GARRISON_ID = s.GARRISON_ID
+        left join Garrison_inspection_project i
+        on s.GARRISON_SUB_WORK_ID = i.GARRISON_SUB_WORK_ID
+        where g.GARRISON_ID = #{garrisonId,jdbcType=VARCHAR}
+        and s.GARRISON_SUB_WORK_ID = #{garrisonSubWorkId,jdbcType=VARCHAR}
+    </select>
+    <!--添加数据-->
+    <insert id="insertGarrisonPhotoResources" parameterType="com.panyu.panyuprojectims.entity.GarrisonPhotoResources">
+        insert into GARRISON_PHOTO_RESOURCES
+        values(sys_guid(),#{garrisonPhotoName},null,#{qualified},#{problemDescription},null,null,#{garrisonProjectId},#{garrisonInformationId})
+    </insert>
+
+    <!--根据parentID查询对应的图片信息个数-->
+    <select id="getGarrisonPhotoResourcesCountByProjectId" resultType="java.lang.Long">
+        select count(GARRISON_PHOTO_ID)
+        from GARRISON_PHOTO_RESOURCES
+        where GARRISON_PROJECT_ID = #{garrisonProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据检查项目ID查询图片资源ID集合-->
+    <select id="selectGarrisonPhotoResourcesByPhotoId" resultType="String">
+        select GARRISON_PHOTO_ID
+        from GARRISON_PHOTO_RESOURCES
+        where GARRISON_PROJECT_ID = #{garrisonProjectId,jdbcType=VARCHAR} and
+        GARRISON_INFORMATION_ID = #{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据图片资源ID查询图片资源-->
+    <select id="selectAllGarrisonPhotoResources" resultMap="result_GarrisonPhotoResources_Map">
+        select
+        GARRISON_PHOTO_NAME,PHOTO_UPLOAD_PEOPLE,QUALIFIED,PROBLEM_DESCRIPTION
+        from GARRISON_PHOTO_RESOURCES
+        where GARRISON_PHOTO_ID = #{garrisonPhotoId,jdbcType=VARCHAR}and
+               GARRISON_PROJECT_ID = #{garrisonProjectId,jdbcType=VARCHAR}and
+               GARRISON_INFORMATION_ID = #{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+</mapper>

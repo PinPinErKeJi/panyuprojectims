@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PowerSupplyDTODao">
+    <!-- Module的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PowerSupplyDTODao_Map" type="com.panyu.panyuprojectims.entity.PowerSupplyDTO">
+        <id column="POWER_MODULE_ID" property="powerModuleId" />
+        <result column="POWER_MODULE_NAME" property="powerModuleName" />
+        <result column="POWER_SUB_WORK_ID" property="powerSubWorkId" />
+        <result column="POWER_SUB_WORK_NAME" property="powerSubWorkName" />
+        <result column="POWER_PROJECT_ID" property="powerProjectId" />
+        <result column="POWER_PROJECT_NAME" property="powerProjectName" />
+        <result column="POWER_CRITERION_ID" property="powerCriterionId" />
+        <result column="POWER_CRITERION_NAME" property="powerCriterionName" />
+        <result column="POWER_QUALIFIED" property="powerQualified" />
+        <result column="POWER_PROBLEM" property="powerProblem" />
+        <result column="POWER_PHOTO" property="powerPhoto" />
+    </resultMap>
+
+    <!--1.**********************************************************************************************-->
+    <!-- 无条件查询展示所有数据-->
+    <select id="selectAllPowerSupplyDTO" resultMap="result_PowerSupplyDTODao_Map">
+     select * from
+        (select t.* ,rownum r from
+            (
+               select
+                    p.power_project_id,
+                    m.power_module_name,
+                    s.power_sub_work_name,
+                    p.power_project_name,
+                    c.power_criterion_name,c.power_qualified,c.power_problem,c.power_photo
+                    from Power_Supply_Module m
+                    left join Power_Sub_Work s
+                    on m.power_module_id = s.power_module_id
+                    left join Power_Supply_Project p
+                    on s.power_sub_work_id = p.power_sub_work_id
+                    left join Power_Supply_Criterion c
+                    on p.power_project_id = c.power_project_id
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+
+    <!-- 查询总数-->
+    <select id="selectAllPowerSupplyDTOCount" resultType="long">
+        select count(*) from(
+                select
+                    p.power_project_id,
+                    m.power_module_name,
+                    s.power_sub_work_name,
+                    p.power_project_name,
+                    c.power_criterion_name,c.power_qualified,c.power_problem,c.power_photo
+                    from Power_Supply_Module m
+                    left join Power_Sub_Work s
+                    on m.power_module_id = s.power_module_id
+                    left join Power_Supply_Project p
+                    on s.power_sub_work_id = p.power_sub_work_id
+                    left join Power_Supply_Criterion c
+                    on p.power_project_id = c.power_project_id
+                    )
+    </select>
+
+
+    <!--2.**********************************************************************************-->
+    <!-- 根据项目名模糊搜索查询-->
+    <select id="FuzzysearchPowerSupplyDTO" resultMap="result_PowerSupplyDTODao_Map">
+        select * from
+            (select t.* ,rownum r from
+                (
+                select
+                p.power_project_id,
+                m.power_module_name,
+                s.power_sub_work_name,
+                p.power_project_name,
+                c.power_criterion_name,c.power_qualified,c.power_problem,c.power_photo
+                from Power_Supply_Module m
+                left join Power_Sub_Work s
+                on m.power_module_id = s.power_module_id
+                left join Power_Supply_Project p
+                on s.power_sub_work_id = p.power_sub_work_id
+                left join Power_Supply_Criterion c
+                on p.power_project_id = c.power_project_id
+                <where>
+                    <if test="powerProjectName !=null and powerProjectName !=''">
+                        and power_project_name like #{powerProjectName}
+                    </if>
+                </where>
+             )t
+        ) where r between #{start} and #{end}
+    </select>
+    <!-- 根据项目名模糊搜索查询总数-->
+    <select id="getFuzzysearchPowerSupplyDTOCount" resultType="long">
+        select count(*) from(
+        select
+        p.power_project_id,
+        m.power_module_name,
+        s.power_sub_work_name,
+        p.power_project_name,
+        c.power_criterion_name,c.power_qualified,c.power_problem,c.power_photo
+        from Power_Supply_Module m
+        left join Power_Sub_Work s
+        on m.power_module_id = s.power_module_id
+        left join Power_Supply_Project p
+        on s.power_sub_work_id = p.power_sub_work_id
+        left join Power_Supply_Criterion c
+        on p.power_project_id = c.power_project_id
+            <where>
+                <if test="powerProjectName !=null and powerProjectName !=''">
+                    and power_project_name like #{powerProjectName}
+                </if>
+            </where>
+         )
+    </select>
+
+    <!--3.************************************************************************************************-->
+    <!--根据点击下拉框名称以及搜索框内容都不为空进行模糊分页查询-->
+    <select id="selectDropdownBoxAndSearchCount" resultType="long">
+        select count(*) from(
+        select
+        p.power_project_id,
+        m.power_module_name,
+        s.power_sub_work_name,
+        p.power_project_name,
+        c.power_criterion_name,c.power_qualified,c.power_problem,c.power_photo
+        from Power_Supply_Module m
+        left join Power_Sub_Work s
+        on m.power_module_id = s.power_module_id
+        left join Power_Supply_Project p
+        on s.power_sub_work_id = p.power_sub_work_id
+        left join Power_Supply_Criterion c
+        on p.power_project_id = c.power_project_id
+        <where>
+            <if test="powerProjectName !=null and powerProjectName !=''">
+                and power_project_name like #{powerProjectName}
+            </if>
+        </where>
+        and m.power_module_id = #{powerModuleId,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <select id="selectAllDropdownBoxAndSearchPowerSupplyDTO" resultMap="result_PowerSupplyDTODao_Map">
+        select * from
+            (select t.* ,rownum r from
+                (
+        select
+        p.power_project_id,
+        m.power_module_name,
+        s.power_sub_work_name,
+        p.power_project_name,
+        c.power_criterion_name,c.power_qualified,c.power_problem,c.power_photo
+        from Power_Supply_Module m
+        left join Power_Sub_Work s
+        on m.power_module_id = s.power_module_id
+        left join Power_Supply_Project p
+        on s.power_sub_work_id = p.power_sub_work_id
+        left join Power_Supply_Criterion c
+        on p.power_project_id = c.power_project_id
+                <where>
+                    <if test="powerProjectName !=null and powerProjectName !=''">
+                        and power_project_name like #{powerProjectName}
+                    </if>
+                </where>
+                and m.power_module_id = #{powerModuleId,jdbcType=VARCHAR}
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+
+    <!--4.*****************************************************************************************-->
+    <!--当搜索框内容为空根据模块ID点击下拉框进行搜索分页展示数据-->
+    <select id="selectAllPowerSupplyDTOSearchList" resultMap="result_PowerSupplyDTODao_Map">
+        select * from
+            (select t.* ,rownum r from
+                (
+                select
+            p.power_project_id,
+            m.power_module_name,
+            s.power_sub_work_name,
+            p.power_project_name,
+            c.power_criterion_name,c.power_qualified,c.power_problem,c.power_photo
+            from Power_Supply_Module m
+            left join Power_Sub_Work s
+            on m.power_module_id = s.power_module_id
+            left join Power_Supply_Project p
+            on s.power_sub_work_id = p.power_sub_work_id
+            left join Power_Supply_Criterion c
+            on p.power_project_id = c.power_project_id
+                where m.power_module_id = #{powerModuleId,jdbcType=VARCHAR}
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+
+    <select id="selectAllPowerSupplyDTOSearchCount" resultType="long">
+        select count(*) from(
+        select
+                p.power_project_id,
+                m.power_module_name,
+                s.power_sub_work_name,
+                p.power_project_name,
+                c.power_criterion_name,c.power_qualified,c.power_problem,c.power_photo
+                from Power_Supply_Module m
+                left join Power_Sub_Work s
+                on m.power_module_id = s.power_module_id
+                left join Power_Supply_Project p
+                on s.power_sub_work_id = p.power_sub_work_id
+                left join Power_Supply_Criterion c
+                on p.power_project_id = c.power_project_id
+            where m.power_module_id = #{powerModuleId,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <!--导出设备专业空Excel表格-->
+    <select id="ExportNullPowerSupplyExcel" resultMap="result_PowerSupplyDTODao_Map">
+            select
+            p.power_project_id,
+            m.power_module_name,
+            s.power_sub_work_name,
+            p.power_project_name,
+            c.power_criterion_name,c.power_qualified,c.power_problem,c.power_photo
+            from Power_Supply_Module m
+            left join Power_Sub_Work s
+            on m.power_module_id = s.power_module_id
+            left join Power_Supply_Project p
+            on s.power_sub_work_id = p.power_sub_work_id
+            left join Power_Supply_Criterion c
+            on p.power_project_id = c.power_project_id
+    </select>
+
+    <!--导出线路专业模块库Excel表格数据-->
+    <select id="ExportPowerSupplyExcel" resultMap="result_PowerSupplyDTODao_Map">
+        select
+        p.power_project_id,
+        m.power_module_name,
+        s.power_sub_work_name,
+        p.power_project_name,
+        c.power_criterion_name,c.power_qualified,c.power_problem,c.power_photo
+        from Power_Supply_Module m
+        left join Power_Sub_Work s
+        on m.power_module_id = s.power_module_id
+        left join Power_Supply_Project p
+        on s.power_sub_work_id = p.power_sub_work_id
+        left join Power_Supply_Criterion c
+        on p.power_project_id = c.power_project_id
+        where p.power_project_id in
+        <foreach collection="array" item="powerProjectId" open="(" separator="," close=")">
+            #{powerProjectId}
+        </foreach>
+    </select>
+</mapper>

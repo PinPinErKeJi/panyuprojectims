@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaStatisticsNewEquipmentDao">
+    <!-- FaStatisticsNewEquipment的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaStatisticsNewEquipment_Map" type="com.panyu.panyuprojectims.entity.FaStatisticsNewEquipment">
+        <id column="STATISTICS_NEW_EQUIPMENT_ID" property="statisticsNewEquipmentId" />
+        <result column="STATISTICS_EQUIPMENT_NUMBER" property="statisticsEquipmentNumber" />
+        <result column="STATISTICS_EQUIPMENT_TYPE" property="statisticsEquipmentType" />
+        <result column="STATISTICS_EQUIPMENT_MODEL" property="statisticsEquipmentModel" />
+        <result column="EQUIPMENT_CABINET_SIZE" property="equipmentCabinetSize" />
+        <result column="EQUIPMENT_ARRIVAL_TIME" property="equipmentArrivalTime" />
+        <result column="EQUIPMENT_VERIFYING_PHOTOS" property="equipmentVerifyingPhotos" />
+    </resultMap>
+
+    <!--获取新增设备的图片-->
+    <select id="selectEquipmentVerifyingPhotos" resultType="java.lang.String" >
+        select fa2.equipment_verifying_photos from  FA_arrival_statistics fa1 left join FA_statistics_new_equipment fa2
+        on fa1.statistics_new_equipment_id = fa2.statistics_new_equipment_id
+        where fa1.arrival_statistics_id=#{arrivalStatisticsId}
+
+    </select>
+
+
+
+</mapper>

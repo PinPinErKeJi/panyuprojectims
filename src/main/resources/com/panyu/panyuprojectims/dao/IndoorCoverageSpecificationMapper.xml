@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IndoorCoverageSpecificationDao">
+    <!-- IndoorCoverageSpecification的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IndoorCoverageSpecification_Map" type="com.panyu.panyuprojectims.entity.IndoorCoverageSpecification">
+        <result column="INDOOR_SPECIFICATION_ID" property="indoorSpecificationId" />
+        <result column="INDOOR_SPECIFICATION_NAME" property="indoorSpecificationName" />
+        <result column="INDOOR_QUALIFIED" property="indoorQualified" />
+        <result column="INDOOR_PROBLEM" property="indoorProblem" />
+        <result column="INDOOR_PHOTO" property="indoorPhoto" />
+        <result column="INDOOR_PROJECT_ID" property="indoorProjectId" />
+    </resultMap>
+
+    <!--根据标准规范id和标准规范内容查查标准规范对象-->
+    <select id="getIndoorCoverageSpecification" resultMap="result_IndoorCoverageSpecification_Map">
+        select * from Indoor_coverage_specification where INDOOR_SPECIFICATION_ID =
+        #{indoorSpecificationId,jdbcType=VARCHAR} and INDOOR_SPECIFICATION_NAME =
+        #{indoorSpecificationName,jdbcType=VARCHAR}
+    </select>
+
+
+
+    <!--根据检查项目id查询包含的标准规范-->
+    <select id="selectIndoorCoverageSpecificationByIndoorProjectId" resultMap="result_IndoorCoverageSpecification_Map">
+        select * from Indoor_coverage_specification where indoor_project_id = #{indoorProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据标准规范名和检查项目id查询个数-->
+    <select id="getCountByIndoorSpecificationNameAndIndoorProjectId" resultType="Long">
+        select count(*) from Indoor_coverage_specification where indoor_specification_name =
+        #{indoorSpecificationName,jdbcType=VARCHAR} and  indoor_project_id =
+        #{indoorProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertIndoorCoverageSpecification">
+        insert into Indoor_coverage_specification
+        values (
+        sys_guid(),
+        #{indoorSpecificationName,jdbcType=VARCHAR}, null, null, null,
+        #{indoorProjectId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据标准规范名和检查项目id查询标准规范-->
+    <select id="selectIndoorCoverageSpecificationByIndoorSpecificationNameAndIndoorProjectId" resultMap="result_IndoorCoverageSpecification_Map">
+        select * from Indoor_coverage_specification where indoor_specification_name =
+        #{indoorSpecificationName,jdbcType=VARCHAR} and  indoor_project_id =
+        #{indoorProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--修改-->
+    <update id="updateIndoorCoverageSpecification">
+        update Indoor_coverage_specification set indoor_specification_name =
+        #{indoorSpecificationName,jdbcType=VARCHAR} where indoor_specification_id =
+        #{indoorSpecificationId,jdbcType=VARCHAR}
+    </update>
+
+    <!--删除-->
+    <delete id="deleteIndoorCoverageSpecification">
+        delete from Indoor_coverage_specification where indoor_specification_id = #{indoorSpecificationId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--根据检查项目id查询标准规范的id-->
+    <select id="selectIndoorSpecificationIdByIndoorProjectId" resultType="String">
+        select indoor_specification_id from Indoor_coverage_specification  where   indoor_project_id = #{indoorProjectId,jdbcType=VARCHAR}
+    </select>
+</mapper>

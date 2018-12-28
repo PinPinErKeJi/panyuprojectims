@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.HnGarrisonInformationDao">
+    <!-- HnGarrisonInformation的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_HnGarrisonInformation_Map" type="com.panyu.panyuprojectims.entity.HnGarrisonInformation">
+        <id column="GARRISON_INFORMATION_ID" property="garrisonInformationId" />
+        <result column="OPERATOR" property="operator" />
+        <result column="BUILDING_PROJECT" property="buildingProject" />
+        <result column="BUILD_YEAR" property="buildYear" />
+        <result column="SINGLE_PROJECT_NAME" property="singleProjectName" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="COUNTY" property="county" />
+        <result column="REGIONAL_TYPE" property="regionalType" />
+        <result column="GARRISON_LONGITUDE" property="garrisonLongitude" />
+        <result column="GARRISON_LATITUDE" property="garrisonLatitude" />
+        <result column="CONSTRUCTION_NATURE" property="constructionNature" />
+        <result column="ASCRIPTION_END_BUREAU" property="ascriptionEndBureau" />
+        <result column="SUPERVISOR_UNIT_ID" property="supervisorUnitId" />
+        <result column="CONSTRUCTION_ORGANIZATION_ID" property="constructionOrganizationId" />
+        <result column="DESIGN_UNIT_ID" property="designUnitId" />
+        <result column="PRIMARY_SPLITTER_NUMBER_ID" property="primarySplitterNumberId" />
+        <result column="SECOND_SPLITTER_NUMBER_ID" property="secondSplitterNumberId" />
+        <result column="PRIMARY_SPLITTER_BOX_ID" property="primarySplitterBoxId" />
+        <result column="SECOND_SPLITTER_BOX_ID" property="secondSplitterBoxId" />
+        <result column="CABLE_CONNECTOR_BOX_ID" property="cableConnectorBoxId" />
+        <result column="CABLE_LENGTH_ID" property="cableLengthId" />
+        <result column="ON_SITE_SUPERVISION" property="onSiteSupervision" />
+        <result column="PROFESSION_RESPONSIBLE_PERSON" property="professionResponsiblePerson" />
+        <result column="DISTRICT_HEAD" property="districtHead" />
+        <result column="CONSTRUCTION_CORPORATE_NAME" property="constructionCorporateName" />
+        <result column="CONSTRUCTION_LINKMAN" property="constructionLinkman" />
+        <result column="DESIGN_CORPORATE_NAME" property="designCorporateName" />
+        <result column="DESIGN_CONSTRUCTION_LINKMAN" property="designConstructionLinkman" />
+        <result column="PRIMARY_ONE_TO_FOUR" property="primaryOneToFour" />
+        <result column="PRIMARY_ONE_TO_EIGHT" property="primaryOneToEight" />
+        <result column="PRIMARY_ONE_TO_SIXTEEN" property="primaryOneToSixteen" />
+        <result column="SECOND_ONE_TO_FOUR" property="secondOneToFour" />
+        <result column="SECOND_ONE_TO_EIGHT" property="secondOneToEight" />
+        <result column="SECOND_ONE_TO_SIXTEEN" property="secondOneToSixteen" />
+        <result column="ONE_TO_THIRTY_TWO" property="oneToThirtyTwo" />
+        <result column="ONE_TO_SIXTY_FOUR" property="oneToSixtyFour" />
+        <result column="PRIMARY_ANCHOREAR_TYPE" property="primaryAnchorearType" />
+        <result column="PRIMARY_WALL_MOUNTED" property="primaryWallMounted" />
+        <result column="SECOND_ANCHOREAR_TYPE" property="secondAnchorearType" />
+        <result column="SECOND_WALL_MOUNTED" property="secondWallMounted" />
+        <result column="CABLE_FLOOR_TYPE" property="cableFloorType" />
+        <result column="CABLE_WALL_MOUNTED" property="cableWallMounted" />
+        <result column="GYSTS" property="gysts" />
+        <result column="GYSTA" property="gysta" />
+        <result column="BURIED_SERVICE_LIGHTGUIDE" property="buriedServiceLightguide" />
+        <result column="WALL_CABLE" property="wallCable" />
+        <result column="IN_BRIDGE_CABLE" property="inBridgeCable" />
+        <result column="GYFXTS" property="gyfxts" />
+    </resultMap>
+
+
+
+    <!--分页模糊匹配查询展示基本信息数据总条数 -->
+    <select id="getHnGarrisonInformationRowCount" resultType="java.lang.Long">
+        select count(*) from (
+            select
+            gi.garrison_information_id,gi.building_project,gi.operator,gi.build_year,gi.single_project_name,
+            gi.province,gi.city,gi.county,gi.regional_type,gi.garrison_longitude,gi.garrison_latitude,
+            gi.construction_nature,gi.ascription_end_bureau,
+            su.on_site_Supervision,su.profession_responsible_person,su.district_head,
+            co.construction_corporate_name,co.construction_linkman,
+            du.design_corporate_name,du.design_construction_linkman,
+            ps.primary_one_to_four,ps.primary_one_to_eight,ps.primary_one_to_sixteen,
+            ssn.second_one_to_four,ssn.second_one_to_eight,ssn.second_one_to_sixteen,
+            ssn.one_to_thirty_two,ssn.one_to_sixty_four,
+            psb.primary_anchorear_type,psb.primary_wall_mounted,
+            ssb.second_anchorear_type,ssb.second_wall_mounted,
+            ccb.cable_floor_type,ccb.cable_wall_mounted,
+            cl.GYSTS,cl.GYSTA,cl.buried_service_lightguide,cl.wall_cable,cl.in_bridge_cable,cl.GYFXTS
+            from HN_Garrison_information gi
+            left join HN_Supervisor_unit su
+            on gi.supervisor_unit_id = su.supervisor_unit_id
+            left join HN_construction_organization co
+            on gi.construction_organization_id = co.construction_organization_id
+            left join HN_Design_unit du
+            on gi.design_unit_id = du.design_unit_id
+            left join HN_Primary_Splitter_Number ps
+            on gi.primary_splitter_number_id = ps.primary_splitter_number_id
+            left join HN_Second_Splitter_Number ssn
+            on gi.second_splitter_number_id = ssn.second_splitter_number_id
+            left join HN_Primary_Splitter_Box_Number psb
+            on gi.primary_splitter_box_id = psb.primary_splitter_box_id
+            left join HN_Second_Splitter_Box_Number ssb
+            on gi.second_splitter_box_id = ssb.second_splitter_box_id
+            left join HN_Cable_Connector_Box_Number ccb
+            on gi.cable_connector_box_id = ccb.cable_connector_box_id
+            left join HN_Cable_length cl
+            on gi.cable_length_id = cl.cable_length_id
+            <where>
+                <if test="province !=null and province !='' ">
+                    and PROVINCE like #{province}
+                </if>
+                <if test="city !=null and city !='' ">
+                    and CITY like #{city}
+                </if>
+                <if test="county !=null and county !='' ">
+                    and COUNTY like #{county}
+                </if>
+                <if test="buildYear !=null and buildYear !='' ">
+                    and BUILD_YEAR like #{buildYear}
+                </if>
+                <if test="buildingProject !=null and buildingProject !='' ">
+                    and BUILDING_PROJECT like #{buildingProject}
+                </if>
+                <if test="operator !=null and operator !='' ">
+                    and OPERATOR like #{operator}
+                </if>
+                <if test="singleProjectName !=null and singleProjectName !='' ">
+                    and SINGLE_PROJECT_NAME like #{singleProjectName}
+                </if>
+                <if test="keyword !=null and keyword !='' ">
+                    and (ON_SITE_SUPERVISION like #{keyword}
+                    or PROFESSION_RESPONSIBLE_PERSON like #{keyword}
+                    or DISTRICT_HEAD like #{keyword})
+                </if>
+            </where>
+        )
+    </select>
+    <!-- 分页模糊匹配查询展示基本信息数据 -->
+    <select id="selectHnGarrisonInformation" resultMap="result_HnGarrisonInformation_Map">
+        select * from(
+            select t.*,rownum r from(
+                select
+                gi.garrison_information_id,gi.building_project,gi.operator,gi.build_year,gi.single_project_name,
+                gi.province,gi.city,gi.county,gi.regional_type,gi.garrison_longitude,gi.garrison_latitude,
+                gi.construction_nature,gi.ascription_end_bureau,
+                su.on_site_Supervision,su.profession_responsible_person,su.district_head,
+                co.construction_corporate_name,co.construction_linkman,
+                du.design_corporate_name,du.design_construction_linkman,
+                ps.primary_one_to_four,ps.primary_one_to_eight,ps.primary_one_to_sixteen,
+                ssn.second_one_to_four,ssn.second_one_to_eight,ssn.second_one_to_sixteen,
+                ssn.one_to_thirty_two,ssn.one_to_sixty_four,
+                psb.primary_anchorear_type,psb.primary_wall_mounted,
+                ssb.second_anchorear_type,ssb.second_wall_mounted,
+                ccb.cable_floor_type,ccb.cable_wall_mounted,
+                cl.GYSTS,cl.GYSTA,cl.buried_service_lightguide,cl.wall_cable,cl.in_bridge_cable,cl.GYFXTS
+                from HN_Garrison_information gi
+                left join HN_Supervisor_unit su
+                on gi.supervisor_unit_id = su.supervisor_unit_id
+                left join HN_construction_organization co
+                on gi.construction_organization_id = co.construction_organization_id
+                left join HN_Design_unit du
+                on gi.design_unit_id = du.design_unit_id
+                left join HN_Primary_Splitter_Number ps
+                on gi.primary_splitter_number_id = ps.primary_splitter_number_id
+                left join HN_Second_Splitter_Number ssn
+                on gi.second_splitter_number_id = ssn.second_splitter_number_id
+                left join HN_Primary_Splitter_Box_Number psb
+                on gi.primary_splitter_box_id = psb.primary_splitter_box_id
+                left join HN_Second_Splitter_Box_Number ssb
+                on gi.second_splitter_box_id = ssb.second_splitter_box_id
+                left join HN_Cable_Connector_Box_Number ccb
+                on gi.cable_connector_box_id = ccb.cable_connector_box_id
+                left join HN_Cable_length cl
+                on gi.cable_length_id = cl.cable_length_id
+                <where>
+                    <if test="province !=null and province !='' ">
+                        and PROVINCE like #{province}
+                    </if>
+                    <if test="city !=null and city !='' ">
+                        and CITY like #{city}
+                    </if>
+                    <if test="county !=null and county !='' ">
+                        and COUNTY like #{county}
+                    </if>
+                    <if test="buildYear !=null and buildYear !='' ">
+                        and BUILD_YEAR like #{buildYear}
+                    </if>
+                    <if test="buildingProject !=null and buildingProject !='' ">
+                        and BUILDING_PROJECT like #{buildingProject}
+                    </if>
+                    <if test="operator !=null and operator !='' ">
+                        and OPERATOR like #{operator}
+                    </if>
+                    <if test="singleProjectName !=null and singleProjectName !='' ">
+                        and SINGLE_PROJECT_NAME like #{singleProjectName}
+                    </if>
+                    <if test="keyword !=null and keyword !='' ">
+                        and (ON_SITE_SUPERVISION like #{keyword}
+                        or PROFESSION_RESPONSIBLE_PERSON like #{keyword}
+                        or DISTRICT_HEAD like #{keyword})
+                    </if>
+                </where>
+            )t
+        )where r between #{start} and #{end}
+    </select>
+
+    <!--添加-->
+    <insert id="insertHnGarrisonInformation">
+        insert into HN_Garrison_information values(
+        #{garrisonInformationId,jdbcType=VARCHAR},
+        #{operator,jdbcType=VARCHAR},
+        #{buildingProject,jdbcType=VARCHAR},
+        #{buildYear,jdbcType=VARCHAR},
+        #{singleProjectName,jdbcType=VARCHAR},
+        #{province,jdbcType=VARCHAR},
+        #{city,jdbcType=VARCHAR},
+        #{county,jdbcType=VARCHAR},
+        #{regionalType,jdbcType=VARCHAR},
+        #{garrisonLongitude,jdbcType=VARCHAR},
+        #{garrisonLatitude,jdbcType=VARCHAR},
+        #{constructionNature,jdbcType=VARCHAR},
+        #{ascriptionEndBureau,jdbcType=VARCHAR},
+        #{supervisorUnitId,jdbcType=VARCHAR},
+        #{constructionOrganizationId,jdbcType=VARCHAR},
+        #{designUnitId,jdbcType=VARCHAR},
+        #{primarySplitterNumberId,jdbcType=VARCHAR},
+        #{secondSplitterNumberId,jdbcType=VARCHAR},
+        #{primarySplitterBoxId,jdbcType=VARCHAR},
+        #{secondSplitterBoxId,jdbcType=VARCHAR},
+        #{cableConnectorBoxId,jdbcType=VARCHAR},
+        #{cableLengthId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--删除-->
+    <!--删除驻地网基本信息数据时首先根据驻地网基本信息表的ID字段查询出关联的字表ID-->
+    <!--查询驻地网监理单位表ID字段-->
+    <select id="selectSupervisorUnitIdByGarrisonInformationId" resultType="String">
+        select SUPERVISOR_UNIT_ID
+        from HN_Garrison_information
+        where GARRISON_INFORMATION_ID = #{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--查询驻地网施工单位表ID字段-->
+    <select id="selectConstructionOrganizationIdByGarrisonInformationId" resultType="String">
+        select CONSTRUCTION_ORGANIZATION_ID
+        from HN_Garrison_information
+        where GARRISON_INFORMATION_ID = #{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--查询驻地网设计单位表ID字段-->
+    <select id="selectDesignUnitIdByGarrisonInformationId" resultType="String">
+        select DESIGN_UNIT_ID
+        from HN_Garrison_information
+        where GARRISON_INFORMATION_ID = #{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--查询一级分光器设计数量表ID字段-->
+    <select id="selectPrimarySplitterNumberIdByGarrisonInformationId" resultType="String">
+        select PRIMARY_SPLITTER_NUMBER_ID
+        from HN_Garrison_information
+        where GARRISON_INFORMATION_ID = #{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--查询二级分光器设计数量表ID字段-->
+    <select id="selectSecondSplitterNumberIdByGarrisonInformationId" resultType="String">
+        select SECOND_SPLITTER_NUMBER_ID
+        from HN_Garrison_information
+        where GARRISON_INFORMATION_ID = #{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--查询一级分光器箱设计数量表ID字段-->
+    <select id="selectPrimarySplitterBoxIdByGarrisonInformationId" resultType="String">
+        select PRIMARY_SPLITTER_BOX_ID
+        from HN_Garrison_information
+        where GARRISON_INFORMATION_ID = #{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--查询二级分光器箱设计数量表ID字段-->
+    <select id="selectSecondSplitterBoxIdByGarrisonInformationId" resultType="String">
+        select SECOND_SPLITTER_BOX_ID
+        from HN_Garrison_information
+        where GARRISON_INFORMATION_ID = #{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--查询光缆交接箱设计数量表ID字段-->
+    <select id="selectCableConnectorBoxIdByGarrisonInformationId" resultType="String">
+        select CABLE_CONNECTOR_BOX_ID
+        from HN_Garrison_information
+        where GARRISON_INFORMATION_ID = #{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--查询光缆长度表ID字段-->
+    <select id="selectCableLengthIdByGarrisonInformationId" resultType="String">
+        select CABLE_LENGTH_ID
+        from HN_Garrison_information
+        where GARRISON_INFORMATION_ID = #{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据ID字段删除驻地网基本信息-->
+    <delete id="deleteHnGarrisonInformationByGarrisonInformationId" parameterType="java.lang.String">
+        delete from HN_Garrison_information
+        where GARRISON_INFORMATION_ID = #{garrisonInformationId,jdbcType=VARCHAR}
+    </delete>
+
+
+    <!--导出空表格-->
+    <select id="exportExcel_HnGarrisonInformation" resultMap="result_HnGarrisonInformation_Map">
+        select
+                gi.garrison_information_id,gi.building_project,gi.operator,gi.build_year,gi.single_project_name,
+                gi.province,gi.city,gi.county,gi.regional_type,gi.garrison_longitude,gi.garrison_latitude,
+                gi.construction_nature,gi.ascription_end_bureau,
+                su.on_site_Supervision,su.profession_responsible_person,su.district_head,
+                co.construction_corporate_name,co.construction_linkman,
+                du.design_corporate_name,du.design_construction_linkman,
+                ps.primary_one_to_four,ps.primary_one_to_eight,ps.primary_one_to_sixteen,
+                ssn.second_one_to_four,ssn.second_one_to_eight,ssn.second_one_to_sixteen,
+                ssn.one_to_thirty_two,ssn.one_to_sixty_four,
+                psb.primary_anchorear_type,psb.primary_wall_mounted,
+                ssb.second_anchorear_type,ssb.second_wall_mounted,
+                ccb.cable_floor_type,ccb.cable_wall_mounted,
+                cl.GYSTS,cl.GYSTA,cl.buried_service_lightguide,cl.wall_cable,cl.in_bridge_cable,cl.GYFXTS
+                from HN_Garrison_information gi
+                left join HN_Supervisor_unit su
+                on gi.supervisor_unit_id = su.supervisor_unit_id
+                left join HN_construction_organization co
+                on gi.construction_organization_id = co.construction_organization_id
+                left join HN_Design_unit du
+                on gi.design_unit_id = du.design_unit_id
+                left join HN_Primary_Splitter_Number ps
+                on gi.primary_splitter_number_id = ps.primary_splitter_number_id
+                left join HN_Second_Splitter_Number ssn
+                on gi.second_splitter_number_id = ssn.second_splitter_number_id
+                left join HN_Primary_Splitter_Box_Number psb
+                on gi.primary_splitter_box_id = psb.primary_splitter_box_id
+                left join HN_Second_Splitter_Box_Number ssb
+                on gi.second_splitter_box_id = ssb.second_splitter_box_id
+                left join HN_Cable_Connector_Box_Number ccb
+                on gi.cable_connector_box_id = ccb.cable_connector_box_id
+                left join HN_Cable_length cl
+                on gi.cable_length_id = cl.cable_length_id
+    </select>
+
+    <!--导出数据-->
+    <select id="export_HnGarrisonInformation" resultMap="result_HnGarrisonInformation_Map">
+        select
+                gi.garrison_information_id,gi.building_project,gi.operator,gi.build_year,gi.single_project_name,
+                gi.province,gi.city,gi.county,gi.regional_type,gi.garrison_longitude,gi.garrison_latitude,
+                gi.construction_nature,gi.ascription_end_bureau,
+                su.on_site_Supervision,su.profession_responsible_person,su.district_head,
+                co.construction_corporate_name,co.construction_linkman,
+                du.design_corporate_name,du.design_construction_linkman,
+                ps.primary_one_to_four,ps.primary_one_to_eight,ps.primary_one_to_sixteen,
+                ssn.second_one_to_four,ssn.second_one_to_eight,ssn.second_one_to_sixteen,
+                ssn.one_to_thirty_two,ssn.one_to_sixty_four,
+                psb.primary_anchorear_type,psb.primary_wall_mounted,
+                ssb.second_anchorear_type,ssb.second_wall_mounted,
+                ccb.cable_floor_type,ccb.cable_wall_mounted,
+                cl.GYSTS,cl.GYSTA,cl.buried_service_lightguide,cl.wall_cable,cl.in_bridge_cable,cl.GYFXTS
+                from HN_Garrison_information gi
+                left join HN_Supervisor_unit su
+                on gi.supervisor_unit_id = su.supervisor_unit_id
+                left join HN_construction_organization co
+                on gi.construction_organization_id = co.construction_organization_id
+                left join HN_Design_unit du
+                on gi.design_unit_id = du.design_unit_id
+                left join HN_Primary_Splitter_Number ps
+                on gi.primary_splitter_number_id = ps.primary_splitter_number_id
+                left join HN_Second_Splitter_Number ssn
+                on gi.second_splitter_number_id = ssn.second_splitter_number_id
+                left join HN_Primary_Splitter_Box_Number psb
+                on gi.primary_splitter_box_id = psb.primary_splitter_box_id
+                left join HN_Second_Splitter_Box_Number ssb
+                on gi.second_splitter_box_id = ssb.second_splitter_box_id
+                left join HN_Cable_Connector_Box_Number ccb
+                on gi.cable_connector_box_id = ccb.cable_connector_box_id
+                left join HN_Cable_length cl
+                on gi.cable_length_id = cl.cable_length_id
+                where gi.garrison_information_id in
+                <foreach collection="array" open="(" separator="," close=")" item="ids">
+                    #{ids}
+                </foreach>
+    </select>
+
+</mapper>

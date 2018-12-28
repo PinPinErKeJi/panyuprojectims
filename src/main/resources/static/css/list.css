@@ -1,0 +1,47 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.easyui-dialog {
+	width: 600px;
+	padding: 30px 40px 20px;
+	background-color: #fff;
+	overflow: hidden;
+}
+
+.form-item {
+	width: 48%;
+	padding-bottom: 30px;
+	position: relative;
+}
+
+.form-label {
+	margin-bottom: 10px;
+	font-size: 14px;
+	color: #666;
+	display: block;
+}
+
+.form-input {
+	width: 100%;
+	height: 34px;
+	text-indent: 8px;
+	font-size: 14px;
+	transition: .3s;
+	border-radius: 0;
+	background-color: #f4f7f9;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	border: none;
+	outline: none;
+}

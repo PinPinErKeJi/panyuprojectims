@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>驻地网工程进度统计信息</title>
+    <link rel="stylesheet" href="easyui/easyui.css">
+    <link rel="stylesheet" href="css/icon.css">
+    <link rel="stylesheet" href="css/list.css">
+    <style>
+        .border{
+            height: 27px;
+            width: 120px;
+            border: 1px solid #95B8E7;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<form id="excelForm" method="post" enctype="multipart/form-data">
+    <div>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true"  data-options="iconCls:'icon-print'" onClick="HnGarrisonJobProgressExcel();">导出工程基本信息</a>
+    </div>
+</form>
+<div data-toggle="distpicker" style="float: left">
+    <select  id="province" class="border" data-province="河南省"></select>
+    <select  id="city" class="border" data-city="郑州市"></select>
+    <select  id="county" class="border" data-district="中原区"></select>
+</div>
+<div>
+    <label>建设年份:</label><input id="construction-year" type="text" class="Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy'})">
+    <label>运营商:</label><input id="operator" class="easyui-combobox" placeholder="请选择运营商" style="width: 100px">
+    <label>建设项目名称：</label><input id="construction-project" class="easyui-textbox" style="width:100px">
+    <label>单项工程名称：</label><input id="construction-only-project" class="easyui-textbox" style="width:100px">
+    <label>监理人员：</label><input id="supervisory" class="easyui-textbox" style="width:80px">
+    <a href="#" id="search" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
+</div>
+<div id="datagrid" class="easyui-datagrid panel-fit" style="height: 100%;width: 100%"></div>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.easyui.min.js"></script>
+<script src="js/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="js/distpicker/distpicker.js" ></script>
+<script type="text/javascript" src="js/distpicker/distpicker.common.js" ></script>
+<script type="text/javascript" src="js/distpicker/distpicker.esm.js" ></script>
+<script type="text/javascript" src="js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //初始化运营商combobox
+        $("#operator").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            data:[{
+                id:'1',
+                name:'中国电信'
+            },{
+                id:'2',
+                name:'中国联通'
+            },{
+                id:'3',
+                name:'中国移动'
+            },{
+                id:'4',
+                name:'中国铁塔'
+            },{
+                id:'5',
+                name:'中国广电'
+            }]
+        })
+        //搜索点击事件
+        $("#search").bind("click",function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "county":$("#county").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operator").combobox("getText"),
+                "singleProjectName":$("#construction-only-project").textbox("getValue").trim(),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "professionResponsiblePerson":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击省份change事件
+        $("#province").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operator").combobox("getText"),
+                "singleProjectName":$("#construction-only-project").textbox("getValue").trim(),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "professionResponsiblePerson":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击城市change事件
+        $("#city").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operator").combobox("getText"),
+                "singleProjectName":$("#construction-only-project").textbox("getValue").trim(),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "professionResponsiblePerson":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击区(县)change事件
+        $("#county").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "county":$("#county").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operator").combobox("getText"),
+                "singleProjectName":$("#construction-only-project").textbox("getValue").trim(),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "professionResponsiblePerson":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //运营商change事件
+        $("#operator").combobox({
+            onChange:function () {
+                $("#datagrid").datagrid("load",{
+                    "province":$("#province").find("option:selected").val(),
+                    "city":$("#city").find("option:selected").val(),
+                    "county":$("#county").find("option:selected").val(),
+                    "buildYear":$("#construction-year").val(),
+                    "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                    "operator":$("#operator").combobox("getText"),
+                    "singleProjectName":$("#construction-only-project").textbox("getValue").trim(),
+                    "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                    "professionResponsiblePerson":$("#supervisory").textbox("getValue").trim(),
+                    "districtHead":$("#supervisory").textbox("getValue").trim(),
+                });
+            }
+        })
+
+        //数据表格
+        $("#datagrid").datagrid({
+            url: 'selectHnGarrisonJobProgress',
+            pagination: true,
+            pageNumber: 1,
+            pageSize: 2,
+            pageList: [2, 4, 8, 10, 20],
+            columns:[[
+                {field:'ck',checkbox:"true",rowspan:2},
+                { field:'jobProgressId',title:'序号',rowspan:2,width:50,align:'center',hidden:true},
+                { field:'operator',title:'运营商',rowspan:2,width:50,align:'center'},
+                { field:'buildingProject',title:'建设项目名称',rowspan:2,width:100,align:'center'},
+                { field:'buildYear',title:'建设年份',rowspan:2,width:80,align:'center'},
+                { field:'singleProjectName',title:'单项工程名称',rowspan:2,width:100,align:'center'},
+                { field:'province',title:'省',rowspan:2,width:50,align:'center'},
+                { field:'city',title:'市',rowspan:2,width:50,align:'center'},
+                { field:'county',title:'县(区)',rowspan:2,width:50,align:'center'},
+                { field:'regionalType',title:'区域类型',rowspan:2,width:100,align:'center'},
+                { field:'garrisonLongitude',title:'经度',rowspan:2,width:50,align:'center'},
+                { field:'garrisonLatitude',title:'纬度',rowspan:2,width:50,align:'center'},
+                { field:'constructionNature',title:'建设性质',rowspan:2,width:100,align:'center'},
+                { field:'ascriptionEndBureau',title:'上联归属端局',rowspan:2,width:100,align:'center'},
+                { title:'监理单位',colspan:3,align:'center'},
+                { title:'施工单位',colspan:2,align:'center'},
+                { title:'设计单位',colspan:2,align:'center'},
+                { title:'一级分光器',colspan:4,align:'center'},
+                { title:'二级分光器',colspan:6,align:'center'},
+                { title:'一级分光器箱',colspan:3,align:'center'},
+                { title:'二级分光器箱',colspan:3,align:'center'},
+                { title:'光缆交接箱',colspan:3,align:'center'},
+                { title:'光缆长度统计',colspan:2,width:100,align:'center'},
+                { title:'皮线光缆长度统计',colspan:3,align:'center'},
+            ],[
+                {field:'onSiteSupervision',title:'现场监理',width:80,align:'center'},
+                {field:'professionResponsiblePerson',title:'专业负责人',width:80,align:'center'},
+                {field:'districtHead',title:'区域负责人',width:100,align:'center'},
+                {field:'progressCompanyName',title:'单位名称',width:80,align:'center'},
+                {field:'progressLeader',title:'负责人',width:50,align:'center'},
+                {field:'designCompanyName',title:'单位名称',width:80,align:'center'},
+                {field:'designLeader',title:'负责人',width:50,align:'center'},
+                {field:'primarySplittingRatio',title:'分光比',width:80,align:'center',
+                    formatter:function (value,row,index) {
+                    //console.log(row)
+                    if((index+1)%2 == 1){
+                        return "设计数量"
+                    }else{
+                        return "安装数量"
+                    }
+                    }
+                },
+                {field:'primaryOneToFour',title:'1:4',width:50,align:'center'},
+                {field:'primaryOneToEight',title:'1:8',width:50,align:'center'},
+                {field:'primaryOneToSixteen',title:'1:16',width:50,align:'center'},
+                {field:'secondSplittingRatio',title:'分光比',width:80,align:'center',
+                    formatter:function (value,row,index) {
+                        //console.log(value+row+index)
+                        if((index+1)%2 == 1){
+                            return "设计数量"
+                        }else{
+                            return "安装数量"
+                        }
+                    }
+                },
+                {field:'secondOneToFour',title:'1:4',width:50,align:'center'},
+                {field:'secondOneToEight',title:'1:8',width:50,align:'center'},
+                {field:'secondOneToSixteen',title:'1:16',width:50,align:'center'},
+                {field:'oneToThirtyTwo',title:'1:32',width:50,align:'center'},
+                {field:'oneToSixtyFour',title:'1:64',width:50,align:'center'},
+                {field:'primarySplitterBoxType',title:'类型',width:80,align:'center',
+                    formatter:function (value,row,index) {
+                       //console.log(value+row+index)
+                        if((index+1)%2 == 1){
+                            return "设计数量"
+                        }else{
+                            return "安装数量"
+                        }
+                    }
+                },
+                {field:'primaryAnchorearType',title:'抱箍式',width:50,align:'center'},
+                {field:'primaryWallMounted',title:'壁挂式',width:50,align:'center'},
+                {field:'secondSplitterBoxType',title:'类型',width:80,align:'center',
+                    formatter:function (value,row,index) {
+                       //console.log(value+row+index)
+                        if((index+1)%2 == 1){
+                            return "设计数量"
+                        }else{
+                            return "安装数量"
+                        }
+                    }
+                },
+                {field:'secondAnchorearType',title:'抱箍式',width:50,align:'center'},
+                {field:'secondWallMounted',title:'壁挂式',width:50,align:'center'},
+                {field:'cableConnectorBoxType',title:'类型',width:80,align:'center',
+                    formatter:function (value,row,index) {
+                       //console.log(value+row+index)
+                        if((index+1)%2 == 1){
+                            return "设计数量"
+                        }else{
+                            return "安装数量"
+                        }
+                    }
+                },
+                {field:'cableFloorType',title:'落地式',width:50,align:'center'},
+                {field:'cableWallMounted',title:'壁挂式',width:50,align:'center'},
+                {field:'coreNumber',title:'芯数',width:50,align:'center'},
+                {field:'cableLength',title:'长度(km)',width:80,align:'center'},
+                {field:'numberOfBranches',title:'条数',width:50,align:'center'},
+                {field:'totalLength',title:'总长度(m)',width:80,align:'center'},
+                {field:'averageLength',title:'平均长度(m)',width:100,align:'center'},
+            ]],
+            onLoadSuccess:function () {
+                //获取当前页的数据
+                var rowsNumber = $("#datagrid").datagrid("getRows")
+                var fields = ['operator','buildingProject','buildYear','singleProjectName','province','city','county'
+                ,'regionalType','garrisonLongitude','garrisonLatitude','constructionNature','ascriptionEndBureau','onSiteSupervision','professionResponsiblePerson',
+                 'districtHead','progressCompanyName','progressLeader','designCompanyName','designLeader','coreNumber','cableLength',
+                'numberOfBranches','totalLength','averageLength']
+                for (var j = 0;j < rowsNumber.length/2;j++){
+                    for (var i = 0;i < fields.length; i++){
+                        $("#datagrid").datagrid('mergeCells',{
+                            index:j*2,
+                            field:fields[i],
+                            rowspan:2
+                        })
+                    }
+                }
+            }
+        })
+    })
+    //导出数据
+    function HnGarrisonJobProgressExcel(){
+        var rowDatas = $("#datagrid").datagrid("getSelections");
+        //console.log(rowDatas+"信息数据");
+        if(rowDatas.length==0){
+            $.messager.alert("信息框","请选中要导出的数据","warning");
+        }else{
+            var ids = new Array(rowDatas.length);
+            for(var i = 0; i<rowDatas.length; i++){
+                ids[i] = rowDatas[i].jobProgressId;
+            }
+            //console.log(ids);
+            window.location.href="HnGarrisonJobProgressExcel?ids="+ids+"&time="+new Date();
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>设备图片信息查询</title>
+    <link rel="stylesheet" href="easyui/easyui.css">
+    <link rel="stylesheet" href="css/icon.css">
+    <link rel="stylesheet" href="css/list.css">
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
+    <style>
+        .border{
+            height: 27px;
+            width: 120px;
+            border: 1px solid #95B8E7;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <a href="#" class="easyui-linkbutton">导出工程基本信息</a>
+</div>
+<div>
+    <div data-toggle="distpicker" style="float: left">
+        <select  id="province" class="border" data-province="河南省"></select>
+        <select  id="city" class="border" data-city="郑州市"></select>
+        <select  id="county" class="border" data-district="中原区"></select>
+    </div>
+    <div>
+        <label>建设年份:</label><input id="construction-year" type="text" class="Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy'})">
+        <label>运营商:</label><input id="operator" class="easyui-combobox" style="width: 100px">
+        <label>建设项目：</label><input id="construction-project" class="easyui-textbox" style="width:100px">
+        <label>监理人员：</label><input id="supervisory" class="easyui-textbox" style="width:100px">
+        <a id="search" class="easyui-linkbutton" iconCls="icon-search" style="width: 60px">搜索</a>
+    </div>
+</div>
+<div id="datagrid" class="easyui-datagrid panel-fit" style="height: 100%;width: 100%"></div>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.easyui.min.js"></script>
+<script src="js/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="js/distpicker/distpicker.js" ></script>
+<script type="text/javascript" src="js/distpicker/distpicker.common.js" ></script>
+<script type="text/javascript" src="js/distpicker/distpicker.esm.js" ></script>
+<script type="text/javascript" src="js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //初始化运营商combobox
+        $("#operator").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            data:[{
+                id:'1',
+                name:'中国电信'
+            },{
+                id:'2',
+                name:'中国联通'
+            },{
+                id:'3',
+                name:'中国移动'
+            },{
+                id:'4',
+                name:'中国铁塔'
+            },{
+                id:'5',
+                name:'中国广电'
+            }]
+        })
+        //搜索事件
+        $("#search").click(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "county":$("#county").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "operator":$("#operator").combobox("getText").trim(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "projectLeader":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击省份change事件
+        $("#province").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "operator":$("#operator").combobox("getText").trim(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "projectLeader":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击城市change事件
+        $("#city").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "operator":$("#operator").combobox("getText").trim(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "projectLeader":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击区(县)change事件
+        $("#county").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "county":$("#county").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "operator":$("#operator").combobox("getText").trim(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "projectLeader":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //运营商onchange事件
+        $("#operator").combobox({
+            onChange:function () {
+                $("#datagrid").datagrid("load",{
+                    "province":$("#province").find("option:selected").val(),
+                    "city":$("#city").find("option:selected").val(),
+                    "county":$("#county").find("option:selected").val(),
+                    "buildYear":$("#construction-year").val(),
+                    "operator":$("#operator").combobox("getText").trim(),
+                    "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                    "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                    "projectLeader":$("#supervisory").textbox("getValue").trim(),
+                });
+            }
+        })
+        // 数据表格
+        $('#datagrid').datagrid({
+            url:'selectFaEquipmentInformation',
+            pagination: true,
+            singleSelect: true,
+            pageNumber: 1,
+            pageSize: 15,
+            pageList: [15, 30, 45, 60],
+            columns: [[
+                {field:'ck',checkbox:"true"},
+                {field: 'equipmentInformationId', title: '序号', align: 'center',width:100,hidden:true},
+                {field: 'operator', title: '运营商', align: 'center',width:100},
+                {field: 'buildYear', title: '建设份', align: 'center',width:100},
+                {field: 'buildingProject', title: '建设项目名称', align: 'center',width:160},
+                {field: 'motorRoomLongitude', title: '机房名称', align: 'center',width:100},
+                {field: 'province', title: '省', align: 'center',width:100},
+                {field: 'city', title: '市', align: 'center',width:100},
+                {field: 'county', title: '区(县)', align: 'center',width:100},
+                {field: 'onSiteSupervision', title: '现场监理', align: 'center',width:160},
+                {field: 'projectLeader', title: '项目负责人', align: 'center',width:160},
+                {field:'do',title:'操作', align:'center',
+                    formatter:function (value,row) {
+                        //console.log(row.equipmentInformationId)
+                        return "<button id = '"+row.equipmentInformationId+"' onclick=\'lookImg(this)\'>查看图片</button>"+
+                        "<button id = '"+row.equipmentInformationId+"' onclick=\'dataAdd(this)\'>数据填报</button>"
+                    }}
+            ]]
+        });
+    });
+    function lookImg(obj) {
+        var id = $(obj).prop("id")
+        //console.log("equipmentInformationId:"+id)
+        window.location.href = "FA-picture-repository.html?id="+id;
+    }
+    function dataAdd(obj) {
+        var id = $(obj).prop("id")
+        //console.log("equipmentInformationId:"+id)
+        window.location.href = "FA-dataAdd-get.html?id="+id;
+    }
+</script>
+</body>
+</html>

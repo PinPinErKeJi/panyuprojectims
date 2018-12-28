@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaVeneerExpansionDao">
+    <!-- FaVeneerExpansion的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaVeneerExpansion_Map" type="com.panyu.panyuprojectims.entity.FaVeneerExpansion">
+        <id column="STATISTICS_VENEER_EXPANSION_ID" property="statisticsVeneerExpansionId" />
+        <result column="VENEER_EXPANSION_NUMBER" property="veneerExpansionNumber" />
+        <result column="VENEER_EXPANSION_NAME" property="veneerExpansionName" />
+        <result column="VENEER_DESIGN_QUANTITY" property="veneerDesignQuantity" />
+        <result column="VENEER_ARRIVAL_NUMBER" property="veneerArrivalNumber" />
+        <result column="VENEER_ARRIVAL_TIME" property="veneerArrivalTime" />
+        <result column="VENEER_VERIFYING_PHOTOS" property="veneerVerifyingPhotos" />
+    </resultMap>
+
+
+    <!--到货信息表、单板扩容表链表查询 单板扩容到货图片-->
+    <select id="selectVeneerVerifyingPhotos" resultType="java.lang.String">
+        select fa2.veneer_verifying_photos from FA_arrival_statistics fa1 left join FA_veneer_expansion fa2
+        on fa1.statistics_veneer_expansion_id = fa2.statistics_veneer_expansion_id
+        where fa1.arrival_statistics_id=#{arrivalStatisticsId}
+    </select>
+
+
+</mapper>

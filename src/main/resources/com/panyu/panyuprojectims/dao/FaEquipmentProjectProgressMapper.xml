@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaEquipmentProjectProgressDao">
+    <!-- FaEquipmentProjectProgress的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaEquipmentProjectProgress_Map" type="com.panyu.panyuprojectims.entity.FaEquipmentProjectProgress">
+        <id column="EQUIPMENT_PROJECT_PROGRESS_ID" property="equipmentProjectProgressId" />
+        <result column="OPERATOR" property="operator" />
+        <result column="BUILD_YEAR" property="buildYear" />
+        <result column="BUILDING_PROJECT" property="buildingProject" />
+        <result column="MOTOR_ROOM_NAME" property="motorRoomName" />
+        <result column="MOTOR_ROOM_LONGITUDE" property="motorRoomLongitude" />
+        <result column="MOTOR_ROOM_LATITUDE" property="motorRoomLatitude" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="COUNTY" property="county" />
+        <result column="ON_SITE_SUPERVISION" property="onSiteSupervision" />
+        <result column="PROJECT_LEADER" property="projectLeader" />
+        <result column="NEW_EQUIPMENT_ID" property="newEquipmentId" />
+        <result column="DILATANT_VENEER_ID" property="dilatantVeneerId" />
+        <result column="NEW_CABLE_ID" property="newCableId" />
+        <result column="NEW_WALKING_FRAME_ID" property="newWalkingFrameId" />
+        <result column="NEW_FIBER_OPTIC_CHANNEL_ID" property="newFiberOpticChannelId" />
+        <result column="NEW_EQUIPMENT_NUMBER" property="newEquipmentNumber" />
+        <result column="NEW_EQUIPMENT_TYPE" property="newEquipmentType" />
+        <result column="NEW_EQUIPMENT_NAME" property="newEquipmentName" />
+        <result column="NEW_EQUIPMENT_MODEL" property="newEquipmentModel" />
+        <result column="NEW_EQUIPMENT_ARRIVAL" property="newEquipmentArrival" />
+        <result column="NEW_EQUIPMENT_INSTALL" property="newEquipmentInstall" />
+        <result column="NEW_EQUIPMENT_POWER_UP" property="newEquipmentPowerUp" />
+        <result column="NEW_EQUIPMENT_LINK_DEBUGGING" property="newEquipmentLinkDebugging" />
+        <result column="SINGLE_MACHINE_DEBUGGING" property="singleMachineDebugging" />
+        <result column="NETWORKING_DEBUGGING" property="networkingDebugging" />
+        <result column="CUT_ACCESS_NETWORK" property="cutAccessNetwork" />
+        <result column="DILATANT_VENEER_NUMBER" property="dilatantVeneerNumber" />
+        <result column="DILATANT_VENEER_NAME" property="dilatantVeneerName" />
+        <result column="DILATANT_VENEER_FUNCTION" property="dilatantVeneerFunction" />
+        <result column="VENEER_PLACE_EQUIPMENT" property="veneerPlaceEquipment" />
+        <result column="DILATANT_VENEER_ESIGN_QUANTITY" property="dilatantVeneerEsignQuantity" />
+        <result column="DILATANT_VENEER_INSTALL" property="dilatantVeneerInstall" />
+        <result column="VENEER_CUT_ACCESS_NETWORK" property="veneerCutAccessNetwork" />
+        <result column="NEW_CABLE_NUMBER" property="newCableNumber" />
+        <result column="NEW_CABLE_TYPE" property="newCableType" />
+        <result column="NEW_CABLE_SPECIFICATION_MODEL" property="newCableSpecificationModel" />
+        <result column="NEW_CABLE_LENGTH" property="newCableLength" />
+        <result column="NEW_CABLE_FORM" property="newCableForm" />
+        <result column="NEW_CABLE_TO" property="newCableTo" />
+        <result column="CABLE_CONSTRUCTION_PROGRESS" property="cableConstructionProgress" />
+        <result column="NEW_CABLE_MAKESPAN" property="newCableMakespan" />
+        <result column="NEW_WALKING_FRAME_LENGTH" property="newWalkingFrameLength" />
+        <result column="WALKING_CONSTRUCTION_PROGRESS" property="walkingConstructionProgress" />
+        <result column="NEW_WALKING_FRAME_MAKESPAN" property="newWalkingFrameMakespan" />
+        <result column="NEW_FIBER_OPTIC_CHANNEL_LENGTH" property="newFiberOpticChannelLength" />
+        <result column="CHANNEL_CONSTRUCTION_PROGRESS" property="channelConstructionProgress" />
+        <result column="CHANNEL_FRAME_MAKESPAN" property="channelFrameMakespan" />
+    </resultMap>
+
+    <!-- 数据库中表名为:FA_EQUIPMENT_PROJECT_PROGRESS的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="FA_EQUIPMENT_PROJECT_PROGRESS_Column">
+        FA_EQUIPMENT_PROJECT_PROGRESS.EQUIPMENT_PROJECT_PROGRESS_ID as EQUIPMENT_PROJECT_PROGRESS_ID
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.OPERATOR as OPERATOR
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.BUILD_YEAR as BUILD_YEAR
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.BUILDING_PROJECT as BUILDING_PROJECT
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.MOTOR_ROOM_NAME as MOTOR_ROOM_NAME
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.MOTOR_ROOM_LONGITUDE as MOTOR_ROOM_LONGITUDE
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.MOTOR_ROOM_LATITUDE as MOTOR_ROOM_LATITUDE
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.PROVINCE as PROVINCE
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.CITY as CITY
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.COUNTY as COUNTY
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.ON_SITE_SUPERVISION as ON_SITE_SUPERVISION
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.PROJECT_LEADER as PROJECT_LEADER
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.NEW_EQUIPMENT_ID as NEW_EQUIPMENT_ID
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.DILATANT_VENEER_ID as DILATANT_VENEER_ID
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.NEW_CABLE_ID as NEW_CABLE_ID
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.NEW_WALKING_FRAME_ID as NEW_WALKING_FRAME_ID
+        ,FA_EQUIPMENT_PROJECT_PROGRESS.NEW_FIBER_OPTIC_CHANNEL_ID as NEW_FIBER_OPTIC_CHANNEL_ID
+    </sql>
+
+    <!--获得类名为:FaEquipmentProjectProgress对应的数据库表的数据总行数 -->
+    <select id="getFaEquipmentProjectProgressRowCount" resultType="java.lang.Long">
+        select count(*)
+        from (
+            select eq.equipment_project_progress_id,eq.operator,eq.build_year,eq.building_project,
+            eq.motor_room_name,eq.motor_room_longitude,eq.motor_room_latitude,eq.province,
+            eq.city,eq.county,eq.on_site_Supervision,eq.project_leader,
+            cp.new_equipment_number,cp.new_equipment_type,cp.new_equipment_name,cp.new_equipment_model,cp.new_equipment_arrival,
+            cp.new_equipment_install,cp.new_equipment_power_up,cp.new_equipment_link_debugging,cp.single_machine_debugging,
+            cp.networking_debugging,cp.cut_access_network,
+            bd.dilatant_veneer_number,bd.dilatant_veneer_name,bd.dilatant_veneer_function,bd.veneer_place_equipment,bd.dilatant_veneer_esign_quantity,
+            bd.dilatant_veneer_install,bd.veneer_cut_access_network,
+            pn.new_cable_number,pn.new_cable_type,pn.new_cable_specification_model,pn.new_cable_length,
+            pn.new_cable_form,pn.new_cable_to,pn.cable_construction_progress,pn.new_cable_makespan,
+            ps.new_walking_frame_length,ps.walking_construction_progress,ps.new_walking_frame_makespan,
+            wf.new_fiber_optic_channel_length,wf.channel_construction_progress,wf.channel_frame_makespan
+            from FA_equipment_project_progress eq
+            left join FA_new_equipment cp
+            on eq.new_equipment_id = cp.new_equipment_id
+            left join FA_dilatant_veneer bd
+            on eq.dilatant_veneer_id = bd.dilatant_veneer_id
+            left join FA_new_cable pn
+            on eq.new_cable_id = pn.new_cable_id
+            left join FA_new_walking_frame ps
+            on eq.new_walking_frame_id = ps.new_walking_frame_id
+            left join FA_new_fiber_optic_channel wf
+            on eq.new_fiber_optic_channel_id = wf.new_fiber_optic_channel_id
+            <where>
+                <if test="province !=null and province !=''">
+                    and PROVINCE like #{province}
+                </if>
+                <if test="city !=null and city !=''">
+                    and CITY like #{city}
+                </if>
+                <if test="county !=null and county !=''">
+                    and COUNTY like #{county}
+                </if>
+                <if test="buildYear !=null and buildYear !=''">
+                    and BUILD_YEAR like #{buildYear}
+                </if>
+                <if test="buildingProject !=null and buildingProject !=''">
+                    and BUILDING_PROJECT like #{buildingProject}
+                </if>
+                <if test="operator !=null and operator !=''">
+                    and OPERATOR like #{operator}
+                </if>
+                <if test="keyword !=null and keyword !=''">
+                    and (ON_SITE_SUPERVISION like #{keyword}
+                    or  PROJECT_LEADER like #{keyword}
+                    )
+                </if>
+            </where>
+        )
+    </select>
+    <!-- 获得类名为:FaEquipmentProjectProgress对应数据库中表的数据集合 -->
+    <select id="selectFaEquipmentProjectProgress" resultMap="result_FaEquipmentProjectProgress_Map">
+        select * from(
+            select t.*,rownum r from(
+                select
+                eq.equipment_project_progress_id,eq.operator,eq.build_year,eq.building_project,
+                eq.motor_room_name,eq.motor_room_longitude,eq.motor_room_latitude,eq.province,
+                eq.city,eq.county,eq.on_site_Supervision,eq.project_leader,
+                cp.new_equipment_number,cp.new_equipment_type,cp.new_equipment_name,cp.new_equipment_model,cp.new_equipment_arrival,
+                cp.new_equipment_install,cp.new_equipment_power_up,cp.new_equipment_link_debugging,cp.single_machine_debugging,
+                cp.networking_debugging,cp.cut_access_network,
+                bd.dilatant_veneer_number,bd.dilatant_veneer_name,bd.dilatant_veneer_function,bd.veneer_place_equipment,bd.dilatant_veneer_esign_quantity,
+                bd.dilatant_veneer_install,bd.veneer_cut_access_network,
+                pn.new_cable_number,pn.new_cable_type,pn.new_cable_specification_model,pn.new_cable_length,
+                pn.new_cable_form,pn.new_cable_to,pn.cable_construction_progress,pn.new_cable_makespan,
+                ps.new_walking_frame_length,ps.walking_construction_progress,ps.new_walking_frame_makespan,
+                wf.new_fiber_optic_channel_length,wf.channel_construction_progress,wf.channel_frame_makespan
+                from FA_equipment_project_progress eq
+                left join FA_new_equipment cp
+                on eq.new_equipment_id = cp.new_equipment_id
+                left join FA_dilatant_veneer bd
+                on eq.dilatant_veneer_id = bd.dilatant_veneer_id
+                left join FA_new_cable pn
+                on eq.new_cable_id = pn.new_cable_id
+                left join FA_new_walking_frame ps
+                on eq.new_walking_frame_id = ps.new_walking_frame_id
+                left join FA_new_fiber_optic_channel wf
+                on eq.new_fiber_optic_channel_id = wf.new_fiber_optic_channel_id
+                <where>
+                    <if test="province !=null and province !=''">
+                        and PROVINCE like #{province}
+                    </if>
+                    <if test="city !=null and city !=''">
+                        and CITY like #{city}
+                    </if>
+                    <if test="county !=null and county !=''">
+                        and COUNTY like #{county}
+                    </if>
+                    <if test="buildYear !=null and buildYear !=''">
+                        and BUILD_YEAR like #{buildYear}
+                    </if>
+                    <if test="buildingProject !=null and buildingProject !=''">
+                        and BUILDING_PROJECT like #{buildingProject}
+                    </if>
+                    <if test="operator !=null and operator !=''">
+                        and OPERATOR like #{operator}
+                    </if>
+                    <if test="keyword !=null and keyword !=''">
+                        and (ON_SITE_SUPERVISION like #{keyword}
+                        or  PROJECT_LEADER like #{keyword}
+                        )
+                    </if>
+                </where>
+            )t
+        )where r between #{start} and #{end}
+    </select>
+
+    <!--导出-->
+    <select id="FaEquipmentProjectProgressExcel" resultMap="result_FaEquipmentProjectProgress_Map">
+        select eq.equipment_project_progress_id,eq.operator,eq.build_year,eq.building_project,
+        eq.motor_room_name,eq.motor_room_longitude,eq.motor_room_latitude,eq.province,
+        eq.city,eq.county,eq.on_site_Supervision,eq.project_leader,
+        cp.new_equipment_number,cp.new_equipment_type,cp.new_equipment_name,cp.new_equipment_model,cp.new_equipment_arrival,
+        cp.new_equipment_install,cp.new_equipment_power_up,cp.new_equipment_link_debugging,cp.single_machine_debugging,
+        cp.networking_debugging,cp.cut_access_network,
+        bd.dilatant_veneer_number,bd.dilatant_veneer_name,bd.dilatant_veneer_function,bd.veneer_place_equipment,bd.dilatant_veneer_esign_quantity,
+        bd.dilatant_veneer_install,bd.veneer_cut_access_network,
+        pn.new_cable_number,pn.new_cable_type,pn.new_cable_specification_model,pn.new_cable_length,
+        pn.new_cable_form,pn.new_cable_to,pn.cable_construction_progress,pn.new_cable_makespan,
+        ps.new_walking_frame_length,ps.walking_construction_progress,ps.new_walking_frame_makespan,
+        wf.new_fiber_optic_channel_length,wf.channel_construction_progress,wf.channel_frame_makespan
+        from FA_equipment_project_progress eq
+        left join FA_new_equipment cp
+        on eq.new_equipment_id = cp.new_equipment_id
+        left join FA_dilatant_veneer bd
+        on eq.dilatant_veneer_id = bd.dilatant_veneer_id
+        left join FA_new_cable pn
+        on eq.new_cable_id = pn.new_cable_id
+        left join FA_new_walking_frame ps
+        on eq.new_walking_frame_id = ps.new_walking_frame_id
+        left join FA_new_fiber_optic_channel wf
+        on eq.new_fiber_optic_channel_id = wf.new_fiber_optic_channel_id
+        where eq.equipment_project_progress_id in
+        <foreach collection="array" item="equipmentProjectProgressId" open="(" separator="," close=")">
+            #{equipmentProjectProgressId,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+
+</mapper>

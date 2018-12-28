@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IndoorCoverageProgressDao">
+    <!-- IndoorCoverageProgress的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IndoorCoverageProgress_Map" type="com.panyu.panyuprojectims.entity.IndoorCoverageProgress">
+        <id column="INDOOR_PROGRESS_ID" property="indoorProgressId" />
+        <result column="OPERATOR" property="operator" />
+        <result column="BUILDING_PROJECT" property="buildingProject" />
+        <result column="BUILD_YEAR" property="buildYear" />
+        <result column="PLAN_STATION_NAME" property="planStationName" />
+        <result column="ACTUAL_STATION_NAME" property="actualStationName" />
+        <result column="INDOOR_LONGITUDE" property="indoorLongitude" />
+        <result column="INDOOR_LATITUDE" property="indoorLatitude" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="COUNTY" property="county" />
+        <result column="SUBORDINATE_DEPARTMENT" property="subordinateDepartment" />
+        <result column="COVER_TYPE" property="coverType" />
+
+        <result column="IC_SUPERVISORY_UNIT_ID" property="icSupervisoryUnitId" />
+        <result column="IC_CONSTRUCTION_ID" property="icConstructionId" />
+        <result column="IC_DESIGN_UNIT_ID" property="icDesignUnitId" />
+        <result column="BBU_NUMBERS_ID" property="bbuNumbersId" />
+        <result column="RRU_NUMBER_ID" property="rruNumberId" />
+        <result column="LIGHT_TYPE_ID" property="lightTypeId" />
+        <result column="PASSIVE_DEVICE_TYPE_ID" property="passiveDeviceTypeId" />
+        <result column="ANTENNA_TYPE_ID" property="antennaTypeId" />
+        <result column="CABLE_TYPE_ID" property="cableTypeId" />
+        <result column="ELECTRIC_METER_ID" property="electricMeterId" />
+
+        <result column="PROFESSION_RESPONSIBLE_PERSON" property="professionResponsiblePerson" />
+        <result column="DISTRICT_HEAD" property="districtHead" />
+        <result column="SITE_LEADER" property="siteLeader" />
+
+        <result column="IC_CORPORATE_NAME" property="icCorporateName" />
+        <result column="PERSON_IN_CHARGE" property="personInCharge" />
+
+        <result column="DESIGN_CORPORATE_NAME" property="designCorporateName" />
+        <result column="DESIGN_PERSON_IN_CHARGE" property="designPersonInCharge" />
+
+        <result column="INSTALLATION" property="installation" />
+        <result column="CENTRALIZATION" property="centralization" />
+        <result column="WALL_HANGING_WALL" property="wallHangingWall" />
+
+        <result column="DESIGN_START" property="designStart" />
+        <result column="DRAM_INSTALLED_DRAM" property="dramInstalledDram" />
+
+        <result column="LIGHT_DISTRIPUTION_TYPE" property="lightDistriputionType" />
+        <result column="EASY_MACRO" property="easyMacro" />
+        <result column="BOOKRRU_NOT_INTEGRATED_ANTENNA" property="bookrruNotIntegratedAntenna" />
+        <result column="BOOKRRU_INTEGRATED_ANTENNA" property="bookrruIntegratedAntenna" />
+        <result column="HUB" property="hub" />
+        <result column="PRU_INTEGRATED_ANTENNA" property="pruIntegratedAntenna" />
+        <result column="PRU_NOT_INTEGRATED_ANTENNA" property="pruNotIntegratedAntenna" />
+        <result column="ACCESS_UNIT" property="accessUnit" />
+        <result column="EXTENSION_UNIT" property="extensionUnit" />
+        <result column="REMOTE_DEVICE_INDOOR" property="remoteDeviceIndoor" />
+        <result column="REMOTE_DEVICE_OUTDOOR" property="remoteDeviceOutdoor" />
+
+        <result column="PASSIVE_DEVICE_TYPE" property="passiveDeviceType" />
+        <result column="POWER_DIVIDER" property="powerDivider" />
+        <result column="COUPLER" property="coupler" />
+        <result column="ROAD_CONNECTOR" property="roadConnector" />
+        <result column="LOAD_NUMBER" property="loadNumber" />
+
+        <result column="ANTENNA_TYPE" property="antennaType" />
+        <result column="INDOOR_ANTENNA" property="indoorAntenna" />
+        <result column="OUTDOOR_ANTENNA" property="outdoorAntenna" />
+        <result column="ELEVATOR_ANTENNA" property="elevatorAntenna" />
+        <result column="GPS_ANTENNA" property="gpsAntenna" />
+
+        <result column="CABLE_TYPE" property="cableType" />
+        <result column="NETWORK_LINE" property="networkLine" />
+        <result column="PHOTOELECTRIC_COMPOSITE_CABLE" property="photoelectricCompositeCable" />
+        <result column="SEVEN_EIGHTHS_FEEDER" property="sevenEighthsFeeder" />
+        <result column="A_HALF_FEEDER" property="ahalfFeeder" />
+
+        <result column="ELECTRIC_DESIGN_START" property="electricDesignStart" />
+        <result column="ELECTRIC_INSTALLED_DRAM" property="electricInstalledDram" />
+    </resultMap>
+
+    <!-- 数据库中表名为:INDOOR_COVERAGE_PROGRESS的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="INDOOR_COVERAGE_PROGRESS_Column">
+        INDOOR_COVERAGE_PROGRESS.INDOOR_PROGRESS_ID as INDOOR_PROGRESS_ID
+        ,INDOOR_COVERAGE_PROGRESS.OPERATOR as OPERATOR
+        ,INDOOR_COVERAGE_PROGRESS.BUILDING_PROJECT as BUILDING_PROJECT
+        ,INDOOR_COVERAGE_PROGRESS.BUILD_YEAR as BUILD_YEAR
+        ,INDOOR_COVERAGE_PROGRESS.PLAN_STATION_NAME as PLAN_STATION_NAME
+        ,INDOOR_COVERAGE_PROGRESS.ACTUAL_STATION_NAME as ACTUAL_STATION_NAME
+        ,INDOOR_COVERAGE_PROGRESS.INDOOR_LONGITUDE as INDOOR_LONGITUDE
+        ,INDOOR_COVERAGE_PROGRESS.INDOOR_LATITUDE as INDOOR_LATITUDE
+        ,INDOOR_COVERAGE_PROGRESS.PROVINCE as PROVINCE
+        ,INDOOR_COVERAGE_PROGRESS.CITY as CITY
+        ,INDOOR_COVERAGE_PROGRESS.COUNTY as COUNTY
+        ,INDOOR_COVERAGE_PROGRESS.SUBORDINATE_DEPARTMENT as SUBORDINATE_DEPARTMENT
+        ,INDOOR_COVERAGE_PROGRESS.COVER_TYPE as COVER_TYPE
+        ,INDOOR_COVERAGE_PROGRESS.IC_SUPERVISORY_UNIT_ID as IC_SUPERVISORY_UNIT_ID
+        ,INDOOR_COVERAGE_PROGRESS.IC_CONSTRUCTION_ID as IC_CONSTRUCTION_ID
+        ,INDOOR_COVERAGE_PROGRESS.IC_DESIGN_UNIT_ID as IC_DESIGN_UNIT_ID
+        ,INDOOR_COVERAGE_PROGRESS.BBU_NUMBER_ID as BBU_NUMBER_ID
+        ,INDOOR_COVERAGE_PROGRESS.RRU_NUMBER_ID as RRU_NUMBER_ID
+        ,INDOOR_COVERAGE_PROGRESS.LIGHT_TYPE_ID as LIGHT_TYPE_ID
+        ,INDOOR_COVERAGE_PROGRESS.PASSIVE_DEVICE_TYPE_ID as PASSIVE_DEVICE_TYPE_ID
+        ,INDOOR_COVERAGE_PROGRESS.ANTENNA_TYPE_ID as ANTENNA_TYPE_ID
+        ,INDOOR_COVERAGE_PROGRESS.CABLE_TYPE_ID as CABLE_TYPE_ID
+        ,INDOOR_COVERAGE_PROGRESS.ELECTRIC_METER_ID as ELECTRIC_METER_ID
+    </sql>
+
+    <!--获取室内覆盖工程进度基本信息总条数 -->
+    <select id="getIndoorCoverageProgressRowCount" resultType="java.lang.Long">
+        select count(*) from (
+            select
+            ic.indoor_progress_id,ic.operator,ic.building_project,ic.build_year,ic.plan_station_name,
+            ic.actual_station_name,ic.indoor_longitude,ic.indoor_latitude,ic.province,ic.city,ic.county,
+            ic.subordinate_department,ic.cover_type,
+            isu.profession_responsible_person,isu.district_head,isu.site_leader,
+            ico.IC_corporate_name,ico.person_in_charge,
+            idu.design_corporate_name,idu.design_person_in_charge,
+            ibn.installation,ibn.centralization,ibn.wall_hanging_wall,
+            irn.design_start,irn.dram_installed_dram,
+            ild.light_distripution_type,ild.Easy_Macro,ild.BOOKRRU_Not_integrated_antenna,ild.BOOKRRU_integrated_antenna,
+            ild.HUB,ild.PRU_integrated_antenna,ild.PRU_Not_integrated_antenna,ild.access_unit,ild.extension_unit,
+            ild.remote_device_indoor,ild.remote_device_outdoor,
+            ipd.passive_device_type,ipd.power_divider,ipd.coupler,ipd.road_connector,ipd.load_number,
+            iat.antenna_type,iat.indoor_antenna,iat.outdoor_antenna,iat.elevator_antenna,iat.GPS_antenna,
+            ict.cable_type,ict.network_line,ict.photoelectric_composite_cable,ict.seven_eighths_feeder,ict.A_half_feeder,
+            iem.electric_design_start,iem.electric_installed_dram
+            from Indoor_Coverage_Progress ic
+            left join IC_supervisory_unit isu
+            on ic.ic_supervisory_unit_id = isu.ic_supervisory_unit_id
+            left join IC_construction_organization ico
+            on ic.ic_construction_id = ico.ic_construction_id
+            left join IC_Design_unit idu
+            on ic.ic_design_unit_id = idu.ic_design_unit_id
+            left join IC_BBU_Numbers ibn
+            on ic.bbu_numbers_id = ibn.bbu_numbers_id
+            left join IC_RRU_Number irn
+            on ic.rru_number_id = irn.rru_number_id
+            left join IC_light_distripution_type ild
+            on ic.light_type_id = ild.light_type_id
+            left join IC_passive_device_type ipd
+            on ic.passive_device_type_id = ipd.passive_device_type_id
+            left join IC_antenna_type iat
+            on ic.antenna_type_id = iat.antenna_type_id
+            left join IC_Cable_type ict
+            on ic.cable_type_id = ict.cable_type_id
+            left join IC_electric_meter iem
+            on ic.electric_meter_id = iem.electric_meter_id
+            <where>
+                <if test="province !=null and province !='' ">
+                    and PROVINCE like #{province}
+                </if>
+                <if test="city !=null and city !='' ">
+                    and CITY like #{city}
+                </if>
+                <if test="county !=null and county !='' ">
+                    and COUNTY like #{county}
+                </if>
+                <if test="buildYear !=null and buildYear !='' ">
+                    and BUILD_YEAR like #{buildYear}
+                </if>
+                <if test="operator !=null and operator !='' ">
+                    and OPERATOR like #{operator}
+                </if>
+                <if test="buildingProject !=null and buildingProject !='' ">
+                    and BUILDING_PROJECT like #{buildingProject}
+                </if>
+                <if test="keyword !=null and keyword !='' ">
+                    and PROFESSION_RESPONSIBLE_PERSON like #{keyword}
+                    or DISTRICT_HEAD like #{keyword}
+                    or SITE_LEADER like #{keyword}
+                </if>
+            </where>
+        )
+    </select>
+    <!-- 获得类名为:IndoorCoverageProgress对应数据库中表的数据集合 -->
+    <select id="selectAllIndoorCoverageProgress" resultMap="result_IndoorCoverageProgress_Map">
+        select * from (
+            select t.*,rownum r from(
+                select
+                ic.indoor_progress_id,ic.operator,ic.building_project,ic.build_year,ic.plan_station_name,
+                ic.actual_station_name,ic.indoor_longitude,ic.indoor_latitude,ic.province,ic.city,ic.county,
+                ic.subordinate_department,ic.cover_type,
+                isu.profession_responsible_person,isu.district_head,isu.site_leader,
+                ico.IC_corporate_name,ico.person_in_charge,
+                idu.design_corporate_name,idu.design_person_in_charge,
+                ibn.installation,ibn.centralization,ibn.wall_hanging_wall,
+                irn.design_start,irn.dram_installed_dram,
+                ild.light_distripution_type,ild.Easy_Macro,ild.BOOKRRU_Not_integrated_antenna,ild.BOOKRRU_integrated_antenna,
+                ild.HUB,ild.PRU_integrated_antenna,ild.PRU_Not_integrated_antenna,ild.access_unit,ild.extension_unit,
+                ild.remote_device_indoor,ild.remote_device_outdoor,
+                ipd.passive_device_type,ipd.power_divider,ipd.coupler,ipd.road_connector,ipd.load_number,
+                iat.antenna_type,iat.indoor_antenna,iat.outdoor_antenna,iat.elevator_antenna,iat.GPS_antenna,
+                ict.cable_type,ict.network_line,ict.photoelectric_composite_cable,ict.seven_eighths_feeder,ict.A_half_feeder,
+                iem.electric_design_start,iem.electric_installed_dram
+                from Indoor_Coverage_Progress ic
+                left join IC_supervisory_unit isu
+                on ic.ic_supervisory_unit_id = isu.ic_supervisory_unit_id
+                left join IC_construction_organization ico
+                on ic.ic_construction_id = ico.ic_construction_id
+                left join IC_Design_unit idu
+                on ic.ic_design_unit_id = idu.ic_design_unit_id
+                left join IC_BBU_Numbers ibn
+                on ic.bbu_numbers_id = ibn.bbu_numbers_id
+                left join IC_RRU_Number irn
+                on ic.rru_number_id = irn.rru_number_id
+                left join IC_light_distripution_type ild
+                on ic.light_type_id = ild.light_type_id
+                left join IC_passive_device_type ipd
+                on ic.passive_device_type_id = ipd.passive_device_type_id
+                left join IC_antenna_type iat
+                on ic.antenna_type_id = iat.antenna_type_id
+                left join IC_Cable_type ict
+                on ic.cable_type_id = ict.cable_type_id
+                left join IC_electric_meter iem
+                on ic.electric_meter_id = iem.electric_meter_id
+                <where>
+                    <if test="province !=null and province !='' ">
+                        and PROVINCE like #{province}
+                    </if>
+                    <if test="city !=null and city !='' ">
+                        and CITY like #{city}
+                    </if>
+                    <if test="county !=null and county !='' ">
+                        and COUNTY like #{county}
+                    </if>
+                    <if test="buildYear !=null and buildYear !='' ">
+                        and BUILD_YEAR like #{buildYear}
+                    </if>
+                    <if test="operator !=null and operator !='' ">
+                        and OPERATOR like #{operator}
+                    </if>
+                    <if test="buildingProject !=null and buildingProject !='' ">
+                        and BUILDING_PROJECT like #{buildingProject}
+                    </if>
+                    <if test="keyword !=null and keyword !='' ">
+                        and PROFESSION_RESPONSIBLE_PERSON like #{keyword}
+                        or DISTRICT_HEAD like #{keyword}
+                        or SITE_LEADER like #{keyword}
+                    </if>
+                </where>
+            )t
+        )where r between #{start} and #{end}
+    </select>
+
+    <!--导出-->
+    <select id="export_IndoorCoverageProgress" resultMap="result_IndoorCoverageProgress_Map">
+        select
+                ic.indoor_progress_id,ic.operator,ic.building_project,ic.build_year,ic.plan_station_name,
+                ic.actual_station_name,ic.indoor_longitude,ic.indoor_latitude,ic.province,ic.city,ic.county,
+                ic.subordinate_department,ic.cover_type,
+                isu.profession_responsible_person,isu.district_head,isu.site_leader,
+                ico.IC_corporate_name,ico.person_in_charge,
+                idu.design_corporate_name,idu.design_person_in_charge,
+                ibn.installation,ibn.centralization,ibn.wall_hanging_wall,
+                irn.design_start,irn.dram_installed_dram,
+                ild.light_distripution_type,ild.Easy_Macro,ild.BOOKRRU_Not_integrated_antenna,ild.BOOKRRU_integrated_antenna,
+                ild.HUB,ild.PRU_integrated_antenna,ild.PRU_Not_integrated_antenna,ild.access_unit,ild.extension_unit,
+                ild.remote_device_indoor,ild.remote_device_outdoor,
+                ipd.passive_device_type,ipd.power_divider,ipd.coupler,ipd.road_connector,ipd.load_number,
+                iat.antenna_type,iat.indoor_antenna,iat.outdoor_antenna,iat.elevator_antenna,iat.GPS_antenna,
+                ict.cable_type,ict.network_line,ict.photoelectric_composite_cable,ict.seven_eighths_feeder,ict.A_half_feeder,
+                iem.electric_design_start,iem.electric_installed_dram
+                from Indoor_Coverage_Progress ic
+                left join IC_supervisory_unit isu
+                on ic.ic_supervisory_unit_id = isu.ic_supervisory_unit_id
+                left join IC_construction_organization ico
+                on ic.ic_construction_id = ico.ic_construction_id
+                left join IC_Design_unit idu
+                on ic.ic_design_unit_id = idu.ic_design_unit_id
+                left join IC_BBU_Numbers ibn
+                on ic.bbu_numbers_id = ibn.bbu_numbers_id
+                left join IC_RRU_Number irn
+                on ic.rru_number_id = irn.rru_number_id
+                left join IC_light_distripution_type ild
+                on ic.light_type_id = ild.light_type_id
+                left join IC_passive_device_type ipd
+                on ic.passive_device_type_id = ipd.passive_device_type_id
+                left join IC_antenna_type iat
+                on ic.antenna_type_id = iat.antenna_type_id
+                left join IC_Cable_type ict
+                on ic.cable_type_id = ict.cable_type_id
+                left join IC_electric_meter iem
+                on ic.electric_meter_id = iem.electric_meter_id
+                where ic.indoor_progress_id in
+                <foreach collection="array" open="(" separator="," close=")" item="ids">
+                    #{ids}
+                </foreach>
+    </select>
+</mapper>

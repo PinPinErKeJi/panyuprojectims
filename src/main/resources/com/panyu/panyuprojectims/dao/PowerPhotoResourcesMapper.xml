@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PowerPhotoResourcesDao">
+    <!-- PowerPhotoResources的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PowerPhotoResources_Map" type="com.panyu.panyuprojectims.entity.PowerPhotoResources">
+        <id column="POWER_PHOTO_ID" property="powerPhotoId" />
+        <result column="POWER_PHOTO_NAME" property="powerPhotoName" />
+        <result column="PHOTO_UPLOAD_PEOPLE" property="photoUploadPeople" />
+        <result column="QUALIFIED" property="qualified" />
+        <result column="PROBLEM_DESCRIPTION" property="problemDescription" />
+        <result column="POWER_MODULE_ID" property="powerModuleId" />
+        <result column="POWER_SUB_WORK_ID" property="powerSubWorkId" />
+        <result column="POWER_PROJECT_ID" property="powerProjectId" />
+        <result column="POWER_INFORMATION_ID" property="powerInformationId" />
+    </resultMap>
+
+    <!-- 数据库中表名为:POWER_PHOTO_RESOURCES的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="POWER_PHOTO_RESOURCES_Column">
+        POWER_PHOTO_RESOURCES.POWER_PHOTO_ID as POWER_PHOTO_ID
+        ,POWER_PHOTO_RESOURCES.POWER_PHOTO_NAME as POWER_PHOTO_NAME
+        ,POWER_PHOTO_RESOURCES.PHOTO_UPLOAD_PEOPLE as PHOTO_UPLOAD_PEOPLE
+        ,POWER_PHOTO_RESOURCES.QUALIFIED as QUALIFIED
+        ,POWER_PHOTO_RESOURCES.PROBLEM_DESCRIPTION as PROBLEM_DESCRIPTION
+        ,POWER_PHOTO_RESOURCES.POWER_MODULE_ID as POWER_MODULE_ID
+        ,POWER_PHOTO_RESOURCES.POWER_SUB_WORK_ID as POWER_SUB_WORK_ID
+        ,POWER_PHOTO_RESOURCES.POWER_PROJECT_ID as POWER_PROJECT_ID
+        ,POWER_PHOTO_RESOURCES.POWER_INFORMATION_ID as POWER_INFORMATION_ID
+    </sql>
+    <!--添加图片-->
+    <insert id="insertPowerPhotoResources">
+        insert into POWER_PHOTO_RESOURCES
+        values (sys_guid(),#{powerPhotoName},null,#{qualified},#{problemDescription},null,null,#{powerProjectId},#{powerInformationId})
+    </insert>
+    <!--根据parentID查询对应的图片信息个数-->
+    <select id="getPowerPhotoResourcesCountByProjectId" resultType="java.lang.Long">
+          select count(POWER_PHOTO_ID)
+          from POWER_PHOTO_RESOURCES
+          where POWER_PROJECT_ID = #{powerProjectId,jdbcType=VARCHAR}
+    </select>
+    <!--根据模块ID和分项工程ID查询检查项目ID集合-->
+    <select id="selectPowerSupplyProjectList" resultType="String">
+        select
+        p.power_project_id
+        from Power_Supply_Module m
+        left join Power_Sub_Work s
+        on m.power_module_id = s.power_module_id
+        left join Power_Supply_Project p
+        on s.power_sub_work_id = p.power_sub_work_id
+        where m.power_module_id = #{powerModuleId,jdbcType=VARCHAR}
+        and p.power_sub_work_id = #{powerSubWorkId,jdbcType=VARCHAR}
+    </select>
+    <!--根据检查项目ID和信息id查询图片资源ID集合-->
+    <select id="selectPowerPhotoResourcesIdList" resultType="String">
+        select POWER_PHOTO_ID
+        from POWER_PHOTO_RESOURCES
+        where POWER_PROJECT_ID = #{powerProjectId,jdbcType=VARCHAR}
+        and POWER_INFORMATION_ID = #{powerInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据图片资源ID，检查项目id和信息id查询图片资源-->
+    <select id="selectAllPowerPhotoResources" resultMap="result_PowerPhotoResources_Map">
+          select POWER_PHOTO_NAME,PHOTO_UPLOAD_PEOPLE,QUALIFIED,PROBLEM_DESCRIPTION
+          from POWER_PHOTO_RESOURCES
+          where POWER_PHOTO_ID = #{powerPhotoId,jdbcType=VARCHAR}
+          and POWER_PROJECT_ID = #{powerProjectId,jdbcType=VARCHAR}
+          and POWER_INFORMATION_ID = #{powerInformationId,jdbcType=VARCHAR}
+    </select>
+</mapper>

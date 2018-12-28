@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.CircuitDTODao">
+    <!-- Module的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_CircuitDTODao_Map" type="com.panyu.panyuprojectims.entity.CircuitDTO">
+        <result column="CIRCUIT_MODULE_ID" property="circuitModuleIddto" />
+        <result column="CIRCUIT_MODULE_NAME" property="circuitModuleNamedto" />
+        <result column="CIRCUIT_SUB_WORK_ID" property="circuitSubWorkIddto" />
+        <result column="CIRCUIT_SUB_WORK_NAME" property="circuitSubWorkNamedto" />
+        <result column="CIRCUIT_PROJECT_ID" property="circuitProjectIddto" />
+        <result column="CIRCUIT_PROJECT_NAME" property="circuitProjectNamedto" />
+        <result column="CIRCUIT_CRITERION_ID" property="circuitCriterionIddto" />
+        <result column="CIRCUIT_CRITERION_NAME" property="circuitCriterionNamedto" />
+        <result column="CIRCUIT_QUALIFIED" property="circuitQualifieddto" />
+        <result column="CIRCUIT_PROBLEM" property="circuitProblemdto" />
+        <result column="CIRCUIT_PHOTO" property="circuitPhotodto" />
+    </resultMap>
+
+    <!--1.**********************************************************************************************-->
+    <!-- 无条件查询展示所有数据-->
+    <select id="selectAllCircuitDTO" resultMap="result_CircuitDTODao_Map">
+     select * from
+        (select t.* ,rownum r from
+            (
+               select
+                    p.circuit_project_id,
+                    m.circuit_module_name,
+                    s.circuit_sub_work_name,
+                    p.circuit_project_name,
+                    i.circuit_criterion_name,i.circuit_qualified,i.circuit_problem,i.circuit_photo
+                    from circuit_module m
+                    left join circuit_sub_work s
+                    on m.circuit_module_id = s.circuit_module_id
+                    left join circuit_inspection_project p
+                    on s.circuit_sub_work_id = p.circuit_sub_work_id
+                    left join circuit_inspection_criterion i
+                    on p.circuit_project_id = i.circuit_project_id
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+
+    <!-- 查询总数-->
+    <select id="selectAllCircuitDTOCount" resultType="long">
+        select count(*) from(
+                select
+                    p.circuit_project_id,
+                    m.circuit_module_name,
+                    s.circuit_sub_work_name,
+                    p.circuit_project_name,
+                    i.circuit_criterion_name,i.circuit_qualified,i.circuit_problem,i.circuit_photo
+                    from circuit_module m
+                    left join circuit_sub_work s
+                    on m.circuit_module_id = s.circuit_module_id
+                    left join circuit_inspection_project p
+                    on s.circuit_sub_work_id = p.circuit_sub_work_id
+                    left join circuit_inspection_criterion i
+                    on p.circuit_project_id = i.circuit_project_id
+                    )
+    </select>
+
+
+    <!--2.**********************************************************************************-->
+    <!-- 根据项目名模糊搜索查询-->
+    <select id="FuzzysearchCircuitDTO" resultMap="result_CircuitDTODao_Map">
+        select * from
+            (select t.* ,rownum r from
+                (
+                select
+                p.circuit_project_id,
+                m.circuit_module_name,
+                s.circuit_sub_work_name,
+                p.circuit_project_name,
+                i.circuit_criterion_name,i.circuit_qualified,i.circuit_problem,i.circuit_photo
+                from circuit_module m
+                left join circuit_sub_work s
+                on m.circuit_module_id = s.circuit_module_id
+                left join circuit_inspection_project p
+                on s.circuit_sub_work_id = p.circuit_sub_work_id
+                left join circuit_inspection_criterion i
+                on p.circuit_project_id = i.circuit_project_id
+                <where>
+                    <if test="circuitProjectName !=null and circuitProjectName !=''">
+                        and CIRCUIT_PROJECT_NAME like #{circuitProjectName}
+                    </if>
+                </where>
+             )t
+        ) where r between #{start} and #{end}
+    </select>
+    <!-- 根据项目名模糊搜索查询总数-->
+    <select id="getFuzzysearchCircuitDTOCount" resultType="long">
+        select count(*) from(
+        select
+        p.circuit_project_id,
+        m.circuit_module_name,
+        s.circuit_sub_work_name,
+        p.circuit_project_name,
+        i.circuit_criterion_name,i.circuit_qualified,i.circuit_problem,i.circuit_photo
+        from circuit_module m
+        left join circuit_sub_work s
+        on m.circuit_module_id = s.circuit_module_id
+        left join circuit_inspection_project p
+        on s.circuit_sub_work_id = p.circuit_sub_work_id
+        left join circuit_inspection_criterion i
+        on p.circuit_project_id = i.circuit_project_id
+            <where>
+                <if test="circuitProjectName !=null and circuitProjectName !=''">
+                    and CIRCUIT_PROJECT_NAME like #{circuitProjectName}
+                </if>
+            </where>
+         )
+    </select>
+
+    <!--3.************************************************************************************************-->
+    <!--根据点击下拉框名称以及搜索框内容都不为空进行模糊分页查询-->
+    <select id="selectDropdownBoxAndSearchCount" resultType="long">
+        select count(*) from(
+        select
+        p.circuit_project_id,
+        m.circuit_module_name,
+        s.circuit_sub_work_name,
+        p.circuit_project_name,
+        i.circuit_criterion_name,i.circuit_qualified,i.circuit_problem,i.circuit_photo
+        from circuit_module m
+        left join circuit_sub_work s
+        on m.circuit_module_id = s.circuit_module_id
+        left join circuit_inspection_project p
+        on s.circuit_sub_work_id = p.circuit_sub_work_id
+        left join circuit_inspection_criterion i
+        on p.circuit_project_id = i.circuit_project_id
+        <where>
+            <if test="circuitProjectName !=null and circuitProjectName !=''">
+                and circuit_project_name like #{circuitProjectName}
+            </if>
+        </where>
+        and m.circuit_module_id = #{circuitModuleId,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <select id="selectAllDropdownBoxAndSearchCircuitDTO" resultMap="result_CircuitDTODao_Map">
+        select * from
+            (select t.* ,rownum r from
+                (
+        select
+        p.circuit_project_id,
+        m.circuit_module_name,
+        s.circuit_sub_work_name,
+        p.circuit_project_name,
+        i.circuit_criterion_name,i.circuit_qualified,i.circuit_problem,i.circuit_photo
+        from circuit_module m
+        left join circuit_sub_work s
+        on m.circuit_module_id = s.circuit_module_id
+        left join circuit_inspection_project p
+        on s.circuit_sub_work_id = p.circuit_sub_work_id
+        left join circuit_inspection_criterion i
+        on p.circuit_project_id = i.circuit_project_id
+                <where>
+                    <if test="circuitProjectName !=null and circuitProjectName !=''">
+                        and circuit_project_name like #{circuitProjectName}
+                    </if>
+                </where>
+                and m.circuit_module_id = #{circuitModuleId,jdbcType=VARCHAR}
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+
+    <!--4.*****************************************************************************************-->
+    <!--当搜索框内容为空根据模块ID点击下拉框进行搜索分页展示数据-->
+    <select id="selectAllCircuitDTOSearchList" resultMap="result_CircuitDTODao_Map">
+        select * from
+            (select t.* ,rownum r from
+                (
+                select
+                p.circuit_project_id,
+                    m.circuit_module_name,
+                    s.circuit_sub_work_name,
+                    p.circuit_project_name,
+                    i.circuit_criterion_name,i.circuit_qualified,i.circuit_problem,i.circuit_photo
+                    from circuit_module m
+                    left join circuit_sub_work s
+                    on m.circuit_module_id = s.circuit_module_id
+                    left join circuit_inspection_project p
+                    on s.circuit_sub_work_id = p.circuit_sub_work_id
+                    left join circuit_inspection_criterion i
+                    on p.circuit_project_id = i.circuit_project_id
+                where m.CIRCUIT_MODULE_ID = #{circuitModuleId,jdbcType=VARCHAR}
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+
+    <select id="selectAllCircuitDTOSearchCount" resultType="long">
+        select count(*) from(
+        select
+            p.circuit_project_id,
+                    m.circuit_module_name,
+                    s.circuit_sub_work_name,
+                    p.circuit_project_name,
+                    i.circuit_criterion_name,i.circuit_qualified,i.circuit_problem,i.circuit_photo
+                    from circuit_module m
+                    left join circuit_sub_work s
+                    on m.circuit_module_id = s.circuit_module_id
+                    left join circuit_inspection_project p
+                    on s.circuit_sub_work_id = p.circuit_sub_work_id
+                    left join circuit_inspection_criterion i
+                    on p.circuit_project_id = i.circuit_project_id
+            where m.CIRCUIT_MODULE_ID = #{circuitModuleId,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <!--导出设备专业空Excel表格-->
+    <select id="ExportNullCircuitExcel" resultMap="result_CircuitDTODao_Map">
+            select
+                    p.circuit_project_id,
+                    m.circuit_module_name,
+                    s.circuit_sub_work_name,
+                    p.circuit_project_name,
+                    i.circuit_criterion_name,i.circuit_qualified,i.circuit_problem,i.circuit_photo
+                    from circuit_module m
+                    left join circuit_sub_work s
+                    on m.circuit_module_id = s.circuit_module_id
+                    left join circuit_inspection_project p
+                    on s.circuit_sub_work_id = p.circuit_sub_work_id
+                    left join circuit_inspection_criterion i
+                    on p.circuit_project_id = i.circuit_project_id
+    </select>
+
+    <!--导出线路专业模块库Excel表格数据-->
+    <select id="ExportCircuitExcel" resultMap="result_CircuitDTODao_Map">
+        select
+        p.circuit_project_id,
+        m.circuit_module_name,
+        s.circuit_sub_work_name,
+        p.circuit_project_name,
+        i.circuit_criterion_name,i.circuit_qualified,i.circuit_problem,i.circuit_photo
+        from circuit_module m
+        left join circuit_sub_work s
+        on m.circuit_module_id = s.circuit_module_id
+        left join circuit_inspection_project p
+        on s.circuit_sub_work_id = p.circuit_sub_work_id
+        left join circuit_inspection_criterion i
+        on p.circuit_project_id = i.circuit_project_id
+        where p.circuit_project_id in
+        <foreach collection="array" item="circuitProjectId" open="(" separator="," close=")">
+            #{circuitProjectId}
+        </foreach>
+    </select>
+</mapper>

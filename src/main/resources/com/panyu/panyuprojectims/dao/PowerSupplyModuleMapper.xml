@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PowerSupplyModuleDao">
+    <!-- PowerSupplyModule的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PowerSupplyModule_Map" type="com.panyu.panyuprojectims.entity.PowerSupplyModule">
+        <id column="POWER_MODULE_ID" property="powerModuleId" />
+        <result column="POWER_MODULE_NAME" property="powerModuleName" />
+    </resultMap>
+
+
+    <!--查询所有的模块信息-->
+    <select id="selectAllPowerSupplyModule" resultMap="result_PowerSupplyModule_Map">
+        select * from Power_Supply_Module
+    </select>
+
+    <!--添加之前根据名字查询个数判断模块是否存在-->
+    <select id="getCountByPowerModuleName" resultType="Long">
+        select count(*) from Power_Supply_Module where power_module_name = #{powerModuleName,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertPowerSupplyModule">
+        insert into Power_Supply_Module values('' ||
+         sys_guid(),
+         #{powerModuleName,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据模块名查询模块对象-->
+    <select id="selectPowerSupplyModuleByPowerModuleName" resultMap="result_PowerSupplyModule_Map">
+        select * from Power_Supply_Module where power_module_name = #{powerModuleName,jdbcType=VARCHAR}
+    </select>
+
+    <!--修改-->
+    <update id="updatePowerSupplyModule">
+        update Power_Supply_Module set power_module_name =
+        #{powerModuleName,jdbcType=VARCHAR} where power_module_id =
+        #{powerModuleId,jdbcType=VARCHAR}
+    </update>
+
+    <!--删除-->
+    <delete id="deletePowerSupplyModule">
+        delete from POWER_SUPPLY_MODULE
+        where power_module_id = #{powerModuleId,jdbcType=VARCHAR}
+    </delete>
+
+
+</mapper>

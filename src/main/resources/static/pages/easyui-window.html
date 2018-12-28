@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/easyui/easyui.css">
+    <link rel="stylesheet" href="../static/css/icon.css">
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/jquery.easyui.min.js"></script>
+    <script src="../static/js/easyui-lang-zh_CN.js"></script>
+</head>
+<body>
+
+<div class="easyui-window"
+     data-options="width:400,height:300,title:'hello world'">
+    这是html data-操作的div
+</div>
+
+<div class="box">
+    这是javascript操作的div
+</div>
+
+<script>
+    $(function () {
+        $('.box').window({
+            title:'hello world',
+            width:400,
+            height:300
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.GarrisonDTODao">
+    <!-- Module的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_GarrisonDTODao_Map" type="com.panyu.panyuprojectims.entity.GarrisonDTO">
+        <result column="GARRISON_ID" property="garrisonIddto" />
+        <result column="GARRISON_PROJECT_ID" property="garrisonProjectIddto" />
+        <result column="GARRISON_NAME" property="garrisonNamedto" />
+        <result column="GARRISON_SUB_WORK_NAME" property="garrisonSubWorkNamedto" />
+        <result column="GARRISON_PROJECT_NAME" property="garrisonProjectNamedto" />
+        <result column="GARRISON_CRITERION_NAME" property="garrisonCriterionNamedto" />
+        <result column="GARRISON_QUALIFIED" property="garrisonQualifieddto" />
+        <result column="GARRISON_PROBLEM" property="garrisonProblemdto" />
+        <result column="GARRISON_PHOTO" property="garrisonPhotodto" />
+    </resultMap>
+
+    <!--查询模块总数-->
+    <select id="selectAllGarrisonDTOCount" resultType="long">
+        select count(*) from(
+                select
+                g.garrison_name,
+                s.garrison_sub_work_name,
+                p.garrison_project_name,
+                p.garrison_project_id,
+                c.garrison_criterion_name,c.garrison_qualified,c.garrison_problem,c.garrison_photo
+                from Garrison g
+                left join Garrison_sub_work s
+                on g.garrison_id = s.garrison_id
+                left join Garrison_inspection_project p
+                on s.garrison_sub_work_id = p.garrison_sub_work_id
+                left join Garrison_inspection_criterion c
+                on p.garrison_project_id = c.garrison_project_id
+            )
+    </select>
+    <!--无条件分页查询展示模块数据-->
+    <select id="selectAllGarrisonDTO" resultMap="result_GarrisonDTODao_Map">
+     select * from
+        (select t.* ,rownum r from
+            (
+                select
+                g.garrison_name,
+                s.garrison_sub_work_name,
+                p.garrison_project_name,
+                p.garrison_project_id,
+                c.garrison_criterion_name,c.garrison_qualified,c.garrison_problem,c.garrison_photo
+                from Garrison g
+                left join Garrison_sub_work s
+                on g.garrison_id = s.garrison_id
+                left join Garrison_inspection_project p
+                on s.garrison_sub_work_id = p.garrison_sub_work_id
+                left join Garrison_inspection_criterion c
+                on p.garrison_project_id = c.garrison_project_id
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+    <!--根据检查项目名模糊匹配查询条数-->
+    <select id="getFuzzysearchGarrisonDTOCount" resultType="long">
+          select count(*) from(
+            select
+            g.garrison_name,
+            s.garrison_sub_work_name,
+            p.garrison_project_name,
+            p.garrison_project_id,
+            c.garrison_criterion_name,c.garrison_qualified,c.garrison_problem,c.garrison_photo
+            from Garrison g
+            left join Garrison_sub_work s
+            on g.garrison_id = s.garrison_id
+            left join Garrison_inspection_project p
+            on s.garrison_sub_work_id = p.garrison_sub_work_id
+            left join Garrison_inspection_criterion c
+            on p.garrison_project_id = c.garrison_project_id
+            <where>
+                <if test="garrisonProjectName !=null and garrisonProjectName !='' ">
+                    and GARRISON_PROJECT_NAME like #{garrisonProjectName}
+                </if>
+            </where>
+          )
+    </select>
+    <!--根据检查项目名分页模糊匹配查询-->
+    <select id="FuzzysearchGarrisonDTO" resultMap="result_GarrisonDTODao_Map">
+          select * from(
+              select t.*,rownum r from (
+                select
+                g.garrison_name,
+                s.garrison_sub_work_name,
+                p.garrison_project_name,
+                p.garrison_project_id,
+                c.garrison_criterion_name,c.garrison_qualified,c.garrison_problem,c.garrison_photo
+                from Garrison g
+                left join Garrison_sub_work s
+                on g.garrison_id = s.garrison_id
+                left join Garrison_inspection_project p
+                on s.garrison_sub_work_id = p.garrison_sub_work_id
+                left join Garrison_inspection_criterion c
+                on p.garrison_project_id = c.garrison_project_id
+                <where>
+                    <if test="garrisonProjectName !=null and garrisonProjectName !='' ">
+                        and GARRISON_PROJECT_NAME like #{garrisonProjectName}
+                    </if>
+                </where>
+              )t
+          ) where r between #{start} and #{end}
+    </select>
+    <!--根据点击下拉框获取模块名称以及搜索框中的内容进行分页模糊匹配查询条数-->
+    <select id="selectDropdownBoxAndSearchCount" resultType="long">
+        select count(*) from(
+            select
+            g.garrison_name,
+            s.garrison_sub_work_name,
+            p.garrison_project_name,
+            p.garrison_project_id,
+            c.garrison_criterion_name,c.garrison_qualified,c.garrison_problem,c.garrison_photo
+            from Garrison g
+            left join Garrison_sub_work s
+            on g.garrison_id = s.garrison_id
+            left join Garrison_inspection_project p
+            on s.garrison_sub_work_id = p.garrison_sub_work_id
+            left join Garrison_inspection_criterion c
+            on p.garrison_project_id = c.garrison_project_id
+            <where>
+                <if test="garrisonProjectName !=null and garrisonProjectName !='' ">
+                    and GARRISON_PROJECT_NAME like #{garrisonProjectName}
+                </if>
+            </where>
+            and g.garrison_id = #{garrisonId,jdbcType=VARCHAR}
+        )
+    </select>
+    <!--根据点击下拉框获取模块名称以及搜索框中的内容进行分页模糊匹配查询-->
+    <select id="selectAllDropdownBoxAndSearchGarrisonDTO" resultMap="result_GarrisonDTODao_Map">
+        select * from(
+            select t.*,rownum r from (
+                select
+                g.garrison_name,
+                s.garrison_sub_work_name,
+                p.garrison_project_name,
+                p.garrison_project_id,
+                c.garrison_criterion_name,c.garrison_qualified,c.garrison_problem,c.garrison_photo
+                from Garrison g
+                left join Garrison_sub_work s
+                on g.garrison_id = s.garrison_id
+                left join Garrison_inspection_project p
+                on s.garrison_sub_work_id = p.garrison_sub_work_id
+                left join Garrison_inspection_criterion c
+                on p.garrison_project_id = c.garrison_project_id
+                <where>
+                    <if test="garrisonProjectName !=null and garrisonProjectName !='' ">
+                        and GARRISON_PROJECT_NAME like #{garrisonProjectName}
+                    </if>
+                </where>
+                and g.garrison_id = #{garrisonId,jdbcType=VARCHAR}
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+    <!--根据模块名为空以及搜索框内容进行分页模糊匹配查询条数-->
+    <select id="selectAllGarrisonDTOSearchCount" resultType="long">
+        select count(*) from(
+            select
+            g.garrison_name,
+            s.garrison_sub_work_name,
+            p.garrison_project_name,
+            p.garrison_project_id,
+            c.garrison_criterion_name,c.garrison_qualified,c.garrison_problem,c.garrison_photo
+            from Garrison g
+            left join Garrison_sub_work s
+            on g.garrison_id = s.garrison_id
+            left join Garrison_inspection_project p
+            on s.garrison_sub_work_id = p.garrison_sub_work_id
+            left join Garrison_inspection_criterion c
+            on p.garrison_project_id = c.garrison_project_id
+            where g.garrison_id = #{garrisonId,jdbcType=VARCHAR}
+        )
+    </select>
+    <!--根据模块名为空以及搜索框内容进行分页模糊匹配查询-->
+    <select id="selectAllGarrisonDTOSearchList" resultMap="result_GarrisonDTODao_Map">
+        select * from(
+            select t.*,rownum r from (
+                select
+                g.garrison_name,
+                s.garrison_sub_work_name,
+                p.garrison_project_name,
+                p.garrison_project_id,
+                c.garrison_criterion_name,c.garrison_qualified,c.garrison_problem,c.garrison_photo
+                from Garrison g
+                left join Garrison_sub_work s
+                on g.garrison_id = s.garrison_id
+                left join Garrison_inspection_project p
+                on s.garrison_sub_work_id = p.garrison_sub_work_id
+                left join Garrison_inspection_criterion c
+                on p.garrison_project_id = c.garrison_project_id
+                where g.garrison_id = #{garrisonId,jdbcType=VARCHAR}
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+
+    <!--导出空表格-->
+    <select id="exportExcel" resultMap="result_GarrisonDTODao_Map">
+        select
+                g.garrison_name,
+                s.garrison_sub_work_name,
+                p.garrison_project_name,
+                c.garrison_criterion_name,c.garrison_qualified,c.garrison_problem,c.garrison_photo
+                from Garrison g
+                left join Garrison_sub_work s
+                on g.garrison_id = s.garrison_id
+                left join Garrison_inspection_project p
+                on s.garrison_sub_work_id = p.garrison_sub_work_id
+                left join Garrison_inspection_criterion c
+                on p.garrison_project_id = c.garrison_project_id
+    </select>
+
+    <!--导出模块数据-->
+    <select id="exportGarrison" resultMap="result_GarrisonDTODao_Map">
+                select
+                g.garrison_name,
+                s.garrison_sub_work_name,
+                p.garrison_project_name,
+                c.garrison_criterion_name,c.garrison_qualified,c.garrison_problem,c.garrison_photo
+                from Garrison g
+                left join Garrison_sub_work s
+                on g.garrison_id = s.garrison_id
+                left join Garrison_inspection_project p
+                on s.garrison_sub_work_id = p.garrison_sub_work_id
+                left join Garrison_inspection_criterion c
+                on p.garrison_project_id = c.garrison_project_id
+                where garrison_project_id in
+                <foreach collection="array" open="(" separator="," close=")" item="ids">
+                    #{ids}
+                </foreach>
+    </select>
+</mapper>

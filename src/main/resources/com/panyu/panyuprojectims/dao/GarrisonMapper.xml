@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.GarrisonDao">
+    <!-- Garrison的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_Garrison_Map" type="com.panyu.panyuprojectims.entity.Garrison">
+        <id column="GARRISON_ID" property="garrisonId" />
+        <result column="GARRISON_NAME" property="garrisonName" />
+    </resultMap>
+
+    <!-- 数据库中表名为:GARRISON的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="GARRISON_Column">
+        GARRISON.GARRISON_ID as GARRISON_ID
+        ,GARRISON.GARRISON_NAME as GARRISON_NAME
+    </sql>
+
+    <!--查询下拉框模块名称 -->
+    <select id="selectGarrison" resultMap="result_Garrison_Map">
+        select * from
+        (
+            select result.* from
+            (
+                select
+                <include refid="GARRISON_Column" /> 
+                from GARRISON
+            ) result
+        )
+    </select>
+    <!--添加-->
+    <insert id="insertGarrison">
+        insert into Garrison values(sys_guid(),#{garrisonName,jdbcType=VARCHAR})
+    </insert>
+    <!--添加前根据名字查询个数，判断要添加的模块名是否存在-->
+    <select id="countByGarrisonName" resultType="java.lang.Long">
+         select count(garrison_name) from Garrison where garrison_name = #{garrisonName,jdbcType=VARCHAR}
+    </select>
+    <!--根据模块名查询模块对象-->
+    <select id="selectGarrisonByGarrisonName" resultMap="result_Garrison_Map">
+        select * from Garrison where garrison_name = #{garrisonName,jdbcType=VARCHAR}
+    </select>
+    <!--修改-->
+    <update id="updateGarrison">
+        update Garrison set garrison_name = #{garrisonName,jdbcType=VARCHAR}
+        where garrison_id = #{garrisonId,jdbcType=VARCHAR}
+    </update>
+    <!--删除-->
+    <delete id="deleteGarrison">
+        delete from Garrison where garrison_id = #{garrisonId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

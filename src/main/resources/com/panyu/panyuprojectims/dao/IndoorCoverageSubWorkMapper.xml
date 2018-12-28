@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IndoorCoverageSubWorkDao">
+    <!-- IndoorCoverageSubWork的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IndoorCoverageSubWork_Map" type="com.panyu.panyuprojectims.entity.IndoorCoverageSubWork">
+        <id column="INDOOR_SUB_WORK_ID" property="indoorSubWorkId" />
+        <result column="INDOOR_SUB_WORK_NAME" property="indoorSubWorkName" />
+        <result column="INDOOR_COVERAGE_ID" property="indoorCoverageId" />
+    </resultMap>
+
+    <!--跟据分项工程id和名字查询分项工程对象-->
+    <select id="getIndoorCoverageSubWork" resultMap="result_IndoorCoverageSubWork_Map">
+        select * from Indoor_coverage_sub_work where INDOOR_SUB_WORK_ID =
+        #{indoorSubWorkId,jdbcType=VARCHAR} and INDOOR_SUB_WORK_NAME =
+        #{indoorSubWorkName,jdbcType=VARCHAR}
+    </select>
+
+
+
+
+    <!--根据模块信息id查询包含的分项工程-->
+    <select id="selectAllIndoorCoverageSubWorkByIndoorCoverageId" resultMap="result_IndoorCoverageSubWork_Map">
+        select * from Indoor_coverage_sub_work where indoor_coverage_id = #{indoorCoverageId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据分项工程名字和模块id查询个数-->
+    <select id="getCountByIndoorSubWorkNameAndByIndoorCoverageId" resultType="Long">
+        select count(*) from Indoor_coverage_sub_work where indoor_sub_work_name =
+        #{indoorSubWorkName,jdbcType=VARCHAR} and indoor_coverage_id =
+        #{indoorCoverageId,jdbcType=VARCHAR}
+    </select>
+
+   <!-- 添加-->
+    <insert id="insertIndoorCoverageSubWork">
+        insert into Indoor_coverage_sub_work values(
+        sys_guid(),
+        #{indoorSubWorkName,jdbcType=VARCHAR},
+        #{indoorCoverageId,jdbcType=VARCHAR})
+    </insert>
+
+   <!-- 根据分项工程名字和模块id查询分项工程-->
+    <select id="selectIndoorCoverageSubWorkByIndoorSubWorkNameAndByIndoorCoverageId" resultMap="result_IndoorCoverageSubWork_Map">
+        select * from Indoor_coverage_sub_work where indoor_sub_work_name =
+        #{indoorSubWorkName,jdbcType=VARCHAR} and indoor_coverage_id =
+        #{indoorCoverageId,jdbcType=VARCHAR}
+    </select>
+
+   <!-- 修改-->
+    <update id="updateIndoorCoverageSubWork">
+        update Indoor_coverage_sub_work set indoor_sub_work_name =
+        #{indoorSubWorkName,jdbcType=VARCHAR} where indoor_sub_work_id =
+        #{indoorSubWorkId,jdbcType=VARCHAR}
+    </update>
+
+   <!-- 删除-->
+   <delete id="deleteIndoorCoverageSubWork">
+        delete from Indoor_coverage_sub_work where indoor_sub_work_id =  #{indoorSubWorkId,jdbcType=VARCHAR}
+   </delete>
+
+   <!-- 根据模块id查询包含的分项工程id-->
+    <select id="selectIndoorSubWorkIdByIndoorCoverageId" resultType="String">
+          select indoor_sub_work_id from Indoor_coverage_sub_work where  indoor_coverage_id = #{indoorCoverageId,jdbcType=VARCHAR}
+    </select>
+</mapper>

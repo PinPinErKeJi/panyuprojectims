@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.SubWorkDao">
+    <!-- SubWork的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_SubWork_Map" type="com.panyu.panyuprojectims.entity.SubWork">
+        <result column="SUB_ID" property="subId" />
+        <result column="SUB_NAME" property="subName" />
+        <result column="MODULE_ID" property="moduleId" />
+        <collection property="inspectionProjectList" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.InspectionProject">
+            <result column="PROJECT_ID" property="projectId" />
+            <result column="PROJECT_NAME" property="projectName" />
+            <result column="SUB_ID" property="subId" />
+        </collection>
+    </resultMap>
+
+    <!-- 数据库中表名为:SUB_WORK的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="SUB_WORK_Column">
+        SUB_WORK.SUB_ID as SUB_ID
+        ,SUB_WORK.SUB_NAME as SUB_NAME
+        ,SUB_WORK.MODULE_ID as MODULE_ID
+    </sql>
+
+    <!--根据分项工程id和名字查询对象-->
+    <select id="getSubWork" resultMap="result_SubWork_Map">
+        select * from sub_work where sub_name =
+        #{subName,jdbcType=VARCHAR} and sub_id =
+        #{subId,jdbcType=VARCHAR}
+    </select>
+
+
+
+    <!--根据名字和父级id查询个数-->
+    <select id="getCountBySubName" resultType="int">
+        select count(*)
+        from sub_work
+        where sub_name = #{subName,jdbcType=VARCHAR}
+        and module_id = #{moduleId,jdbcType=VARCHAR}
+    </select>
+
+
+<!--添加分项工程选项框开始-->
+        <!--添加选项框分项工程时根据id查询对应的分项工程名称-->
+        <select id="selectSubWorkById" parameterType="java.lang.String" resultMap="result_SubWork_Map">
+            select
+            <include refid="SUB_WORK_Column" />
+            from Sub_Work
+            where Sub_Work.MODULE_ID = #{moduleId,jdbcType=VARCHAR}
+        </select>
+
+        <select id="selectSubWorkByName" parameterType="java.lang.String" resultMap="result_SubWork_Map">
+            select
+            <include refid="SUB_WORK_Column" />
+            from Sub_Work
+            where Sub_Work.SUB_NAME = #{subName,jdbcType=VARCHAR} and module_id = #{moduleId,jdbcType=VARCHAR}
+        </select>
+        <!--添加选项框分项工程名称-->
+        <insert id="insertSubWork" parameterType="com.panyu.panyuprojectims.entity.SubWork">
+            insert into SUB_WORK(SUB_ID,SUB_NAME,MODULE_ID)
+            values(sys_guid(),#{subName,jdbcType=VARCHAR},#{moduleId,jdbcType=VARCHAR})
+        </insert>
+<!--添加分项工程选项框结束-->
+
+<!--删除分项工程选项框开始-->
+    <select id="selectSubWorkModuleId" parameterType="java.lang.String" resultType="String">
+        select sub_id
+        from Sub_Work
+        where Sub_Work.MODULE_ID = #{moduleId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteSubWorkById">
+        delete from Sub_Work where sub_id = #{subId,jdbcType=VARCHAR}
+    </delete>
+<!--删除分项工程选项框结束-->
+
+<!--修改分项工程选项框开始-->
+    <update id="updateSubwork">
+        update Sub_Work set sub_name = #{subName,jdbcType=VARCHAR}
+        where sub_id = #{subId,jdbcType=VARCHAR}
+    </update>
+<!--修改分项工程选项框结束-->
+<!--根据名字和父id查询subid-->
+    <select id="selectSubIdBySubNameAndModuleId" resultType="java.lang.String">
+        select sub_id from sub_work where sub_name = #{subName,jdbcType=VARCHAR}and module_id = #{moduleId,jdbcType=VARCHAR}
+    </select>
+</mapper>

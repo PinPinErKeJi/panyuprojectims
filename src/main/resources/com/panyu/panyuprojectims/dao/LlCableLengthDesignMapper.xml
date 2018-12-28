@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.LlCableLengthDesignDao">
+    <!-- LlCableLengthDesign的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_LlCableLengthDesign_Map" type="com.panyu.panyuprojectims.entity.LlCableLengthDesign">
+        <id column="CABLE_LENGTH_DESIGN_ID" property="cableLengthDesignId" />
+        <result column="GYSTS_SUSPENDED" property="gystsSuspended" />
+        <result column="GYSTS_SUSPENSION_WIRE" property="gystsSuspensionWire" />
+        <result column="GYSTA" property="gysta" />
+        <result column="PLOW_IN_OPTICAL_CABLE" property="plowInOpticalCable" />
+        <result column="WALL_CABLE" property="wallCable" />
+        <result column="IN_BRIDGE_CABLE" property="inBridgeCable" />
+        <result column="GYFXTS" property="gyfxts" />
+    </resultMap>
+
+    <!-- 数据库中表名为:LL_CABLE_LENGTH_DESIGN的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="LL_CABLE_LENGTH_DESIGN_Column">
+        LL_CABLE_LENGTH_DESIGN.CABLE_LENGTH_DESIGN_ID as CABLE_LENGTH_DESIGN_ID
+        ,LL_CABLE_LENGTH_DESIGN.GYSTS_SUSPENDED as GYSTS_SUSPENDED
+        ,LL_CABLE_LENGTH_DESIGN.GYSTS_SUSPENSION_WIRE as GYSTS_SUSPENSION_WIRE
+        ,LL_CABLE_LENGTH_DESIGN.GYSTA as GYSTA
+        ,LL_CABLE_LENGTH_DESIGN.PLOW_IN_OPTICAL_CABLE as PLOW_IN_OPTICAL_CABLE
+        ,LL_CABLE_LENGTH_DESIGN.WALL_CABLE as WALL_CABLE
+        ,LL_CABLE_LENGTH_DESIGN.IN_BRIDGE_CABLE as IN_BRIDGE_CABLE
+        ,LL_CABLE_LENGTH_DESIGN.GYFXTS as GYFXTS
+    </sql>
+
+    <!--根据信息id查询光缆设计长度对象-->
+    <select id="selectLlCableLengthDesignByCircuitInformationId" resultMap="result_LlCableLengthDesign_Map">
+        select ll.* from LL_circuit_information l left join LL_cable_length_design ll
+        on l.cable_length_design_id = ll.cable_length_design_id
+        where l.circuit_information_id = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+
+
+
+
+
+    <!--根据光缆设计皮长公里ID删除选中项-->
+    <delete id="deleteLlCableLengthDesign">
+        delete from LL_CABLE_LENGTH_DESIGN
+        where CABLE_LENGTH_DESIGN_ID = #{cableLengthDesignId,jdbcType=VARCHAR}
+    </delete>
+    <!--添加光缆设计皮长公里-->
+    <insert id="insertLlCableLengthDesign">
+        insert into LL_CABLE_LENGTH_DESIGN values (
+            #{cableLengthDesignId,jdbcType=VARCHAR},
+            #{gystsSuspended,jdbcType=VARCHAR},
+            #{gystsSuspensionWire,jdbcType=VARCHAR},
+            #{gysta,jdbcType=VARCHAR},
+            #{plowInOpticalCable,jdbcType=VARCHAR},
+            #{wallCable,jdbcType=VARCHAR},
+            #{inBridgeCable,jdbcType=VARCHAR},
+            #{gyfxts,jdbcType=VARCHAR}
+        )
+    </insert>
+</mapper>

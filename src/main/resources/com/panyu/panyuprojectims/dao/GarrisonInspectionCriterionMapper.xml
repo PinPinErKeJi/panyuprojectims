@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.GarrisonInspectionCriterionDao">
+    <!-- GarrisonInspectionCriterion的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_GarrisonInspectionCriterion_Map" type="com.panyu.panyuprojectims.entity.GarrisonInspectionCriterion">
+        <id column="GARRISON_CRITERION_ID" property="garrisonCriterionId" />
+        <result column="GARRISON_CRITERION_NAME" property="garrisonCriterionName" />
+        <result column="GARRISON_QUALIFIED" property="garrisonQualified" />
+        <result column="GARRISON_PROBLEM" property="garrisonProblem" />
+        <result column="GARRISON_PHOTO" property="garrisonPhoto" />
+        <result column="GARRISON_PROJECT_ID" property="garrisonProjectId" />
+    </resultMap>
+
+    <!-- 数据库中表名为:GARRISON_INSPECTION_CRITERION的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="GARRISON_INSPECTION_CRITERION_Column">
+        GARRISON_INSPECTION_CRITERION.GARRISON_CRITERION_ID as GARRISON_CRITERION_ID
+        ,GARRISON_INSPECTION_CRITERION.GARRISON_CRITERION_NAME as GARRISON_CRITERION_NAME
+        ,GARRISON_INSPECTION_CRITERION.GARRISON_QUALIFIED as GARRISON_QUALIFIED
+        ,GARRISON_INSPECTION_CRITERION.GARRISON_PROBLEM as GARRISON_PROBLEM
+        ,GARRISON_INSPECTION_CRITERION.GARRISON_PHOTO as GARRISON_PHOTO
+        ,GARRISON_INSPECTION_CRITERION.GARRISON_PROJECT_ID as GARRISON_PROJECT_ID
+    </sql>
+
+    <!--根据标准规范id和内容查询标准规范对象-->
+    <select id="getGarrisonInspectionCriterion" resultMap="result_GarrisonInspectionCriterion_Map">
+        select * from Garrison_inspection_criterion where GARRISON_CRITERION_ID =
+        #{garrisonCriterionId,jdbcType=VARCHAR} and GARRISON_CRITERION_NAME =
+        #{garrisonCriterionName,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据检查项目id查询包含的标准规范-->
+    <select id="selectAllGarrisonInspectionCriterionByGarrisonProjectId" resultMap="result_GarrisonInspectionCriterion_Map">
+        select * from Garrison_inspection_criterion
+        where garrison_project_id = #{garrisonProjectId,jdbcType=VARCHAR}
+    </select>
+    <!--添加-->
+    <insert id="insertGarrisonInspectionCriterion">
+        insert into Garrison_inspection_criterion values(
+        sys_guid(),
+        #{garrisonCriterionName,jdbcType=VARCHAR},null,null,null,
+        #{garrisonProjectId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--添加之前根据标准规范内容查询个数，判断标准规范是否存在-->
+    <select id="countByGarrisonCriterionName" resultType="java.lang.Long">
+        select count(garrison_criterion_name)
+        from Garrison_inspection_criterion
+        where garrison_criterion_name = #{garrisonCriterionName,jdbcType=VARCHAR}
+        and garrison_project_id = #{garrisonProjectId,jdbcType=VARCHAR}
+    </select>
+    <!--根据标准规范内容查询标准规范-->
+    <select id="seleectGarrisonInspectionCriterionByGarrisonCriterionName" resultMap="result_GarrisonInspectionCriterion_Map">
+        select * from Garrison_inspection_criterion
+        where garrison_criterion_name = #{garrisonCriterionName,jdbcType=VARCHAR}
+        and garrison_project_id = #{garrisonProjectId,jdbcType=VARCHAR}
+    </select>
+    <!--修改-->
+    <update id="updateGarrisonInspectionCriterion">
+        update Garrison_inspection_criterion set garrison_criterion_name= #{garrisonCriterionName,jdbcType=VARCHAR}
+        where garrison_criterion_id = #{garrisonCriterionId,jdbcType=VARCHAR}
+    </update>
+    <!--删除-->
+    <delete id="deleteGarrisonInspectionCriterion">
+        delete from  Garrison_inspection_criterion where garrison_criterion_id = #{garrisonCriterionId,jdbcType=VARCHAR}
+    </delete>
+    <!--根据检查项目id查询标准规范id集合-->
+    <select id="selectGarrisonCriterionIdByGarrisonProjectId" resultType="java.lang.String">
+        select garrison_criterion_id from Garrison_inspection_criterion where garrison_project_id = #{garrisonProjectId,jdbcType=VARCHAR}
+    </select>
+</mapper>

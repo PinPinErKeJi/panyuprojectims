@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.InspectionProjectDao">
+    <!-- InspectionProject的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_InspectionProject_Map" type="com.panyu.panyuprojectims.entity.InspectionProject">
+        <result column="PROJECT_ID" property="projectId" />
+        <result column="PROJECT_NAME" property="projectName" />
+        <result column="SUB_ID" property="subId" />
+        <result column="INSPECTION_CONTENT" property="inspectionContent" />
+        <collection property="photoResourcesList" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.PhotoResources">
+            <id column="PHOTO_RESOURCES_ID" property="photoResourcesId" />
+            <result column="PHOTO_NAME" property="photoName" />
+            <result column="PHOTO_UPLOAD_PEOPLE" property="photoUploadPeople" />
+            <result column="QUALIFIED" property="qualified" />
+            <result column="PROBLEM_DESCRIPTION" property="problemDescription" />
+            <result column="MODULE_ID" property="moduleId" />
+            <result column="SUB_ID" property="subId" />
+            <result column="PARENT_ID" property="parentId" />
+        </collection>
+    </resultMap>
+
+    <!-- 数据库中表名为:INSPECTION_PROJECT的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="INSPECTION_PROJECT_Column">
+        INSPECTION_PROJECT.PROJECT_ID as PROJECT_ID
+        ,INSPECTION_PROJECT.PROJECT_NAME as PROJECT_NAME
+        ,INSPECTION_PROJECT.SUB_ID as SUB_ID
+    </sql>
+
+    <!--根据检查项目id和名字查询对象-->
+    <select id="getInspectionProject" resultMap="result_InspectionProject_Map">
+        select * from  inspection_project where project_name =
+        #{projectName,jdbcType=VARCHAR} and project_id =
+        #{projectId,jdbcType=VARCHAR}
+    </select>
+
+
+
+
+
+
+
+    <select id="selectProjectName" resultMap="result_InspectionProject_Map">
+        select p.project_name,i.inspection_content
+        from inspection_project p
+        left join inspection_standard i
+        on p.project_id = i.project_id
+        where i.project_id = #{projectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据名字和父级id查个数-->
+    <select id="getCountByProjectNameAndSubId" resultType="int">
+        select count(*) from inspection_project where project_name =
+        #{projectName,jdbcType=VARCHAR}and sub_id =
+        #{subId,jdbcType=VARCHAR}
+    </select>
+
+
+
+
+
+
+
+
+    <!--添加选项框检查项目内容-->
+    <!-- 将InspectionProject插入到对应数据库的表中,包括属性值为null的数据-->
+    <insert id="insertInspectionProject" parameterType="com.panyu.panyuprojectims.entity.InspectionProject">
+        insert into INSPECTION_PROJECT(PROJECT_ID,PROJECT_NAME,SUB_ID)
+        values(sys_guid(),#{projectName,jdbcType=VARCHAR},#{subId,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="selectInspectionProjectByName" parameterType="java.lang.String" resultMap="result_InspectionProject_Map">
+        select
+        <include refid="INSPECTION_PROJECT_Column" />
+        from INSPECTION_PROJECT
+        where INSPECTION_PROJECT.PROJECT_NAME = #{projectName,jdbcType=VARCHAR} and sub_id =
+        #{subId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectInspectionProjectById" parameterType="java.lang.String" resultMap="result_InspectionProject_Map">
+        select
+        <include refid="INSPECTION_PROJECT_Column" />
+        from INSPECTION_PROJECT
+        where INSPECTION_PROJECT.SUB_ID = #{subId,jdbcType=VARCHAR}
+    </select>
+<!--添加选项框检查项目内容-->
+<!--删除选项框检查项目内容-->
+    <select id="selectProjectSubId" parameterType="java.lang.String" resultType="String">
+        select project_id
+        from INSPECTION_PROJECT
+        where INSPECTION_PROJECT.SUB_ID = #{subId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteInspectionProjectById">
+        delete from INSPECTION_PROJECT where PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+    </delete>
+<!--删除选项框检查项目内容-->
+
+<!--修改选项框检查项目内容-->
+    <update id="updateProject">
+        update inspection_project set project_name = #{projectName,jdbcType=VARCHAR}
+        where project_id = #{projectId,jdbcType=VARCHAR}
+    </update>
+<!--修改选项框检查项目内容-->
+
+<!--根据projectName 和 subId 查询projectId-->
+<select id="selectProjectIdByProjectNameAndSubId" resultType="java.lang.String">
+    select project_id from Inspection_Project where project_name = #{projectName,jdbcType=VARCHAR}and sub_id = #{subId,jdbcType=VARCHAR}
+</select>
+
+</mapper>

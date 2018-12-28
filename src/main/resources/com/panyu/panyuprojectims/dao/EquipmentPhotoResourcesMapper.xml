@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.EquipmentPhotoResourcesDao">
+    <!-- EquipmentPhotoResources的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_EquipmentPhotoResources_Map" type="com.panyu.panyuprojectims.entity.EquipmentPhotoResources">
+        <id column="EQUIPMENT_PHOTO_ID" property="equipmentPhotoId" />
+        <result column="EQUIPMENT_PHOTO_NAME" property="equipmentPhotoName" />
+        <result column="PHOTO_UPLOAD_PEOPLE" property="photoUploadPeople" />
+        <result column="QUALIFIED" property="qualified" />
+        <result column="PROBLEM_DESCRIPTION" property="problemDescription" />
+        <result column="EQUIPMENT_SPECIALITY_ID" property="equipmentSpecialityId" />
+        <result column="EQUIPMENT_SUB_WORK_ID" property="equipmentSubWorkId" />
+        <result column="EQUIPMENT_PROJECT_ID" property="equipmentProjectId" />
+        <result column="EQUIPMENT_INFORMATION_ID" property="equipmentInformationId" />
+    </resultMap>
+
+
+
+    <!--根据模块ID和分项工程ID查询检查项目ID集合-->
+    <select id="selectEquipmentInspectionProjectList" resultType="String">
+        select i.EQUIPMENT_PROJECT_ID
+        from Equipment_speciality m
+        left join EQUIPMENT_SUB_WORK s on
+        m.EQUIPMENT_SPECIALITY_ID = s.EQUIPMENT_SPECIALITY_ID
+        left join EQUIPMENT_INSPECTION_PROJECT i on
+        s.EQUIPMENT_SUB_WORK_ID = i.EQUIPMENT_SUB_WORK_ID
+        where m.EQUIPMENT_SPECIALITY_ID = #{equipmentSpecialityId,jdbcType=VARCHAR}
+        and s.EQUIPMENT_SUB_WORK_ID = #{equipmentSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加图片-->
+    <insert id="insertEquipmentPhotoResources" parameterType="com.panyu.panyuprojectims.entity.EquipmentPhotoResources">
+        insert into EQUIPMENT_PHOTO_RESOURCES
+        values(sys_guid(),#{equipmentPhotoName},null,#{qualified},#{problemDescription},null,null,#{equipmentProjectId},#{equipmentInformationId})
+    </insert>
+
+    <!--查询parentID对应的图片信息个数-->
+    <select id="getCountEquipmentPhotoResourcesByParentId" resultType="java.lang.Long">
+        select count(equipment_photo_id)
+        from equipment_photo_resources
+        where equipment_project_id = #{equipmentProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据检查项目ID查询图片资源ID集合-->
+    <select id="selectEquipmentPhotoResourcesIds" resultType="String">
+        select equipment_photo_id
+        from equipment_photo_resources
+        where equipment_project_id = #{equipmentProjectId,jdbcType=VARCHAR} and
+        EQUIPMENT_INFORMATION_ID = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 根据图片资源ID查询图片对象-->
+    <select id="selectEquipmentPhotoResourcesById" parameterType="java.lang.String" resultMap="result_EquipmentPhotoResources_Map">
+        select EQUIPMENT_PHOTO_NAME,PHOTO_UPLOAD_PEOPLE,QUALIFIED,PROBLEM_DESCRIPTION
+        from EQUIPMENT_PHOTO_RESOURCES
+        where EQUIPMENT_PHOTO_RESOURCES.EQUIPMENT_PHOTO_ID = #{equipmentPhotoId,jdbcType=VARCHAR}and
+        equipment_project_id = #{equipmentProjectId,jdbcType=VARCHAR} and
+        EQUIPMENT_INFORMATION_ID = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

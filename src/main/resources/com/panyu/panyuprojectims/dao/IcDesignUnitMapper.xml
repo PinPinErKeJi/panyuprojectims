@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IcDesignUnitDao">
+    <!-- IcDesignUnit的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IcDesignUnit_Map" type="com.panyu.panyuprojectims.entity.IcDesignUnit">
+        <id column="IC_DESIGN_UNIT_ID" property="icDesignUnitId" />
+        <result column="DESIGN_CORPORATE_NAME" property="designCorporateName" />
+        <result column="DESIGN_PERSON_IN_CHARGE" property="designPersonInCharge" />
+    </resultMap>
+
+    <!-- 数据库中表名为:IC_DESIGN_UNIT的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="IC_DESIGN_UNIT_Column">
+        IC_DESIGN_UNIT.IC_DESIGN_UNIT_ID as IC_DESIGN_UNIT_ID
+        ,IC_DESIGN_UNIT.DESIGN_CORPORATE_NAME as DESIGN_CORPORATE_NAME
+        ,IC_DESIGN_UNIT.DESIGN_PERSON_IN_CHARGE as DESIGN_PERSON_IN_CHARGE
+    </sql>
+
+    <!--添加-->
+    <insert id="insertIcDesignUnit">
+        insert into IC_Design_unit values(
+        #{icDesignUnitId,jdbcType=VARCHAR},
+        #{designCorporateName,jdbcType=VARCHAR},
+        #{designPersonInCharge,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 根据设计单位ID删除选中项-->
+    <delete id="deleteIcDesignUnitById" parameterType="java.lang.String">
+        delete from IC_DESIGN_UNIT
+        where IC_DESIGN_UNIT_ID = #{icDesignUnitId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

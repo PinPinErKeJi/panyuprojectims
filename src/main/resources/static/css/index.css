@@ -1,0 +1,168 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	list-style: none;
+}
+
+iframe {
+	padding: 5px;
+	width: calc(100% - 12px);
+	height: calc(100% - 14px);
+}
+
+.home-header {
+	height: 122px;
+	background: url("./icons/topbg.gif") repeat-x;
+	position: relative;
+	overflow: hidden;
+}
+
+.home-logo {
+	float: left;
+	height: 71px;
+	padding: 15px 20px 0 10px;
+}
+
+.home-nav {
+	float: left;
+}
+
+.home-nav a {
+	display: inline-block;
+	width: 88px;
+	height: 86px;
+	text-align: center;
+	text-decoration: none;
+	color: #fff;
+}
+
+.home-nav a:hover {
+	background: none repeat scroll rgb(43, 127, 181);
+}
+
+.home-nav img {
+	padding-top: 10px;
+}
+
+.home-nav span {
+	display: block;
+}
+
+.home-toolbar {
+	position: absolute;
+	right: 10px;
+	top: 0;
+}
+
+.home-toolbar ul {
+	margin-top: 10px;
+}
+
+.home-toolbar li {
+	padding: 0 10px;
+	display: inline-block;
+}
+
+.home-toolbar .login-info{
+	padding: 5px;
+	border-radius:30px;
+	color: #b8ceda;
+	background-color: #09537a;
+}
+
+.home-toolbar a {
+	color: #fff;
+	text-decoration: none;
+}
+
+/*new nav*/
+.home-navs{
+	width: 100%;
+	padding: 1px 0;
+	line-height: 30px;background-color:#f0f6ff;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
+.home-navs a{
+	margin-left: 5px;
+	display: inline-block;
+}
+
+.home-sidebar .panel-with-icon {
+	padding-left: 28px;
+}
+
+.home-panel-west > .panel-header .panel-title {
+	height: 19px;
+	line-height: 19px;
+}
+
+.home-sidebar {
+	width: 200px;
+	height: 100%;
+}
+
+.home-menubutton {
+	position: absolute;
+	right: 10px;
+	top: 5px;
+}
+
+.home-accordion {
+	width: 100%;
+	height: 100%;
+}
+
+.home-accordion .panel-header {
+	padding: 4px 5px;
+}
+
+.home-menu {
+	padding-bottom: 5px;
+}
+
+.home-menu li {
+	position: relative;
+	text-indent: 34px;
+	line-height: 23px;
+	border-bottom: 1px solid #fff;
+}
+
+.home-menu li.active {
+	background: #A3F1B2 url(./icons/current-row.gif) repeat-x top;
+	border-bottom: 1px solid #6ECC81;
+}
+
+.home-menu a {
+	display: block;
+	color: #333;
+	text-decoration: none;
+}
+
+.home-menu .icon-menu {
+	background: url(./icons/icons.gif) -62px -141px;
+}
+
+.home-menu .icon-avatar {
+	background: url(./icons/icons.gif) -142px -101px;
+}
+
+.home-menu .icon-section {
+	background: url(./icons/icons.gif) -42px -41px;
+}
+
+.home-menu .icon-job {
+	background: url(./icons/icons.gif) -262px -41px;
+}
+
+.home-menu .icon-tpl {
+	background: url(./icons/icons.gif) -302px -61px;
+}
+
+.home-content {
+
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.CircuitSubWorkDao">
+    <!-- CircuitSubWork的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_CircuitSubWork_Map" type="com.panyu.panyuprojectims.entity.CircuitSubWork">
+        <id column="CIRCUIT_SUB_WORK_ID" property="circuitSubWorkId" />
+        <result column="CIRCUIT_SUB_WORK_NAME" property="circuitSubWorkName" />
+        <result column="CIRCUIT_MODULE_ID" property="circuitModuleId" />
+    </resultMap>
+
+
+    <!--根据分项工程id和名字查询分项工程对象-->
+    <select id="getCircuitSubWork" resultMap="result_CircuitSubWork_Map">
+        select * from circuit_sub_work where CIRCUIT_SUB_WORK_ID =
+        #{circuitSubWorkId,jdbcType=VARCHAR} and CIRCUIT_SUB_WORK_NAME =
+        #{circuitSubWorkName,jdbcType=VARCHAR}
+    </select>
+
+
+    <!--根据模块id查询包含的分项工程信息-->
+    <select id="selectCircuitSubWorkByModuleId" resultMap="result_CircuitSubWork_Map">
+        select * from circuit_sub_work where circuit_module_id = #{circuitModuleId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据分项工程名和模块id查询分项工程数量，判断分项工程名是否存在-->
+    <select id="getCountCircuitSubWorkNameByCircuitSubWorkNameAndCircuitModuleId" resultType="java.lang.Long">
+        select count(*) from circuit_sub_work where circuit_sub_work_name =
+        #{circuitSubWorkName,jdbcType=VARCHAR} and circuit_module_id=
+        #{circuitModuleId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertCircuitSubWork">
+        insert into circuit_sub_work values(
+        sys_guid(),
+        #{circuitSubWorkName,jdbcType=VARCHAR},
+        #{circuitModuleId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据分项工程名和模块id查查询分项工程-->
+    <select id="selectCircuitSubWorkByCircuitSubWorkNameAndCircuitModuleId" resultMap="result_CircuitSubWork_Map">
+        select * from circuit_sub_work where circuit_sub_work_name =
+        #{circuitSubWorkName,jdbcType=VARCHAR} and circuit_module_id=
+        #{circuitModuleId,jdbcType=VARCHAR}
+    </select>
+
+    <!--修改-->
+    <update id="updateCircuitSubWork">
+        update circuit_sub_work set circuit_sub_work_name =
+        #{circuitSubWorkName,jdbcType=VARCHAR} where circuit_sub_work_id =
+        #{circuitSubWorkId,jdbcType=VARCHAR}
+    </update>
+
+    <!--根据模块id查询包含的分项工程id-->
+    <select id="selectCircuitSubWorkIdByCircuitModuleId" resultType="String">
+        select circuit_sub_work_id from circuit_sub_work where  circuit_module_id=#{circuitModuleId,jdbcType=VARCHAR}
+    </select>
+
+    <!--删除-->
+    <delete id="deleteCircuitSubWork">
+        delete from circuit_sub_work where circuit_sub_work_id = #{circuitSubWorkId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaFiberOpticChannelDao">
+    <!-- FaFiberOpticChannel的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaFiberOpticChannel_Map" type="com.panyu.panyuprojectims.entity.FaFiberOpticChannel">
+        <id column="FIBER_OPTIC_CHANNEL_ID" property="fiberOpticChannelId" />
+        <result column="FIBER_OPTIC_NUMBER" property="fiberOpticNumber" />
+        <result column="FIBER_OPTIC_DESIGN_LENGTH" property="fiberOpticDesignLength" />
+        <result column="FIBER_OPTIC_SUPPLIER" property="fiberOpticSupplier" />
+        <result column="FIBER_OPTIC_CONTACTS" property="fiberOpticContacts" />
+    </resultMap>
+
+    <!-- 数据库中表名为:FA_FIBER_OPTIC_CHANNEL的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="FA_FIBER_OPTIC_CHANNEL_Column">
+        FA_FIBER_OPTIC_CHANNEL.FIBER_OPTIC_CHANNEL_ID as FIBER_OPTIC_CHANNEL_ID
+        ,FA_FIBER_OPTIC_CHANNEL.FIBER_OPTIC_NUMBER as FIBER_OPTIC_NUMBER
+        ,FA_FIBER_OPTIC_CHANNEL.FIBER_OPTIC_DESIGN_LENGTH as FIBER_OPTIC_DESIGN_LENGTH
+        ,FA_FIBER_OPTIC_CHANNEL.FIBER_OPTIC_SUPPLIER as FIBER_OPTIC_SUPPLIER
+        ,FA_FIBER_OPTIC_CHANNEL.FIBER_OPTIC_CONTACTS as FIBER_OPTIC_CONTACTS
+    </sql>
+
+    <!--添加-->
+    <insert id="insertFaFiberOpticChannel" parameterType="com.panyu.panyuprojectims.entity.FaFiberOpticChannel">
+        insert into FA_FIBER_OPTIC_CHANNEL
+        values(#{fiberOpticChannelId,jdbcType=VARCHAR},
+        #{fiberOpticNumber,jdbcType=VARCHAR},
+        #{fiberOpticDesignLength,jdbcType=VARCHAR},
+        #{fiberOpticSupplier,jdbcType=VARCHAR},
+        #{fiberOpticContacts,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 通过FaFiberOpticChannel的id将数据库表中对应的数据删除-->
+    <delete id="deleteFaFiberOpticChannelById" parameterType="java.lang.String">
+        delete from FA_FIBER_OPTIC_CHANNEL
+        where FIBER_OPTIC_CHANNEL_ID = #{fiberOpticChannelId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--根据设备信息id查询FaFibOpticChannel-->
+    <select id="getFaFiberOpticChannel" resultMap="result_FaFiberOpticChannel_Map">
+        select fo.* from FA_equipment_information ei left join FA_fiber_optic_channel fo on
+        ei.fiber_optic_channel_id = fo.fiber_optic_channel_id
+        where ei.equipment_information_id = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

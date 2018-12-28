@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>线路工程进度统计信息</title>
+    <link rel="stylesheet" href="easyui/easyui.css">
+    <link rel="stylesheet" href="css/icon.css">
+    <link rel="stylesheet" href="css/list.css">
+    <style>
+        .border{
+            height: 27px;
+            width: 120px;
+            border: 1px solid #95B8E7;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<form id="excelForm" method="post" enctype="multipart/form-data">
+    <div>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true"  data-options="iconCls:'icon-print'" onClick="ProjectProgressDegreeExcel();">导出工程进度基本信息</a>
+    </div>
+</form>
+<div data-toggle="distpicker" style="float: left">
+    <select  id="province" class="border" data-province="河南省"></select>
+    <select  id="city" class="border" data-city="郑州市"></select>
+    <select  id="county" class="border" data-district="中原区"></select>
+</div>
+<div>
+    <label>建设年份:</label><input id="construction-year" type="text" class="Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy'})">
+    <label>运营商:</label><input id="operator" class="easyui-combobox" placeholder="请选择运营商" style="width: 100px">
+    <label>建设项目名称：</label><input id="construction-project" class="easyui-textbox" style="width:100px">
+    <!--<label>单项工程名称：</label><input id="construction-only-project" class="easyui-textbox" style="width:100px">-->
+    <label>监理人员：</label><input id="supervisory" class="easyui-textbox" style="width:80px">
+    <a href="#" id="search" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
+    <!--<a href="#" class="easyui-linkbutton">导出工程进度信息</a>-->
+</div>
+<div id="datagrid" class="easyui-datagrid panel-fit" style="height: 100%;width: 100%"></div>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.easyui.min.js"></script>
+<script src="js/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="js/distpicker/distpicker.js" ></script>
+<script type="text/javascript" src="js/distpicker/distpicker.common.js" ></script>
+<script type="text/javascript" src="js/distpicker/distpicker.esm.js" ></script>
+<script type="text/javascript" src="js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //初始化运营商combobox
+        $("#operator").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            data:[{
+                id:'1',
+                name:'中国电信'
+            },{
+                id:'2',
+                name:'中国联通'
+            },{
+                id:'3',
+                name:'中国移动'
+            },{
+                id:'4',
+                name:'中国铁塔'
+            },{
+                id:'5',
+                name:'中国广电'
+            }]
+        })
+        //搜索点击事件
+        $("#search").bind("click",function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "county":$("#county").find("option:selected").val(),
+                "constructionYear":$("#construction-year").val(),
+                "constructionProject":$("#construction-project").textbox("getValue"),
+                "operator":$("#operator").combobox("getText"),
+                "supervisory":$("#supervisory").textbox("getValue")
+
+            });
+        })
+        //点击省份change事件
+        $("#province").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "constructionYear":$("#construction-year").val(),
+                "constructionProject":$("#construction-project").textbox("getValue"),
+                "operator":$("#operator").combobox("getText"),
+                "supervisory":$("#supervisory").textbox("getValue")
+            });
+        })
+        //点击城市change事件
+        $("#city").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "constructionYear":$("#construction-year").val(),
+                "constructionProject":$("#construction-project").textbox("getValue"),
+                "operator":$("#operator").combobox("getText"),
+                "supervisory":$("#supervisory").textbox("getValue")
+            });
+        })
+        //点击区(县)change事件
+        $("#county").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "county":$("#county").find("option:selected").val(),
+                "constructionYear":$("#construction-year").val(),
+                "constructionProject":$("#construction-project").textbox("getValue"),
+                "operator":$("#operator").combobox("getText"),
+                "supervisory":$("#supervisory").textbox("getValue")
+            });
+        })
+        //运营商change事件
+        $("#operator").combobox({
+            onChange:function () {
+                $("#datagrid").datagrid("load",{
+                    "province":$("#province").find("option:selected").val(),
+                    "city":$("#city").find("option:selected").val(),
+                    "county":$("#county").find("option:selected").val(),
+                    "constructionYear":$("#construction-year").val(),
+                    "constructionProject":$("#construction-project").textbox("getValue"),
+                    "operator":$("#operator").combobox("getText"),
+                    "supervisory":$("#supervisory").textbox("getValue")
+                });
+            }
+        })
+
+        //数据表格
+        $("#datagrid").datagrid({
+            url: 'selectAllLlCircuitProgress',
+            pagination: true,
+            pageNumber: 1,
+            pageSize: 15,
+            //rownumbers: true,
+            pageList: [15, 30, 45, 60],
+            columns:[[
+                {field: 'ck',checkbox:"true",rowspan:3},
+                {field: 'circuitProgressId', title: '序号', rowspan: 3, width: 50, align: 'center',hidden:true},
+                {field: 'operator', title: '运营商', rowspan: 3, width: 60, align: 'center'},
+                {field: 'buildingProject', title: '建设项目名称', rowspan: 3, width: 100, align: 'center'},
+                {field: 'buildYear', title: '建设年份', rowspan: 3, width: 80, align: 'center'},
+                {field: 'hopName', title: '中继段名称', rowspan: 3, width: 100, align: 'center'},
+                {field: 'province', title: '省', rowspan: 3, width: 50, align: 'center'},
+                {field: 'city', title: '市', rowspan: 3, width: 50, align: 'center'},
+                {field: 'county', title: '县(区)', rowspan: 3, width: 50, align: 'center'},
+                {field: 'area', title: '区域', rowspan: 3, width: 50, align: 'center'},
+                {title: '设计单位', colspan:2, align: 'center'},
+                {title: '监理单位', colspan:3, align: 'center'},
+                {title: '施工单位', colspan:2, align: 'center'},
+                {title: '新建线路长度（km）', colspan:8, align: 'center'},
+                {field: 'cableType',title: '光缆类型', rowspan:3, align: 'center',width:80},
+                {title: '光缆皮长公里（km）', colspan:14, align: 'center'},
+                {title: '落地式光交箱（新建）', colspan:3, align: 'center'},
+                {title: '落地式光交箱（利旧）', colspan:3, align: 'center'},
+                {title: '壁挂式光交箱（新建）', colspan:3, align: 'center'},
+                {title: '壁挂式光交箱（利旧）', colspan:3, align: 'center'},
+            ],[
+                {field: 'companyName', title: '公司名称', rowspan:2, width: 80, align: 'center'},
+                {field: 'designPersonnel', title: '设计人员', rowspan:2, width: 80, align: 'center'},
+
+                {field: 'siteLeader', title: '现场监理', rowspan:2,width: 80, align: 'center'},
+                {field: 'professionResponsiblePerson', title: '专业负责人', rowspan:2, width: 100, align: 'center'},
+                {field: 'districtHead', title: '区域负责人',  rowspan:2,width: 100, align: 'center'},
+
+                {field: 'corporateName', title: '公司名称', rowspan:2, width: 80, align: 'center'},
+                {field: 'personInCharge', title: '负责人',  rowspan:2,width: 80, align: 'center'},
+
+                {title: '新建杆路', colspan:2, align: 'center'},
+                {title: '新建管道',  colspan:2,align: 'center'},
+                {title: '直埋光缆',  colspan:2, align: 'center'},
+                {title: '顶管', colspan:2,align: 'center'},
+                {title: '架空光缆（附挂）', colspan:2, align: 'center'},
+                {title: '架空光缆（加挂吊线）',colspan:2,align: 'center'},
+                {title: '管道光缆',  colspan:2,align: 'center'},
+                {title: '直埋光缆',  colspan:2, align: 'center'},
+                {title: '墙壁光缆',  colspan:2,align: 'center'},
+                {title: '桥架内光缆',  colspan:2, align: 'center'},
+                {title: '路面微槽光缆',  colspan:2,align: 'center'},
+                {field: 'newOnuDesignStart', title: '设计数量',rowspan:2,  width: 80, align: 'center'},
+                {field: 'newModelOnuSize', title: '规格',  width: 50,rowspan:2, align: 'center'},
+                {field: 'newOnuInstallationNumber', title: '安装数量',rowspan:2,  width: 80, align: 'center'},
+
+                {field: 'wornOnuDesignStart', title: '设计数量',rowspan:2,  width: 80, align: 'center'},
+                {field: 'wornModelOnuSize', title: '规格',  width: 50,rowspan:2, align: 'center'},
+                {field: 'wornOnuInstallationNumber', title: '安装数量',rowspan:2,  width: 80, align: 'center'},
+
+                {field: 'newWallDesignStart', title: '设计数量',rowspan:2,  width: 80, align: 'center'},
+                {field: 'newWallOnuSize', title: '规格',  width: 50,rowspan:2, align: 'center'},
+                {field: 'newWallInstallationNumber', title: '安装数量',rowspan:2,  width: 80, align: 'center'},
+
+                {field: 'wornWallDesignStart', title: '设计数量',rowspan:2,  width: 80, align: 'center'},
+                {field: 'wornWallOnuSize', title: '规格',  width: 50,rowspan:2, align: 'center'},
+                {field: 'wornWallInstallationNumber', title: '安装数量',rowspan:2,  width: 80, align: 'center'},
+            ],[
+                {field: 'poleDesignLength', title: '设计长度',  width: 80, align: 'center'},
+                {field: 'poleCompletionLength', title: '完工长度',  width: 80, align: 'center'},
+
+                {field: 'pipelineDesignLength', title: '设计长度',  width: 80, align: 'center'},
+                {field: 'pipelineCompletionLength', title: '完工长度',  width: 80, align: 'center'},
+
+                {field: 'buriedDesignLength', title: '设计长度',  width: 80, align: 'center'},
+                {field: 'buriedCompletionLength', title: '完工长度',  width: 80, align: 'center'},
+
+                {field: 'pushDesignLength', title: '设计长度',  width: 80, align: 'center'},
+                {field: 'pushCompletionLength', title: '完工长度',  width: 80, align: 'center'},
+
+                {field: 'suspendedDesignLength', title: '设计长度',  width: 80, align: 'center'},
+                {field: 'suspendedLaidLength', title: '敷设长度',  width: 80, align: 'center'},
+
+                {field: 'messengerDesignLength', title: '设计长度',  width: 80, align: 'center'},
+                {field: 'messengerLaidLength', title: '敷设长度',  width: 80, align: 'center'},
+
+                {field: 'gystaDesignLength', title: '设计长度',  width: 80, align: 'center'},
+                {field: 'gystaLaidLength', title: '敷设长度',  width: 80, align: 'center'},
+
+                {field: 'lightguideDesignLength', title: '设计长度',  width: 80, align: 'center'},
+                {field: 'lightguideLaidLength', title: '敷设长度',  width: 80, align: 'center'},
+
+                {field: 'wallDesignLength', title: '设计长度',  width: 80, align: 'center'},
+                {field: 'wallLaidLength', title: '敷设长度',  width: 80, align: 'center'},
+
+                {field: 'bridgeDesignLength', title: '设计长度',  width: 80, align: 'center'},
+                {field: 'bridgeLaidLength', title: '敷设长度',  width: 80, align: 'center'},
+
+                {field: 'gyfxtsDesignLength', title: '设计长度',  width: 80, align: 'center'},
+                {field: 'gyfxtsLaidLength', title: '敷设长度',  width: 80, align: 'center'},
+
+            ]]
+        })
+    })
+    //导出数据
+    function ProjectProgressDegreeExcel(){
+        var rowDatas = $("#datagrid").datagrid("getSelections");
+        //console.log(rowDatas+"信息数据");
+        if(rowDatas.length==0){
+            $.messager.alert("信息框","请选中要导出的数据","warning");
+        }else{
+            var ids = new Array(rowDatas.length);
+            for(var i = 0; i<rowDatas.length; i++){
+                ids[i] = rowDatas[i].circuitProgressId;
+            }
+            //console.log(ids);
+            window.location.href="LLExportLlCircuitProgressExcel?ids="+ids+"&time="+new Date();
+        }
+    }
+</script>
+</body>
+</html>

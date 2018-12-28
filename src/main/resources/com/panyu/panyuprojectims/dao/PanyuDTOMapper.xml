@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PanyuDTODao">
+    <!-- Module的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PanyuDTO_Map" type="com.panyu.panyuprojectims.entity.PanyuDTO">
+        <result column="PROJECT_ID" property="projectIddto" />
+        <result column="MODULE_ID" property="moduleId" />
+        <result column="MODULE_NAME" property="moduleNamedto" />
+        <result column="SUB_NAME" property="subNamedto" />
+        <result column="PROJECT_NAME" property="projectNamedto" />
+        <result column="INSPECTION_CONTENT" property="inspectionContentdto" />
+        <result column="QUALIFIED" property="qualifieddto" />
+        <result column="PROBLEM_DESCRIPTION" property="problemDescriptiondto" />
+        <result column="PHOTO" property="photodto" />
+    </resultMap>
+<!---if (moduleId==null&&projectName==null){}-->
+    <!--查询所有-->
+    <select id="selectAllPanyuDTO" resultMap="result_PanyuDTO_Map">
+     select * from
+        (select t.* ,rownum r from
+            (
+                select i.project_id,m.module_id,m.module_name,s.sub_name,i.project_name,
+                ins.inspection_content,ins.qualified,ins.problem_description,ins.photo
+                from Module m
+                left join sub_work s
+                on s.module_id = m.module_id
+                left join Inspection_project i
+                on i.sub_id = s.sub_id
+                left join Inspection_standard ins
+                on ins.project_id = i.project_id
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+    <!--查询总数-->
+    <select id="getCount" resultType="long">
+        select count(*) from(
+                select i.project_id,m.module_id,m.module_name,s.sub_name,i.project_name,
+                ins.inspection_content,ins.qualified,ins.problem_description,ins.photo
+                from Module m
+                left join sub_work s
+                on s.module_id = m.module_id
+                left join Inspection_project i
+                on i.sub_id = s.sub_id
+                left join Inspection_standard ins
+                on ins.project_id = i.project_id
+            )
+    </select>
+<!---if (moduleId==null&&projectName==null){}-->
+
+<!--if (moduleId==null&&projectName!=null){}-->
+    <select id="FuzzyqueryProjectName" resultMap="result_PanyuDTO_Map">
+        select * from(
+        select t.* ,rownum r from(
+        select i.project_id,m.module_id,m.module_name,s.sub_name,i.project_name,
+        ins.inspection_content,ins.qualified,ins.problem_description,ins.photo
+        from Module m
+        left join sub_work s
+        on s.module_id = m.module_id
+        left join Inspection_project i
+        on i.sub_id = s.sub_id
+        left join Inspection_standard ins
+        on ins.project_id = i.project_id
+        <where>
+            <if test="projectName !=null and projectName !=''">
+                and PROJECT_NAME like #{projectName}
+            </if>
+        </where>
+        )t
+     ) where r between #{start} and #{end}
+    </select>
+
+    <select id="FuzzyqueryCount" resultType="long">
+        select count(*) from(
+        select i.project_id,m.module_id,m.module_name,s.sub_name,i.project_name,
+        ins.inspection_content,ins.qualified,ins.problem_description,ins.photo
+        from Module m
+        left join sub_work s
+        on s.module_id = m.module_id
+        left join Inspection_project i
+        on i.sub_id = s.sub_id
+        left join Inspection_standard ins
+        on ins.project_id = i.project_id
+        <where>
+            <if test="projectName !=null and projectName !=''">
+                and PROJECT_NAME like #{projectName}
+            </if>
+        </where>
+        )
+    </select>
+<!--if (moduleId==null&&projectName!=null){}-->
+
+<!--if (moduleId!=null&&projectName!=null){}-->
+    <select id="selectModuleNameAndProjectName" resultMap="result_PanyuDTO_Map">
+        select * from(
+        select t.* ,rownum r from(
+        select i.project_id,m.module_id,m.module_name,s.sub_name,i.project_name,
+        ins.inspection_content,ins.qualified,ins.problem_description,ins.photo
+        from Module m
+        left join sub_work s
+        on s.module_id = m.module_id
+        left join Inspection_project i
+        on i.sub_id = s.sub_id
+        left join Inspection_standard ins
+        on ins.project_id = i.project_id
+        <where>
+            <if test="projectName !=null and projectName !=''">
+                and PROJECT_NAME like #{projectName}
+            </if>
+            and m.module_id = #{moduleId}
+        </where>
+        )t
+    ) where r between #{start} and #{end}
+    </select>
+
+    <select id="selectModuleAndProjectCount" resultType="long">
+        select count(*) from(
+        select i.project_id,m.module_id,m.module_name,s.sub_name,i.project_name,
+        ins.inspection_content,ins.qualified,ins.problem_description,ins.photo
+        from Module m
+        left join sub_work s
+        on s.module_id = m.module_id
+        left join Inspection_project i
+        on i.sub_id = s.sub_id
+        left join Inspection_standard ins
+        on ins.project_id = i.project_id
+        <where>
+            <if test="projectName !=null and projectName !=''">
+                and PROJECT_NAME like #{projectName}
+            </if>
+            and m.module_id = #{moduleId}
+        </where>
+        )
+    </select>
+<!--if (moduleId!=null&&projectName!=null){}-->
+
+<!--if (moduleId!=null&&projectName==null){}-->
+    <select id="selectFuzzyqueryModuleId" resultMap="result_PanyuDTO_Map">
+        select * from(
+        select t.* ,rownum r from(
+        select i.project_id,m.module_id,m.module_name,s.sub_name,i.project_name,
+        ins.inspection_content,ins.qualified,ins.problem_description,ins.photo
+        from Module m
+        left join sub_work s
+        on s.module_id = m.module_id
+        left join Inspection_project i
+        on i.sub_id = s.sub_id
+        left join Inspection_standard ins
+        on ins.project_id = i.project_id
+        where m.module_id = #{moduleId}
+        )t
+    ) where r between #{start} and #{end}
+    </select>
+
+    <select id="selectFuzzyqueryModuleIdCount" resultType="long">
+     select count(*) from(
+        select i.project_id,m.module_id,m.module_name,s.sub_name,i.project_name,
+        ins.inspection_content,ins.qualified,ins.problem_description,ins.photo
+        from Module m
+        left join sub_work s
+        on s.module_id = m.module_id
+        left join Inspection_project i
+        on i.sub_id = s.sub_id
+        left join Inspection_standard ins
+        on ins.project_id = i.project_id
+        where m.module_id = #{moduleId}
+     )
+    </select>
+<!--if (moduleId!=null&&projectName==null){}-->
+
+<!--if (moduleId!=null&&ModuleName!=null){}-->
+    <select id="selectAllModuleNameByPage" resultMap="result_PanyuDTO_Map">
+     select * from(
+        select t.* ,rownum r from(
+        select i.project_id,m.module_id,m.module_name,s.sub_name,i.project_name,
+        ins.inspection_content,ins.qualified,ins.problem_description,ins.photo
+        from Module m
+        left join sub_work s
+        on s.module_id = m.module_id
+        left join Inspection_project i
+        on i.sub_id = s.sub_id
+        left join Inspection_standard ins
+        on ins.project_id = i.project_id
+        where m.module_id = #{moduleId}
+        and m.module_name = #{moduleName}
+        )t
+    ) where r between #{start} and #{end}
+    </select>
+
+    <select id="selectAllModuleNameByPageCount" resultType="long">
+     select count(*) from(
+        select i.project_id,m.module_id,m.module_name,s.sub_name,i.project_name,
+        ins.inspection_content,ins.qualified,ins.problem_description,ins.photo
+        from Module m
+        left join sub_work s
+        on s.module_id = m.module_id
+        left join Inspection_project i
+        on i.sub_id = s.sub_id
+        left join Inspection_standard ins
+        on ins.project_id = i.project_id
+        where m.module_id = #{moduleId}
+        and m.module_name = #{moduleName}
+     )
+    </select>
+<!--if (moduleId!=null&&ModuleName!=null){}-->
+
+
+
+    <!--导出空表格-->
+    <select id="exportExcel" resultMap="result_PanyuDTO_Map">
+        select m.module_id,m.module_name,s.sub_name,i.project_name,
+        ins.inspection_content,ins.qualified,ins.problem_description,ins.photo
+        from Module m
+        left join sub_work s
+        on s.module_id = m.module_id
+        left join Inspection_project i
+        on i.sub_id = s.sub_id
+        left join Inspection_standard ins
+        on ins.project_id = i.project_id
+    </select>
+
+    <!--导出module模块数据-->
+    <select id="exportModule" resultMap="result_PanyuDTO_Map">
+        select i.project_id,m.module_id,m.module_name,s.sub_name,i.project_name,
+        ins.inspection_content,ins.qualified,ins.problem_description,ins.photo
+        from Module m
+        left join sub_work s
+        on s.module_id = m.module_id
+        left join Inspection_project i
+        on i.sub_id = s.sub_id
+        left join Inspection_standard ins
+        on ins.project_id = i.project_id
+        where i.project_id in
+        <foreach collection="array" item="projectId" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </select>
+
+</mapper>

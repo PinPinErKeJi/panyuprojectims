@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.EquipmentDTODao">
+    <!-- Module的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_EquimentDTODao_Map" type="com.panyu.panyuprojectims.entity.EquipmentDTO">
+        <result column="EQUIPMENT_PROJECT_ID" property="equipmentProjectIddto" />
+        <result column="EQUIPMENT_SPECIALITY_ID" property="equipmentSpecialityIddto" />
+        <result column="EQUIPMENT_SPECIALITY_NAME" property="equipmentSpecialityNamedto" />
+        <result column="EQUIPMENT_SUB_WORK_NAME" property="equipmentSubWorkNamedto" />
+        <result column="EQUIPMENT_PROJECT_NAME" property="equipmentProjectNamedto" />
+        <result column="EQUIPMENT_CRITERION_NAME" property="equipmentCriterionNamedto" />
+        <result column="EQUIPMENT_QUALIFIED" property="equipmentQualifieddto" />
+        <result column="EQUIPMENT_PROBLEM" property="equipmentProblemdto" />
+        <result column="EQUIPMENT_PHOTO" property="equipmentPhotodto" />
+    </resultMap>
+
+    <!--无条件查询展示所有数据-->
+    <select id="selectAllEquimentDTODao" resultMap="result_EquimentDTODao_Map">
+     select * from
+        (select t.* ,rownum r from
+            (
+                select es.equipment_speciality_id,es.equipment_speciality_name,
+                ew.equipment_sub_work_name,ep.equipment_project_id,
+                ep.equipment_project_name,ec.equipment_criterion_name,
+                ec.equipment_qualified,ec.equipment_problem,ec.equipment_photo
+                from Equipment_speciality es
+                left join equipment_sub_work ew
+                on es.equipment_speciality_id = ew.equipment_speciality_id
+                left join equipment_inspection_project ep
+                on ew.equipment_sub_work_id = ep.equipment_sub_work_id
+                left join equipment_inspection_criterion ec
+                on ep.equipment_project_id = ec.equipment_project_id
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+    <!--查询总数-->
+    <select id="getEquimentDTOCount" resultType="long">
+        select count(*) from(
+                select es.equipment_speciality_id,es.equipment_speciality_name,
+                ew.equipment_sub_work_name,ep.equipment_project_id,
+                ep.equipment_project_name,ec.equipment_criterion_name,
+                ec.equipment_qualified,ec.equipment_problem,ec.equipment_photo
+                from Equipment_speciality es
+                left join equipment_sub_work ew
+                on es.equipment_speciality_id = ew.equipment_speciality_id
+                left join equipment_inspection_project ep
+                on ew.equipment_sub_work_id = ep.equipment_sub_work_id
+                left join equipment_inspection_criterion ec
+                on ep.equipment_project_id = ec.equipment_project_id
+            )
+    </select>
+
+    <!--根据项目名模糊搜索查询-->
+    <select id="FuzzysearchEquimentDTODao" resultMap="result_EquimentDTODao_Map">
+        select * from
+            (select t.* ,rownum r from
+                (
+                    select es.equipment_speciality_id,es.equipment_speciality_name,
+                    ew.equipment_sub_work_name,ep.equipment_project_id,
+                    ep.equipment_project_name,ec.equipment_criterion_name,
+                    ec.equipment_qualified,ec.equipment_problem,ec.equipment_photo
+                    from Equipment_speciality es
+                    left join equipment_sub_work ew
+                    on es.equipment_speciality_id = ew.equipment_speciality_id
+                    left join equipment_inspection_project ep
+                    on ew.equipment_sub_work_id = ep.equipment_sub_work_id
+                    left join equipment_inspection_criterion ec
+                    on ep.equipment_project_id = ec.equipment_project_id
+                <where>
+                    <if test="equipmentProjectName !=null and equipmentProjectName !=''">
+                        and EQUIPMENT_PROJECT_NAME like #{equipmentProjectName}
+                    </if>
+                </where>
+             )t
+        ) where r between #{start} and #{end}
+    </select>
+    <!--根据项目名模糊搜索查询总数-->
+    <select id="getFuzzysearchEquimentDTODaoCount" resultType="long">
+        select count(*) from(
+                select es.equipment_speciality_id,es.equipment_speciality_name,
+                ew.equipment_sub_work_name,ep.equipment_project_id,
+                ep.equipment_project_name,ec.equipment_criterion_name,
+                ec.equipment_qualified,ec.equipment_problem,ec.equipment_photo
+                from Equipment_speciality es
+                left join equipment_sub_work ew
+                on es.equipment_speciality_id = ew.equipment_speciality_id
+                left join equipment_inspection_project ep
+                on ew.equipment_sub_work_id = ep.equipment_sub_work_id
+                left join equipment_inspection_criterion ec
+                on ep.equipment_project_id = ec.equipment_project_id
+            <where>
+                <if test="equipmentProjectName !=null and equipmentProjectName !=''">
+                    and EQUIPMENT_PROJECT_NAME like #{equipmentProjectName}
+                </if>
+            </where>
+         )
+    </select>
+
+    <!--根据点击下拉框名称以及搜索框内容都不为空进行模糊分页查询-->
+    <select id="getDropdownBoxAndSearch" resultType="long">
+        select count(*) from(
+        select es.equipment_speciality_id,es.equipment_speciality_name,
+        ew.equipment_sub_work_name,ep.equipment_project_id,
+        ep.equipment_project_name,ec.equipment_criterion_name,
+        ec.equipment_qualified,ec.equipment_problem,ec.equipment_photo
+        from Equipment_speciality es
+        left join equipment_sub_work ew
+        on es.equipment_speciality_id = ew.equipment_speciality_id
+        left join equipment_inspection_project ep
+        on ew.equipment_sub_work_id = ep.equipment_sub_work_id
+        left join equipment_inspection_criterion ec
+        on ep.equipment_project_id = ec.equipment_project_id
+        <where>
+            <if test="equipmentProjectName !=null and equipmentProjectName !=''">
+                and EQUIPMENT_PROJECT_NAME like #{equipmentProjectName}
+            </if>
+        </where>
+        and es.equipment_speciality_id = #{equipmentSpecialityId,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <select id="selectDropdownBoxAndSearch" resultMap="result_EquimentDTODao_Map">
+        select * from
+            (select t.* ,rownum r from
+                (
+                select es.equipment_speciality_id,es.equipment_speciality_name,
+                ew.equipment_sub_work_name,ep.equipment_project_id,
+                ep.equipment_project_name,ec.equipment_criterion_name,
+                ec.equipment_qualified,ec.equipment_problem,ec.equipment_photo
+                from Equipment_speciality es
+                left join equipment_sub_work ew
+                on es.equipment_speciality_id = ew.equipment_speciality_id
+                left join equipment_inspection_project ep
+                on ew.equipment_sub_work_id = ep.equipment_sub_work_id
+                left join equipment_inspection_criterion ec
+                on ep.equipment_project_id = ec.equipment_project_id
+                <where>
+                    <if test="equipmentProjectName !=null and equipmentProjectName !=''">
+                        and EQUIPMENT_PROJECT_NAME like #{equipmentProjectName}
+                    </if>
+                </where>
+                and es.equipment_speciality_id = #{equipmentSpecialityId,jdbcType=VARCHAR}
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+
+    <!--当搜索框内容为空根据模块ID点击下拉框进行搜索分页展示数据-->
+    <select id="selectEquipmentSpecialityIdAndSeach" resultMap="result_EquimentDTODao_Map">
+        select * from
+            (select t.* ,rownum r from
+                (
+                select es.equipment_speciality_id,es.equipment_speciality_name,
+                ew.equipment_sub_work_name,ep.equipment_project_id,
+                ep.equipment_project_name,ec.equipment_criterion_name,
+                ec.equipment_qualified,ec.equipment_problem,ec.equipment_photo
+                from Equipment_speciality es
+                left join equipment_sub_work ew
+                on es.equipment_speciality_id = ew.equipment_speciality_id
+                left join equipment_inspection_project ep
+                on ew.equipment_sub_work_id = ep.equipment_sub_work_id
+                left join equipment_inspection_criterion ec
+                on ep.equipment_project_id = ec.equipment_project_id
+                where es.equipment_speciality_id = #{equipmentSpecialityId,jdbcType=VARCHAR}
+            )t
+        ) where r between #{start} and #{end}
+    </select>
+
+    <select id="getEquipmentSpecialityIdAndSeachCount" resultType="long">
+        select count(*) from(
+            select es.equipment_speciality_id,es.equipment_speciality_name,
+            ew.equipment_sub_work_name,ep.equipment_project_id,
+            ep.equipment_project_name,ec.equipment_criterion_name,
+            ec.equipment_qualified,ec.equipment_problem,ec.equipment_photo
+            from Equipment_speciality es
+            left join equipment_sub_work ew
+            on es.equipment_speciality_id = ew.equipment_speciality_id
+            left join equipment_inspection_project ep
+            on ew.equipment_sub_work_id = ep.equipment_sub_work_id
+            left join equipment_inspection_criterion ec
+            on ep.equipment_project_id = ec.equipment_project_id
+            where es.equipment_speciality_id = #{equipmentSpecialityId,jdbcType=VARCHAR}
+        )
+    </select>
+
+    <!--导出设备专业空Excel表格-->
+    <select id="ExportNullEquipmentExcel" resultMap="result_EquimentDTODao_Map">
+        select es.equipment_speciality_id,es.equipment_speciality_name,
+        ew.equipment_sub_work_name,ep.equipment_project_id,
+        ep.equipment_project_name,ec.equipment_criterion_name,
+        ec.equipment_qualified,ec.equipment_problem,ec.equipment_photo
+        from Equipment_speciality es
+        left join equipment_sub_work ew
+        on es.equipment_speciality_id = ew.equipment_speciality_id
+        left join equipment_inspection_project ep
+        on ew.equipment_sub_work_id = ep.equipment_sub_work_id
+        left join equipment_inspection_criterion ec
+        on ep.equipment_project_id = ec.equipment_project_id
+    </select>
+
+    <!--导出设备专业模块库Excel表格数据-->
+    <select id="ExportEquipmentExcel" resultMap="result_EquimentDTODao_Map">
+        select es.equipment_speciality_id,es.equipment_speciality_name,
+        ew.equipment_sub_work_name,ep.equipment_project_id,
+        ep.equipment_project_name,ec.equipment_criterion_name,
+        ec.equipment_qualified,ec.equipment_problem,ec.equipment_photo
+        from Equipment_speciality es
+        left join equipment_sub_work ew
+        on es.equipment_speciality_id = ew.equipment_speciality_id
+        left join equipment_inspection_project ep
+        on ew.equipment_sub_work_id = ep.equipment_sub_work_id
+        left join equipment_inspection_criterion ec
+        on ep.equipment_project_id = ec.equipment_project_id
+        where ep.equipment_project_id in
+        <foreach collection="array" item="equipmentProjectId" open="(" separator="," close=")">
+            #{equipmentProjectId}
+        </foreach>
+    </select>
+
+</mapper>

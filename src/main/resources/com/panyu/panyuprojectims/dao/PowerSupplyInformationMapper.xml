@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PowerSupplyInformationDao">
+    <!-- PowerSupplyInformation的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PowerSupplyInformation_Map" type="com.panyu.panyuprojectims.entity.PowerSupplyInformation">
+        <id column="POWER_INFORMATION_ID" property="powerInformationId" />
+        <result column="OPERATOR" property="operator" />
+        <result column="BUILD_YEAR" property="buildYear" />
+        <result column="BUILDING_PROJECT" property="buildingProject" />
+        <result column="MOTOR_ROOM_NAME" property="motorRoomName" />
+        <result column="MOTOR_ROOM_LONGITUDE" property="motorRoomLongitude" />
+        <result column="MOTOR_ROOM_LATITUDE" property="motorRoomLatitude" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="COUNTY" property="county" />
+        <result column="SITE_SUPERVISION" property="siteSupervision" />
+        <result column="PROJECT_LEADER" property="projectLeader" />
+        <result column="POWER_EQUIPMENT_ID" property="powerEquipmentId" />
+        <result column="NEW_POWER_CABLE_ID" property="newPowerCableId" />
+        <result column="NEW_CABLING_RACK_ID" property="newCablingRackId" />
+
+        <result column="POWER_EQUIPMENT_NUMBER" property="powerEquipmentNumber" />
+        <result column="POWER_EQUIPMENT_TYPE" property="powerEquipmentType" />
+        <result column="POWER_EQUIPMENT_MODEL" property="powerEquipmentModel" />
+        <result column="EQUIPMENT_DESIGN_START" property="equipmentDesignStart" />
+        <result column="POWER_EQUIPMENT_SIZE" property="powerEquipmentSize" />
+        <result column="POWER_EQUIPMENT_SUPPLIER" property="powerEquipmentSupplier" />
+        <result column="POWER_EQUIPMENT_LINKMAN" property="powerEquipmentLinkman" />
+
+        <result column="NEW_POWER_CABLE_NUMBER" property="newPowerCableNumber" />
+        <result column="NEW_POWER_CABLE_MODEL" property="newPowerCableModel" />
+        <result column="NEW_POWER_CABLE_ROW" property="newPowerCableRow" />
+        <result column="POWER_SINGLE_LENGTH" property="powerSingleLength" />
+        <result column="POWER_TOTAL_LENGTH" property="powerTotalLength" />
+        <result column="BE_FROM" property="beFrom" />
+        <result column="BE_TO" property="beTo" />
+        <result column="CABLE_EQUIPMENT_SUPPLIER" property="cableEquipmentSupplier" />
+        <result column="CABLE_EQUIPMENT_LINKMAN" property="cableEquipmentLinkman" />
+
+        <result column="NEW_CABLING_RACK_NUMBER" property="newCablingRackNumber" />
+        <result column="RACK_DESIGN_START" property="rackDesignStart" />
+        <result column="RACK_EQUIPMENT_SUPPLIER" property="rackEquipmentSupplier" />
+        <result column="RACK_EQUIPMENT_LINKMAN" property="rackEquipmentLinkman" />
+    </resultMap>
+
+    <!--查查信息数量-->
+    <select id="getPowerSupplyInformationRowCount" resultType="Long">
+        select count(*) from (
+        select
+        ps.power_information_id,ps.operator,ps.build_year,ps.building_project,ps.motor_room_name,
+        ps.motor_room_longitude,ps.motor_room_latitude,ps.province,ps.city,ps.county,
+        ps.site_supervision,ps.project_leader,
+        ne.power_equipment_number,ne.power_equipment_type,ne.power_equipment_model,
+        ne.equipment_design_start,ne.power_equipment_size,ne.power_equipment_supplier,ne.power_equipment_linkman,
+        np.new_power_cable_number,np.new_power_cable_model,np.new_power_cable_row,
+        np.power_single_length,np.power_total_length,np.be_from,np.be_to,
+        np.cable_equipment_supplier,np.cable_equipment_linkman,
+        nc.new_cabling_rack_number,nc.rack_design_start,nc.rack_equipment_supplier,nc.rack_equipment_linkman
+        from power_supply_information ps
+        left join PS_new_equipment ne
+        on ps.power_equipment_id = ne.power_equipment_id
+        left join PS_new_power_cable np
+        on ps.new_power_cable_id = np.new_power_cable_id
+        left join PS_new_cabling_rack nc
+        on ps.new_cabling_rack_id = nc.new_cabling_rack_id
+        <where>
+            <if test="province !=null and province !=''">
+                and PROVINCE like #{province}
+            </if>
+            <if test="city !=null and city !=''">
+                and CITY like #{city}
+            </if>
+            <if test="county !=null and county !=''">
+                and COUNTY like #{county}
+            </if>
+            <if test="buildYear !=null and buildYear !=''">
+                and BUILD_YEAR like #{buildYear}
+            </if>
+            <if test="operator !=null and operator !=''">
+                and operator like #{operator}
+            </if>
+            <if test="buildingProject !=null and buildingProject !=''">
+                and BUILDING_PROJECT like #{buildingProject}
+            </if>
+            <if test="motorRoomName !=null and motorRoomName !=''">
+                and MOTOR_ROOM_NAME like #{motorRoomName}
+            </if>
+            <if test="keyword !=null and keyword !=''">
+                and (SITE_SUPERVISION like #{keyword}
+                or  PROJECT_LEADER like #{keyword})
+            </if>
+        </where>
+        )
+    </select>
+
+
+    <!--查询所有的信息-->
+    <select id="selectPowerSupplyInformation" resultMap="result_PowerSupplyInformation_Map">
+        select * from(
+        select t.*,rownum r from(
+        select
+        ps.power_information_id,ps.operator,ps.build_year,ps.building_project,ps.motor_room_name,
+        ps.motor_room_longitude,ps.motor_room_latitude,ps.province,ps.city,ps.county,
+        ps.site_supervision,ps.project_leader,
+        ne.power_equipment_number,ne.power_equipment_type,ne.power_equipment_model,
+        ne.equipment_design_start,ne.power_equipment_size,ne.power_equipment_supplier,ne.power_equipment_linkman,
+        np.new_power_cable_number,np.new_power_cable_model,np.new_power_cable_row,
+        np.power_single_length,np.power_total_length,np.be_from,np.be_to,
+        np.cable_equipment_supplier,np.cable_equipment_linkman,
+        nc.new_cabling_rack_number,nc.rack_design_start,nc.rack_equipment_supplier,nc.rack_equipment_linkman
+        from power_supply_information ps
+        left join PS_new_equipment ne
+        on ps.power_equipment_id = ne.power_equipment_id
+        left join PS_new_power_cable np
+        on ps.new_power_cable_id = np.new_power_cable_id
+        left join PS_new_cabling_rack nc
+        on ps.new_cabling_rack_id = nc.new_cabling_rack_id
+        <where>
+            <if test="province !=null and province !=''">
+                and PROVINCE like #{province}
+            </if>
+            <if test="city !=null and city !=''">
+                and CITY like #{city}
+            </if>
+            <if test="county !=null and county !=''">
+                and COUNTY like #{county}
+            </if>
+            <if test="buildYear !=null and buildYear !=''">
+                and BUILD_YEAR like #{buildYear}
+            </if>
+            <if test="operator !=null and operator !=''">
+                and operator like #{operator}
+            </if>
+            <if test="buildingProject !=null and buildingProject !=''">
+                and BUILDING_PROJECT like #{buildingProject}
+            </if>
+            <if test="motorRoomName !=null and motorRoomName !=''">
+                and MOTOR_ROOM_NAME like #{motorRoomName}
+            </if>
+            <if test="keyword !=null and keyword !=''">
+                and (SITE_SUPERVISION like #{keyword}
+                or  PROJECT_LEADER like #{keyword})
+            </if>
+        </where>
+        )t
+        )where r between #{start} and #{end}
+    </select>
+
+    <!--添加-->
+    <insert id="insertPowerSupplyInformation">
+        insert into power_supply_information values(
+            #{powerInformationId,jdbcType=VARCHAR},
+            #{operator,jdbcType=VARCHAR},
+            #{buildYear,jdbcType=VARCHAR},
+            #{buildingProject,jdbcType=VARCHAR},
+            #{motorRoomName,jdbcType=VARCHAR},
+            #{motorRoomLongitude,jdbcType=VARCHAR},
+            #{motorRoomLatitude,jdbcType=VARCHAR},
+            #{province,jdbcType=VARCHAR},
+            #{city,jdbcType=VARCHAR},
+            #{county,jdbcType=VARCHAR},
+            #{siteSupervision,jdbcType=VARCHAR},
+            #{projectLeader,jdbcType=VARCHAR},
+            #{powerEquipmentId,jdbcType=VARCHAR},
+            #{newPowerCableId,jdbcType=VARCHAR},
+            #{newCablingRackId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据信息ID查询关联的小表的ID-->
+    <select id="selectPowerEquipmentId" resultType="String">
+        select POWER_EQUIPMENT_ID
+        from POWER_SUPPLY_INFORMATION
+        where POWER_INFORMATION_ID = #{powerInformationId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectNewPowerCableId" resultType="String">
+        select NEW_POWER_CABLE_ID
+        from POWER_SUPPLY_INFORMATION
+        where POWER_INFORMATION_ID = #{powerInformationId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectNewCablingRackId" resultType="String">
+        select NEW_CABLING_RACK_ID
+        from POWER_SUPPLY_INFORMATION
+        where POWER_INFORMATION_ID = #{powerInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--删除-->
+    <delete id="deletePowerSupplyInformation">
+        delete from POWER_SUPPLY_INFORMATION
+        where POWER_INFORMATION_ID = #{powerInformationId,jdbcType=VARCHAR}
+    </delete>
+
+
+
+    <!--  导出Excel空表格  -->
+    <select id="importPowerSupplyInformationExcel" resultMap="result_PowerSupplyInformation_Map">
+       select
+        ps.power_information_id,ps.operator,ps.build_year,ps.building_project,ps.motor_room_name,
+        ps.motor_room_longitude,ps.motor_room_latitude,ps.province,ps.city,ps.county,
+        ps.site_supervision,ps.project_leader,
+        ne.power_equipment_number,ne.power_equipment_type,ne.power_equipment_model,
+        ne.equipment_design_start,ne.power_equipment_size,ne.power_equipment_supplier,ne.power_equipment_linkman,
+        np.new_power_cable_number,np.new_power_cable_model,np.new_power_cable_row,
+        np.power_single_length,np.power_total_length,np.be_from,np.be_to,
+        np.cable_equipment_supplier,np.cable_equipment_linkman,
+        nc.new_cabling_rack_number,nc.rack_design_start,nc.rack_equipment_supplier,nc.rack_equipment_linkman
+        from power_supply_information ps
+        left join PS_new_equipment ne
+        on ps.power_equipment_id = ne.power_equipment_id
+        left join PS_new_power_cable np
+        on ps.new_power_cable_id = np.new_power_cable_id
+        left join PS_new_cabling_rack nc
+        on ps.new_cabling_rack_id = nc.new_cabling_rack_id
+    </select>
+
+    <!--  导出数据  -->
+    <select id="powerSupplyInformationExcel" resultMap="result_PowerSupplyInformation_Map">
+        select
+        ps.power_information_id,ps.operator,ps.build_year,ps.building_project,ps.motor_room_name,
+        ps.motor_room_longitude,ps.motor_room_latitude,ps.province,ps.city,ps.county,
+        ps.site_supervision,ps.project_leader,
+        ne.power_equipment_number,ne.power_equipment_type,ne.power_equipment_model,
+        ne.equipment_design_start,ne.power_equipment_size,ne.power_equipment_supplier,ne.power_equipment_linkman,
+        np.new_power_cable_number,np.new_power_cable_model,np.new_power_cable_row,
+        np.power_single_length,np.power_total_length,np.be_from,np.be_to,
+        np.cable_equipment_supplier,np.cable_equipment_linkman,
+        nc.new_cabling_rack_number,nc.rack_design_start,nc.rack_equipment_supplier,nc.rack_equipment_linkman
+        from power_supply_information ps
+        left join PS_new_equipment ne
+        on ps.power_equipment_id = ne.power_equipment_id
+        left join PS_new_power_cable np
+        on ps.new_power_cable_id = np.new_power_cable_id
+        left join PS_new_cabling_rack nc
+        on ps.new_cabling_rack_id = nc.new_cabling_rack_id
+        where ps.power_information_id in
+        <foreach collection="array" item="powerInformationId" open="(" separator="," close=")">
+            #{powerInformationId}
+        </foreach>
+    </select>
+
+
+
+</mapper>

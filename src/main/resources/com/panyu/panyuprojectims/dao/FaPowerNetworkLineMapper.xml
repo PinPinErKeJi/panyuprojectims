@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaPowerNetworkLineDao">
+    <!-- FaPowerNetworkLine的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaPowerNetworkLine_Map" type="com.panyu.panyuprojectims.entity.FaPowerNetworkLine">
+        <id column="POWER_NETWORK_LINE_ID" property="powerNetworkLineId" />
+        <result column="POWER_NUMBER" property="powerNumber" />
+        <result column="CABLE_TYPE" property="cableType" />
+        <result column="SPECIFICATION_MODEL" property="specificationModel" />
+        <result column="NUMBER_OF_BRANCHES" property="numberOfBranches" />
+        <result column="SINGLE_LENGTH" property="singleLength" />
+        <result column="TOTAL_LENGTH" property="totalLength" />
+        <result column="FROMS" property="froms" />
+        <result column="TO1" property="to1" />
+        <result column="POWER_SUPPLIER" property="powerSupplier" />
+        <result column="POWER_CONTACTS" property="powerContacts" />
+    </resultMap>
+
+    <!-- 数据库中表名为:FA_POWER_NETWORK_LINE的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="FA_POWER_NETWORK_LINE_Column">
+        FA_POWER_NETWORK_LINE.POWER_NETWORK_LINE_ID as POWER_NETWORK_LINE_ID
+        ,FA_POWER_NETWORK_LINE.POWER_NUMBER as POWER_NUMBER
+        ,FA_POWER_NETWORK_LINE.CABLE_TYPE as CABLE_TYPE
+        ,FA_POWER_NETWORK_LINE.SPECIFICATION_MODEL as SPECIFICATION_MODEL
+        ,FA_POWER_NETWORK_LINE.NUMBER_OF_BRANCHES as NUMBER_OF_BRANCHES
+        ,FA_POWER_NETWORK_LINE.SINGLE_LENGTH as SINGLE_LENGTH
+        ,FA_POWER_NETWORK_LINE.TOTAL_LENGTH as TOTAL_LENGTH
+        ,FA_POWER_NETWORK_LINE.FROMS as FROMS
+        ,FA_POWER_NETWORK_LINE.TO1 as TO1
+        ,FA_POWER_NETWORK_LINE.POWER_SUPPLIER as POWER_SUPPLIER
+        ,FA_POWER_NETWORK_LINE.POWER_CONTACTS as POWER_CONTACTS
+    </sql>
+
+    <!--添加-->
+    <insert id="insertFaPowerNetworkLine" parameterType="com.panyu.panyuprojectims.entity.FaPowerNetworkLine">
+        insert into FA_POWER_NETWORK_LINE
+        values(
+        #{powerNetworkLineId,jdbcType=VARCHAR},
+        #{powerNumber,jdbcType=VARCHAR},
+        #{cableType,jdbcType=VARCHAR},
+        #{specificationModel,jdbcType=VARCHAR},
+        #{numberOfBranches,jdbcType=VARCHAR},
+        #{singleLength,jdbcType=VARCHAR},
+        #{totalLength,jdbcType=VARCHAR},
+        #{froms,jdbcType=VARCHAR},
+        #{to1,jdbcType=VARCHAR},
+        #{powerSupplier,jdbcType=VARCHAR},
+        #{powerContacts,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 根据电源线,网线,2M线表ID字段删除选中项-->
+    <delete id="deleteFaPowerNetworkLineById" parameterType="java.lang.String">
+        delete from FA_POWER_NETWORK_LINE
+        where POWER_NETWORK_LINE_ID = #{powerNetworkLineId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--/根据设备信息id查询FaPowerNetworkLine-->
+    <select id="getFaPowerNetworkLine" resultMap="result_FaPowerNetworkLine_Map">
+        select pn.* from FA_equipment_information ei left join FA_power_network_line pn on
+        ei.power_network_line_id = pn.power_network_line_id
+        where ei.equipment_information_id =#{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 通过FaPowerNetworkLine的id将FaPowerNetworkLine的数据更新到数据库中对应的表,包括值null的数据-->
+    <update id="updateFaPowerNetworkLineById" parameterType="com.panyu.panyuprojectims.entity.FaPowerNetworkLine">
+        update FA_POWER_NETWORK_LINE set
+            POWER_NUMBER=#{powerNumber}
+            ,CABLE_TYPE=#{cableType}
+            ,SPECIFICATION_MODEL=#{specificationModel}
+            ,NUMBER_OF_BRANCHES=#{numberOfBranches}
+            ,SINGLE_LENGTH=#{singleLength}
+            ,TOTAL_LENGTH=#{totalLength}
+            ,FROMS=#{froms}
+            ,TO1=#{to1}
+            ,POWER_SUPPLIER=#{powerSupplier}
+            ,POWER_CONTACTS=#{powerContacts}
+        where POWER_NETWORK_LINE_ID=#{powerNetworkLineId}
+    </update>
+</mapper>

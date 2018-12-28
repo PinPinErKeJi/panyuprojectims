@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaArrivalPigtailDao">
+    <!-- FaArrivalPigtail的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaArrivalPigtail_Map" type="com.panyu.panyuprojectims.entity.FaArrivalPigtail">
+        <result column="ARRIVAL_PIGTAIL_ID" property="arrivalPigtailId" />
+        <result column="ARRIVAL_PIGTAIL_NUMBER" property="arrivalPigtailNumber" />
+        <result column="PIGTAIL_CABLE_TYPE" property="pigtailCableType" />
+        <result column="PIGTAIL_SPECIFICATION_MODEL" property="pigtailSpecificationModel" />
+        <result column="PIGTAIL_DESIGN_BARS" property="pigtailDesignBars" />
+        <result column="DESIGN_SINGLE_LENGTH" property="designSingleLength" />
+        <result column="PIGTAIL_ARRIVALS_NUMBER" property="pigtailArrivalsNumber" />
+        <result column="ARRIVAL_SINGLE_LENGTH" property="arrivalSingleLength" />
+        <result column="PIGTAIL_ARRIVAL_TIME" property="pigtailArrivalTime" />
+        <result column="PIGTAIL_VERIFYING_PHOTOS" property="pigtailVerifyingPhotos" />
+    </resultMap>
+
+    <!--到货信息表、尾纤，跳纤表链表查询 到货图片-->
+    <select id="selectPigtailVerifyingPhotos" resultType="java.lang.String">
+        select fa2.pigtail_verifying_photos from FA_arrival_statistics fa1 left join FA_arrival_pigtail fa2
+        on fa1.arrival_pigtail_id = fa2.arrival_pigtail_id
+        where fa1.arrival_statistics_id=#{arrivalStatisticsId}
+    </select>
+
+
+</mapper>

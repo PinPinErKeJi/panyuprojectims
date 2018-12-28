@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.HnDesignUnitDao">
+    <!-- HnDesignUnit的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_HnDesignUnit_Map" type="com.panyu.panyuprojectims.entity.HnDesignUnit">
+        <id column="DESIGN_UNIT_ID" property="designUnitId" />
+        <result column="DESIGN_CORPORATE_NAME" property="designCorporateName" />
+        <result column="DESIGN_CONSTRUCTION_LINKMAN" property="designConstructionLinkman" />
+    </resultMap>
+
+
+    <!--根据驻地网设计单位表ID字段删除数据-->
+    <delete id="deleteHnDesignUnitByDesignUnitId" parameterType="java.lang.String">
+        delete from HN_DESIGN_UNIT
+        where DESIGN_UNIT_ID = #{designUnitId,jdbcType=VARCHAR}
+    </delete>
+
+
+    <!--添加-->
+    <insert id="insertHnDesignUnit">
+        insert into HN_Design_unit values(
+        #{designUnitId,jdbcType=VARCHAR},
+        #{designCorporateName,jdbcType=VARCHAR},
+        #{designConstructionLinkman,jdbcType=VARCHAR})
+    </insert>
+</mapper>

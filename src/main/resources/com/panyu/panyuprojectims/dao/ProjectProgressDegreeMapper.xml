@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.ProjectProgressDegreeDao">
+    <!-- ProjectProgressDegree的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_ProjectProgressDegree_Map" type="com.panyu.panyuprojectims.entity.ProjectProgressDegree">
+        <id column="PROJECT_PROGRESS_ID" property="projectProgressId" />
+        <result column="OPERATOR" property="operator" />
+        <result column="BUILD_YEAR" property="buildYear" />
+        <result column="BUILDING_PROJECT" property="buildingProject" />
+        <result column="PLANNING_NAME" property="planningName" />
+        <result column="ACTUAL_NAME" property="actualName" />
+        <result column="PLANNING_LONGITUDE" property="planningLongitude" />
+        <result column="PLANNING_LATITUDE" property="planningLatitude" />
+        <result column="ACTUAL_LONGITUDE" property="actualLongitude" />
+        <result column="ACTUAL_LATITUDES" property="actualLatitudes" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="COUNTY" property="county" />
+        <result column="REGIONS" property="regions" />
+        <result column="ON_SITE_SUPERVISION" property="onSiteSupervision" />
+        <result column="PROFESSION_PEOPLE" property="professionPeople" />
+        <result column="DISTRICT_HEAD" property="districtHead" />
+        <result column="OVERLAY_SCENE" property="overlayScene" />
+        <result column="SKY_BRANCH_ID" property="skyBranchId" />
+        <result column="MACHINE_ROOM_ID" property="machineRoomId" />
+        <result column="ELECTRIC_POWER_ID" property="electricPowerId" />
+        <result column="MAIN_EQUIPMENT_ID" property="mainEquipmentId" />
+        <result column="AIR_CONDITIONER_ID" property="airConditionerId" />
+        <result column="FIRE_ID" property="fireId" />
+        <result column="POWER_MONITORING_ID" property="powerMonitoringId" />
+        <result column="REMAKE" property="remake" />
+        <result column="CONSTRUCTION_MODE" property="constructionMode" />
+        <result column="BASIC_TYPE" property="basicType" />
+        <result column="FOUNDATION_CONSTRUCTION_NAME" property="foundationConstructionName" />
+        <result column="BASIC_UNIT_CONTACTS" property="basicUnitContacts" />
+        <result column="FOUNDATION_PROGRESS_NAME" property="foundationProgressName" />
+        <result column="CURING_START_DATE" property="curingStartDate" />
+        <result column="SKY_BRANCH_TYPE_NAME" property="skyBranchTypeName" />
+        <result column="SKY_BRANCH_SUPPLIER_NAME" property="skyBranchSupplierName" />
+        <result column="SKY_BRANCH_SUPPLIER_CONTACTS" property="skyBranchSupplierContacts" />
+        <result column="SKY_BRANCH_UNIT_NAME" property="skyBranchUnitName" />
+        <result column="SKY_CONSTRUCTION_UNIT_CONTACTS" property="skyConstructionUnitContacts" />
+        <result column="SKY_BRANCH_HEIGHT" property="skyBranchHeight" />
+        <result column="SKY_BRANCH_PROGRESS_NAME" property="skyBranchProgressName" />
+        <result column="SKY_BRANCH_COMPLETION_DATE" property="skyBranchCompletionDate" />
+        <result column="MACHINE_ROOM_CONSTRUCTION_MODE" property="machineRoomConstructionMode" />
+        <result column="MACHINE_ROOM_TYPE_NAME" property="machineRoomTypeName" />
+        <result column="MACHINE_ROOM_CONSTRUCTION_NAME" property="machineRoomConstructionName" />
+        <result column="CIVIL_ENGINEERING_CONTACTS" property="civilEngineeringContacts" />
+        <result column="MACHINE_ROOM_SCHEDULE" property="machineRoomSchedule" />
+        <result column="MACHINE_ROOM_END_TIME" property="machineRoomEndTime" />
+        <result column="MACHINE_ROOM_DECORATE_NAME" property="machineRoomDecorateName" />
+        <result column="DECORATION_UNIT_CONTACTS" property="decorationUnitContacts" />
+        <result column="MACHINE_ROOM_ADORN" property="machineRoomAdorn" />
+        <result column="MACHINE_ROOM_DECORATE_END_TIME" property="machineRoomDecorateEndTime" />
+        <result column="ELECTRIC_CONSTRUCTION_MODE" property="electricConstructionMode" />
+        <result column="ELECTRIC_TYPE" property="electricType" />
+        <result column="ELECTRIC_UNIT_NAME" property="electricUnitName" />
+        <result column="ELECTRIC_UNIT_CONTACTS" property="electricUnitContacts" />
+        <result column="ELECTRIC_PROGRESS" property="electricProgress" />
+        <result column="ELECTRIC_COMPLETION_DATE" property="electricCompletionDate" />
+        <result column="EQUIPMENT_CONSTRUCTION_MODE" property="equipmentConstructionMode" />
+        <result column="EQUIPMENT_TYPE_NAME" property="equipmentTypeName" />
+        <result column="EQUIPMENT_SUPPLIER_NAME" property="equipmentSupplierName" />
+        <result column="EQUIPMENT_SUPPLIER_CONTACTS" property="equipmentSupplierContacts" />
+        <result column="EQUIPMENT_UNIT_NAME" property="equipmentUnitName" />
+        <result column="EQUIPMENT_UNIT_CONTACTS" property="equipmentUnitContacts" />
+        <result column="EQUIPMENT_PROGRESS" property="equipmentProgress" />
+        <result column="EQUIPMENT_COMPLETION_DATE" property="equipmentCompletionDate" />
+        <result column="AIR_CONSTRUCTION_MODE" property="airConstructionMode" />
+        <result column="CONDITIONING_BRAND_NAME" property="conditioningBrandName" />
+        <result column="SPECIFICATION_TYPE_NAME" property="specificationTypeName" />
+        <result column="AIR_UNIT_NAME" property="airUnitName" />
+        <result column="AIR_CONSTRUCTION_CONTACTS" property="airConstructionContacts" />
+        <result column="AIR_PROGRESS" property="airProgress" />
+        <result column="AIR_COMPLETION_DATE" property="airCompletionDate" />
+        <result column="FIRE_CONSTRUCTION_MODE" property="fireConstructionMode" />
+        <result column="HAND_HELD_NUMBER" property="handHeldNumber" />
+        <result column="SPRAYING_METHOD_NUMBER" property="sprayingMethodNumber" />
+        <result column="FIRE_SUPPLIER_NAME" property="fireSupplierName" />
+        <result column="FIRE_SUPPLIER_CONTACTS" property="fireSupplierContacts" />
+        <result column="INSTALLATION_UNIT_NAME" property="installationUnitName" />
+        <result column="INSTALLATION_UNIT_CONTACTS" property="installationUnitContacts" />
+        <result column="FIRE_PROGRESS" property="fireProgress" />
+        <result column="FIRE_COMPLETION_DATE" property="fireCompletionDate" />
+        <result column="POWER_CONSTRUCTION_MODE" property="powerConstructionMode" />
+        <result column="POWER_SUPPLIER_NAME" property="powerSupplierName" />
+        <result column="POWER_SUPPLIER_CONTACTS" property="powerSupplierContacts" />
+        <result column="POWER_UNIT_NAME" property="powerUnitName" />
+        <result column="POWER_UNIT_CONTACTS" property="powerUnitContacts" />
+        <result column="POWER_PROGRESS" property="powerProgress" />
+        <result column="POWER_COMPLETION_DATE" property="powerCompletionDate" />
+    </resultMap>
+
+    <!-- 数据库中表名为:PROJECT_PROGRESS_DEGREE的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="PROJECT_PROGRESS_DEGREE_Column">
+        PROJECT_PROGRESS_DEGREE.PROJECT_PROGRESS_ID as PROJECT_PROGRESS_ID
+        ,PROJECT_PROGRESS_DEGREE.OPERATOR as OPERATOR
+        ,PROJECT_PROGRESS_DEGREE.BUILD_YEAR as BUILD_YEAR
+        ,PROJECT_PROGRESS_DEGREE.BUILDING_PROJECT as BUILDING_PROJECT
+        ,PROJECT_PROGRESS_DEGREE.PLANNING_NAME as PLANNING_NAME
+        ,PROJECT_PROGRESS_DEGREE.ACTUAL_NAME as ACTUAL_NAME
+        ,PROJECT_PROGRESS_DEGREE.PLANNING_LONGITUDE as PLANNING_LONGITUDE
+        ,PROJECT_PROGRESS_DEGREE.PLANNING_LATITUDE as PLANNING_LATITUDE
+        ,PROJECT_PROGRESS_DEGREE.ACTUAL_LONGITUDE as ACTUAL_LONGITUDE
+        ,PROJECT_PROGRESS_DEGREE.ACTUAL_LATITUDES as ACTUAL_LATITUDES
+        ,PROJECT_PROGRESS_DEGREE.PROVINCE as PROVINCE
+        ,PROJECT_PROGRESS_DEGREE.CITY as CITY
+        ,PROJECT_PROGRESS_DEGREE.COUNTY as COUNTY
+        ,PROJECT_PROGRESS_DEGREE.REGIONS as REGIONS
+        ,PROJECT_PROGRESS_DEGREE.ON_SITE_SUPERVISION as ON_SITE_SUPERVISION
+        ,PROJECT_PROGRESS_DEGREE.PROFESSION_PEOPLE as PROFESSION_PEOPLE
+        ,PROJECT_PROGRESS_DEGREE.DISTRICT_HEAD as DISTRICT_HEAD
+        ,PROJECT_PROGRESS_DEGREE.OVERLAY_SCENE as OVERLAY_SCENE
+        ,PROJECT_PROGRESS_DEGREE.SKY_BRANCH_ID as SKY_BRANCH_ID
+        ,PROJECT_PROGRESS_DEGREE.MACHINE_ROOM_ID as MACHINE_ROOM_ID
+        ,PROJECT_PROGRESS_DEGREE.ELECTRIC_POWER_ID as ELECTRIC_POWER_ID
+        ,PROJECT_PROGRESS_DEGREE.MAIN_EQUIPMENT_ID as MAIN_EQUIPMENT_ID
+        ,PROJECT_PROGRESS_DEGREE.AIR_CONDITIONER_ID as AIR_CONDITIONER_ID
+        ,PROJECT_PROGRESS_DEGREE.FIRE_ID as FIRE_ID
+        ,PROJECT_PROGRESS_DEGREE.POWER_MONITORING_ID as POWER_MONITORING_ID
+        ,PROJECT_PROGRESS_DEGREE.REMAKE as REMAKE
+    </sql>
+
+    <!--获得类名为:ProjectProgressDegree对应的数据库表的数据总行数 -->
+    <select id="getProjectProgressDegreeRowCount" resultType="java.lang.Long">
+        select count(*) from (
+          select
+            p.project_progress_id,p.operator,p.build_year,p.building_project,
+            p.planning_name,p.actual_name,
+            p.planning_longitude,p.planning_latitude,p.actual_longitude,
+            p.actual_latitudes,p.province,
+            p.city,p.county,p.regions,p.on_site_supervision,p.profession_people,
+            p.district_head,p.overlay_scene,
+            sky.construction_mode,sky.basic_type,sky.foundation_construction_name,
+            sky.basic_unit_contacts,
+            sky.foundation_progress_name,sky.curing_start_date,
+            sky.sky_branch_type_name,sky.sky_branch_supplier_name,sky.sky_branch_supplier_contacts,
+            sky.sky_branch_unit_name,sky.sky_construction_unit_contacts,sky.sky_branch_height,
+            sky.sky_branch_progress_name,sky.sky_branch_completion_date,
+            mr.machine_room_construction_mode,mr.machine_room_type_name,
+            mr.machine_room_construction_name,mr.civil_engineering_contacts,
+            mr.machine_room_schedule,mr.machine_room_end_time,
+            mr.machine_room_decorate_name,mr.decoration_unit_contacts,
+            mr.machine_room_adorn,mr.machine_room_decorate_end_time,
+            ep.electric_construction_mode,ep.electric_type,
+            ep.electric_unit_name,ep.electric_unit_contacts,
+            ep.electric_progress,ep.electric_completion_date,
+            me.equipment_construction_mode,me.equipment_type_name,
+            me.equipment_supplier_name,me.equipment_supplier_contacts,
+            me.equipment_unit_name,me.equipment_unit_contacts,
+            me.equipment_progress,me.equipment_completion_date,
+            ac.air_construction_mode,ac.conditioning_brand_name,ac.specification_type_name,
+            ac.air_unit_name,ac.air_construction_contacts,ac.air_progress,ac.air_completion_date,
+            ff.fire_construction_mode,ff.hand_held_number,ff.spraying_method_number,
+            ff.fire_supplier_name,ff.fire_supplier_contacts,
+            ff.installation_unit_name,ff.Installation_unit_contacts,
+            ff.fire_progress,ff.fire_completion_date,
+            pm.power_construction_mode,pm.power_supplier_name,
+            pm.power_supplier_contacts,pm.power_unit_name,pm.power_unit_contacts,
+            pm.power_progress,pm.power_completion_date,p.remake
+            from project_progress_degree p
+            left join Sky_branch_degree sky
+            on p.sky_branch_id = sky.sky_branch_id
+            left join machine_room_degree mr
+            on p.machine_room_id = mr.machine_room_id
+            left join electric_power_degree ep
+            on p.electric_power_id = ep.electric_power_id
+            left join main_equipment_degree me
+            on p.main_equipment_id = me.main_equipment_id
+            left join Air_conditioner_degree ac
+            on p.air_conditioner_id = ac.air_conditioner_id
+            left join fire_fighting_device_degree ff
+            on p.fire_id = ff.fire_id
+            left join power_monitoring_degree pm
+            on p.power_monitoring_id = pm.power_monitoring_id
+        <where>
+            <if test="province !=null and province !=''">
+                and PROVINCE like #{province}
+            </if>
+            <if test="city !=null and city !=''">
+                and CITY like #{city}
+            </if>
+            <if test="county !=null and county !=''">
+                and COUNTY like #{county}
+            </if>
+            <if test="buildYear !=null and buildYear !=''">
+                and BUILD_YEAR like #{buildYear}
+            </if>
+            <if test="buildingProject !=null and buildingProject !=''">
+                and BUILDING_PROJECT like #{buildingProject}
+            </if>
+            <if test="operator !=null and operator !=''">
+                and OPERATOR like #{operator}
+            </if>
+            <if test="keyword !=null and keyword !=''">
+                and (ON_SITE_SUPERVISION like #{keyword}
+                or  PROFESSION_PEOPLE like #{keyword}
+                or  DISTRICT_HEAD like #{keyword})
+            </if>
+        </where>
+        )
+    </select>
+    <!-- 获得类名为:ProjectProgressDegree对应数据库中表的数据集合 -->
+    <select id="selectProjectProgressDegree" resultMap="result_ProjectProgressDegree_Map">
+        select * from(
+            select t.*,rownum r from(
+                    select
+                    p.project_progress_id,p.operator,p.build_year,p.building_project,
+                    p.planning_name,p.actual_name,
+                    p.planning_longitude,p.planning_latitude,p.actual_longitude,
+                    p.actual_latitudes,p.province,
+                    p.city,p.county,p.regions,p.on_site_supervision,p.profession_people,
+                    p.district_head,p.overlay_scene,
+                    sky.construction_mode,sky.basic_type,sky.foundation_construction_name,
+                    sky.basic_unit_contacts,
+                    sky.foundation_progress_name,sky.curing_start_date,
+                    sky.sky_branch_type_name,sky.sky_branch_supplier_name,sky.sky_branch_supplier_contacts,
+                    sky.sky_branch_unit_name,sky.sky_construction_unit_contacts,sky.sky_branch_height,
+                    sky.sky_branch_progress_name,sky.sky_branch_completion_date,
+                    mr.machine_room_construction_mode,mr.machine_room_type_name,
+                    mr.machine_room_construction_name,mr.civil_engineering_contacts,
+                    mr.machine_room_schedule,mr.machine_room_end_time,
+                    mr.machine_room_decorate_name,mr.decoration_unit_contacts,
+                    mr.machine_room_adorn,mr.machine_room_decorate_end_time,
+                    ep.electric_construction_mode,ep.electric_type,
+                    ep.electric_unit_name,ep.electric_unit_contacts,
+                    ep.electric_progress,ep.electric_completion_date,
+                    me.equipment_construction_mode,me.equipment_type_name,
+                    me.equipment_supplier_name,me.equipment_supplier_contacts,
+                    me.equipment_unit_name,me.equipment_unit_contacts,
+                    me.equipment_progress,me.equipment_completion_date,
+                    ac.air_construction_mode,ac.conditioning_brand_name,ac.specification_type_name,
+                    ac.air_unit_name,ac.air_construction_contacts,ac.air_progress,ac.air_completion_date,
+                    ff.fire_construction_mode,ff.hand_held_number,ff.spraying_method_number,
+                    ff.fire_supplier_name,ff.fire_supplier_contacts,
+                    ff.installation_unit_name,ff.Installation_unit_contacts,
+                    ff.fire_progress,ff.fire_completion_date,
+                    pm.power_construction_mode,pm.power_supplier_name,
+                    pm.power_supplier_contacts,pm.power_unit_name,pm.power_unit_contacts,
+                    pm.power_progress,pm.power_completion_date,p.remake
+                    from project_progress_degree p
+                    left join Sky_branch_degree sky
+                    on p.sky_branch_id = sky.sky_branch_id
+                    left join machine_room_degree mr
+                    on p.machine_room_id = mr.machine_room_id
+                    left join electric_power_degree ep
+                    on p.electric_power_id = ep.electric_power_id
+                    left join main_equipment_degree me
+                    on p.main_equipment_id = me.main_equipment_id
+                    left join Air_conditioner_degree ac
+                    on p.air_conditioner_id = ac.air_conditioner_id
+                    left join fire_fighting_device_degree ff
+                    on p.fire_id = ff.fire_id
+                    left join power_monitoring_degree pm
+                    on p.power_monitoring_id = pm.power_monitoring_id
+                    <where>
+                        <if test="province !=null and province !=''">
+                            and PROVINCE like #{province}
+                        </if>
+                        <if test="city !=null and city !=''">
+                            and CITY like #{city}
+                        </if>
+                        <if test="county !=null and county !=''">
+                            and COUNTY like #{county}
+                        </if>
+                        <if test="buildYear !=null and buildYear !=''">
+                            and BUILD_YEAR like #{buildYear}
+                        </if>
+                        <if test="buildingProject !=null and buildingProject !=''">
+                            and BUILDING_PROJECT like #{buildingProject}
+                        </if>
+                        <if test="operator !=null and operator !=''">
+                            and OPERATOR like #{operator}
+                        </if>
+                        <if test="keyword !=null and keyword !=''">
+                            and (ON_SITE_SUPERVISION like #{keyword}
+                            or  PROFESSION_PEOPLE like #{keyword}
+                            or  DISTRICT_HEAD like #{keyword})
+                        </if>
+                    </where>
+            )t
+        )where r between #{start} and #{end}
+    </select> 
+
+<!--导出数据-->
+    <select id="ProjectProgressDegreeExcel" resultMap="result_ProjectProgressDegree_Map">
+        select
+        p.project_progress_id,p.operator,p.build_year,p.building_project,
+        p.planning_name,p.actual_name,
+        p.planning_longitude,p.planning_latitude,p.actual_longitude,
+        p.actual_latitudes,p.province,
+        p.city,p.county,p.regions,p.on_site_supervision,p.profession_people,
+        p.district_head,p.overlay_scene,
+        sky.construction_mode,sky.basic_type,sky.foundation_construction_name,
+        sky.basic_unit_contacts,
+        sky.foundation_progress_name,sky.curing_start_date,
+        sky.sky_branch_type_name,sky.sky_branch_supplier_name,sky.sky_branch_supplier_contacts,
+        sky.sky_branch_unit_name,sky.sky_construction_unit_contacts,sky.sky_branch_height,
+        sky.sky_branch_progress_name,sky.sky_branch_completion_date,
+        mr.machine_room_construction_mode,mr.machine_room_type_name,
+        mr.machine_room_construction_name,mr.civil_engineering_contacts,
+        mr.machine_room_schedule,mr.machine_room_end_time,
+        mr.machine_room_decorate_name,mr.decoration_unit_contacts,
+        mr.machine_room_adorn,mr.machine_room_decorate_end_time,
+        ep.electric_construction_mode,ep.electric_type,
+        ep.electric_unit_name,ep.electric_unit_contacts,
+        ep.electric_progress,ep.electric_completion_date,
+        me.equipment_construction_mode,me.equipment_type_name,
+        me.equipment_supplier_name,me.equipment_supplier_contacts,
+        me.equipment_unit_name,me.equipment_unit_contacts,
+        me.equipment_progress,me.equipment_completion_date,
+        ac.air_construction_mode,ac.conditioning_brand_name,ac.specification_type_name,
+        ac.air_unit_name,ac.air_construction_contacts,ac.air_progress,ac.air_completion_date,
+        ff.fire_construction_mode,ff.hand_held_number,ff.spraying_method_number,
+        ff.fire_supplier_name,ff.fire_supplier_contacts,
+        ff.installation_unit_name,ff.Installation_unit_contacts,
+        ff.fire_progress,ff.fire_completion_date,
+        pm.power_construction_mode,pm.power_supplier_name,
+        pm.power_supplier_contacts,pm.power_unit_name,pm.power_unit_contacts,
+        pm.power_progress,pm.power_completion_date,p.remake
+        from project_progress_degree p
+        left join Sky_branch_degree sky
+        on p.sky_branch_id = sky.sky_branch_id
+        left join machine_room_degree mr
+        on p.machine_room_id = mr.machine_room_id
+        left join electric_power_degree ep
+        on p.electric_power_id = ep.electric_power_id
+        left join main_equipment_degree me
+        on p.main_equipment_id = me.main_equipment_id
+        left join Air_conditioner_degree ac
+        on p.air_conditioner_id = ac.air_conditioner_id
+        left join fire_fighting_device_degree ff
+        on p.fire_id = ff.fire_id
+        left join power_monitoring_degree pm
+        on p.power_monitoring_id = pm.power_monitoring_id
+        where p.project_progress_id in
+        <foreach collection="array" item="projectProgressId" open="(" separator="," close=")">
+            #{projectProgressId}
+        </foreach>
+    </select>
+
+</mapper>

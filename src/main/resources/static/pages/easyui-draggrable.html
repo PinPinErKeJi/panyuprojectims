@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/easyui/easyui.css">
+    <link rel="stylesheet" href="../static/css/icon.css">
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/jquery.easyui.min.js"></script>
+    <script src="../static/js/easyui-lang-zh_CN.js"></script>
+    <style>
+        .box{
+            width: 400px;
+            height: 300px;
+            border:1px solid #ccc;
+        }
+        .box-title{
+            line-height: 30px;
+            background: #ccc;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <div class="box-title">hello world</div>
+    <p>这是javascript操作的div</p>
+</div>
+
+<script>
+    $(function () {
+        $('.box').draggable({
+            handle:'.box-title',
+            revert:true
+        });
+    });
+</script>
+</body>
+</html>

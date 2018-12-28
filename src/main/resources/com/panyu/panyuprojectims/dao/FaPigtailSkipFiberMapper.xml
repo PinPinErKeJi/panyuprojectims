@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaPigtailSkipFiberDao">
+    <!-- FaPigtailSkipFiber的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaPigtailSkipFiber_Map" type="com.panyu.panyuprojectims.entity.FaPigtailSkipFiber">
+        <id column="PIGTAIL_SKIP_FIBER_ID" property="pigtailSkipFiberId" />
+        <result column="PIGTAIL_NUMBER" property="pigtailNumber" />
+        <result column="FIBER_CABLE_TYPE" property="fiberCableType" />
+        <result column="FIBER_SPECIFICATION_MODEL" property="fiberSpecificationModel" />
+        <result column="FIBER_NUMBER_OF_BRANCHES" property="fiberNumberOfBranches" />
+        <result column="FIBER_SINGLE_LENGTH" property="fiberSingleLength" />
+        <result column="FORMS" property="forms" />
+        <result column="TO2" property="to2" />
+        <result column="FIBER_SUPPLIER" property="fiberSupplier" />
+        <result column="FIBER_CONTACTS" property="fiberContacts" />
+    </resultMap>
+
+    <!-- 数据库中表名为:FA_PIGTAIL_SKIP_FIBER的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="FA_PIGTAIL_SKIP_FIBER_Column">
+        FA_PIGTAIL_SKIP_FIBER.PIGTAIL_SKIP_FIBER_ID as PIGTAIL_SKIP_FIBER_ID
+        ,FA_PIGTAIL_SKIP_FIBER.PIGTAIL_NUMBER as PIGTAIL_NUMBER
+        ,FA_PIGTAIL_SKIP_FIBER.FIBER_CABLE_TYPE as FIBER_CABLE_TYPE
+        ,FA_PIGTAIL_SKIP_FIBER.FIBER_SPECIFICATION_MODEL as FIBER_SPECIFICATION_MODEL
+        ,FA_PIGTAIL_SKIP_FIBER.FIBER_NUMBER_OF_BRANCHES as FIBER_NUMBER_OF_BRANCHES
+        ,FA_PIGTAIL_SKIP_FIBER.FIBER_SINGLE_LENGTH as FIBER_SINGLE_LENGTH
+        ,FA_PIGTAIL_SKIP_FIBER.FORMS as FORMS
+        ,FA_PIGTAIL_SKIP_FIBER.TO2 as TO2
+        ,FA_PIGTAIL_SKIP_FIBER.FIBER_SUPPLIER as FIBER_SUPPLIER
+        ,FA_PIGTAIL_SKIP_FIBER.FIBER_CONTACTS as FIBER_CONTACTS
+    </sql>
+
+
+    <!--添加-->
+    <insert id="insertFaPigtailSkipFiber" parameterType="com.panyu.panyuprojectims.entity.FaPigtailSkipFiber">
+        insert into FA_PIGTAIL_SKIP_FIBER
+        values(
+        #{pigtailSkipFiberId,jdbcType=VARCHAR},
+        #{pigtailNumber,jdbcType=VARCHAR},
+        #{fiberCableType,jdbcType=VARCHAR},
+        #{fiberSpecificationModel,jdbcType=VARCHAR},
+        #{fiberNumberOfBranches,jdbcType=VARCHAR},
+        #{fiberSingleLength,jdbcType=VARCHAR},
+        #{forms,jdbcType=VARCHAR},
+        #{to2,jdbcType=VARCHAR},
+        #{fiberSupplier,jdbcType=VARCHAR},
+        #{fiberContacts,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 根据尾纤,跳纤ID删除选中项-->
+    <delete id="deleteFaPigtailSkipFiberById" parameterType="java.lang.String">
+        delete from FA_PIGTAIL_SKIP_FIBER
+        where PIGTAIL_SKIP_FIBER_ID = #{pigtailSkipFiberId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--根据设备信息id查询FaPigtailSkipFiber-->
+    <select id="getFaPigtailSkipFiber" resultMap="result_FaPigtailSkipFiber_Map">
+        select ps.* from FA_equipment_information ei left join FA_pigtail_skip_fiber ps on
+        ei.pigtail_skip_fiber_id = ps.pigtail_skip_fiber_id
+        where ei.equipment_information_id = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 通过FaPigtailSkipFiber的id将FaPigtailSkipFiber的数据更新到数据库中对应的表,包括值null的数据-->
+    <update id="updateFaPigtailSkipFiberById" parameterType="com.panyu.panyuprojectims.entity.FaPigtailSkipFiber">
+        update FA_PIGTAIL_SKIP_FIBER set
+            PIGTAIL_NUMBER=#{pigtailNumber}
+            ,FIBER_CABLE_TYPE=#{fiberCableType}
+            ,FIBER_SPECIFICATION_MODEL=#{fiberSpecificationModel}
+            ,FIBER_NUMBER_OF_BRANCHES=#{fiberNumberOfBranches}
+            ,FIBER_SINGLE_LENGTH=#{fiberSingleLength}
+            ,FORMS=#{forms}
+            ,TO2=#{to2}
+            ,FIBER_SUPPLIER=#{fiberSupplier}
+            ,FIBER_CONTACTS=#{fiberContacts}
+        where PIGTAIL_SKIP_FIBER_ID=#{pigtailSkipFiberId}
+    </update>
+
+</mapper>

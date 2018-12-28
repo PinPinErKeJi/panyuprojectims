@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IcSupervisoryUnitDao">
+    <!-- IcSupervisoryUnit的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IcSupervisoryUnit_Map" type="com.panyu.panyuprojectims.entity.IcSupervisoryUnit">
+        <id column="IC_SUPERVISORY_UNIT_ID" property="icSupervisoryUnitId" />
+        <result column="PROFESSION_RESPONSIBLE_PERSON" property="professionResponsiblePerson" />
+        <result column="DISTRICT_HEAD" property="districtHead" />
+        <result column="SITE_LEADER" property="siteLeader" />
+    </resultMap>
+
+    <!-- 数据库中表名为:IC_SUPERVISORY_UNIT的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="IC_SUPERVISORY_UNIT_Column">
+        IC_SUPERVISORY_UNIT.IC_SUPERVISORY_UNIT_ID as IC_SUPERVISORY_UNIT_ID
+        ,IC_SUPERVISORY_UNIT.PROFESSION_RESPONSIBLE_PERSON as PROFESSION_RESPONSIBLE_PERSON
+        ,IC_SUPERVISORY_UNIT.DISTRICT_HEAD as DISTRICT_HEAD
+        ,IC_SUPERVISORY_UNIT.SITE_LEADER as SITE_LEADER
+    </sql>
+
+    <!--添加-->
+    <insert id="insertIcSupervisoryUnit">
+        insert into IC_supervisory_unit values(
+        #{icSupervisoryUnitId,jdbcType=VARCHAR},
+        #{professionResponsiblePerson,jdbcType=VARCHAR},
+        #{districtHead,jdbcType=VARCHAR},
+        #{siteLeader,jdbcType=VARCHAR})
+    </insert>
+
+
+    <!-- 根据监理单位ID删除选中项-->
+    <delete id="deleteIcSupervisoryUnitById" parameterType="java.lang.String">
+        delete from IC_SUPERVISORY_UNIT
+        where IC_SUPERVISORY_UNIT_ID = #{icSupervisoryUnitId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

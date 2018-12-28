@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaCabinetPowerFrameDao">
+    <!-- FaCabinetPowerFrame的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaCabinetPowerFrame_Map" type="com.panyu.panyuprojectims.entity.FaCabinetPowerFrame">
+        <id column="EQUIPMENT_ID" property="equipmentId" />
+        <result column="EQUIPMENT_NUMBER" property="equipmentNumber" />
+        <result column="EQUIPMENT_TYPE" property="equipmentType" />
+        <result column="EQUIPMENT_NAME" property="equipmentName" />
+        <result column="EQUIPMENT_MODEL" property="equipmentModel" />
+        <result column="EQUIPMENT_DESIGN_QUANTITY" property="equipmentDesignQuantity" />
+        <result column="EQUIPMENT_SIZE" property="equipmentSize" />
+        <result column="EQUIPMENT_SUPPLIER" property="equipmentSupplier" />
+        <result column="EQUIPMENT_CONTACTS" property="equipmentContacts" />
+    </resultMap>
+
+    <!-- 数据库中表名为:FA_CABINET_POWER_FRAME的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="FA_CABINET_POWER_FRAME_Column">
+        FA_CABINET_POWER_FRAME.EQUIPMENT_ID as EQUIPMENT_ID
+        ,FA_CABINET_POWER_FRAME.EQUIPMENT_NUMBER as EQUIPMENT_NUMBER
+        ,FA_CABINET_POWER_FRAME.EQUIPMENT_TYPE as EQUIPMENT_TYPE
+        ,FA_CABINET_POWER_FRAME.EQUIPMENT_NAME as EQUIPMENT_NAME
+        ,FA_CABINET_POWER_FRAME.EQUIPMENT_MODEL as EQUIPMENT_MODEL
+        ,FA_CABINET_POWER_FRAME.EQUIPMENT_DESIGN_QUANTITY as EQUIPMENT_DESIGN_QUANTITY
+        ,FA_CABINET_POWER_FRAME.EQUIPMENT_SIZE as EQUIPMENT_SIZE
+        ,FA_CABINET_POWER_FRAME.EQUIPMENT_SUPPLIER as EQUIPMENT_SUPPLIER
+        ,FA_CABINET_POWER_FRAME.EQUIPMENT_CONTACTS as EQUIPMENT_CONTACTS
+    </sql>
+
+    <!--添加-->
+    <insert id="insertFaCabinetPowerFrame" parameterType="com.panyu.panyuprojectims.entity.FaCabinetPowerFrame">
+        insert into FA_CABINET_POWER_FRAME
+        values(#{equipmentId,jdbcType=VARCHAR},
+        #{equipmentNumber,jdbcType=VARCHAR},
+        #{equipmentType,jdbcType=VARCHAR},
+        #{equipmentName,jdbcType=VARCHAR},
+        #{equipmentModel,jdbcType=VARCHAR},
+        #{equipmentDesignQuantity,jdbcType=VARCHAR},
+        #{equipmentSize,jdbcType=VARCHAR},
+        #{equipmentSupplier,jdbcType=VARCHAR},
+        #{equipmentContacts,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 通过FaCabinetPowerFrame的id将数据库表中对应的数据删除-->
+    <delete id="deleteFaCabinetPowerFrameById" parameterType="java.lang.String">
+        delete from FA_CABINET_POWER_FRAME
+        where EQUIPMENT_ID = #{equipmentId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--根据设备信息的id查询FaCabinetPowerFrame-->
+    <select id="getFaCabinetPowerFrame" resultMap="result_FaCabinetPowerFrame_Map">
+        select cp.* from FA_equipment_information ei left join FA_cabinet_power_frame cp on
+        ei.equipment_id = cp.equipment_id
+        where ei.equipment_information_id = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+</mapper>

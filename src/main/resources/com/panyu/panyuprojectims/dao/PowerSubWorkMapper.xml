@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PowerSubWorkDao">
+    <!-- PowerSubWork的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PowerSubWork_Map" type="com.panyu.panyuprojectims.entity.PowerSubWork">
+        <id column="POWER_SUB_WORK_ID" property="powerSubWorkId" />
+        <result column="POWER_SUB_WORK_NAME" property="powerSubWorkName" />
+        <result column="POWER_MODULE_ID" property="powerModuleId" />
+    </resultMap>
+
+
+    <!--根据模块id查询包含的分项工程-->
+    <select id="selectAllPowerSubWorkByPowerModuleId" resultMap="result_PowerSubWork_Map">
+        select * from Power_Sub_Work where power_module_id = #{powerModuleId,jdbcType=VARCHAR}
+    </select>
+
+
+    <!--根据分项工程名字和模块id查询分项工程个数-->
+    <select id="getCountByPowerSubWorkNameAndPowerModuleId" resultType="Long">
+        select count(*) from Power_Sub_Work where power_sub_work_name =
+        #{powerSubWorkName,jdbcType=VARCHAR} and power_module_id =
+        #{powerModuleId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertPowerSubWork">
+        insert into Power_Sub_Work values(
+        sys_guid(),
+        #{powerSubWorkName,jdbcType=VARCHAR},
+        #{powerModuleId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据分项工程名字和模块id查询分项工程-->
+    <select id="selectPowerSubWorkByPowerSubWorkNameAndPowerModuleId" resultMap="result_PowerSubWork_Map">
+         select * from Power_Sub_Work where power_sub_work_name =
+         #{powerSubWorkName,jdbcType=VARCHAR} and power_module_id =
+         #{powerModuleId,jdbcType=VARCHAR}
+    </select>
+
+    <!--修改-->
+    <update id="updatePowerSubWork">
+        update Power_Sub_Work set power_sub_work_name =
+        #{powerSubWorkName,jdbcType=VARCHAR} where power_sub_work_id =
+        #{powerSubWorkId,jdbcType=VARCHAR}
+    </update>
+
+    <!--根据分项工程名字和id查询分项工程-->
+    <select id="selectPowerSubWorkByPowerSubWorkNameAndPowerSubWorkId" resultMap="result_PowerSubWork_Map">
+        select * from Power_Sub_Work where power_sub_work_name =
+         #{powerSubWorkName,jdbcType=VARCHAR} and power_sub_work_id =
+         #{powerSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据模块ID查询分项工程ID集合-->
+    <select id="selectPowerSubWorkId" resultType="String">
+        select POWER_SUB_WORK_ID
+        from POWER_SUB_WORK
+        where POWER_MODULE_ID = #{powerModuleId,jdbcType=VARCHAR}
+    </select>
+    <!--删除-->
+    <delete id="deletePowerSubWork">
+        delete from POWER_SUB_WORK
+        where POWER_SUB_WORK_ID = #{powerSubWorkId,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

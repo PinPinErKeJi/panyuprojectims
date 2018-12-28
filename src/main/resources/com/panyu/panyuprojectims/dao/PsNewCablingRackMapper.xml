@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PsNewCablingRackDao">
+    <!-- PsNewCablingRack的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PsNewCablingRack_Map" type="com.panyu.panyuprojectims.entity.PsNewCablingRack">
+        <id column="NEW_CABLING_RACK_ID" property="newCablingRackId" />
+        <result column="NEW_CABLING_RACK_NUMBER" property="newCablingRackNumber" />
+        <result column="RACK_DESIGN_START" property="rackDesignStart" />
+        <result column="RACK_EQUIPMENT_SUPPLIER" property="rackEquipmentSupplier" />
+        <result column="RACK_EQUIPMENT_LINKMAN" property="rackEquipmentLinkman" />
+    </resultMap>
+
+    <!--根据信息id查询新增走线架对象-->
+    <select id="selectPsNewCablingRackByPowerInformationId" resultMap="result_PsNewCablingRack_Map">
+        select ps.* from power_supply_information p
+        left join PS_new_cabling_rack ps on
+        p.new_cabling_rack_id = ps.new_cabling_rack_id
+        where p.power_information_id = #{powerInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertPsNewCablingRack">
+        insert into PS_new_cabling_rack values(
+        #{newCablingRackId,jdbcType=VARCHAR},
+        #{newCablingRackNumber,jdbcType=VARCHAR},
+        #{rackDesignStart,jdbcType=VARCHAR},
+        #{rackEquipmentSupplier,jdbcType=VARCHAR},
+        #{rackEquipmentLinkman,jdbcType=VARCHAR})
+    </insert>
+
+    <!--删除-->
+    <delete id="deletePsNewCablingRack">
+        delete from PS_NEW_CABLING_RACK
+        where NEW_CABLING_RACK_ID = #{newCablingRackId,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

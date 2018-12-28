@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaEquipmentInformationDao">
+    <!-- FaEquipmentInformation的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaEquipmentInformation_Map" type="com.panyu.panyuprojectims.entity.FaEquipmentInformation">
+        <id column="EQUIPMENT_INFORMATION_ID" property="equipmentInformationId" />
+        <result column="OPERATOR" property="operator" />
+        <result column="BUILD_YEAR" property="buildYear" />
+        <result column="BUILDING_PROJECT" property="buildingProject" />
+        <result column="MOTOR_ROOM_NAME" property="motorRoomName" />
+        <result column="MOTOR_ROOM_LONGITUDE" property="motorRoomLongitude" />
+        <result column="MOTOR_ROOM_LATITUDE" property="motorRoomLatitude" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="COUNTY" property="county" />
+        <result column="ON_SITE_SUPERVISION" property="onSiteSupervision" />
+        <result column="PROJECT_LEADER" property="projectLeader" />
+
+        <result column="EQUIPMENT_ID" property="equipmentId" />
+        <result column="BOARD_CARD_DILATATION_ID" property="boardCardDilatationId" />
+        <result column="POWER_NETWORK_LINE_ID" property="powerNetworkLineId" />
+        <result column="PIGTAIL_SKIP_FIBER_ID" property="pigtailSkipFiberId" />
+        <result column="WALKING_FRAME_ID" property="walkingFrameId" />
+        <result column="FIBER_OPTIC_CHANNEL_ID" property="fiberOpticChannelId" />
+        <result column="EQUIPMENT_NUMBER" property="equipmentNumber" />
+        <result column="EQUIPMENT_TYPE" property="equipmentType" />
+        <result column="EQUIPMENT_NAME" property="equipmentName" />
+        <result column="EQUIPMENT_MODEL" property="equipmentModel" />
+        <result column="EQUIPMENT_DESIGN_QUANTITY" property="equipmentDesignQuantity" />
+        <result column="EQUIPMENT_SIZE" property="equipmentSize" />
+        <result column="EQUIPMENT_SUPPLIER" property="equipmentSupplier" />
+        <result column="EQUIPMENT_CONTACTS" property="equipmentContacts" />
+        <result column="BOARD_CARD_NUMBER" property="boardCardNumber" />
+        <result column="BOARD_CARD_NAME" property="boardCardName" />
+        <result column="VENEER_FUNCTION" property="veneerFunction" />
+        <result column="PLACE_EQUIPMENT" property="placeEquipment" />
+        <result column="BOARD_CARD_DESIGN_QUANTITY" property="boardCardDesignQuantity" />
+        <result column="BOARD_CARD_SUPPLIER" property="boardCardSupplier" />
+        <result column="BOARD_CARD_CONTACTS" property="boardCardContacts" />
+        <result column="POWER_NUMBER" property="powerNumber" />
+        <result column="CABLE_TYPE" property="cableType" />
+        <result column="SPECIFICATION_MODEL" property="specificationModel" />
+        <result column="NUMBER_OF_BRANCHES" property="numberOfBranches" />
+        <result column="SINGLE_LENGTH" property="singleLength" />
+        <result column="TOTAL_LENGTH" property="totalLength" />
+        <result column="FROMS" property="froms" />
+        <result column="TO1" property="to1" />
+        <result column="POWER_SUPPLIER" property="powerSupplier" />
+        <result column="POWER_CONTACTS" property="powerContacts" />
+        <result column="PIGTAIL_NUMBER" property="pigtailNumber" />
+        <result column="FIBER_CABLE_TYPE" property="fiberCableType" />
+        <result column="FIBER_SPECIFICATION_MODEL" property="fiberSpecificationModel" />
+        <result column="FIBER_NUMBER_OF_BRANCHES" property="fiberNumberOfBranches" />
+        <result column="FIBER_SINGLE_LENGTH" property="fiberSingleLength" />
+        <result column="FORMS" property="forms" />
+        <result column="TO2" property="to2" />
+        <result column="FIBER_SUPPLIER" property="fiberSupplier" />
+        <result column="FIBER_CONTACTS" property="fiberContacts" />
+        <result column="WALKING_NUMBER" property="walkingNumber" />
+        <result column="WALKING_DESIGN_LENGTH" property="walkingDesignLength" />
+        <result column="WALKING_FRAME_SUPPLIER" property="walkingFrameSupplier" />
+        <result column="WALKING_FRAME_CONTACTS" property="walkingFrameContacts" />
+        <result column="FIBER_OPTIC_NUMBER" property="fiberOpticNumber" />
+        <result column="FIBER_OPTIC_DESIGN_LENGTH" property="fiberOpticDesignLength" />
+        <result column="FIBER_OPTIC_SUPPLIER" property="fiberOpticSupplier" />
+        <result column="FIBER_OPTIC_CONTACTS" property="fiberOpticContacts" />
+    </resultMap>
+
+    <!-- 数据库中表名为:FA_EQUIPMENT_INFORMATION的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="FA_EQUIPMENT_INFORMATION_Column">
+        FA_EQUIPMENT_INFORMATION.EQUIPMENT_INFORMATION_ID as EQUIPMENT_INFORMATION_ID
+        ,FA_EQUIPMENT_INFORMATION.OPERATOR as OPERATOR
+        ,FA_EQUIPMENT_INFORMATION.BUILD_YEAR as BUILD_YEAR
+        ,FA_EQUIPMENT_INFORMATION.BUILDING_PROJECT as BUILDING_PROJECT
+        ,FA_EQUIPMENT_INFORMATION.MOTOR_ROOM_NAME as MOTOR_ROOM_NAME
+        ,FA_EQUIPMENT_INFORMATION.MOTOR_ROOM_LONGITUDE as MOTOR_ROOM_LONGITUDE
+        ,FA_EQUIPMENT_INFORMATION.MOTOR_ROOM_LATITUDE as MOTOR_ROOM_LATITUDE
+        ,FA_EQUIPMENT_INFORMATION.PROVINCE as PROVINCE
+        ,FA_EQUIPMENT_INFORMATION.CITY as CITY
+        ,FA_EQUIPMENT_INFORMATION.COUNTY as COUNTY
+        ,FA_EQUIPMENT_INFORMATION.ON_SITE_SUPERVISION as ON_SITE_SUPERVISION
+        ,FA_EQUIPMENT_INFORMATION.PROJECT_LEADER as PROJECT_LEADER
+        ,FA_EQUIPMENT_INFORMATION.EQUIPMENT_ID as EQUIPMENT_ID
+        ,FA_EQUIPMENT_INFORMATION.BOARD_CARD_DILATATION_ID as BOARD_CARD_DILATATION_ID
+        ,FA_EQUIPMENT_INFORMATION.POWER_NETWORK_LINE_ID as POWER_NETWORK_LINE_ID
+        ,FA_EQUIPMENT_INFORMATION.PIGTAIL_SKIP_FIBER_ID as PIGTAIL_SKIP_FIBER_ID
+        ,FA_EQUIPMENT_INFORMATION.WALKING_FRAME_ID as WALKING_FRAME_ID
+        ,FA_EQUIPMENT_INFORMATION.FIBER_OPTIC_CHANNEL_ID as FIBER_OPTIC_CHANNEL_ID
+    </sql>
+
+    <!--获得类名为:FaEquipmentInformation对应的数据库表的数据总行数 -->
+    <select id="getFaEquipmentInformationRowCount" resultType="java.lang.Long">
+        select count(*) from (
+          select eq.equipment_information_id,eq.operator,eq.build_year,eq.building_project,
+          eq.motor_room_name,eq.motor_room_longitude,eq.motor_room_latitude,eq.province,
+          eq.city,eq.county,eq.on_site_Supervision,eq.project_leader,
+          cp.equipment_number,cp.equipment_type,cp.equipment_name,cp.equipment_model,cp.equipment_design_quantity,
+          cp.equipment_size,cp.equipment_supplier,cp.equipment_contacts,
+          bd.board_card_number,bd.board_card_name,bd.veneer_function,bd.place_equipment,bd.board_card_design_quantity,
+          bd.board_card_supplier,bd.board_card_contacts,
+          pn.power_number,pn.cable_type,pn.specification_model,pn.number_of_branches,
+          pn.single_length,pn.total_length,pn.Froms,pn.To1,pn.power_supplier,pn.power_contacts,
+          ps.pigtail_number,ps.fiber_cable_type,ps.fiber_specification_model,ps.fiber_number_of_branches,
+          ps.fiber_single_length,ps.Forms,ps.To2,ps.fiber_supplier,ps.fiber_contacts,
+          wf.walking_number,wf.walking_design_length,wf.walking_frame_supplier,wf.walking_frame_contacts,
+          fo.fiber_optic_number,fo.fiber_optic_design_length,fo.fiber_optic_supplier,fo.fiber_optic_contacts
+          from FA_equipment_information eq
+          left join FA_cabinet_power_frame cp
+          on eq.equipment_id = cp.equipment_id
+          left join FA_boardCard_dilatation bd
+          on eq.board_card_dilatation_id = bd.board_card_dilatation_id
+          left join FA_power_network_line pn
+          on eq.power_network_line_id = pn.power_network_line_id
+          left join FA_pigtail_skip_fiber ps
+          on eq.pigtail_skip_fiber_id = ps.pigtail_skip_fiber_id
+          left join FA_walking_frame wf
+          on eq.walking_frame_id = wf.walking_frame_id
+          left join FA_fiber_optic_channel fo
+          on eq.fiber_optic_channel_id = fo.fiber_optic_channel_id
+        <where>
+            <if test="province !=null and province !=''">
+                and PROVINCE like #{province}
+            </if>
+            <if test="city !=null and city !=''">
+                and CITY like #{city}
+            </if>
+            <if test="county !=null and county !=''">
+                and COUNTY like #{county}
+            </if>
+            <if test="buildYear !=null and buildYear !=''">
+                and BUILD_YEAR like #{buildYear}
+            </if>
+            <if test="buildingProject !=null and buildingProject !=''">
+                and BUILDING_PROJECT like #{buildingProject}
+            </if>
+            <if test="operator !=null and operator !=''">
+                and OPERATOR like #{operator}
+            </if>
+            <if test="keyword !=null and keyword !=''">
+                and (ON_SITE_SUPERVISION like #{keyword}
+                or  PROJECT_LEADER like #{keyword}
+                )
+            </if>
+        </where>
+     )
+    </select>
+    <!-- 获得类名为:FaEquipmentInformation对应数据库中表的数据集合 -->
+    <select id="selectFaEquipmentInformation" resultMap="result_FaEquipmentInformation_Map">
+        select * from(
+        select t.*,rownum r from(
+            select eq.equipment_information_id,eq.operator,eq.build_year,eq.building_project,
+            eq.motor_room_name,eq.motor_room_longitude,eq.motor_room_latitude,eq.province,
+            eq.city,eq.county,eq.on_site_Supervision,eq.project_leader,
+            cp.equipment_number,cp.equipment_type,cp.equipment_name,cp.equipment_model,cp.equipment_design_quantity,
+            cp.equipment_size,cp.equipment_supplier,cp.equipment_contacts,
+            bd.board_card_number,bd.board_card_name,bd.veneer_function,bd.place_equipment,bd.board_card_design_quantity,
+            bd.board_card_supplier,bd.board_card_contacts,
+            pn.power_number,pn.cable_type,pn.specification_model,pn.number_of_branches,
+            pn.single_length,pn.total_length,pn.Froms,pn.To1,pn.power_supplier,pn.power_contacts,
+            ps.pigtail_number,ps.fiber_cable_type,ps.fiber_specification_model,ps.fiber_number_of_branches,
+            ps.fiber_single_length,ps.Forms,ps.To2,ps.fiber_supplier,ps.fiber_contacts,
+            wf.walking_number,wf.walking_design_length,wf.walking_frame_supplier,wf.walking_frame_contacts,
+            fo.fiber_optic_number,fo.fiber_optic_design_length,fo.fiber_optic_supplier,fo.fiber_optic_contacts
+            from FA_equipment_information eq
+            left join FA_cabinet_power_frame cp
+            on eq.equipment_id = cp.equipment_id
+            left join FA_boardCard_dilatation bd
+            on eq.board_card_dilatation_id = bd.board_card_dilatation_id
+            left join FA_power_network_line pn
+            on eq.power_network_line_id = pn.power_network_line_id
+            left join FA_pigtail_skip_fiber ps
+            on eq.pigtail_skip_fiber_id = ps.pigtail_skip_fiber_id
+            left join FA_walking_frame wf
+            on eq.walking_frame_id = wf.walking_frame_id
+            left join FA_fiber_optic_channel fo
+            on eq.fiber_optic_channel_id = fo.fiber_optic_channel_id
+            <where>
+                <if test="province !=null and province !=''">
+                    and PROVINCE like #{province}
+                </if>
+                <if test="city !=null and city !=''">
+                    and CITY like #{city}
+                </if>
+                <if test="county !=null and county !=''">
+                    and COUNTY like #{county}
+                </if>
+                <if test="buildYear !=null and buildYear !=''">
+                    and BUILD_YEAR like #{buildYear}
+                </if>
+                <if test="buildingProject !=null and buildingProject !=''">
+                    and BUILDING_PROJECT like #{buildingProject}
+                </if>
+                <if test="operator !=null and operator !=''">
+                    and OPERATOR like #{operator}
+                </if>
+                <if test="keyword !=null and keyword !=''">
+                    and (ON_SITE_SUPERVISION like #{keyword}
+                    or  PROJECT_LEADER like #{keyword}
+                    )
+                </if>
+            </where>
+            )t
+        )where r between #{start} and #{end}
+    </select> 
+
+    <!-- 通过FaEquipmentInformation的id获得对应数据库中表的数据对象-->
+    <select id="selectFaEquipmentInformationById" parameterType="java.lang.String" resultMap="result_FaEquipmentInformation_Map">
+        select 
+            <include refid="FA_EQUIPMENT_INFORMATION_Column" />
+        from FA_EQUIPMENT_INFORMATION
+        where FA_EQUIPMENT_INFORMATION.EQUIPMENT_INFORMATION_ID = #{id}
+    </select>
+
+    <!--添加-->
+    <insert id="insertFaEquipmentInformation" parameterType="com.panyu.panyuprojectims.entity.FaEquipmentInformation">
+        insert into FA_EQUIPMENT_INFORMATION
+        values(
+        #{equipmentInformationId,jdbcType=VARCHAR},
+        #{operator,jdbcType=VARCHAR},
+        #{buildYear,jdbcType=VARCHAR},
+        #{buildingProject,jdbcType=VARCHAR},
+        #{motorRoomName,jdbcType=VARCHAR},
+        #{motorRoomLongitude,jdbcType=VARCHAR},
+        #{motorRoomLatitude,jdbcType=VARCHAR},
+        #{province},#{city,jdbcType=VARCHAR},
+        #{county},#{onSiteSupervision,jdbcType=VARCHAR},
+        #{projectLeader,jdbcType=VARCHAR},
+        #{equipmentId,jdbcType=VARCHAR},
+        #{boardCardDilatationId,jdbcType=VARCHAR},
+        #{powerNetworkLineId,jdbcType=VARCHAR},
+        #{pigtailSkipFiberId,jdbcType=VARCHAR},
+        #{walkingFrameId,jdbcType=VARCHAR},
+        #{fiberOpticChannelId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据设备基本工程信息表字段的ID查询关联的其他表ID字段-->
+    <select id="selectFaCabinetPowerFrameIdByEquipmentInformationId" parameterType="java.lang.String" resultType="String">
+        select
+        EQUIPMENT_ID
+        from FA_EQUIPMENT_INFORMATION
+        where EQUIPMENT_INFORMATION_ID = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectFaBoardcardDilatationIdByEquipmentInformationId" parameterType="java.lang.String" resultType="String">
+        select
+        BOARD_CARD_DILATATION_ID
+        from FA_EQUIPMENT_INFORMATION
+        where EQUIPMENT_INFORMATION_ID = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectFaPowerNetworkLineIdByEquipmentInformationId" parameterType="java.lang.String" resultType="String">
+        select
+        POWER_NETWORK_LINE_ID
+        from FA_EQUIPMENT_INFORMATION
+        where EQUIPMENT_INFORMATION_ID = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectFaPigtailSkipFiberIdByEquipmentInformationId" parameterType="java.lang.String" resultType="String">
+        select
+        PIGTAIL_SKIP_FIBER_ID
+        from FA_EQUIPMENT_INFORMATION
+        where EQUIPMENT_INFORMATION_ID = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectFaWalkingFrameIdByEquipmentInformationId" parameterType="java.lang.String" resultType="String">
+        select
+        WALKING_FRAME_ID
+        from FA_EQUIPMENT_INFORMATION
+        where EQUIPMENT_INFORMATION_ID = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectFaFiberOpticChannelIdByEquipmentInformationId" parameterType="java.lang.String" resultType="String">
+        select
+        FIBER_OPTIC_CHANNEL_ID
+        from FA_EQUIPMENT_INFORMATION
+        where EQUIPMENT_INFORMATION_ID = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+    <!--根据设备基本工程信息表字段的ID查询关联的其他表ID字段-->
+
+    <!-- 根据设备基本工程信息表字段的ID删除选中项-->
+    <delete id="deleteFaEquipmentInformationById" parameterType="java.lang.String">
+        delete from FA_EQUIPMENT_INFORMATION
+        where EQUIPMENT_INFORMATION_ID = #{equipmentInformationId,jdbcType=VARCHAR}
+    </delete>
+
+
+
+
+    <!-- 通过FaEquipmentInformation的id将FaEquipmentInformation的数据更新到数据库中对应的表,包括值null的数据-->
+    <update id="updateFaEquipmentInformationById" parameterType="com.panyu.panyuprojectims.entity.FaEquipmentInformation">
+        update FA_EQUIPMENT_INFORMATION set
+            OPERATOR=#{operator}
+            ,BUILD_YEAR=#{buildYear}
+            ,BUILDING_PROJECT=#{buildingProject}
+            ,MOTOR_ROOM_NAME=#{motorRoomName}
+            ,MOTOR_ROOM_LONGITUDE=#{motorRoomLongitude}
+            ,MOTOR_ROOM_LATITUDE=#{motorRoomLatitude}
+            ,PROVINCE=#{province}
+            ,CITY=#{city}
+            ,COUNTY=#{county}
+            ,ON_SITE_SUPERVISION=#{onSiteSupervision}
+            ,PROJECT_LEADER=#{projectLeader}
+            ,EQUIPMENT_ID=#{equipmentId}
+            ,BOARD_CARD_DILATATION_ID=#{boardCardDilatationId}
+            ,POWER_NETWORK_LINE_ID=#{powerNetworkLineId}
+            ,PIGTAIL_SKIP_FIBER_ID=#{pigtailSkipFiberId}
+            ,WALKING_FRAME_ID=#{walkingFrameId}
+            ,FIBER_OPTIC_CHANNEL_ID=#{fiberOpticChannelId}
+        where EQUIPMENT_INFORMATION_ID=#{equipmentInformationId}
+    </update>
+
+    <!--导出设备基本工程信息空Excel表格-->
+    <select id="FAExportEquipmentNullExcel" resultMap="result_FaEquipmentInformation_Map">
+        select eq.equipment_information_id,eq.operator,eq.build_year,eq.building_project,
+        eq.motor_room_name,eq.motor_room_longitude,eq.motor_room_latitude,eq.province,
+        eq.city,eq.county,eq.on_site_Supervision,eq.project_leader,
+        cp.equipment_number,cp.equipment_type,cp.equipment_name,cp.equipment_model,cp.equipment_design_quantity,
+        cp.equipment_size,cp.equipment_supplier,cp.equipment_contacts,
+        bd.board_card_number,bd.board_card_name,bd.veneer_function,bd.place_equipment,bd.board_card_design_quantity,
+        bd.board_card_supplier,bd.board_card_contacts,
+        pn.power_number,pn.cable_type,pn.specification_model,pn.number_of_branches,
+        pn.single_length,pn.total_length,pn.Froms,pn.To1,pn.power_supplier,pn.power_contacts,
+        ps.pigtail_number,ps.fiber_cable_type,ps.fiber_specification_model,ps.fiber_number_of_branches,
+        ps.fiber_single_length,ps.Forms,ps.To2,ps.fiber_supplier,ps.fiber_contacts,
+        wf.walking_number,wf.walking_design_length,wf.walking_frame_supplier,wf.walking_frame_contacts,
+        fo.fiber_optic_number,fo.fiber_optic_design_length,fo.fiber_optic_supplier,fo.fiber_optic_contacts
+        from FA_equipment_information eq
+        left join FA_cabinet_power_frame cp
+        on eq.equipment_id = cp.equipment_id
+        left join FA_boardCard_dilatation bd
+        on eq.board_card_dilatation_id = bd.board_card_dilatation_id
+        left join FA_power_network_line pn
+        on eq.power_network_line_id = pn.power_network_line_id
+        left join FA_pigtail_skip_fiber ps
+        on eq.pigtail_skip_fiber_id = ps.pigtail_skip_fiber_id
+        left join FA_walking_frame wf
+        on eq.walking_frame_id = wf.walking_frame_id
+        left join FA_fiber_optic_channel fo
+        on eq.fiber_optic_channel_id = fo.fiber_optic_channel_id
+    </select>
+
+    <!--导出设备基本工程信息Excel表格-->
+    <select id="FAExportEquipmentInfoExcel" resultMap="result_FaEquipmentInformation_Map">
+        select eq.equipment_information_id,eq.operator,eq.build_year,eq.building_project,
+        eq.motor_room_name,eq.motor_room_longitude,eq.motor_room_latitude,eq.province,
+        eq.city,eq.county,eq.on_site_Supervision,eq.project_leader,
+        cp.equipment_number,cp.equipment_type,cp.equipment_name,cp.equipment_model,cp.equipment_design_quantity,
+        cp.equipment_size,cp.equipment_supplier,cp.equipment_contacts,
+        bd.board_card_number,bd.board_card_name,bd.veneer_function,bd.place_equipment,bd.board_card_design_quantity,
+        bd.board_card_supplier,bd.board_card_contacts,
+        pn.power_number,pn.cable_type,pn.specification_model,pn.number_of_branches,
+        pn.single_length,pn.total_length,pn.Froms,pn.To1,pn.power_supplier,pn.power_contacts,
+        ps.pigtail_number,ps.fiber_cable_type,ps.fiber_specification_model,ps.fiber_number_of_branches,
+        ps.fiber_single_length,ps.Forms,ps.To2,ps.fiber_supplier,ps.fiber_contacts,
+        wf.walking_number,wf.walking_design_length,wf.walking_frame_supplier,wf.walking_frame_contacts,
+        fo.fiber_optic_number,fo.fiber_optic_design_length,fo.fiber_optic_supplier,fo.fiber_optic_contacts
+        from FA_equipment_information eq
+        left join FA_cabinet_power_frame cp
+        on eq.equipment_id = cp.equipment_id
+        left join FA_boardCard_dilatation bd
+        on eq.board_card_dilatation_id = bd.board_card_dilatation_id
+        left join FA_power_network_line pn
+        on eq.power_network_line_id = pn.power_network_line_id
+        left join FA_pigtail_skip_fiber ps
+        on eq.pigtail_skip_fiber_id = ps.pigtail_skip_fiber_id
+        left join FA_walking_frame wf
+        on eq.walking_frame_id = wf.walking_frame_id
+        left join FA_fiber_optic_channel fo
+        on eq.fiber_optic_channel_id = fo.fiber_optic_channel_id
+        where eq.equipment_information_id in
+        <foreach collection="array" item="equipmentInformationId" open="(" separator="," close=")">
+            #{equipmentInformationId}
+        </foreach>
+    </select>
+</mapper>

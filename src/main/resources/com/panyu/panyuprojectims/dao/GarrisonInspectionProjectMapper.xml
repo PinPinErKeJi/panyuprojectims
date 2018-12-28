@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.GarrisonInspectionProjectDao">
+    <!-- GarrisonInspectionProject的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_GarrisonInspectionProject_Map" type="com.panyu.panyuprojectims.entity.GarrisonInspectionProject">
+        <id column="GARRISON_PROJECT_ID" property="garrisonProjectId" />
+        <result column="GARRISON_PROJECT_NAME" property="garrisonProjectName" />
+        <result column="GARRISON_CRITERION_NAME" property="garrisonCriterionName" />
+        <result column="GARRISON_SUB_WORK_ID" property="garrisonSubWorkId" />
+        <collection property="garrisonPhotoResourcesList" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.GarrisonPhotoResources">
+            <result column="GARRISON_PHOTO_ID" property="garrisonPhotoId" />
+            <result column="GARRISON_PHOTO_NAME" property="garrisonPhotoName" />
+            <result column="PHOTO_UPLOAD_PEOPLE" property="photoUploadPeople" />
+            <result column="QUALIFIED" property="qualified" />
+            <result column="PROBLEM_DESCRIPTION" property="problemDescription" />
+            <result column="GARRISON_ID" property="garrisonId" />
+            <result column="GARRISON_SUB_WORK_ID" property="garrisonSubWorkId" />
+            <result column="GARRISON_PROJECT_ID" property="garrisonProjectId" />
+        </collection>
+    </resultMap>
+
+    <!-- 数据库中表名为:GARRISON_INSPECTION_PROJECT的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="GARRISON_INSPECTION_PROJECT_Column">
+        GARRISON_INSPECTION_PROJECT.GARRISON_PROJECT_ID as GARRISON_PROJECT_ID
+        ,GARRISON_INSPECTION_PROJECT.GARRISON_PROJECT_NAME as GARRISON_PROJECT_NAME
+        ,GARRISON_INSPECTION_PROJECT.GARRISON_SUB_WORK_ID as GARRISON_SUB_WORK_ID
+    </sql>
+
+    <!--根据检查项目id和名字查询检查项目对象-->
+    <select id="getGarrisonInspectionProject" resultMap="result_GarrisonInspectionProject_Map">
+        select * from Garrison_inspection_project where GARRISON_PROJECT_ID =
+        #{garrisonProjectId,jdbcType=VARCHAR} and GARRISON_PROJECT_NAME =
+        #{garrisonProjectName,jdbcType=VARCHAR}
+    </select>
+
+
+
+
+    <!--数据填报的时候根据检查项目ID查询项目名称通过对象接收-->
+    <select id="selectGarrisonInspectionProjectByProjectName" resultMap="result_GarrisonInspectionProject_Map">
+        select p.GARRISON_PROJECT_NAME,i.GARRISON_CRITERION_NAME
+        from Garrison_inspection_project p
+        left join Garrison_inspection_criterion i
+        on p.GARRISON_PROJECT_ID = i.GARRISON_PROJECT_ID
+        where i.GARRISON_PROJECT_ID = #{garrisonProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据分项工程id查询包含的检查项目-->
+    <select id="selectAllGarrisonInspectionProjectByGarrisonSubWorkId" resultMap="result_GarrisonInspectionProject_Map">
+        select * from Garrison_inspection_project
+        where garrison_sub_work_id = #{garrisonSubWorkId,jdbcType=VARCHAR}
+    </select>
+    <!--添加-->
+    <insert id="insertGarrisonInspectionProject">
+        insert into Garrison_inspection_project values(
+        sys_guid(),
+        #{garrisonProjectName,jdbcType=VARCHAR},
+        #{garrisonSubWorkId,jdbcType=VARCHAR})
+    </insert>
+    <!--根据检查项目名字查询个数，判断名字是否存在-->
+    <select id="countByGarrisonProjectName" resultType="java.lang.Long">
+        select count(garrison_project_name)
+        from Garrison_inspection_project
+        where garrison_project_name= #{garrisonProjectName,jdbcType=VARCHAR}
+        and garrison_sub_work_id = #{garrisonSubWorkId,jdbcType=VARCHAR}
+    </select>
+    <!--根据检查项目名字查询检查项目-->
+    <select id="selectGarrisonInspectionProjectByGarrisonProjectName" resultMap="result_GarrisonInspectionProject_Map">
+        select * from Garrison_inspection_project
+        where garrison_project_name = #{garrisonProjectName,jdbcType=VARCHAR}
+        and garrison_sub_work_id = #{garrisonSubWorkId,jdbcType=VARCHAR}
+    </select>
+    <!--修改-->
+    <update id="updateGarrisonInspectionProject">
+        update Garrison_inspection_project set garrison_project_name = #{garrisonProjectName,jdbcType=VARCHAR}
+        where garrison_project_id = #{garrisonProjectId,jdbcType=VARCHAR}
+    </update>
+    <!--删除-->
+    <delete id="deleteGarrisonInspectionProject">
+        delete from Garrison_inspection_project where garrison_project_id = #{garrisonProjectId,jdbcType=VARCHAR}
+    </delete>
+    <!--根据分项工程id查询包含的检查项目id 集合-->
+    <select id="selectAllGarrisonProjectIdByGarrisonSubWorkId" resultType="java.lang.String">
+        select garrison_project_id from Garrison_inspection_project where  garrison_sub_work_id = #{garrisonSubWorkId,jdbcType=VARCHAR}
+    </select>
+</mapper>

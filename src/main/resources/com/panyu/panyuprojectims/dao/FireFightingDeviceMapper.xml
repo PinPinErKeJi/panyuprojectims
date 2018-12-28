@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FireFightingDeviceDao">
+    <!-- FireFightingDevice的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FireFightingDevice_Map" type="com.panyu.panyuprojectims.entity.FireFightingDevice">
+        <id column="FIRE_ID" property="fireId" />
+        <result column="FIRE_CONSTRUCTION_MODE" property="fireConstructionMode" />
+        <result column="HAND_HELD_NUMBER" property="handHeldNumber" />
+        <result column="SPRAYING_METHOD_NUMBER" property="sprayingMethodNumber" />
+        <result column="FIRE_SUPPLIER_NAME" property="fireSupplierName" />
+        <result column="FIRE_SUPPLIER_CONTACTS" property="fireSupplierContacts" />
+        <result column="INSTALLATION_UNIT_NAME" property="installationUnitName" />
+        <result column="INSTALLATION_UNIT_CONTACTS" property="installationUnitContacts" />
+    </resultMap>
+
+    <!-- 数据库中表名为:FIRE_FIGHTING_DEVICE的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="FIRE_FIGHTING_DEVICE_Column">
+        FIRE_FIGHTING_DEVICE.FIRE_ID as FIRE_ID
+        ,FIRE_FIGHTING_DEVICE.FIRE_CONSTRUCTION_MODE as FIRE_CONSTRUCTION_MODE
+        ,FIRE_FIGHTING_DEVICE.HAND_HELD_NUMBER as HAND_HELD_NUMBER
+        ,FIRE_FIGHTING_DEVICE.SPRAYING_METHOD_NUMBER as SPRAYING_METHOD_NUMBER
+        ,FIRE_FIGHTING_DEVICE.FIRE_SUPPLIER_NAME as FIRE_SUPPLIER_NAME
+        ,FIRE_FIGHTING_DEVICE.FIRE_SUPPLIER_CONTACTS as FIRE_SUPPLIER_CONTACTS
+        ,FIRE_FIGHTING_DEVICE.INSTALLATION_UNIT_NAME as INSTALLATION_UNIT_NAME
+        ,FIRE_FIGHTING_DEVICE.INSTALLATION_UNIT_CONTACTS as INSTALLATION_UNIT_CONTACTS
+    </sql>
+
+    <!--添加-->
+    <insert id="insertFireFightingDevice" parameterType="com.panyu.panyuprojectims.entity.FireFightingDevice">
+        insert into FIRE_FIGHTING_DEVICE(FIRE_ID,FIRE_CONSTRUCTION_MODE,HAND_HELD_NUMBER,SPRAYING_METHOD_NUMBER,FIRE_SUPPLIER_NAME,FIRE_SUPPLIER_CONTACTS,INSTALLATION_UNIT_NAME,INSTALLATION_UNIT_CONTACTS)
+        values(
+        #{fireId,jdbcType=VARCHAR},
+        #{fireConstructionMode,jdbcType=VARCHAR},
+        #{handHeldNumber,jdbcType=VARCHAR},
+        #{sprayingMethodNumber,jdbcType=VARCHAR},
+        #{fireSupplierName,jdbcType=VARCHAR},
+        #{fireSupplierContacts,jdbcType=VARCHAR},
+        #{installationUnitName,jdbcType=VARCHAR},
+        #{installationUnitContacts,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 通过FireFightingDevice的id将数据库表中对应的数据删除-->
+    <delete id="deleteFireFightingDeviceById" parameterType="java.lang.String">
+        delete from FIRE_FIGHTING_DEVICE
+        where FIRE_ID = #{fireId,jdbcType=VARCHAR}
+    </delete>
+
+
+<!--  查询消防设施ID  -->
+    <select id="selectFireFightingDeviceByInstallationId" resultMap="result_FireFightingDevice_Map">
+        select
+        FIRE_ID
+        from FIRE_FIGHTING_DEVICE
+    </select>
+<!--根据消防设施ID查询建设方式-->
+    <select id="SelectByFireId" resultMap="result_FireFightingDevice_Map">
+        select fire_construction_mode from
+        project_progress p left join fire_fighting_device f
+        on p.fire_id = f.fire_id
+        where project_progress_id = #{projectProgressId,jdbcType=VARCHAR}
+    </select>
+</mapper>

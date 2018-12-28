@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.HnCableConnectorBoxNumberDao">
+    <!-- HnCableConnectorBoxNumber的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_HnCableConnectorBoxNumber_Map" type="com.panyu.panyuprojectims.entity.HnCableConnectorBoxNumber">
+        <id column="CABLE_CONNECTOR_BOX_ID" property="cableConnectorBoxId" />
+        <result column="CABLE_FLOOR_TYPE" property="cableFloorType" />
+        <result column="CABLE_WALL_MOUNTED" property="cableWallMounted" />
+    </resultMap>
+
+    <!--根据驻地网信息id查询 光缆交接箱设计数量对象-->
+    <select id="selectHnCableConnectorBoxNumberByGarrisonInformationId" resultMap="result_HnCableConnectorBoxNumber_Map">
+        select h2.* from HN_Garrison_information h1 left join HN_Cable_Connector_Box_Number h2 on
+        h1.cable_connector_box_id = h2.cable_connector_box_id
+        where h1.garrison_information_id=#{garrisonInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据光缆交接箱设计数量表ID字段删除数据-->
+    <delete id="deleteHnCableConnectorBoxNumberByCableConnectorBoxId" parameterType="java.lang.String">
+        delete from HN_CABLE_CONNECTOR_BOX_NUMBER
+        where CABLE_CONNECTOR_BOX_ID = #{cableConnectorBoxId,jdbcType=VARCHAR}
+    </delete>
+
+   <!--添加-->
+    <insert id="insertHnCableConnectorBoxNumber">
+        insert into HN_Cable_Connector_Box_Number values(
+        #{cableConnectorBoxId,jdbcType=VARCHAR},
+        #{cableFloorType,jdbcType=VARCHAR},
+        #{cableWallMounted,jdbcType=VARCHAR})
+    </insert>
+
+</mapper>

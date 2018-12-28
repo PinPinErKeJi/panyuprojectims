@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.EquipmentInspectionCriterionDao">
+    <!-- EquipmentInspectionCriterion的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_EquipmentInspectionCriterion_Map" type="com.panyu.panyuprojectims.entity.EquipmentInspectionCriterion">
+        <id column="EQUIPMENT_CRITERION_ID" property="equipmentCriterionId" />
+        <result column="EQUIPMENT_CRITERION_NAME" property="equipmentCriterionName" />
+        <result column="EQUIPMENT_QUALIFIED" property="equipmentQualified" />
+        <result column="EQUIPMENT_PROBLEM" property="equipmentProblem" />
+        <result column="EQUIPMENT_PHOTO" property="equipmentPhoto" />
+        <result column="EQUIPMENT_PROJECT_ID" property="equipmentProjectId" />
+    </resultMap>
+
+    <!-- 数据库中表名为:EQUIPMENT_INSPECTION_CRITERION的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="EQUIPMENT_INSPECTION_CRITERION_Column">
+        EQUIPMENT_INSPECTION_CRITERION.EQUIPMENT_CRITERION_ID as EQUIPMENT_CRITERION_ID
+        ,EQUIPMENT_INSPECTION_CRITERION.EQUIPMENT_CRITERION_NAME as EQUIPMENT_CRITERION_NAME
+        ,EQUIPMENT_INSPECTION_CRITERION.EQUIPMENT_QUALIFIED as EQUIPMENT_QUALIFIED
+        ,EQUIPMENT_INSPECTION_CRITERION.EQUIPMENT_PROBLEM as EQUIPMENT_PROBLEM
+        ,EQUIPMENT_INSPECTION_CRITERION.EQUIPMENT_PHOTO as EQUIPMENT_PHOTO
+        ,EQUIPMENT_INSPECTION_CRITERION.EQUIPMENT_PROJECT_ID as EQUIPMENT_PROJECT_ID
+    </sql>
+
+    <!--根据标准规范id和内容查询对象-->
+    <select id="getEquipmentInspectionCriterion" resultMap="result_EquipmentInspectionCriterion_Map">
+        select * from EQUIPMENT_INSPECTION_CRITERION where EQUIPMENT_CRITERION_ID =
+        #{equipmentCriterionId,jdbcType=VARCHAR} and EQUIPMENT_CRITERION_NAME =
+        #{equipmentCriterionName,jdbcType=VARCHAR}
+    </select>
+
+    <!--获得类名为:EquipmentInspectionCriterion对应的数据库表的数据总行数 -->
+    <select id="getEquipmentInspectionCriterionRowCount" resultType="java.lang.Long">
+        select count(EQUIPMENT_CRITERION_ID) from EQUIPMENT_INSPECTION_CRITERION
+    </select>
+    <!-- 获得类名为:EquipmentInspectionCriterion对应数据库中表的数据集合 -->
+    <select id="selectEquipmentInspectionCriterion" resultMap="result_EquipmentInspectionCriterion_Map">
+        select * from
+        (
+            select result.* from
+            (
+                select 
+                <include refid="EQUIPMENT_INSPECTION_CRITERION_Column" /> 
+                from EQUIPMENT_INSPECTION_CRITERION 
+
+            ) result 
+        )
+    </select>
+    <!--根据名字查询个数-->
+    <select id="getCountByEquipmentCriterionName" resultType="int">
+        select count(*) from equipment_inspection_criterion where
+        equipment_criterion_name = #{equipmentCriterionName,jdbcType=VARCHAR} and
+        equipment_project_id = #{equipmentProjectId,jdbcType=VARCHAR}
+
+    </select>
+    <!-- 通过EquipmentInspectionCriterion的id获得对应数据库中表的数据对象-->
+    <select id="selectEquipmentInspectionCriterionById" parameterType="java.lang.String" resultMap="result_EquipmentInspectionCriterion_Map">
+        select 
+            <include refid="EQUIPMENT_INSPECTION_CRITERION_Column" /> 
+        from EQUIPMENT_INSPECTION_CRITERION
+        where EQUIPMENT_INSPECTION_CRITERION.EQUIPMENT_CRITERION_ID = #{id}
+    </select> 
+
+    <!--根据检查项目ID查询标准规范-->
+    <select id="selectEquipmentInspectionCriterionByEquipmentProjectId" parameterType="java.lang.String" resultMap="result_EquipmentInspectionCriterion_Map">
+        select
+        <include refid="EQUIPMENT_INSPECTION_CRITERION_Column" />
+        from EQUIPMENT_INSPECTION_CRITERION
+        where EQUIPMENT_PROJECT_ID = #{equipmentProjectId,jdbcType=VARCHAR}
+    </select>
+    <!--导入设备专业模块信息数据时调用标准规范添加方法-->
+    <insert id="insertEquipmentInspectionCriterion" parameterType="com.panyu.panyuprojectims.entity.EquipmentInspectionCriterion">
+        insert into EQUIPMENT_INSPECTION_CRITERION(EQUIPMENT_CRITERION_ID,EQUIPMENT_CRITERION_NAME,EQUIPMENT_QUALIFIED,EQUIPMENT_PROBLEM,EQUIPMENT_PHOTO,EQUIPMENT_PROJECT_ID) 
+        values(sys_guid(),#{equipmentCriterionName,jdbcType=VARCHAR},null,null,null,#{equipmentProjectId,jdbcType=VARCHAR})
+    </insert>
+    <!--添加标准规范数据之后根据名称查询返回对象-->
+    <select id="selectInspectionCriterionByCriterionName" parameterType="java.lang.String" resultMap="result_EquipmentInspectionCriterion_Map">
+        select
+        <include refid="EQUIPMENT_INSPECTION_CRITERION_Column" />
+        from EQUIPMENT_INSPECTION_CRITERION
+        where EQUIPMENT_CRITERION_NAME = #{equipmentCriterionName,jdbcType=VARCHAR} and
+        equipment_project_id = #{equipmentProjectId,jdbcType=VARCHAR}
+    </select>
+    <!--根据检查项目ID查询出所有相应的标准规范ID-->
+    <select id="selectAllEquipmentCriterionIdByProjectId" resultType="String">
+        select EQUIPMENT_CRITERION_ID
+        from EQUIPMENT_INSPECTION_CRITERION
+        where EQUIPMENT_PROJECT_ID = #{equipmentProjectId,jdbcType=VARCHAR}
+    </select>
+    <!-- 通过EquipmentInspectionCriterion的id将数据库表中对应的数据删除-->
+    <delete id="deleteEquipmentInspectionCriterionById" parameterType="java.lang.String">
+        delete from EQUIPMENT_INSPECTION_CRITERION
+        where EQUIPMENT_CRITERION_ID = #{equipmentCriterionId，jdbcType=VARCHAR}
+    </delete>
+
+    <!--修改-->
+    <update id="updateEquipmentInspectionCriterionById" parameterType="com.panyu.panyuprojectims.entity.EquipmentInspectionCriterion">
+        update EQUIPMENT_INSPECTION_CRITERION set
+        EQUIPMENT_CRITERION_NAME=#{equipmentCriterionName}
+        where EQUIPMENT_CRITERION_ID=#{equipmentCriterionId}
+    </update>
+</mapper>

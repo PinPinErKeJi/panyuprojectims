@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.CircuitInspectionCriterionDao">
+    <!-- CircuitInspectionCriterion的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_CircuitInspectionCriterion_Map" type="com.panyu.panyuprojectims.entity.CircuitInspectionCriterion">
+        <id column="CIRCUIT_CRITERION_ID" property="circuitCriterionId" />
+        <result column="CIRCUIT_CRITERION_NAME" property="circuitCriterionName" />
+        <result column="CIRCUIT_QUALIFIED" property="circuitQualified" />
+        <result column="CIRCUIT_PROBLEM" property="circuitProblem" />
+        <result column="CIRCUIT_PHOTO" property="circuitPhoto" />
+        <result column="CIRCUIT_PROJECT_ID" property="circuitProjectId" />
+    </resultMap>
+
+    <!--根据标准规范id和标准规范内容查询标准规范对象-->
+    <select id="getCircuitInspectionCriterion" resultMap="result_CircuitInspectionCriterion_Map">
+        select * from circuit_inspection_criterion where CIRCUIT_CRITERION_ID =
+        #{circuitCriterionId,jdbcType=VARCHAR} and CIRCUIT_CRITERION_NAME =
+        #{circuitCriterionName,jdbcType=VARCHAR}
+    </select>
+
+
+
+    <!--根据检查项目id查询包含的标准规范-->
+    <select id="selectCircuitInspectionCriterionByCircuitProjectId" resultMap="result_CircuitInspectionCriterion_Map">
+        select * from circuit_inspection_criterion where circuit_project_id = #{circuitProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据标准规范和检查项目id查询标准规范的数量，判断标准规范是否存在-->
+    <select id="getCountCircuitCriterionNameByCircuitCriterionNameAndCircuitProjectId" resultType="java.lang.Long">
+        select count(*) from circuit_inspection_criterion where circuit_criterion_name =
+        #{circuitCriterionName,jdbcType=VARCHAR} and circuit_project_id =
+        #{circuitProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertCircuitInspectionCriterion">
+        insert into circuit_inspection_criterion values(
+        sys_guid(),
+        #{circuitCriterionName,jdbcType=VARCHAR},
+        null,null,null,
+        #{circuitProjectId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据标准规范和检查项目id查询标准规范对象-->
+    <select id="selectCircuitInspectionCriterionByCircuitCriterionNameAndCircuitProjectId" resultMap="result_CircuitInspectionCriterion_Map">
+        select * from circuit_inspection_criterion where circuit_criterion_name =
+        #{circuitCriterionName,jdbcType=VARCHAR} and circuit_project_id =
+        #{circuitProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--修改-->
+    <update id="updateCircuitInspectionCriterion">
+        update circuit_inspection_criterion set circuit_criterion_name =
+        #{circuitCriterionName,jdbcType=VARCHAR}where circuit_criterion_id =
+        #{circuitCriterionId,jdbcType=VARCHAR}
+    </update>
+
+    <!--根据检查项目id查询包含的标准规范id-->
+    <select id="selectCircuitCriterionIdByCircuitProjectId" resultType="java.lang.String">
+        select circuit_criterion_id from circuit_inspection_criterion where circuit_project_id = #{circuitProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--删除-->
+    <delete id="deleteCircuitInspectionCriterion">
+        delete from circuit_inspection_criterion where circuit_criterion_id = #{circuitCriterionId,jdbcType=VARCHAR}
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PhotoResourcesDao">
+    <!-- PhotoResources的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PhotoResources_Map" type="com.panyu.panyuprojectims.entity.PhotoResources">
+        <id column="PHOTO_RESOURCES_ID" property="photoResourcesId" />
+        <result column="PHOTO_NAME" property="photoName" />
+        <result column="PHOTO_UPLOAD_PEOPLE" property="photoUploadPeople" />
+        <result column="QUALIFIED" property="qualified" />
+        <result column="PROBLEM_DESCRIPTION" property="problemDescription" />
+        <result column="MODULE_ID" property="moduleId" />
+        <result column="SUB_ID" property="subId" />
+        <result column="PARENT_ID" property="parentId" />
+        <result column="PROJECT_PROGRESS_ID" property="projectProgressId"/>
+    </resultMap>
+
+
+
+    <!--根据moduleID和subID查询出projectID的list集合数据-->
+    <select id="selectProjectByIdList" resultType="String">
+        select i.project_id
+        from module m
+        left join sub_work s on
+        m.module_id = s.module_id
+        left join inspection_project i on
+        s.sub_id = i.sub_id
+        where m.module_id = #{moduleId,jdbcType=VARCHAR}
+        and s.sub_id = #{subId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据检查项目ID查询图片资源ID-->
+    <select id="selectPhotoResourcesIds" resultType="String">
+        select photo_resources_id from photo_resources where parent_id = #{projectId,jdbcType=VARCHAR} and
+        PROJECT_PROGRESS_ID = #{projectProgressId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据photoResourcesId查询图片资源对象-->
+    <select id="selectPhotoResourcesByPhotoId" resultMap="result_PhotoResources_Map">
+        select photo_name,photo_upload_people,qualified,problem_description
+        from photo_resources
+        where photo_resources_id = #{photoResourcesId,jdbcType=VARCHAR} and
+        project_progress_id = #{projectProgressId,jdbcType=VARCHAR}
+    </select>
+
+    <!--查询parentID对应的图片信息个数-->
+    <select id="getCountPhotoResourcesByParentId" resultType="java.lang.Long">
+        select count(photo_resources_id) from photo_resources where parent_id = #{parentId,jdbcType=VARCHAR}
+    </select>
+
+    <!--数据填报信息添加-->
+    <insert id="insertPhotoResourcesData" parameterType="com.panyu.panyuprojectims.entity.PhotoResources">
+        insert into PHOTO_RESOURCES
+        values(sys_guid(),#{photoName},null,#{qualified},#{problemDescription},null,null,#{parentId},#{projectProgressId})
+    </insert>
+
+
+</mapper>

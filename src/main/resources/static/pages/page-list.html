@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../static/easyui/easyui.css">
+  <link rel="stylesheet" href="../static/css/icon.css">
+  <link rel="stylesheet" href="../static/css/list.css">
+</head>
+<body>
+
+<div id="toolbar">
+  <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-add" id="newUser">添加记录</a>
+  <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-edit" id="editUser">修改记录</a>
+  <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-remove" id="removeUser">移除记录</a>
+</div>
+<div id="datagrid" class="easyui-datagrid panel-fit" style="height: 100%"></div>
+
+<div id="dialog" class="easyui-dialog">
+  <form method="post" id="form">
+    <div class="form-item left">
+      <div class="form-label">标题：</div>
+      <input class="form-input" type="text" name="title" data-options="required:true">
+    </div>
+
+    <div class="form-item right">
+      <div class="form-label">内容：</div>
+      <input class="form-input" type="text" name="content" data-options="required:true">
+    </div>
+
+    <div class="form-item left">
+      <div class="form-label">作者：</div>
+      <input class="form-input" type="text" name="author" data-options="required:true">
+    </div>
+
+    <div class="form-item right">
+      <div class="form-label">评论：</div>
+      <input class="form-input" type="text" name="remarks" data-options="required:true">
+    </div>
+
+    <div class="form-item left">
+      <div class="form-label">状态：</div>
+      <select class="form-input" name="status" data-options="required:true">
+        <option value="" disabled>是否可用</option>
+        <option value="1">可用</option>
+        <option value="0">不可用</option>
+      </select>
+    </div>
+  </form>
+</div>
+
+<script src="../static/js/jquery.min.js"></script>
+<script src="../static/js/jquery.easyui.min.js"></script>
+<script src="../static/js/easyui-lang-zh_CN.js"></script>
+<script>
+  $(function () {
+    var dialog = $('#dialog');
+    var form = $('#form');
+    var rowEditor = undefined;
+
+    // 隐藏弹窗
+    dialog.dialog('close');
+
+    // 数据表格
+    var grid = $('#datagrid').datagrid({
+      url: '../api/datagrid.json',
+      pagination: true,
+      singleSelect: true,
+      pageNumber: 1,
+      pageSize: 2,
+      pageList: [2, 4, 8, 10, 20],
+      toolbar: '#toolbar',
+      columns: [[{
+        field: 'id',
+        title: 'ID',
+        width: '10%'
+      }, {
+        field: 'title',
+        title: '标题',
+        width: '20%'
+      }, {
+        field: 'content',
+        title: '内容',
+        width: '20%'
+      }, {
+        field: 'status',
+        title: '状态',
+        width: '20%',
+        formatter: function (value, row, index) {
+          if (value != null) {
+            return value === '1' ? '审核已通过' : '审核未通过';
+          } else {
+            return ''
+          }
+        }
+      }, {
+        field: 'author',
+        title: '作者',
+        width: '20%'
+      }, {
+        field: 'remarks',
+        title: '备注',
+        width: '10%'
+      }]]
+    });
+
+    // 获取按钮
+    var newUser = $('#newUser');
+    var editUser = $('#editUser');
+    var removeUser = $('#removeUser');
+
+    // 添加记录
+    newUser.on('click', function () {
+      dialog.dialog('open');// open
+      dialog.dialog({
+        title: '添加记录',
+        iconCls: 'icon-save',
+        buttons: [{
+          text: '保存',
+          iconCls: 'icon-save',
+          handler: function () { // 新增数据
+            form.form('submit', {
+              url: '/form',
+              onSubmit: function () {
+                return form.form('validate');
+              },
+              success: function (data) {
+                dialog.dialog('close');// close
+                console.log(data);
+              }
+            });
+          }
+        }, {
+          text: '取消',
+          iconCls: 'icon-remove',
+          handler: function () {
+            dialog.dialog('close');// close
+          }
+        }]
+      });
+    });
+
+    // 修改记录
+    editUser.on('click', function () {
+      dialog.dialog({
+        title: '修改记录',
+        iconCls: 'icon-save',
+        buttons: [{
+          text: '保存',
+          iconCls: 'icon-save',
+          handler: function () {// 保存修改
+            form.form('submit', {
+              url: '/form',
+              onSubmit: function () {
+                return form.form('validate');
+              },
+              success: function (data) {
+                dialog.dialog('close');// close
+                console.log(data);
+              }
+            });
+          }
+        }, {
+          text: '取消',
+          iconCls: 'icon-remove',
+          handler: function () {
+            dialog.dialog('close');// close
+          }
+        }]
+      });
+
+      // 修改选中的数据行
+      if (grid.datagrid('getSelected')) {
+        dialog.dialog('open');// open
+        var row = grid.datagrid('getSelected');
+
+        row.status === '1' ? row.status = '审核已通过' : row.status = '审核未通过';
+
+        form.form('load', row); // 填充表单
+
+        console.log({
+          author: "33",
+          content: "22",
+          createdAt: "2017-12-03T11:15:52.000Z",
+          remarks: "666",
+          status: "1",
+          title: "这是标题11",
+          updatedAt: "2017-12-03T11:15:52.000Z"
+        });
+      } else {
+        dialog.dialog('close');// close
+        alert('请选择一条数据！');
+      }
+    });
+
+    // 移除记录
+    removeUser.on('click', function () {
+      // 移除选中的数据行
+      if (grid.datagrid('getSelected')) {
+        var row = grid.datagrid('getSelected');
+        $.messager.confirm('移除记录', '确定移除吗?', function () {
+          console.log('移除记录');
+          console.log(row);
+        });
+      } else {
+        alert('请选择一条数据！');
+      }
+    });
+
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.IcBbuNumberDao">
+    <!-- IcBbuNumber的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_IcBbuNumber_Map" type="com.panyu.panyuprojectims.entity.IcBbuNumber">
+        <id column="BBU_NUMBER_ID" property="bbuNumberId" />
+        <result column="CENTRALIZATION" property="centralization" />
+        <result column="WALL_HANGING_WALL" property="wallHangingWall" />
+    </resultMap>
+
+    <!-- 数据库中表名为:IC_BBU_NUMBER的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="IC_BBU_NUMBER_Column">
+        IC_BBU_NUMBER.BBU_NUMBER_ID as BBU_NUMBER_ID
+        ,IC_BBU_NUMBER.CENTRALIZATION as CENTRALIZATION
+        ,IC_BBU_NUMBER.WALL_HANGING_WALL as WALL_HANGING_WALL
+    </sql>
+
+    <!--根据信息id查询室内覆盖BBU对象-->
+    <select id="selectIcBbuNumberByIndoorInformationId" resultMap="result_IcBbuNumber_Map">
+        select ic.* from Indoor_Coverage_information in1 left join IC_BBU_Number ic on
+        in1.bbu_number_id = ic.bbu_number_id  where in1.indoor_information_id =
+        #{indoorInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加-->
+    <insert id="insertIcBbuNumber">
+        insert into IC_BBU_Number values(
+        #{bbuNumberId,jdbcType=VARCHAR},
+        #{centralization,jdbcType=VARCHAR},
+        #{wallHangingWall,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 根据BBU数量ID删除选中项-->
+    <delete id="deleteIcBbuNumberById" parameterType="java.lang.String">
+        delete from IC_BBU_NUMBER
+        where BBU_NUMBER_ID = #{bbuNumberId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

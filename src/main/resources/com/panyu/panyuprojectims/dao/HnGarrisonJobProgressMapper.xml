@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.HnGarrisonJobProgressDao">
+    <!-- HnGarrisonJobProgress的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_HnGarrisonJobProgress_Map" type="com.panyu.panyuprojectims.entity.HnGarrisonJobProgress">
+        <id column="JOB_PROGRESS_ID" property="jobProgressId" />
+        <result column="OPERATOR" property="operator" />
+        <result column="BUILDING_PROJECT" property="buildingProject" />
+        <result column="BUILD_YEAR" property="buildYear" />
+        <result column="SINGLE_PROJECT_NAME" property="singleProjectName" />
+        <result column="PROVINCE" property="province" />
+        <result column="CITY" property="city" />
+        <result column="COUNTY" property="county" />
+        <result column="REGIONAL_TYPE" property="regionalType" />
+        <result column="GARRISON_LONGITUDE" property="garrisonLongitude" />
+        <result column="GARRISON_LATITUDE" property="garrisonLatitude" />
+        <result column="CONSTRUCTION_NATURE" property="constructionNature" />
+        <result column="ASCRIPTION_END_BUREAU" property="ascriptionEndBureau" />
+        <result column="PROGRESS_SUPERVISOR_UNIT_ID" property="progressSupervisorUnitId" />
+        <result column="PROGRESS_CONSTRUCTION_ID" property="progressConstructionId" />
+        <result column="PROGRESS_DESIGN_UNIT_ID" property="progressDesignUnitId" />
+        <result column="PRIMARY_SPLITTER_ID" property="primarySplitterId" />
+        <result column="SECOND_SPLITTER_ID" property="secondSplitterId" />
+        <result column="PRIMARY_SPLITTER_BOX_ID" property="primarySplitterBoxId" />
+        <result column="SECOND_SPLITTER_BOX_ID" property="secondSplitterBoxId" />
+        <result column="CABLE_CONNECTOR_BOX_ID" property="cableConnectorBoxId" />
+        <result column="CABLE_LENGTH_STATISTICS_ID" property="cableLengthStatisticsId" />
+        <result column="STATISTICAL_LENGTH_ID" property="statisticalLengthId" />
+        <result column="ON_SITE_SUPERVISION" property="onSiteSupervision" />
+        <result column="PROFESSION_RESPONSIBLE_PERSON" property="professionResponsiblePerson" />
+        <result column="DISTRICT_HEAD" property="districtHead" />
+        <result column="PROGRESS_COMPANY_NAME" property="progressCompanyName" />
+        <result column="PROGRESS_LEADER" property="progressLeader" />
+        <result column="DESIGN_COMPANY_NAME" property="designCompanyName" />
+        <result column="DESIGN_LEADER" property="designLeader" />
+        <result column="PRIMARY_SPLITTING_RATIO" property="primarySplittingRatio" />
+        <result column="PRIMARY_ONE_TO_FOUR" property="primaryOneToFour" />
+        <result column="PRIMARY_ONE_TO_EIGHT" property="primaryOneToEight" />
+        <result column="PRIMARY_ONE_TO_SIXTEEN" property="primaryOneToSixteen" />
+        <result column="SECOND_SPLITTING_RATIO" property="secondSplittingRatio" />
+        <result column="SECOND_ONE_TO_FOUR" property="secondOneToFour" />
+        <result column="SECOND_ONE_TO_EIGHT" property="secondOneToEight" />
+        <result column="SECOND_ONE_TO_SIXTEEN" property="secondOneToSixteen" />
+        <result column="ONE_TO_THIRTY_TWO" property="oneToThirtyTwo" />
+        <result column="ONE_TO_SIXTY_FOUR" property="oneToSixtyFour" />
+        <result column="PRIMARY_SPLITTER_BOX_TYPE" property="primarySplitterBoxType" />
+        <result column="PRIMARY_ANCHOREAR_TYPE" property="primaryAnchorearType" />
+        <result column="PRIMARY_WALL_MOUNTED" property="primaryWallMounted" />
+        <result column="SECOND_SPLITTER_BOX_TYPE" property="secondSplitterBoxType" />
+        <result column="SECOND_ANCHOREAR_TYPE" property="secondAnchorearType" />
+        <result column="SECOND_WALL_MOUNTED" property="secondWallMounted" />
+        <result column="CABLE_CONNECTOR_BOX_TYPE" property="cableConnectorBoxType" />
+        <result column="CABLE_FLOOR_TYPE" property="cableFloorType" />
+        <result column="CABLE_WALL_MOUNTED" property="cableWallMounted" />
+        <result column="CORE_NUMBER" property="coreNumber" />
+        <result column="CABLE_LENGTH" property="cableLength" />
+        <result column="NUMBER_OF_BRANCHES" property="numberOfBranches" />
+        <result column="TOTAL_LENGTH" property="totalLength" />
+        <result column="AVERAGE_LENGTH" property="averageLength" />
+    </resultMap>
+
+    <!-- 数据库中表名为:HN_GARRISON_JOB_PROGRESS的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="HN_GARRISON_JOB_PROGRESS_Column">
+        HN_GARRISON_JOB_PROGRESS.JOB_PROGRESS_ID as JOB_PROGRESS_ID
+        ,HN_GARRISON_JOB_PROGRESS.OPERATOR as OPERATOR
+        ,HN_GARRISON_JOB_PROGRESS.BUILDING_PROJECT as BUILDING_PROJECT
+        ,HN_GARRISON_JOB_PROGRESS.BUILD_YEAR as BUILD_YEAR
+        ,HN_GARRISON_JOB_PROGRESS.SINGLE_PROJECT_NAME as SINGLE_PROJECT_NAME
+        ,HN_GARRISON_JOB_PROGRESS.PROVINCE as PROVINCE
+        ,HN_GARRISON_JOB_PROGRESS.CITY as CITY
+        ,HN_GARRISON_JOB_PROGRESS.COUNTY as COUNTY
+        ,HN_GARRISON_JOB_PROGRESS.REGIONAL_TYPE as REGIONAL_TYPE
+        ,HN_GARRISON_JOB_PROGRESS.GARRISON_LONGITUDE as GARRISON_LONGITUDE
+        ,HN_GARRISON_JOB_PROGRESS.GARRISON_LATITUDE as GARRISON_LATITUDE
+        ,HN_GARRISON_JOB_PROGRESS.CONSTRUCTION_NATURE as CONSTRUCTION_NATURE
+        ,HN_GARRISON_JOB_PROGRESS.ASCRIPTION_END_BUREAU as ASCRIPTION_END_BUREAU
+        ,HN_GARRISON_JOB_PROGRESS.PROGRESS_SUPERVISOR_UNIT_ID as PROGRESS_SUPERVISOR_UNIT_ID
+        ,HN_GARRISON_JOB_PROGRESS.PROGRESS_CONSTRUCTION_ID as PROGRESS_CONSTRUCTION_ID
+        ,HN_GARRISON_JOB_PROGRESS.PROGRESS_DESIGN_UNIT_ID as PROGRESS_DESIGN_UNIT_ID
+        ,HN_GARRISON_JOB_PROGRESS.PRIMARY_SPLITTER_ID as PRIMARY_SPLITTER_ID
+        ,HN_GARRISON_JOB_PROGRESS.SECOND_SPLITTER_ID as SECOND_SPLITTER_ID
+        ,HN_GARRISON_JOB_PROGRESS.PRIMARY_SPLITTER_BOX_ID as PRIMARY_SPLITTER_BOX_ID
+        ,HN_GARRISON_JOB_PROGRESS.SECOND_SPLITTER_BOX_ID as SECOND_SPLITTER_BOX_ID
+        ,HN_GARRISON_JOB_PROGRESS.CABLE_CONNECTOR_BOX_ID as CABLE_CONNECTOR_BOX_ID
+        ,HN_GARRISON_JOB_PROGRESS.CABLE_LENGTH_STATISTICS_ID as CABLE_LENGTH_STATISTICS_ID
+        ,HN_GARRISON_JOB_PROGRESS.STATISTICAL_LENGTH_ID as STATISTICAL_LENGTH_ID
+    </sql>
+
+    <!--查询驻地网工程进度信息总条数 -->
+    <select id="getHnGarrisonJobProgressRowCount" resultType="java.lang.Long">
+        select count(*) from (
+            select
+            gi.job_progress_id,gi.operator,gi.building_project,gi.build_year,gi.single_project_name,
+            gi.province,gi.city,gi.county,gi.regional_type,gi.garrison_longitude,gi.garrison_latitude,
+            gi.construction_nature,gi.ascription_end_bureau,
+            psu.on_site_Supervision,psu.profession_responsible_person,psu.district_head,
+            pc.progress_company_name,pc.progress_leader,
+            pd.design_company_name,pd.design_leader,
+            ps.primary_splitting_ratio,ps.primary_one_to_four,ps.primary_one_to_eight,ps.primary_one_to_sixteen,
+            ssr.second_splitting_ratio,ssr.second_one_to_four,ssr.second_one_to_eight,ssr.second_one_to_sixteen,
+            ssr.one_to_thirty_two,ssr.one_to_sixty_four,
+            psb.primary_splitter_box_type,psb.primary_anchorear_type,psb.primary_wall_mounted,
+            ssb.second_splitter_box_type,ssb.second_anchorear_type,ssb.second_wall_mounted,
+            ccb.cable_connector_box_type,ccb.cable_floor_type,ccb.cable_wall_mounted,
+            cls.core_number,cls.cable_length,
+            gl.number_of_branches,gl.total_length,gl.average_length
+            from HN_garrison_job_progress gi
+            left join HN_progress_supervisor_unit psu
+            on gi.progress_supervisor_unit_id = psu.progress_supervisor_unit_id
+            left join HN_progress_construction_unit pc
+            on gi.progress_construction_id = pc.progress_construction_id
+            left join HN_progress_design_unit pd
+            on gi.progress_design_unit_id = pd.progress_design_unit_id
+            left join HN_Primary_Splitter ps
+            on gi.primary_splitter_id = ps.primary_splitter_id
+            left join HN_Second_Splitter ssr
+            on gi.second_splitter_id = ssr.second_splitter_id
+            left join HN_Primary_Splitter_Box psb
+            on gi.primary_splitter_box_id = psb.primary_splitter_box_id
+            left join HN_Second_Splitter_Box ssb
+            on gi.second_splitter_box_id = ssb.second_splitter_box_id
+            left join HN_Cable_Connector_Box ccb
+            on gi.cable_connector_box_id = ccb.cable_connector_box_id
+            left join HN_Cable_length_statistics cls
+            on gi.cable_length_statistics_id = cls.cable_length_statistics_id
+            left join HN_GJYXFCH_Length gl
+            on gi.statistical_length_id = gl.statistical_length_id
+            <where>
+                <if test="province !=null and province !='' ">
+                    and PROVINCE like #{province}
+                </if>
+                <if test="city !=null and city !='' ">
+                    and CITY like #{city}
+                </if>
+                <if test="county !=null and county !='' ">
+                    and COUNTY like #{county}
+                </if>
+                <if test="buildYear !=null and buildYear !='' ">
+                    and BUILD_YEAR like #{buildYear}
+                </if>
+                <if test="buildingProject !=null and buildingProject !='' ">
+                    and BUILDING_PROJECT like #{buildingProject}
+                </if>
+                <if test="operator !=null and operator !='' ">
+                    and OPERATOR like #{operator}
+                </if>
+                <if test="singleProjectName !=null and singleProjectName !='' ">
+                    and SINGLE_PROJECT_NAME like #{singleProjectName}
+                </if>
+                <if test="keyword !=null and keyword !='' ">
+                    and ON_SITE_SUPERVISION like #{keyword}
+                    or PROFESSION_RESPONSIBLE_PERSON like #{keyword}
+                    or DISTRICT_HEAD like #{keyword}
+                </if>
+            </where>
+        )
+    </select>
+    <!-- 分页模糊匹配查询展示驻地网工程进度信息数据 -->
+    <select id="selectHnGarrisonJobProgress" resultMap="result_HnGarrisonJobProgress_Map">
+        select * from (
+            select t.*,rownum r from (
+                select
+                gi.job_progress_id,gi.operator,gi.building_project,gi.build_year,gi.single_project_name,
+                gi.province,gi.city,gi.county,gi.regional_type,gi.garrison_longitude,gi.garrison_latitude,
+                gi.construction_nature,gi.ascription_end_bureau,
+                psu.on_site_Supervision,psu.profession_responsible_person,psu.district_head,
+                pc.progress_company_name,pc.progress_leader,
+                pd.design_company_name,pd.design_leader,
+                ps.primary_splitting_ratio,ps.primary_one_to_four,ps.primary_one_to_eight,ps.primary_one_to_sixteen,
+                ssr.second_splitting_ratio,ssr.second_one_to_four,ssr.second_one_to_eight,ssr.second_one_to_sixteen,
+                ssr.one_to_thirty_two,ssr.one_to_sixty_four,
+                psb.primary_splitter_box_type,psb.primary_anchorear_type,psb.primary_wall_mounted,
+                ssb.second_splitter_box_type,ssb.second_anchorear_type,ssb.second_wall_mounted,
+                ccb.cable_connector_box_type,ccb.cable_floor_type,ccb.cable_wall_mounted,
+                cls.core_number,cls.cable_length,
+                gl.number_of_branches,gl.total_length,gl.average_length
+                from HN_garrison_job_progress gi
+                left join HN_progress_supervisor_unit psu
+                on gi.progress_supervisor_unit_id = psu.progress_supervisor_unit_id
+                left join HN_progress_construction_unit pc
+                on gi.progress_construction_id = pc.progress_construction_id
+                left join HN_progress_design_unit pd
+                on gi.progress_design_unit_id = pd.progress_design_unit_id
+                left join HN_Primary_Splitter ps
+                on gi.primary_splitter_id = ps.primary_splitter_id
+                left join HN_Second_Splitter ssr
+                on gi.second_splitter_id = ssr.second_splitter_id
+                left join HN_Primary_Splitter_Box psb
+                on gi.primary_splitter_box_id = psb.primary_splitter_box_id
+                left join HN_Second_Splitter_Box ssb
+                on gi.second_splitter_box_id = ssb.second_splitter_box_id
+                left join HN_Cable_Connector_Box ccb
+                on gi.cable_connector_box_id = ccb.cable_connector_box_id
+                left join HN_Cable_length_statistics cls
+                on gi.cable_length_statistics_id = cls.cable_length_statistics_id
+                left join HN_GJYXFCH_Length gl
+                on gi.statistical_length_id = gl.statistical_length_id
+                <where>
+                    <if test="province !=null and province !='' ">
+                        and PROVINCE like #{province}
+                    </if>
+                    <if test="city !=null and city !='' ">
+                        and CITY like #{city}
+                    </if>
+                    <if test="county !=null and county !='' ">
+                        and COUNTY like #{county}
+                    </if>
+                    <if test="buildYear !=null and buildYear !='' ">
+                        and BUILD_YEAR like #{buildYear}
+                    </if>
+                    <if test="buildingProject !=null and buildingProject !='' ">
+                        and BUILDING_PROJECT like #{buildingProject}
+                    </if>
+                    <if test="operator !=null and operator !='' ">
+                        and OPERATOR like #{operator}
+                    </if>
+                    <if test="singleProjectName !=null and singleProjectName !='' ">
+                        and SINGLE_PROJECT_NAME like #{singleProjectName}
+                    </if>
+                    <if test="keyword !=null and keyword !='' ">
+                        and ON_SITE_SUPERVISION like #{keyword}
+                        or PROFESSION_RESPONSIBLE_PERSON like #{keyword}
+                        or DISTRICT_HEAD like #{keyword}
+                    </if>
+                </where>
+            )t
+        )where r between #{start} and #{end}
+    </select>
+    <!--导出工程进度Excel表格数据-->
+    <select id="HnGarrisonJobProgressExcel" resultMap="result_HnGarrisonJobProgress_Map">
+            select
+            gi.job_progress_id,gi.operator,gi.building_project,gi.build_year,gi.single_project_name,
+            gi.province,gi.city,gi.county,gi.regional_type,gi.garrison_longitude,gi.garrison_latitude,
+            gi.construction_nature,gi.ascription_end_bureau,
+            psu.on_site_Supervision,psu.profession_responsible_person,psu.district_head,
+            pc.progress_company_name,pc.progress_leader,
+            pd.design_company_name,pd.design_leader,
+            ps.primary_splitting_ratio,ps.primary_one_to_four,ps.primary_one_to_eight,ps.primary_one_to_sixteen,
+            ssr.second_splitting_ratio,ssr.second_one_to_four,ssr.second_one_to_eight,ssr.second_one_to_sixteen,
+            ssr.one_to_thirty_two,ssr.one_to_sixty_four,
+            psb.primary_splitter_box_type,psb.primary_anchorear_type,psb.primary_wall_mounted,
+            ssb.second_splitter_box_type,ssb.second_anchorear_type,ssb.second_wall_mounted,
+            ccb.cable_connector_box_type,ccb.cable_floor_type,ccb.cable_wall_mounted,
+            cls.core_number,cls.cable_length,
+            gl.number_of_branches,gl.total_length,gl.average_length
+            from HN_garrison_job_progress gi
+            left join HN_progress_supervisor_unit psu
+            on gi.progress_supervisor_unit_id = psu.progress_supervisor_unit_id
+            left join HN_progress_construction_unit pc
+            on gi.progress_construction_id = pc.progress_construction_id
+            left join HN_progress_design_unit pd
+            on gi.progress_design_unit_id = pd.progress_design_unit_id
+            left join HN_Primary_Splitter ps
+            on gi.primary_splitter_id = ps.primary_splitter_id
+            left join HN_Second_Splitter ssr
+            on gi.second_splitter_id = ssr.second_splitter_id
+            left join HN_Primary_Splitter_Box psb
+            on gi.primary_splitter_box_id = psb.primary_splitter_box_id
+            left join HN_Second_Splitter_Box ssb
+            on gi.second_splitter_box_id = ssb.second_splitter_box_id
+            left join HN_Cable_Connector_Box ccb
+            on gi.cable_connector_box_id = ccb.cable_connector_box_id
+            left join HN_Cable_length_statistics cls
+            on gi.cable_length_statistics_id = cls.cable_length_statistics_id
+            left join HN_GJYXFCH_Length gl
+            on gi.statistical_length_id = gl.statistical_length_id
+            where gi.job_progress_id in
+            <foreach collection="array" item="jobProgressId" open="(" separator="," close=")">
+                #{jobProgressId,jdbcType=VARCHAR}
+            </foreach>
+    </select>
+</mapper>

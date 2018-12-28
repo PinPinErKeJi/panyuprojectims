@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.FaWalkingFrameDao">
+    <!-- FaWalkingFrame的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_FaWalkingFrame_Map" type="com.panyu.panyuprojectims.entity.FaWalkingFrame">
+        <id column="WALKING_FRAME_ID" property="walkingFrameId" />
+        <result column="WALKING_NUMBER" property="walkingNumber" />
+        <result column="WALKING_DESIGN_LENGTH" property="walkingDesignLength" />
+        <result column="WALKING_FRAME_SUPPLIER" property="walkingFrameSupplier" />
+        <result column="WALKING_FRAME_CONTACTS" property="walkingFrameContacts" />
+    </resultMap>
+
+    <!-- 数据库中表名为:FA_WALKING_FRAME的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="FA_WALKING_FRAME_Column">
+        FA_WALKING_FRAME.WALKING_FRAME_ID as WALKING_FRAME_ID
+        ,FA_WALKING_FRAME.WALKING_NUMBER as WALKING_NUMBER
+        ,FA_WALKING_FRAME.WALKING_DESIGN_LENGTH as WALKING_DESIGN_LENGTH
+        ,FA_WALKING_FRAME.WALKING_FRAME_SUPPLIER as WALKING_FRAME_SUPPLIER
+        ,FA_WALKING_FRAME.WALKING_FRAME_CONTACTS as WALKING_FRAME_CONTACTS
+    </sql>
+
+    <!--添加-->
+    <insert id="insertFaWalkingFrame" parameterType="com.panyu.panyuprojectims.entity.FaWalkingFrame">
+        insert into FA_WALKING_FRAME
+        values(
+        #{walkingFrameId,jdbcType=VARCHAR},
+        #{walkingNumber,jdbcType=VARCHAR},
+        #{walkingDesignLength,jdbcType=VARCHAR},
+        #{walkingFrameSupplier,jdbcType=VARCHAR},
+        #{walkingFrameContacts,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 通过FaWalkingFrame的id将数据库表中对应的数据删除-->
+    <delete id="deleteFaWalkingFrameById" parameterType="java.lang.String">
+        delete from FA_WALKING_FRAME
+        where WALKING_FRAME_ID = #{walkingFrameId,jdbcType=VARCHAR}
+    </delete>
+
+    <!--根据设备信息id查询FaWalkingFrame-->
+    <select id="getFaWalkingFrame" resultMap="result_FaWalkingFrame_Map">
+        select wf.* from FA_equipment_information ei left join FA_walking_frame wf on
+        ei.walking_frame_id = wf.walking_frame_id
+        where ei.equipment_information_id = #{equipmentInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 通过FaWalkingFrame的id将FaWalkingFrame的数据更新到数据库中对应的表,包括值null的数据-->
+    <update id="updateFaWalkingFrameById" parameterType="com.panyu.panyuprojectims.entity.FaWalkingFrame">
+        update FA_WALKING_FRAME set
+            WALKING_NUMBER=#{walkingNumber}
+            ,WALKING_DESIGN_LENGTH=#{walkingDesignLength}
+            ,WALKING_FRAME_SUPPLIER=#{walkingFrameSupplier}
+            ,WALKING_FRAME_CONTACTS=#{walkingFrameContacts}
+        where WALKING_FRAME_ID=#{walkingFrameId}
+    </update>
+</mapper>

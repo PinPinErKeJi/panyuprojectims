@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.ElectricPowerDao">
+    <!-- ElectricPower的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_ElectricPower_Map" type="com.panyu.panyuprojectims.entity.ElectricPower">
+        <id column="ELECTRIC_POWER_ID" property="electricPowerId" />
+        <result column="ELECTRIC_CONSTRUCTION_MODE" property="electricConstructionMode" />
+        <result column="ELECTRIC_TYPE" property="electricType" />
+        <result column="ELECTRIC_UNIT_NAME" property="electricUnitName" />
+        <result column="ELECTRIC_UNIT_CONTACTS" property="electricUnitContacts" />
+    </resultMap>
+
+    <!-- 添加-->
+    <insert id="insertElectricPower" parameterType="com.panyu.panyuprojectims.entity.ElectricPower">
+        insert into ELECTRIC_POWER(ELECTRIC_POWER_ID,ELECTRIC_CONSTRUCTION_MODE,ELECTRIC_TYPE,ELECTRIC_UNIT_NAME,ELECTRIC_UNIT_CONTACTS)
+        values(
+        #{electricPowerId,jdbcType=VARCHAR},
+        #{electricConstructionMode,jdbcType=VARCHAR},
+        #{electricType,jdbcType=VARCHAR},
+        #{electricUnitName,jdbcType=VARCHAR},
+        #{electricUnitContacts,jdbcType=VARCHAR})
+    </insert>
+
+<!-- 通过ElectricPower的id将数据库表中对应的数据删除-->
+    <delete id="deleteElectricPowerById" parameterType="java.lang.String">
+        delete from ELECTRIC_POWER
+        where ELECTRIC_POWER_ID = #{electricPowerId,jdbcType=VARCHAR}
+    </delete>
+<!--删除结束-->
+
+
+<!--查询外电引入ID-->
+    <select id="selectByelectricPowerId" resultMap="result_ElectricPower_Map">
+        select
+        ELECTRIC_POWER_ID
+        from ELECTRIC_POWER
+    </select>
+
+<!--  根据外电引入ID查询建设方式、外电类型  -->
+    <select id="SelectByElectricPowerId" resultMap="result_ElectricPower_Map">
+                select electric_construction_mode,electric_type from
+                project_progress p left join electric_power e
+                on p.electric_power_id = e.electric_power_id
+                where project_progress_id = #{projectProgressId,jdbcType=VARCHAR}
+    </select>
+</mapper>

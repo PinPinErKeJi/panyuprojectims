@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/easyui/easyui.css">
+    <link rel="stylesheet" href="../static/css/icon.css">
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/jquery.easyui.min.js"></script>
+    <script src="../static/js/easyui-lang-zh_CN.js"></script>
+    <style>
+        .easyui-menu {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="nav" class="easyui-menu">
+    <div data-options="iconCls:'icon-save'">001</div>
+    <div data-options="iconCls:'icon-ok'">002</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'icon-tip'">005</div>
+</div>
+
+<div id="nav2" class="easyui-menu">
+    <div data-options="iconCls:'icon-save'">001</div>
+    <div data-options="iconCls:'icon-edit'">
+        <span>002</span>
+        <div class="submenu">
+            <div>01</div>
+            <div>02</div>
+        </div>
+    </div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'icon-tip'">003</div>
+</div>
+
+<a class="easyui-menubutton" href="javascript:;" data-options="menu:'#nav'">一级菜单</a>
+<a class="easyui-menubutton" href="javascript:;" data-options="menu:'#nav2'">一级菜单</a>
+
+<button id="btn" type="button">按钮1</button>
+
+
+<div class="easyui-form">
+    <form id="easyuiForm" method="post">
+        <div>
+            <label for="name">Name:</label>
+            <input class="easyui-validatebox" id="name" type="text" name="name" data-options="required:true" />
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input class="easyui-validatebox" id="email" type="text" name="email" data-options="validType:'email'" />
+        </div>
+    </form>
+</div>
+
+<script>
+    $(function () {
+        $('.easyui-menu').menu({
+            onClick: function (item) {
+                //alert(JSON.stringify(item));
+                alert(item.text);
+            }
+        });
+        $('#btn').click(function () {
+            $('#nav2').menu('show', {
+                left: 100,
+                top: 100
+            });
+        });
+    });
+</script>
+</body>
+</html>

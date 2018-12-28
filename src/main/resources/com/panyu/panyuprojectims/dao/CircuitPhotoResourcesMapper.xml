@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.CircuitPhotoResourcesDao">
+    <!-- CircuitPhotoResources的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_CircuitPhotoResources_Map" type="com.panyu.panyuprojectims.entity.CircuitPhotoResources">
+        <id column="CIRCUIT_PHOTO_ID" property="circuitPhotoId" />
+        <result column="CIRCUIT_PHOTO_NAME" property="circuitPhotoName" />
+        <result column="PHOTO_UPLOAD_PEOPLE" property="photoUploadPeople" />
+        <result column="QUALIFIED" property="qualified" />
+        <result column="PROBLEM_DESCRIPTION" property="problemDescription" />
+        <result column="CIRCUIT_MODULE_ID" property="circuitModuleId" />
+        <result column="CIRCUIT_SUB_WORK_ID" property="circuitSubWorkId" />
+        <result column="CIRCUIT_PROJECT_ID" property="circuitProjectId" />
+        <result column="CIRCUIT_INFORMATION_ID" property="circuitInformationId" />
+    </resultMap>
+
+    <!--根据模块ID和分项工程ID查询检查项目ID集合-->
+    <select id="selectCircuitInspectionProjectList" resultType="String">
+        select
+        p.circuit_project_id
+        from circuit_module m
+        left join circuit_sub_work s
+        on m.circuit_module_id = s.circuit_module_id
+        left join circuit_inspection_project p
+        on s.circuit_sub_work_id = p.circuit_sub_work_id
+        where m.circuit_module_id = #{circuitModuleId,jdbcType=VARCHAR} and
+        s.circuit_sub_work_id = #{circuitSubWorkId,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加数据-->
+    <insert id="insertCircuitPhotoResources">
+        insert into circuit_photo_resources
+        values(sys_guid(),#{circuitPhotoName},null ,#{qualified},#{problemDescription},null,null,#{circuitProjectId},#{circuitInformationId})
+    </insert>
+
+    <!--根据parentID查询对应的图片信息个数-->
+    <select id="getCircuitPhotoResourcesCountByProjectId" resultType="java.lang.Long">
+        select count(circuit_photo_id)
+        from circuit_photo_resources
+        where circuit_project_id = #{circuitProjectId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据检查项目ID和信息id查询图片资源ID集合-->
+    <select id="selectCircuitPhotoResourcesByPhotoId" resultType="String">
+        select circuit_photo_id
+        from circuit_photo_resources
+        where circuit_project_id = #{circuitProjectId,jdbcType=VARCHAR} and
+        circuit_information_id = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据图片资源ID，检查项目id和信息id查询图片资源-->
+    <select id="selectAllCircuitPhotoResources" resultMap="result_CircuitPhotoResources_Map">
+        select
+        circuit_photo_name,photo_upload_people,qualified,problem_description
+        from circuit_photo_resources
+        where
+        circuit_photo_id = #{circuitPhotoId,jdbcType=VARCHAR} and
+        circuit_project_id = #{circuitProjectId,jdbcType=VARCHAR} and
+        circuit_information_id = #{circuitInformationId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

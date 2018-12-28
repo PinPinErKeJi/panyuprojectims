@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.HnGarrisonNodeDao">
+    <!-- HnGarrisonNode的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_HnGarrisonNode_Map" type="com.panyu.panyuprojectims.entity.HnGarrisonNode">
+        <id column="GARRISON_NODE_ID" property="garrisonNodeId" />
+        <result column="GARRISON_NODE_NAME" property="garrisonNodeName" />
+        <result column="PARENT_ID" property="parentId" />
+    </resultMap>
+    <resultMap id="treeNode" type="com.panyu.panyuprojectims.entity.TreeNode">
+        <id column="GARRISON_NODE_ID" property="id" />
+        <result column="GARRISON_NODE_NAME" property="text" />
+        <collection property="children" javaType="java.util.List" ofType="com.panyu.panyuprojectims.entity.TreeNode">
+            <id column="garrison_node_id_" property="id" />
+            <result column="garrison_node_name_" property="text" />
+        </collection>
+    </resultMap>
+
+    <!-- 数据库中表名为:HN_GARRISON_NODE的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="HN_GARRISON_NODE_Column">
+        HN_GARRISON_NODE.GARRISON_NODE_ID as GARRISON_NODE_ID
+        ,HN_GARRISON_NODE.GARRISON_NODE_NAME as GARRISON_NODE_NAME
+        ,HN_GARRISON_NODE.PARENT_ID as PARENT_ID
+    </sql>
+    <!--根据TreeNodeID查询子级菜单所属父级的ID集合-->
+    <select id="getGarrisonTreeNode" resultType="String">
+        select ga.GARRISON_NODE_ID garrison_node_id_
+        from HN_GARRISON_NODE ga
+        left join HN_GARRISON_NODE gn
+        on ga.GARRISON_NODE_ID = gn.GARRISON_NODE_ID
+        where ga.PARENT_ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <!--根据节点ID查询一级菜单模块名称-->
+    <select id="selectFirstGarrisonName" resultType="String">
+        select GARRISON_NODE_NAME
+        from HN_GARRISON_NODE
+        where GARRISON_NODE_ID = #{garrisonNodeId,jdbcType=VARCHAR}
+    </select>
+    <!--根据节点ID查询二级菜单模块名称-->
+    <select id="selectSecondGarrisonName" resultType="String">
+        select GARRISON_NODE_NAME
+        from HN_GARRISON_NODE
+        where GARRISON_NODE_ID = #{id,jdbcType=VARCHAR}
+    </select>
+
+
+</mapper>
