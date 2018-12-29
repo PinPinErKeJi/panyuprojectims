@@ -31,7 +31,9 @@
                    prompt="验证码" iconWidth="28"
                    data-options="label:'验证码:',required:true,missingMessage:''"
                    style="width: 200px; height: 30px;">
-            <img src="${ctp }/genCaptcha"/>
+            <div id="mpanel1" >
+            </div>
+            <button id="check-btn" class="verify-btn">确定</button>
         </div>
     </form>
     <div style="text-align: center; padding: 5px 0">
@@ -42,7 +44,9 @@
     </div>
 </div>
 
+
 <script src="js/jquery.min.js"></script>
+<script src="js/verify.min.js"></script>
 <script src="js/jquery.easyui.min.js"></script>
 <script src="js/easyui-lang-zh_CN.js"></script>
 <script>
@@ -109,6 +113,28 @@
     function clearForm() {
         $('#formlogin').form('clear');
     }
+
+//    验证码
+    $('#mpanel1').codeVerify({
+
+        type : 1,
+        width : '100px',
+        height : '50px',
+        fontSize : '20px',
+        codeLength : 4,
+        btnId : 'check-btn',
+        ready : function() {
+        },
+        success : function() {
+            alert('验证匹配！');
+        },
+        error : function() {
+            alert('验证码不匹配！');
+        }
+
+    });
+
+
 </script>
 </body>
 </html>
