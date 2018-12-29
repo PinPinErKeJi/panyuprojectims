@@ -58,10 +58,10 @@
             var password = $("#password").val();
             if($("#formlogin").form('validate')){
                 var msg = "";
-                if (!/^\w{1,20}$/.test(loginname)) {
-                    msg = "登录名长度必须是1~20之间";
-                } else if (!/^\w{6,8}$/.test(password)) {
-                    msg = "密码长度必须是1~20之间";
+                if (!/([0-9]|[a-z]){1,20}$/.test(loginname)) {
+                    msg = "登录名长度必须是由1~20个拼音或字母组成";
+                } else if (!/^[0-9a-zA-Z]{6,8}$/.test(password)) {
+                    msg = "密码长度必须是由6~8个数字或字母组成";
                 }
                 if (msg != "") {
                     $.messager.alert('用户名密码错误',msg,'info');
