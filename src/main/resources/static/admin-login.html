@@ -15,25 +15,23 @@
     <form id="formlogin" method="post" action="${ctp }/loginauth">
         <!-- menulogin -->
         <div style="margin-bottom: 20px">
-            <input class="easyui-textbox" id="loginname" name="usercode"
-                   prompt="usercode" iconWidth="28"
+            <input class="easyui-textbox" id="loginname" name="username"
+                   prompt="由1~20个拼音或字母组成" iconWidth="28"
                    data-options="label:'用户名:',required:true"
                    style="width: 300px; height: 34px; padding: 10px;">
         </div>
         <div style="margin-bottom: 20px">
             <input class="easyui-passwordbox" id="password" name="password"
-                   prompt="password" iconWidth="28"
+                   prompt="由6~8个数字或字母组成" iconWidth="28"
                    data-options="label:'密码:',required:true"
                    style="width: 300px; height: 34px; padding: 10px">
         </div>
-        <div style="margin-bottom: 20px">
-            <input class="easyui-textbox" id="icaptcha" name="captcha"
-                   prompt="验证码" iconWidth="28"
-                   data-options="label:'验证码:',required:true,missingMessage:''"
-                   style="width: 200px; height: 30px;">
-            <div id="mpanel1" >
+        <div style="margin-bottom: 20px; overflow: hidden">
+            <span style="float: left;padding-top: 10px">验证码：</span>
+            <!--验证码插件-->
+            <div id="mpanel1" style="overflow: hidden">
             </div>
-            <button id="check-btn" class="verify-btn">确定</button>
+
         </div>
     </form>
     <div style="text-align: center; padding: 5px 0">
@@ -51,14 +49,6 @@
 <script src="js/easyui-lang-zh_CN.js"></script>
 <script>
     $(function() {
-        if("${msg }"!=""){
-            //$.messager.alert('提示',"${msg }");
-            var showmsg="${msg }";
-            $.messager.show({
-                title:'提示',
-                msg:showmsg
-            });
-        }
         /*获取焦点*/
         $('#loginname').textbox('textbox').focus();
         /** 给登录按钮绑定点击事件  */
@@ -70,7 +60,7 @@
                 var msg = "";
                 if (!/^\w{1,20}$/.test(loginname)) {
                     msg = "登录名长度必须是1~20之间";
-                } else if (!/^\w{1,20}$/.test(password)) {
+                } else if (!/^\w{6,8}$/.test(password)) {
                     msg = "密码长度必须是1~20之间";
                 }
                 if (msg != "") {
@@ -79,22 +69,6 @@
                 }
                 $("#formlogin").submit();
             }
-            /*
-             * $.ajax({
-                url:'menudologin',
-                type='post',
-                data:{usercode:loginname,password:password},
-                error:function(){
-                    $.messager.alert('提示','请求失败!')
-                },
-                success:function(res){
-                    if(res.strresult=='OK'){
-                    }else{
-                        $.messager.alert('提示','用户名或者密码错误');
-                        window.location.href='userlogin.jsp';
-                    }
-                }
-            });*/
         });
         //相应输入框的回车键
         /* $('#formlogin').find('input').on('keyup',function(event){
@@ -119,15 +93,15 @@
 
         type : 1,
         width : '100px',
-        height : '50px',
+        height : '40px',
         fontSize : '20px',
         codeLength : 4,
-        btnId : 'check-btn',
+        btnId : 'login-submit-btn',
         ready : function() {
         },
-        success : function() {
-            alert('验证匹配！');
-        },
+//        success : function() {
+//            alert('验证匹配！');
+//        },
         error : function() {
             alert('验证码不匹配！');
         }
