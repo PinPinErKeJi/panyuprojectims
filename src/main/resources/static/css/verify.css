@@ -5,33 +5,41 @@
 	cursor: pointer;
 	margin-bottom: 5px;
 	border: 1px solid #ddd;
+	margin-left: 36px;
+	float: left;
 }
 
 .cerify-code-panel {
 	height:100%;
+	/*margin-left: 40px;*/
 	overflow:hidden;
 }
 
 .verify-code-area {
-	float:left;
+	display: inline-block;
+	margin-left: 10px;
+	overflow: hidden;
+	width: 150px !important;
 }
 
 .verify-input-area {
 	float: left;
-	width: 60%;
+	width: 40%;
 	padding-right: 10px;
+	margin: 5px 5px 0 5px;
 	
 }
 
 .verify-change-area {
-	line-height: 30px;
-	float: left;
+	line-height: 40px;
+	/*float: right;*/
 }
 
 .varify-input-code {
-	display:inline-block; 
+	/*display:inline-block; */
 	width: 100%;
 	height: 25px;
+	/*float: right;*/
 }
 
 .verify-change-code {
