@@ -5,6 +5,22 @@
     <title>用户管理</title>
 </head>
 <body>
+<div data-options="region:'west',title:'用户信息',split:true" style="width:100%;">
+    <table id="dg1" class="easyui-datagrid" title="" style="width:700px;height:336px"
+           data-options="url:'',fitColumns:true,singleSelect:true,pagination:true,pageList:[]">
 
+        <thead>
+        <tr>
+            <th data-options="field:'UserId',width:40"> </th>
+            <th data-options="field:'UserName',width:60">用户名</th>
+            <th data-options="field:'UserPwd',width:120">用户密码</th>
+            <th data-options="field:'_operate',width:120,align:'center',formatter:formatOper">操作</th>
+        </tr>
+        </thead>
+    </table>
+    <div id="tb1">
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">增加用户</a>
+    </div>
+</div>
 </body>
 </html>
