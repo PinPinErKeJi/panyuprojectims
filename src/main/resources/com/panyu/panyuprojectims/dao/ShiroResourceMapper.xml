@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.ShiroResourceDao">
+    <!-- ShiroResource的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_ShiroResource_Map" type="com.panyu.panyuprojectims.entity.ShiroResource">
+        <id column="RESOURCE_ID" property="resourceId" />
+        <result column="RESOURCE_NAME" property="resourceName" />
+        <result column="RESOURCE_URL" property="resourceUrl" />
+        <result column="RESOURCE_CODE" property="resourceCode" />
+        <result column="PARECT_RESOURCE_ID" property="parectResourceId" />
+    </resultMap>
+
+   
+
+</mapper>
