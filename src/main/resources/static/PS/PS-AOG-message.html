@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>电源到货统计信息</title>
+    <link rel="stylesheet" href="../easyui/easyui.css">
+    <link rel="stylesheet" href="../css/icon.css">
+    <link rel="stylesheet" href="../css/list.css">
+    <style>
+        .border{
+            height: 27px;
+            width: 120px;
+            border: 1px solid #95B8E7;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div data-toggle="distpicker" style="float: left">
+    <select  id="province" class="border" data-province="河南省"></select>
+    <select  id="city" class="border" data-city="郑州市"></select>
+    <select  id="county" class="border" data-district="中原区"></select>
+</div>
+<div>
+    <label>建设年份:</label><input id="construction-year" type="text" class="Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy'})">
+    <label>运营商:</label><input id="operator" class="easyui-combobox" placeholder="请选择运营商" style="width: 120px">
+    <label>建设项目：</label><input id="construction-project" class="easyui-textbox" style="width:120px">
+    <label>监理人员：</label><input id="supervisory" class="easyui-textbox" style="width:120px">
+    <a href="#" id="search" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
+    <a href="#" class="easyui-linkbutton">导出电源到货信息</a>
+</div>
+<div id="photoShow" class="easyui-dialog" style="width: 500px;height: 400px;overflow: scroll" data-options="resizable:true,modal:true">
+    <img style="width: 380px;height: 280px;overflow: scroll"></div>
+<div id="datagrid" class="easyui-datagrid panel-fit" style="height: 100%;width: 100%"></div>
+
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.easyui.min.js"></script>
+<script src="../js/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.js" ></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.common.js" ></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.esm.js" ></script>
+<script type="text/javascript" src="../js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    function imgMax(obj) {
+        $("#photoShow").dialog("open")
+        var url = $(obj).prop("id")
+        $("#photoShow img").attr("src",url)
+        //alert(url)
+        //alert(obj.value)
+        $("#photoShow").dialog({
+            title:obj.value
+        })
+    }
+
+    $(function () {
+        //关闭显示图片的dialog
+        $("#photoShow").dialog("close")
+        //初始化运营商combobox
+        $("#operator").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            data:[{
+                id:'1',
+                name:'中国电信'
+            },{
+                id:'2',
+                name:'中国联通'
+            },{
+                id:'3',
+                name:'中国移动'
+            },{
+                id:'4',
+                name:'中国铁塔'
+            },{
+                id:'5',
+                name:'中国广电'
+            }]
+        })
+        //搜索点击事件
+        $("#search").bind("click",function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "county":$("#county").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "operator":$("#operator").combobox("getText"),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "siteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "projectLeader":$("#supervisory").textbox("getValue").trim()
+            });
+        })
+        //点击省份change事件
+        $("#province").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "operator":$("#operator").combobox("getText"),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "siteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "projectLeader":$("#supervisory").textbox("getValue").trim()
+            });
+        })
+        //点击城市change事件
+        $("#city").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "operator":$("#operator").combobox("getText"),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "siteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "projectLeader":$("#supervisory").textbox("getValue").trim()
+            });
+        })
+        //点击区(县)change事件
+        $("#county").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "county":$("#county").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "operator":$("#operator").combobox("getText"),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "siteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "projectLeader":$("#supervisory").textbox("getValue").trim()
+            });
+        })
+        //运营商change事件
+        $("#operator").combobox({
+            onChange:function () {
+                $("#datagrid").datagrid("load",{
+                    "province":$("#province").find("option:selected").val(),
+                    "city":$("#city").find("option:selected").val(),
+                    "county":$("#county").find("option:selected").val(),
+                    "buildYear":$("#construction-year").val(),
+                    "operator":$("#operator").combobox("getText"),
+                    "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                    "siteSupervision":$("#supervisory").textbox("getValue").trim(),
+                    "projectLeader":$("#supervisory").textbox("getValue").trim()
+                });
+            }
+        })
+
+        //数据表格 所有验货照片显示超链接
+        $("#datagrid").datagrid({
+            url: 'selectPowerArrivalStatistics',
+            pagination: true,
+            pageNumber: 1,
+            pageSize: 2,
+            pageList: [2, 4, 8, 10, 20],
+            columns:[[
+                {field:'ck',checkbox:"true",rowspan:2},
+                {field: 'powerStatisticsId', title: '序号', rowspan: 2, width: 50, align: 'center',hidden:true},
+                {field: 'operator', title: '运营商', rowspan: 2, width: 60, align: 'center'},
+                {field: 'buildYear', title: '建设年份', rowspan: 2, align: 'center', width: 100},
+                {field: 'buildingProject', title: '建设项目名称', rowspan: 2, align: 'center', width: 120},
+                {field: 'motorRoomName', title: '机房名称', rowspan: 2, align: 'center', width: 120},
+                {field: 'motorRoomLongitude', title: '机房经度', rowspan: 2, align: 'center', width: 80},
+                {field: 'motorRoomLatitude', title: '机房纬度', rowspan: 2, align: 'center', width: 80},
+                {field: 'province', title: '省', rowspan: 2, align: 'center', width: 80},
+                {field: 'city', title: '市', rowspan: 2, align: 'center', width: 80},
+                {field: 'county', title: '区(县)', rowspan: 2, align: 'center', width: 80},
+                {field: 'siteSupervision', title: '现场监理', rowspan: 2, align: 'center', width: 100},
+                {field: 'projectLeader', title: '项目负责人', rowspan: 2, align: 'center', width: 100},
+                {title: '新增设备', colspan:6, align: 'center'},
+                {title: '新增电力电缆', colspan:5, align: 'center'},
+                {title: '新增走线架', colspan:5, align: 'center'},
+            ],[
+                {field: 'powerStatisticsNumber', title: '编号',  width: 80, align: 'center'},
+                {field: 'powerStatisticsType', title: '类型',  width: 80, align: 'center'},
+                {field: 'powerStatisticsModel', title: '设备型号', width: 100, align: 'center'},
+                {field: 'powerStatisticsSize', title: '机柜尺寸',  width: 100, align: 'center'},
+                {field: 'powerStatisticsTime', title: '到货时间',  width: 80, align: 'center'},
+                {field: 'powerEquipmentPhoto', title: '验货照片',  width: 80, align: 'center',
+                    formatter:function (value,row,index) {
+                        return "<button id='"+/panyuprojectims/+"photo/"+value+"' value='图片信息' onclick='imgMax(this)'>查看图片</button>"
+                    }
+                },
+                {field: 'powerArrivalCableNumber', title: '编号',  width: 80, align: 'center'},
+                {field: 'powerArrivalCableModel', title: '规格型号',  width: 80, align: 'center'},
+                {field: 'powerArrivalCableLength', title: '长度(m)', width: 80, align: 'center'},
+                {field: 'powerArrivalCableTime', title: '到货时间',  width: 80, align: 'center'},
+                {field: 'powerArrivalCablePhoto', title: '验货照片',  width: 80, align: 'center',
+                    formatter:function (value,row,index) {
+                        return "<button id='"+/panyuprojectims/+"photo/"+value+"' value='图片信息' onclick='imgMax(this)'>查看图片</button>"
+                    }
+                },
+                {field: 'powerArrivalRackNumber', title: '编号',  width: 80, align: 'center'},
+                {field: 'powerArrivalRackModel', title: '规格型号',  width: 80, align: 'center'},
+                {field: 'powerArrivalRackLength', title: '长度(m)',  width: 80, align: 'center'},
+                {field: 'powerArrivalRackTime', title: '到货时间',  width: 80, align: 'center'},
+                {field: 'powerArrivalRackPhoto', title: '验货照片',  width: 80, align: 'center',
+                    formatter:function (value,row,index) {
+                        return "<button id='"+/panyuprojectims/+"photo/"+value+"' value='图片信息' onclick='imgMax(this)'>查看图片</button>"
+                    }
+                },
+            ]]
+        })
+    })
+</script>
+</body>
+</html>

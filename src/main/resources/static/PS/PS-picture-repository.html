@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>电源图片库</title>
+    <link rel="stylesheet" href="../easyui/easyui.css">
+    <link rel="stylesheet" href="../css/icon.css">
+    <link rel="stylesheet" href="../css/menu.css">
+    <style>
+        .box{
+            padding: 15px 0 0 10px;
+            display: inline-block;
+        }
+        .pic{
+            padding: 10px;
+            border: 1px solid white;
+            border-radius: 5px;
+            box-shadow:0 0 5px white;
+        }
+
+        .min{
+            width: 180px;
+            height: 140px;
+        }
+        .max{
+            width: 380px;
+            height: 260px;
+        }
+        p{
+            font-size: 12px;
+        }
+        .display{
+            display: none;
+            position: fixed;
+            top: 45px;
+            right: 0px;
+        }
+    </style>
+</head>
+<body>
+<div class="easyui-tree" id="module-menu"></div>
+<div id="waterfall"></div>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.easyui.min.js"></script>
+<script src="../js/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript">
+    function lookImg(obj){
+        //alert(6666666)
+        //获取点击图片的src属性
+        if ($(".display:has(img)").length==0) {//判断是否有img子元素
+            //没有img子标签
+            var src = $(obj).prop("src");
+            //console.log(src)
+            //设置图片显示位置的src属性值
+            $(".display").show();
+            $(".display").append("<img class='max' />");
+            $(".display img").attr("src",src);
+        }else{
+            //有img子标签的话就删除,并隐藏div
+            $(".display").empty();
+            $(".display").hide();
+            //再加上当前的img标签
+            var src = $(obj).prop("src");
+            //console.log(src)
+            //设置图片显示位置的src属性值
+            $(".display").show();
+            $(".display").append("<img class='max' />");
+            $(".display img").attr("src",src);
+        }
+    }
+
+    $(function () {
+        var loc = location.href;
+        var n1 = loc.length;//地址的总长度
+        var n2 = loc.indexOf("=");//取得=号的位置
+        var id = decodeURI(loc.substr(n2+1, n1-n2));//从=号后面的内容
+        //console.log(id+"----------")
+        // 树形菜单
+        $('#module-menu').tree({
+            url:'getPowerSupplyTreeNode?powerInformationId='+id,
+            lines: true,
+            formatter: function (node) {
+                return node.text;
+            },
+            onClick: function (node) {
+                //判断是否是子节点
+                if ($("#module-menu").tree("isLeaf",node.target)) {
+                    if($("#waterfall").children().length > 0){
+                        $("#waterfall").children()._remove()
+                    }
+                    var parentNode = $("#module-menu").tree("getParent",node.target)
+                    $.ajax({
+                        url:'selectAllPowerPhotoResourcesByModuleIdAndSubId?powerModuleId='+parentNode.id+"&powerSubWorkId="+node.id+'&powerInformationId='+id,
+                        method:'get',
+                        dataType:'json',
+                        success:function (data) {
+                            $("#waterfall").append("<div class='display' onclick='$(this).empty() '></div>");
+                            for (var i=0;i<data.length;i++){
+                                $("#waterfall").append("<div></div>")
+                                //拿到每个检查项目对象的信息
+                                var check_name=data[i].powerProjectName;//检查项目名称
+                                var check_centent=data[i].powerCriterionName;//检查项目标准规范
+                                var check_picList=data[i].powerPhotoResourcesList;//检查项目图片对象集合
+                                //把检查项目名称,标准规范写入div标签
+                                var check_div=$("#waterfall").children("div").get(i+1);
+                                $(check_div).append("<div style='font-size: 24px'></div><div style='font-size: 12px'></div>");
+                                //拿到检查项目DOM对象
+                                var check_projectName=$(check_div).children("div").get(0);
+                                var check_projectContent=$(check_div).children("div").get(1);
+                                //写入检查项目名称,标准规范
+                                $(check_projectName).text(check_name);
+                                $(check_projectContent).text("标准规范:"+check_centent);
+                                //遍历所有图片对象集合
+                                //console.log(check_picList)
+                                for (var j=0;j<check_picList.length;j++){
+                                    //添加图片box的div
+                                    $(check_div).append("<div class='box'></div>");
+                                    //获得图片box的DOM对象
+                                    var pic_box=$(check_div).children("div").get(2+j);
+                                    //添加图片img标签
+                                    $(pic_box).append("<div class='pic'><img class='min' onclick=\'lookImg(this)\' ></div>");
+                                    var url="photo/"+check_picList[j].powerPhotoName;
+                                    //获取类样式为pic的div的DOM对象
+                                    var pic_pic=$(pic_box).children("div").get(0);
+                                    //获得img的DOM对象
+                                    var img=$(pic_pic).children(":first");
+                                    $(img).attr("src",url);
+                                    //添加p标签
+                                    $(pic_box).append("<p></p><p></p><p></p>");
+                                    //分别获得三个p标签的DOM对象
+                                    var first_p=$(pic_box).children("p").get(0);
+                                    var second_p=$(pic_box).children("p").get(1);
+                                    var third_p=$(pic_box).children("p").get(2);
+                                    //分别给三个p标签写入对应的值
+                                    $(first_p).text("照片上传人:"+check_picList[j].photoUploadPeople);
+                                    $(second_p).text("是否合格:"+check_picList[j].qualified);
+                                    $(third_p).text("问题描述:"+check_picList[j].problemDescription);
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
