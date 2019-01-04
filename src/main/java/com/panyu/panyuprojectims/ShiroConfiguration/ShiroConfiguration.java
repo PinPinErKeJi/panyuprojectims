@@ -97,15 +97,23 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 拦截器.
         Map<String, String> map = new HashMap<String, String>();
+        String login = "/admin-login.html";
         map.put("/static/**", "anon");
-        map.put("/login", "anon");
+        map.put("/css/**","anon");
+        map.put("/js/**","anon");
+        map.put("/img/**","anon");
+        map.put("/bootstrap/**","anon");
+        map.put("/easyui/**","anon");
+        map.put("/pages/**","anon");
+
+        map.put(login, "anon");
         map.put("/logout", "logout");
         map.put("/logon", "anon");
         //对所有用户认证
         map.put("/**", "authc");
 
         // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
-       shiroFilterFactoryBean.setLoginUrl("/admin-login");
+         shiroFilterFactoryBean.setLoginUrl(login);
         // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setSuccessUrl("/index");
         // 未授权界面;
