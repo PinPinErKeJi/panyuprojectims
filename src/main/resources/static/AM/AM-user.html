@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" type="text/css" href="easyui/easyui.css" id="style">
+    <link rel="stylesheet" type="text/css" href="css/icon.css">
+</head>
+<body>
+<table id="dg1" class="easyui-datagrid" title="用户信息"
+       data-options="url:'servlet/userServlet',fitColumns:true,singleSelect:true,pagination:true,pageList:[10]">
+
+    <thead>
+    <tr>
+        <th data-options="field:'UserId',width:40"> </th>
+        <th data-options="field:'UserName',width:60">用户名</th>
+        <th data-options="field:'UserPwd',width:120">用户密码</th>
+        <th data-options="field:'Name',width:60,align:'right'">姓名</th>
+        <th data-options="field:'Phone',width:300,">用户联系电话</th>
+        <th data-options="field:'Memo',width:80,align:'right'">备注</th>
+        <th data-options="field:'_operate',width:120,align:'center',formatter:formatOper">操作</th>
+    </tr>
+    </thead>
+</table>
+</body>
+</html>
