@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.ShiroAmdinRoleDao">
+    <!-- ShiroAmdinRole的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_ShiroAmdinRole_Map" type="com.panyu.panyuprojectims.entity.ShiroAmdinRole">
+        <id column="ADMIN_ROLE_ID" property="adminRoleId" />
+        <result column="ADMIN_ID" property="adminId" />
+        <result column="ROLE_ID" property="roleId" />
+    </resultMap>
+
+  
+
+</mapper>

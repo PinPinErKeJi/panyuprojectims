@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.PanyuUserDao">
+    <!-- PanyuUser的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_PanyuUser_Map" type="com.panyu.panyuprojectims.entity.PanyuUser">
+        <id column="USER_ID" property="userId" />
+        <result column="USER_PROVINCE" property="userProvince" />
+        <result column="USER_CITY" property="userCity" />
+        <result column="USER_COUNTY" property="userCounty" />
+        <result column="USER_COMPANY_NAME" property="userCompanyName" />
+        <result column="USER_COMPANYCCC_NUMBER" property="userCompanycccNumber" />
+        <result column="USER_NAME" property="userName" />
+        <result column="USER_EMAIL" property="userEmail" />
+        <result column="USER_PWD" property="userPwd" />
+    </resultMap>
+
+   
+
+</mapper>

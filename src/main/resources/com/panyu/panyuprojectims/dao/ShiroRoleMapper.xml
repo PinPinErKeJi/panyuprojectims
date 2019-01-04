@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panyu.panyuprojectims.dao.ShiroRoleDao">
+    <!-- ShiroRole的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_ShiroRole_Map" type="com.panyu.panyuprojectims.entity.ShiroRole">
+        <id column="ROLE_ID" property="roleId" />
+        <result column="ROLE_NAME" property="roleName" />
+        <result column="ROLE_CREATE_TIME" property="roleCreateTime" />
+        <result column="ROLE_UPDATE_TIME" property="roleUpdateTime" />
+    </resultMap>
+
+   
+
+</mapper>
