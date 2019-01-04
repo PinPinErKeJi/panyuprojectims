@@ -3,129 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <title>用户管理</title>
+    <link rel="stylesheet" type="text/css" href="../css/AM-user.css">
 </head>
-<script type="text/javascript" src="../js/jquery.min.js"></script>
-<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="../js/easyui-lang-zh_CN.js"></script>
-<link rel="stylesheet" type="text/css" href="../easyui/easyui.css" id="style">
-<link rel="stylesheet" type="text/css" href="../css/icon.css">
-<link rel="stylesheet" type="text/css" href="../css/index.css">
-<link rel="stylesheet" type="text/css" href="../css/menu.css">
-<body class="easyui-layout">
-<div data-options="region:'west',title:'用户信息',split:true" style="width:850px">
-    <table id="dg1" class="easyui-datagrid" title="" style="width:850px;height:500px"
-           data-options="url:'servlet/userServlet',fitColumns:true,singleSelect:true,pagination:true,pageList:[]">
-
-        <thead>
-        <tr>
-            <th data-options="field:'UserId',width:40"> </th>
-            <th data-options="field:'UserName',width:60">用户名</th>
-            <th data-options="field:'UserPwd',width:120">用户密码</th>
-            <th data-options="field:'_operate',width:120,align:'center',formatter:formatOper">操作</th>
+<div style="margin-left: 50px;margin-top: 30px;">
+    <button onclick="qx()" class="quan">全选</button>
+    <button onclick="fx()" class="fan">反选</button>
+    <button onclick="dellist ()" class="pi">批量删除</button>
+    <table style="width: 700px;" border="1" cellpadding="10" cellspacing="0">
+        <tr style="background-color: lightskyblue;" align="center">
+            <td>编号</td>
+            <td>用户名</td>
+            <td>密码</td>
+            <td>操作</td>
         </tr>
-        </thead>
     </table>
-    <div id="tb1">
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">增加用户</a>
-    </div>
 </div>
-<!-- ++++++++++++++++++++弹出的增加用户框++++++++++++++++++++++++++++++++++++++++ -->
-<div class="easyui-dialog" id="add"
-     data-options="title:'增加用户',closable:true,closed:true,
-        buttons:[{text:'确定',handler:queding},
-        {text:'关闭',handler:function(){$('#add').dialog('close')}}]">
 
-    <table>
-        <tr><td>用户名:<td><input name="UserName" type="text" id="username"></td></td></tr>
-        <tr><td>用户密码：<td><input name="UserPwd" type="text" id="userpwd"></td></td></tr>
-    </table>
-
-
+<div class="form">
+    <div>
+        用户名：<input type="text" id="username" /><br>
+        <span id="name_span"></span>
+    </div>
+    <div>
+        密码：<input id="password" /><br>
+        <span id="price_span"></span>
+    </div>
+    <button onclick="save()">确定</button>
 </div>
 
 </body>
-<script type="text/javascript">
-
-    function formatOper(value,row,index){
-
-        return '<a href="javascript:void(0);" onclick="bianjiUser('+index+')">编辑</a> <a href="javascript:void(0);" onclick="shanchuUser('+index+')">删除</a>';
-    };
-    //++++++++++增加用户按钮++++++++
-    $("#dg1").datagrid({
-        toolbar:'#tb1'
-    });
-    //+++++增加用户+++++
-    function add(){
-        $('#add').dialog('open').dialog({
-            title:增加用户,
-            modal: true
-        });
-    };
-
-    function queding(){
-
-        var message={
-            "username":$("#username").val(),
-            "userpwd":$("#userpwd").val(),
-        };
-        if($("#username").val()!=""&&$("#userpwd").val()!="")
-        {
-            $.ajax({
-                type:"post",
-                url:"servlet/adduserServlet",
-                data:{"Message":JSON.stringify(message)},
-                success:function(){
-                    $('#dg1').datagrid('reload');
-                    alert("添加成功！");
-                    $("#username").val("");
-                    $("#userpwd").val("");
-                }
-            })
-            $('#add').dialog('close');
-
-
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script>
+    //表单验证+添加
+    function save () {
+        //获取值
+        $("span").html("");
+        var username = $("#username").val();
+        var password =$("#password").val();
+        //表单验证
+        if(username.length<2||username.length>20||username==''){
+            $("#name_span").html("*用户名在2~20个字符").css("color","red");
+            return;
         }
-        else{alert("请填写完整！");
-            $("#username").val("");
-            $("#userpwd").val("");
+        if(password.length<6||password.length>8||username==''){
+            $("#price_span").html("*密码在6~8个字符").css("color","red");
+            return;
+        }
+        //添加
+        $("table").append("<tr><td><input type='checkbox' id='qxx'></td><td>"+username+"</td><td>"+password+"</td><td><button onclick='del(this)'>删除</button></td></tr>");
+    }
+    //删除
+    function del (a) {
+        if (confirm("您是否删除本条数据！！！")) {
+            $(a).parent().parent().remove();
         }
     }
-    //++++++++++用户编辑+++++++++++++
-    function  bianjiUser(index){
-
-        alert(index);
-    }
-
-    //++++++++++++用户删除++++++++++++++++
-    function shanchuUser(index){
-        $.ajax({
-            type:"post",
-            url:"servlet/shanchuServlet",
-            data:{"index":index},
-            success:function(){
-                $("#dg1").datagrid('reload');
-            }
-        });
-
-    }
-
-
-
-    $('#f').combobox({
-        url:'combobox_data.json',
-        valueField:'id',
-        textField:'text',
-        loadFilter:function(data){
-            var obj={};
-            obj.id='';
-            obj.text='-请选择-'
-            data.splice(0,0,obj)//在数组0位置插入obj,不删除原来的元素
-            return data;
-
+    //批量删除
+    function dellist () {
+        var ids=$("#qxx:checked");
+        if (ids.length==0) {
+            alert("请选择一条数据");
         }
-
-
-    });
-
+        ids.each(function  () {
+            $(this).parent().parent().remove();
+        })
+    }
+    //全选
+    function qx () {
+        var ids = $(":checkbox");
+        ids.prop("checked",true);
+    }
+    //反选
+    function fx () {
+        var ids = $(":checkbox");
+        ids.prop("checked",false);
+    }
 </script>
 </html>
