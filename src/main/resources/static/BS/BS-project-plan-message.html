@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>工程进度信息</title>
+    <link rel="stylesheet" href="../easyui/easyui.css">
+    <link rel="stylesheet" href="../css/icon.css">
+    <link rel="stylesheet" href="../css/list.css">
+    <style>
+        .border{
+            height: 27px;
+            width: 120px;
+            border: 1px solid #95B8E7;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<form id="excelForm" method="post" enctype="multipart/form-data">
+    <div>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true"  data-options="iconCls:'icon-print'" onClick="ProjectProgressDegreeExcel();">导出工程基本信息</a>
+    </div>
+</form>
+
+<div data-toggle="distpicker" style="float: left">
+    <select  id="province" class="border" data-province="河南省"></select>
+    <select  id="city" class="border" data-city="郑州市"></select>
+    <select  id="county" class="border" data-district="中原区"></select>
+</div>
+
+<div>
+    <label>建设年份:</label><input id="construction-year" type="text" class="Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy'})">
+    <label>运营商:</label><input id="operator" class="easyui-combobox" placeholder="请选择运营商" style="width: 100px">
+    <label>建设项目：</label><input id="construction-project" class="easyui-textbox" style="width:100px">
+    <label>监理人员：</label><input id="supervisory" class="easyui-textbox" style="width:80px">
+    <a href="#" id="search" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
+</div>
+<div id="datagrid" class="easyui-datagrid panel-fit" style="height: 100%;width: 100%"></div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.easyui.min.js"></script>
+<script src="../js/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.js" ></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.common.js" ></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.esm.js" ></script>
+<script type="text/javascript" src="../js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //初始化运营商combobox
+        $("#operator").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            data:[{
+                id:'1',
+                name:'中国电信'
+            },{
+                id:'2',
+                name:'中国联通'
+            },{
+                id:'3',
+                name:'中国移动'
+            },{
+                id:'4',
+                name:'中国铁塔'
+            },{
+                id:'5',
+                name:'中国广电'
+            }]
+        })
+        //搜索点击事件
+        $("#search").bind("click",function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").text(),
+                "county":$("#county").find("option:selected").text(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operator").combobox("getText"),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "professionPeople":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击省份change事件
+        $("#province").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operator").combobox("getText"),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "professionPeople":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击城市change事件
+        $("#city").change(function () {
+           $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").text(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operator").combobox("getText"),
+               "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+               "professionPeople":$("#supervisory").textbox("getValue").trim(),
+               "districtHead":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击区(县)change事件
+        $("#county").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").text(),
+                "county":$("#county").find("option:selected").text(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operator").combobox("getText"),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "professionPeople":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //运营商change事件
+        $("#operator").combobox({
+            onChange:function () {
+                $("#datagrid").datagrid("load",{
+                    "province":$("#province").find("option:selected").val(),
+                    "city":$("#city").find("option:selected").text(),
+                    "county":$("#county").find("option:selected").text(),
+                    "buildYear":$("#construction-year").val(),
+                    "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                    "operator":$("#operator").combobox("getText"),
+                    "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                    "professionPeople":$("#supervisory").textbox("getValue").trim(),
+                    "districtHead":$("#supervisory").textbox("getValue").trim(),
+                });
+            }
+        });
+
+        // 数据表格
+         $('#datagrid').datagrid({
+            url: 'selectProjectProgressDegree',
+            pagination: true,
+            //singleSelect: true,
+            pageNumber: 1,
+            pageSize: 15,
+            pageList: [15, 30,45, 60],
+            //toolbar: '#toolbar',
+            columns:[[
+                {field:'ck',checkbox:"true",rowspan:2},
+                { field:'projectProgressId',title:'序号',rowspan:2,width:50,align:'center',hidden:true},
+                { field:'operator',title:'运营商',rowspan:2,width:50,align:'center'},
+                { field:'buildYear',title:'建设年份',rowspan:2,align:'center',width:80},
+                { field:'buildingProject',title:'建设项目名称',rowspan:2,align:'center',width:80},
+                { title:'基站名称',align:'center',colspan:2},
+                { field:'planningLongitude',title:'规划经度',rowspan:2,align:'center',width:80},
+                { field:'actualLongitude',title:'实际经度',rowspan:2,align:'center',width:80},
+                { field:'planningLatitude',title:'规划纬度',rowspan:2,align:'center',width:80},
+                { field:'actualLatitudes',title:'实际纬度',rowspan:2,align:'center',width:80},
+                { field:'province',title:'省',rowspan:2,align:'center',width:50},
+                { field:'city',title:'市',rowspan:2,align:'center',width:50},
+                { field:'county',title:'县(区)',rowspan:2,align:'center',width:50},
+                { field:'regions',title:'区域',rowspan:2,align:'center',width:50},
+                { field:'onSiteSupervision',title:'现场监理',rowspan:2,align:'center',width:80},
+                { field:'professionPeople',title:'专业负责人',rowspan:2,align:'center',width:80},
+                { field:'districtHead',title:'区域负责人',rowspan:2,align:'center',width:80},
+                { field:'overlayScene',title:'覆盖场景',rowspan:2,align:'center',width:80},
+                { title:'天支',colspan:14,align:'center'},
+                { title:'机房',colspan:10,align:'center'},
+                { title:'外电引入',colspan:6,align:'center'},
+                { title:'主设备',colspan:8,align:'center'},
+                { title:'空调',colspan:7,align:'center'},
+                { title:'消防设施',colspan:9,align:'center'},
+                { title:'动力环境监控',colspan:7,align:'center'},
+                { field:'remake',title:'备注',rowspan:2,width:50,align:'center'},
+            ],[
+                {field:'planningName',title:'规划名称',align:'center',width:80},
+                {field:'actualName',title:'实际名称',align:'center',width:80},
+                {field:'constructionMode',title:'建设方式',align:'center',width:80},
+                {field:'basicType',title:'基础类型',align:'center',width:80},
+                {field:'foundationConstructionName',title:'基础施工单位',align:'center',width:80},
+                {field:'basicUnitContacts',title:'基础施工单位联系人',align:'center',width:130},
+                {field:'foundationProgressName',title:'基础施工进度',align:'center',width:80},
+                {field:'curingStartDate',title:'基础养护开始日期',align:'center',width:110},
+                {field:'skyBranchTypeName',title:'天支类型',align:'center',width:80},
+                {field:'skyBranchSupplierName',title:'天支供货厂家',align:'center',width:80},
+                {field:'skyBranchSupplierContacts',title:'天支供货厂家联系人',align:'center',width:130},
+                {field:'skyBranchUnitName',title:'天支施工单位',align:'center',width:80},
+                {field:'skyConstructionUnitContacts',title:'天支施工单位联系人',align:'center',width:130},
+                {field:'skyBranchHeight',title:'天支高度(m)',align:'center',width:80},
+                {field:'skyBranchProgressName',title:'天支施工进度',align:'center',width:80},
+                {field:'skyBranchCompletionDate',title:'天支完工日期',align:'center',width:80},
+                {field:'machineRoomConstructionMode',title:'建设方式',align:'center',width:80},
+                {field:'machineRoomTypeName',title:'机房类型',align:'center',width:80},
+                {field:'machineRoomConstructionName',title:'土建单位',align:'center',width:80},
+                {field:'civilEngineeringContacts',title:'土建单位联系人',align:'center',width:120},
+                {field:'machineRoomSchedule',title:'机房施工进度',align:'center',width:80},
+                {field:'machineRoomEndTime',title:'机房完工日期',align:'center',width:80},
+                {field:'machineRoomDecorateName',title:'装修单位',align:'center',width:80},
+                {field:'decorationUnitContacts',title:'装修单位联系人',align:'center',width:120},
+                {field:'machineRoomAdorn',title:'机房装修进度',align:'center',width:80},
+                {field:'machineRoomDecorateEndTime',title:'装修完工日期',align:'center',width:80},
+                {field:'electricConstructionMode',title:'建设方式',align:'center',width:80},
+                {field:'electricType',title:'外电类型',align:'center',width:80},
+                {field:'electricUnitName',title:'施工单位',align:'center',width:80},
+                {field:'electricUnitContacts',title:'施工单位联系人',align:'center',width:120},
+                {field:'electricProgress',title:'施工进度',align:'center',width:80},
+                {field:'electricCompletionDate',title:'完工日期',align:'center',width:80},
+                {field:'equipmentConstructionMode',title:'建设方式',align:'center',width:80},
+                {field:'equipmentTypeName',title:'主设备类型',align:'center',width:80},
+                {field:'equipmentSupplierName',title:'供货厂家',align:'center',width:80},
+                {field:'equipmentSupplierContacts',title:'供货厂家联系人',align:'center',width:120},
+                {field:'equipmentUnitName',title:'施工单位',align:'center',width:80},
+                {field:'equipmentUnitContacts',title:'施工单位联系人',align:'center',width:120},
+                {field:'equipmentProgress',title:'施工进度',align:'center',width:80},
+                {field:'equipmentCompletionDate',title:'完工日期',align:'center',width:80},
+                {field:'airConstructionMode',title:'建设方式',align:'center',width:80},
+                {field:'conditioningBrandName',title:'空调品牌',align:'center',width:80},
+                {field:'specificationTypeName',title:'规格型号',align:'center',width:80},
+                {field:'specificationTypeName',title:'施工单位',align:'center',width:80},
+                {field:'airConstructionContacts',title:'施工单位联系人',align:'center',width:120},
+                {field:'airProgress',title:'施工进度',align:'center',width:80},
+                {field:'airCompletionDate',title:'完工日期',align:'center',width:80},
+                {field:'fireConstructionMode',title:'建设方式',align:'center',width:80},
+                {field:'handHeldNumber',title:'手提式灭火器数量(个)',align:'center',width:100},
+                {field:'sprayingMethodNumber',title:'喷淋式灭火去数量(个)',align:'center',width:100},
+                {field:'fireSupplierName',title:'供货厂家',align:'center',width:80},
+                {field:'fireSupplierContacts',title:'供货厂家联系人',align:'center',width:120},
+                {field:'installationUnitName',title:'安装单位',align:'center',width:80},
+                {field:'installationUnitContacts',title:'安装单位联系人',align:'center',width:120},
+                {field:'fireProgress',title:'施工进度',align:'center',width:80},
+                {field:'fireCompletionDate',title:'完工日期',align:'center',width:80},
+                {field:'powerConstructionMode',title:'建设方式',align:'center',width:80},
+                {field:'powerSupplierName',title:'供货厂家',align:'center',width:80},
+                {field:'powerSupplierContacts',title:'供货厂家联系人',align:'center',width:120},
+                {field:'powerUnitName',title:'施工单位',align:'center',width:80},
+                {field:'powerUnitContacts',title:'施工单位联系人',align:'center',width:120},
+                {field:'powerProgress',title:'施工进度',align:'center',width:80},
+                {field:'powerCompletionDate',title:'完工日期',align:'center',width:80},
+            ]]
+        });
+    });
+
+    //导出数据
+    function ProjectProgressDegreeExcel(){
+        var rowDatas = $("#datagrid").datagrid("getSelections");
+        //console.log(rowDatas+"信息数据");
+        if(rowDatas.length==0){
+            $.messager.alert("信息框","请选中要导出的数据","warning");
+        }else{
+            var ids = new Array(rowDatas.length);
+            for(var i = 0; i<rowDatas.length; i++){
+                ids[i] = rowDatas[i].projectProgressId;
+            }
+            //console.log(ids);
+            window.location.href="ProjectProgressDegreeExcel?ids="+ids+"&time="+new Date();
+        }
+    }
+</script>
+</body>
+</html>

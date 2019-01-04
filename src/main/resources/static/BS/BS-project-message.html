@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>工程基本信息</title>
+    <link rel="stylesheet" href="../easyui/easyui.css">
+    <link rel="stylesheet" href="../css/icon.css">
+    <link rel="stylesheet" href="../css/list.css">
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="../css/bootstrap-theme.css" />
+        <style>
+        .border{
+            height: 27px;
+            width: 120px;
+            border: 1px solid #95B8E7;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<form id="excelForm" method="post" enctype="multipart/form-data">
+<div>
+    <a href="javascript:void(0)" class="easyui-linkbutton" plain="true"  data-options="iconCls:'icon-print'" onClick="importProjectProgressExcel();">导出Excel空表格</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" plain="true"  data-options="iconCls:'icon-print'" onClick="ProjectProgressExcel();">导出工程基本信息</a>
+    <input  id="fileName" class="easyui-filebox" name="fileName"  style="width:200px;vertical-align:middle;" />
+    <a href="javascript:void(0)" onclick="importProjectProgress()" class="easyui-linkbutton">导入工程基本信息</a>
+</div>
+</form>
+    <div data-toggle="distpicker" style="float: left">
+    <select  id="province" class="border"  data-province="河南省"></select>
+    <select  id="city" class="border"  data-city="郑州市"></select>
+    <select  id="county" class="border"  data-district="中原区"></select>
+    </div>
+    <div>
+        <label>建设年份:</label><input id="construction-year"  type="text" class="Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy'})">
+        <label>基站名称:</label><input id="base-name"  class="easyui-textbox" style="width: 90px">
+        <label>建设项目：</label><input id="construction-project"  class="easyui-textbox" style="width:90px">
+        <label>运营商：</label><input id="operatorSearch" class="easyui-combobox" style="width:90px">
+        <label>区域：</label><input id="base-area" class="easyui-textbox" style="width:90px">
+        <label>监理人员：</label><input id="supervisory" class="easyui-textbox" style="width:90px">
+        <a id="search" class="easyui-linkbutton" iconCls="icon-search" style="width: 60px">搜索</a>
+        <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-add" id="newUser">添加</a>
+        <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-remove" id="removeUser">移除</a>
+    </div>
+<div id="datagrid" class="easyui-datagrid panel-fit" style="height: 100%"></div>
+<div id="dialog" class="easyui-dialog" style="width: 500px;height: 400px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form method="post" id="form">
+        <div style="margin-bottom:20px">
+            <label>建设年份:</label><input type="text" name="buildYear" class="Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy'})">
+        </div>
+        <div style="margin-bottom:20px">
+            <div data-toggle="distpicker" style="float: left">
+                <select  id="form-province" class="border"  data-province="河南省"></select>
+                <select  id="form-city" class="border"  data-city="郑州市"></select>
+                <select  id="form-county" class="border"  data-district="中原区"></select>
+            </div>
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="运营商:" labelPosition="top" id="operator" name="operator" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="区域:" labelPosition="top" required name="regions" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="建设项目名称:" labelPosition="top"  required name="buildingProject" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="基站规划名称:" labelPosition="top" required name="planningName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="基站实际名称:" labelPosition="top" required name="actualName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="规划经度:" labelPosition="top" required name="planningLongitude" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="实际经度:" labelPosition="top" required name="actualLongitude" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="规划纬度:" labelPosition="top" required name="planningLatitude" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="实际纬度:" labelPosition="top" required name="actualLatitudes" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="现场监理:" labelPosition="top" required name="onSiteSupervision" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="专业负责人:" labelPosition="top" required name="professionPeople" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="区域负责人:" labelPosition="top" required name="districtHead" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="覆盖场景:" labelPosition="top" required name="overlayScene" style="width:100%;">
+        </div>
+        <a class="easyui-linkbutton" id="holder">天支</a>
+        <a class="easyui-linkbutton" id="machine-room">机房</a>
+        <a class="easyui-linkbutton" id="import">外电引入</a>
+        <a class="easyui-linkbutton" id="master">主设备</a>
+        <a class="easyui-linkbutton" id="air-condition">空调</a>
+        <a class="easyui-linkbutton" id="fire-control">消防设施</a>
+        <a class="easyui-linkbutton" id="power">动力环境监控</a>
+    </form>
+</div>
+
+<!--天支-->
+<div id="dialog-holder" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-holder" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="建设方式" labelPosition="top" id="holder-construction" name="constructionMode" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="基础类型" labelPosition="top" id="holder-base-type" name="basicType" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="天支类型" labelPosition="top" id="holder-type" name="skyBranchTypeName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="基础施工单位" labelPosition="top" data-options="required:true" id="holder-base-builder" name="foundationConstructionName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="基础施工单位联系人" labelPosition="top" data-options="required:true" name="basicUnitContacts" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="天支供货厂家" labelPosition="top" data-options="required:true" id="holder-supplier" name="skyBranchSupplierName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="天支供货厂家联系人" labelPosition="top" data-options="required:true" name="skyBranchSupplierContacts" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="天支施工单位" labelPosition="top" data-options="required:true" id="holder-builder" name="skyBranchUnitName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="天支施工单位联系人" labelPosition="top" data-options="required:true" name="skyConstructionUnitContacts" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="天支高度" labelPosition="top" data-options="required:true" name="skyBranchHeight" style="width:100%;">
+        </div>
+    </form>
+</div>
+
+<!--机房-->
+<div id="dialog-machine-room" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-machine-room" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="建设方式" labelPosition="top" id="machine-room-construction" name="machineRoomConstructionMode" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="机房类型" labelPosition="top" id="machine-room-type" name="machineRoomTypeName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="土建单位" labelPosition="top" data-options="required:true" id="machine-room-builder" name="machineRoomConstructionName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="土建单位联系人" labelPosition="top" data-options="required:true" name="civilEngineeringContacts" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="装修单位" labelPosition="top" data-options="required:true" id="machine-room-fitment" name="machineRoomDecorateName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="装修单位联系人" labelPosition="top" data-options="required:true" name="decorationUnitContacts" style="width:100%;">
+        </div>
+    </form>
+</div>
+
+<!--外电引入-->
+<div id="dialog-import" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-import" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="建设方式" labelPosition="top" id="import-construction" name="electricConstructionMode" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="外电类型" labelPosition="top" id="import-type" name="electricType" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="施工单位" labelPosition="top" data-options="required:true" id="import-builder" name="electricUnitName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="施工单位联系人" labelPosition="top" data-options="required:true" name="electricUnitContacts" style="width:100%;">
+        </div>
+    </form>
+</div>
+
+<!--主设备-->
+<div id="dialog-master" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-master" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="建设方式" labelPosition="top" id="master-construction" name="equipmentConstructionMode" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="主设备类型" labelPosition="top" id="master-type" name="equipmentTypeName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="供货厂家" labelPosition="top" data-options="required:true" id="master-supplier" name="equipmentSupplierName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="供货厂家联系人" labelPosition="top" data-options="required:true" name="equipmentSupplierContacts" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="施工单位" labelPosition="top" data-options="required:true" id="master-builder" name="equipmentUnitName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="施工单位联系人" labelPosition="top" data-options="required:true" name="equipmentUnitContacts" style="width:100%;">
+        </div>
+    </form>
+</div>
+
+<!--空调-->
+<div id="dialog-air-condition" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-air-condition" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="建设方式" labelPosition="top" id="air-condition-construction" name="airConstructionMode" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="空调品牌" labelPosition="top" data-options="required:true" id="air-condition-brand" name="conditioningBrandName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="规格类型" labelPosition="top" data-options="required:true" id="air-condition-type" name="specificationTypeName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="施工单位" labelPosition="top" data-options="required:true" id="air-condition-builder" name="airUnitName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="施工单位联系人" labelPosition="top" data-options="required:true" name="airConstructionContacts" style="width:100%;">
+        </div>
+    </form>
+</div>
+
+<!--消防设施-->
+<div id="dialog-fire-control" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-fire-control" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="建设方式" labelPosition="top" id="fire-control-construction" name="fireConstructionMode" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="供货厂家" labelPosition="top" data-options="required:true" id="fire-control-supplier" name="fireSupplierName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="供货厂家联系人" labelPosition="top" data-options="required:true" name="fireSupplierContacts" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="安装单位" labelPosition="top" data-options="required:true" id="fire-control-install" name="installationUnitName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="安装单位联系人" labelPosition="top" data-options="required:true" name="installationUnitContacts" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="手提式灭火器数量(个)" labelPosition="top" data-options="required:true" name="handHeldNumber" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="喷淋式灭火器数量(个)" labelPosition="top" data-options="required:true" name="sprayingMethodNumber" style="width:100%;">
+        </div>
+    </form>
+</div>
+
+<!--动力监控-->
+<div id="dialog-power" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-power" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="建设方式" labelPosition="top" id="power-construction" name="powerConstructionMode" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="供货厂家" labelPosition="top" data-options="required:true" id="power-supplier" name="powerSupplierName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="供货厂家联系人" labelPosition="top" data-options="required:true" name="powerSupplierContacts" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="施工单位" labelPosition="top" data-options="required:true" id="power-builder" name="powerUnitName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="施工单位联系人" labelPosition="top" data-options="required:true" name="powerUnitContacts" style="width:100%;">
+        </div>
+    </form>
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.easyui.min.js"></script>
+<script src="../js/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.js" ></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.common.js" ></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.esm.js" ></script>
+<script type="text/javascript" src="../js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var one=0;
+        var two=0;
+        var three=0;
+        var four=0;
+        var five=0;
+        var six=0;
+        var seven=0;
+
+        var skyBranchId;
+        var machineRoomId;
+        var electricPowerId;
+        var mainEquipmentId;
+        var airConditionerId;
+        var fireId;
+        var powerMonitoringId;
+        //初始化运营商combobox
+        $("#operator").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:'1',
+                name:'中国电信'
+            },{
+                id:'2',
+                name:'中国联通'
+            },{
+                id:'3',
+                name:'中国移动'
+            },{
+                id:'4',
+                name:'中国铁塔'
+            },{
+                id:'5',
+                name:'中国广电'
+            }]
+        })
+
+        //运营商改变
+        $("#operatorSearch").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+           // required:true,
+            data:[{
+                id:'1',
+                name:'中国电信'
+            },{
+                id:'2',
+                name:'中国联通'
+            },{
+                id:'3',
+                name:'中国移动'
+            },{
+                id:'4',
+                name:'中国铁塔'
+            },{
+                id:'5',
+                name:'中国广电'
+            }]
+        })
+        //初始化天支建设方式
+        $("#holder-construction").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:"1",
+                name:"新建"
+            },{
+                id:"2",
+                name:"利旧"
+            },{
+                id:"3",
+                name:"新增支臂"
+            }]
+        })
+        //初始化天支基础类型
+        $("#holder-base-type").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:"1",
+                name:"桩基"
+            },{
+                id:"2",
+                name:"筏板基础"
+            }]
+        })
+        //初始化天支类型
+        $("#holder-type").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:"1",
+                name:"独管塔"
+            },{
+                id:"2",
+                name:"美化独管塔"
+            },{
+                id:"3",
+                name:"三管塔"
+            },{
+                id:"4",
+                name:"四管塔"
+            },{
+                id:"5",
+                name:"角钢塔"
+            },{
+                id:"6",
+                name:"市政灯杆"
+            },{
+                id:"7",
+                name:"可移动塔"
+            },{
+                id:"8",
+                name:"美化集束天线"
+            },{
+                id:"9",
+                name:"美化排气筒"
+            },{
+                id:"10",
+                name:"美化空调"
+            },{
+                id:"11",
+                name:"美化变色龙"
+            },{
+                id:"12",
+                name:"美化水桶"
+            },{
+                id:"13",
+                name:"美化方柱"
+            },{
+                id:"14",
+                name:"增高塔"
+            },{
+                id:"15",
+                name:"抱杆"
+            }]
+        })
+        //初始化机房建设方式
+        $("#machine-room-construction").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:"1",
+                name:"新建"
+            },{
+                id:"2",
+                name:"利旧"
+            }]
+        })
+        //初始化机房类型
+        $("#machine-room-type").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:"1",
+                name:"自建房"
+            },{
+                id:"2",
+                name:"可移动塔"
+            },{
+                id:"3",
+                name:"租赁机房"
+            },{
+                id:"4",
+                name:"MINI机柜"
+            },{
+                id:"5",
+                name:"路灯杆机柜"
+            }]
+        })
+        //初始化外电引入建设方式
+        $("#import-construction").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:"1",
+                name:"新建"
+            },{
+                id:"2",
+                name:"利旧"
+            }]
+        })
+        //初始化外电引入外电类型
+        $("#import-type").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:"1",
+                name:"交流引入"
+            },{
+                id:"2",
+                name:"直流远供"
+            }]
+        })
+        //初始化主设备建设方式
+        $("#master-construction").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:"1",
+                name:"新建"
+            },{
+                id:"2",
+                name:"利旧"
+            }]
+        })
+        //初始化主设备-主设备类型
+        $("#master-type").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:"1",
+                name:"常规主设备"
+            },{
+                id:"2",
+                name:"一体化主设备"
+            }]
+        })
+        //初始化空调建设方式
+        $("#air-condition-construction").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:"1",
+                name:"新建"
+            },{
+                id:"2",
+                name:"利旧"
+            }]
+        })
+        //初始化消防设施建设方式
+        $("#fire-control-construction").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:"1",
+                name:"新建"
+            },{
+                id:"2",
+                name:"利旧"
+            }]
+        })
+        //初始化动力环境监控建设方式
+        $("#power-construction").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:"1",
+                name:"新建"
+            },{
+                id:"2",
+                name:"利旧"
+            }]
+        })
+        //搜索事件
+        $("#search").click(function () {
+            $("#datagrid").datagrid("load",{
+                "province" :$("#province").find("option:selected").val(),
+                "city" : $("#city").find("option:selected").text(),
+                "county" : $("#county").find("option:selected").text(),
+                "buildYear" : $("#construction-year").val(),
+                "buildingProject" :$("#construction-project").textbox("getText").trim(),
+                "operator":$("#operatorSearch").combobox("getText"),
+                "planningName":$("#base-name").textbox("getValue").trim(),
+                "actualName":$("#base-name").textbox("getValue").trim(),
+                "regions":$("#base-area").textbox("getValue").trim(),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "professionPeople":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+        });
+            //console.log("项目名字:"+$("#construction-project").textbox("getText").trim())
+        });
+
+        //点击省份change事件
+        $("#province").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province" :$("#province").find("option:selected").val(),
+                "buildYear" : $("#construction-year").val(),
+                "buildingProject" : $("#construction-project").textbox("getText").trim(),
+                "operator":$("#operatorSearch").combobox("getText"),
+                "planningName":$("#base-name").textbox("getValue").trim(),
+                "actualName":$("#base-name").textbox("getValue").trim(),
+                "regions":$("#base-area").textbox("getValue").trim(),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "professionPeople":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击城市change事件
+        $("#city").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province" :$("#province").find("option:selected").val(),
+                "city" : $("#city").find("option:selected").text(),
+                "buildYear" : $("#construction-year").val(),
+                "buildingProject" : $("#construction-project").textbox("getText").trim(),
+                "operator":$("#operatorSearch").combobox("getText"),
+                "planningName":$("#base-name").textbox("getValue").trim(),
+                "actualName":$("#base-name").textbox("getValue").trim(),
+                "regions":$("#base-area").textbox("getValue").trim(),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "professionPeople":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击区(县)change事件
+        $("#county").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province" :$("#province").find("option:selected").val(),
+                "city" : $("#city").find("option:selected").text(),
+                "county" : $("#county").find("option:selected").text(),
+                "buildYear" : $("#construction-year").val(),
+                "buildingProject" : $("#construction-project").textbox("getText").trim(),
+                "operator":$("#operatorSearch").combobox("getText"),
+                "planningName":$("#base-name").textbox("getValue").trim(),
+                "actualName":$("#base-name").textbox("getValue").trim(),
+                "regions":$("#base-area").textbox("getValue").trim(),
+                "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "professionPeople":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+            });
+        });
+        //运营商change事件
+        $("#operatorSearch").combobox({
+            onChange:function () {
+                $("#datagrid").datagrid("load",{
+                    "province":$("#province").find("option:selected").val(),
+                    "city":$("#city").find("option:selected").text(),
+                    "county":$("#county").find("option:selected").text(),
+                    "buildYear":$("#construction-year").val(),
+                    "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                    "operator":$("#operatorSearch").combobox("getText"),
+                    "onSiteSupervision":$("#supervisory").textbox("getValue").trim(),
+                    "professionPeople":$("#supervisory").textbox("getValue").trim(),
+                    "districtHead":$("#supervisory").textbox("getValue").trim(),
+                });
+            }
+        });
+
+
+        var dialogHolder = $('#dialog-holder');
+        var formHolder = $('#form-holder');
+        var dialogMachineRoom = $('#dialog-machine-room');
+        var formMachineRoom = $('#form-machine-room');
+        var dialogImport = $('#dialog-import');
+        var formImport = $('#form-import');
+        var dialogMaster = $('#dialog-master');
+        var formMaster = $('#form-master');
+        var dialogAirCondition = $('#dialog-air-condition');
+        var formAirCondition = $('#form-air-condition');
+        var dialogFireControl = $('#dialog-fire-control');
+        var formFireControl = $('#form-fire-control');
+        var dialogPower = $('#dialog-power');
+        var formPower = $('#form-power');
+        //隐藏dialog窗口
+        dialogHolder.dialog("close");
+        dialogMachineRoom.dialog("close");
+        dialogImport.dialog("close");
+        dialogMaster.dialog("close");
+        dialogAirCondition.dialog("close");
+        dialogFireControl.dialog("close");
+        dialogPower.dialog("close");
+
+        //天支按钮的点击事件
+        $("#holder").bind("click", function () {
+            dialogHolder.dialog('open');// open
+            dialogHolder.dialog({
+                title: '天支',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        var holder_type=$("#holder-type").combobox("getText");
+                        var holder_construction=$("#holder-construction").combobox("getText");
+                        var holder_base_type=$("#holder-base-type").combobox("getText");
+                        formHolder.form('submit', {
+                            url: 'insertSkyBranch?constructionMode='+holder_construction+'&basicType='+holder_base_type+'&skyBranchTypeName='+holder_type,
+                            onSubmit: function () {
+                                return formHolder.form('validate');
+                            },
+                            success: function (data) {
+                                skyBranchId = data;
+                                //console.log("skyBranchId:"+skyBranchId);
+                                //console.log(data);
+                                one=1;
+                                dialogHolder.dialog('close');// close
+                                $("#holder").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogHolder.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //机房按钮的点击事件
+        $("#machine-room").bind("click", function () {
+            dialogMachineRoom.dialog('open');// open
+            dialogMachineRoom.dialog({
+                title: '机房',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        var holder_construction=$("#machine-room-construction").combobox("getText");
+                        var holder_type=$("#machine-room-type").combobox("getText");
+                        formMachineRoom.form('submit', {
+                            url: 'insertMachineRoom?machineRoomConstructionMode='+holder_construction+'&machineRoomTypeName='+holder_type,
+                            onSubmit: function () {
+                                return formMachineRoom.form('validate');
+                            },
+                            success: function (data) {
+                                machineRoomId = data;
+                                //console.log("machineRoomId:"+machineRoomId)
+                                two=1;
+                                dialogMachineRoom.dialog('close');// close
+                                $("#machine-room").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogMachineRoom.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //外电引入按钮的点击事件
+        $("#import").bind("click", function () {
+            dialogImport.dialog('open');// open
+            dialogImport.dialog({
+                title: '外电引入',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        var importconstruction = $("#import-construction").combobox("getText")
+                        var importtype = $("#import-type").combobox("getText")
+                        formImport.form('submit', {
+                            url: 'insertElectricPower?electricConstructionMode='+importconstruction+'&electricType='+importtype,
+                            onSubmit: function () {
+                                return formImport.form('validate');
+                            },
+                            success: function (data) {
+                                electricPowerId = data;
+                                //console.log("electricPowerId:"+electricPowerId);
+                                three=1
+                                dialogImport.dialog('close');// close
+                                $("#import").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogImport.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //主设备的点击事件
+        $("#master").bind("click", function () {
+            dialogMaster.dialog('open');// open
+            dialogMaster.dialog({
+                title: '主设备',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        //获取主设备的相关参数值
+                        var masterconstruction= $("#master-construction").combobox("getText")
+                        var mastertype  = $("#master-type").combobox("getText")
+                        formMaster.form('submit', {
+                            url: 'insertMainEquipment?equipmentConstructionMode='+masterconstruction+'&equipmentTypeName='+mastertype,
+                            onSubmit: function () {
+                                return formMaster.form('validate');
+                            },
+                            success: function (data) {
+                                mainEquipmentId = data;
+                                //console.log("mainEquipmentId:"+mainEquipmentId);
+                                four=1
+                                dialogMaster.dialog('close');// close
+                                $("#master").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogMaster.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //空调的点击事件
+        $("#air-condition").bind("click", function () {
+            dialogAirCondition.dialog('open');// open
+            dialogAirCondition.dialog({
+                title: '空调',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        //获取空调相关参数的值
+                        var airconditionconstruction =  $("#air-condition-construction").combobox("getText")
+                        formAirCondition.form('submit', {
+                            url: 'insertAirConditioner?airConstructionMode='+airconditionconstruction,
+                            onSubmit: function () {
+                                return formAirCondition.form('validate');
+                            },
+                            success: function (data) {
+                                airConditionerId = data;
+                                //console.log("airConditionerId:"+airConditionerId);
+                                five=1
+                                dialogAirCondition.dialog('close');// close
+                                $("#air-condition").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogAirCondition.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //消防设施的点击事件
+        $("#fire-control").bind("click", function () {
+            dialogFireControl.dialog('open');// open
+            dialogFireControl.dialog({
+                title: '消防设施',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        //获取消防相关参数的值
+                        var firecontrolconstruction = $("#fire-control-construction").combobox("getText");
+                        formFireControl.form('submit', {
+                            url: 'insertFireFightingDevice?fireConstructionMode='+firecontrolconstruction,
+                            onSubmit: function () {
+                                return formFireControl.form('validate');
+                            },
+                            success: function (data) {
+                                fireId = data;
+                                //console.log("fireId:"+fireId);
+                                six=1;
+                                dialogFireControl.dialog('close');// close
+                                $("#fire-control").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogFireControl.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //动力环境监控的点击事件
+        $("#power").bind("click", function () {
+            dialogPower.dialog('open');// open
+            dialogPower.dialog({
+                title: '动力环境监控',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        //获取动力环境监控相关参数的值
+                        var powerconstruction = $("#power-construction").combobox("getText");
+                        formPower.form('submit', {
+                            url: 'insertPowerMonitoring?powerConstructionMode='+powerconstruction,
+                            onSubmit: function () {
+                                return formPower.form('validate');
+                            },
+                            success: function (data) {
+                                powerMonitoringId = data;
+                                //console.log("powerMonitoringId:"+powerMonitoringId);
+                                seven=1;
+                                dialogPower.dialog('close');// close
+                                $("#power").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogPower.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        var dialog = $('#dialog');
+        var form = $('#form');
+
+        // 隐藏弹窗
+        dialog.dialog('close');
+
+        // 数据表格
+        var grid = $('#datagrid').datagrid({
+            url: 'selectProjectProgress',
+            pagination: true,
+            //singleSelect: true,
+            pageNumber: 1,
+            pageSize: 15,
+            pageList: [15, 30, 45, 60],
+            //toolbar: '#toolbar',
+            columns: [[
+                {field:'ck',checkbox:"true",rowspan:2},
+                {field: 'projectProgressId', title: '序号', rowspan: 2, width: 50,align: 'center',hidden:true},
+                {field: 'operator', title: '运营商', rowspan: 2, width: 50, align: 'center'},
+                {field: 'buildYear', title: '建设年份', rowspan: 2, align: 'center', width: 80},
+                {field: 'buildingProject', title: '建设项目名称', rowspan: 2, align: 'center', width: 80},
+                {title: '基站名称', align: 'center', colspan: 2},
+                {field: 'planningLongitude', title: '规划经度', rowspan: 2, align: 'center', width: 80},
+                {field: 'actualLongitude', title: '实际经度', rowspan: 2, align: 'center', width: 80},
+                {field: 'planningLatitude', title: '规划纬度', rowspan: 2, align: 'center', width: 80},
+                {field: 'actualLatitudes', title: '实际纬度', rowspan: 2, align: 'center', width: 80},
+                {field: 'province', title: '省', rowspan: 2, align: 'center', width: 50},
+                {field: 'city', title: '市', rowspan: 2, align: 'center', width: 50},
+                {field: 'county', title: '县(区)', rowspan: 2, align: 'center', width: 50},
+                {field: 'regions', title: '区域', rowspan: 2, align: 'center', width: 50},
+                {field: 'onSiteSupervision', title: '现场监理', rowspan: 2, align: 'center', width: 80},
+                {field: 'professionPeople', title: '专业负责人', rowspan: 2, align: 'center', width: 80},
+                {field: 'districtHead', title: '区域负责人', rowspan: 2, align: 'center', width: 80},
+                {field: 'overlayScene', title: '覆盖场景', rowspan: 2, align: 'center', width: 80},
+                {title: '天支', colspan: 10, align: 'center'},
+                {title: '机房', colspan: 6, align: 'center'},
+                {title: '外电引入', colspan: 4, align: 'center'},
+                {title: '主设备', colspan: 6, align: 'center'},
+                {title: '空调', colspan: 5, align: 'center'},
+                {title: '消防设施', colspan: 7, align: 'center'},
+                {title: '动力环境监控', colspan: 5, align: 'center'},
+                //{title: '安全管理', colspan: 5, align: 'center'}
+            ], [
+                {field: 'planningName', title: '规划名称', align: 'center', width: 80},
+                {field: 'actualName', title: '实际名称', align: 'center', width: 80},
+                {field: 'constructionMode', title: '建设方式', align: 'center', width: 80},
+                {field: 'basicType', title: '基础类型', align: 'center', width: 80},
+                {field: 'foundationConstructionName', title: '基础施工单位', align: 'center', width: 80},
+                {field: 'basicUnitContacts', title: '基础施工单位联系人', align: 'center', width: 80},
+                {field: 'skyBranchTypeName', title: '天支类型', align: 'center', width: 80},
+                {field: 'skyBranchSupplierName', title: '天支供货厂家', align: 'center', width: 80},
+                {field: 'skyBranchSupplierContacts', title: '天支供货厂家联系人', align: 'center', width: 80},
+                {field: 'skyBranchUnitName', title: '天支施工单位', align: 'center', width: 80},
+                {field: 'skyConstructionUnitContacts', title: '天支施工单位联系人', align: 'center', width: 80},
+                {field: 'skyBranchHeight', title: '天支高度(m)', align: 'center', width: 80},
+                {field: 'machineRoomConstructionMode', title: '建设方式', align: 'center', width: 80},
+                {field: 'machineRoomTypeName', title: '机房类型', align: 'center', width: 80},
+                {field: 'machineRoomConstructionName', title: '土建单位', align: 'center', width: 80},
+                {field: 'civilEngineeringContacts', title: '土建单位联系人', align: 'center', width: 80},
+                {field: 'machineRoomDecorateName', title: '装修单位', align: 'center', width: 80},
+                {field: 'decorationUnitContacts', title: '装修单位联系人', align: 'center', width: 80},
+                {field: 'electricConstructionMode', title: '建设方式', align: 'center', width: 80},
+                {field: 'electricType', title: '外电类型', align: 'center', width: 80},
+                {field: 'electricUnitName', title: '施工单位', align: 'center', width: 80},
+                {field: 'electricUnitContacts', title: '施工单位联系人', align: 'center', width: 80},
+                {field: 'equipmentConstructionMode', title: '建设方式', align: 'center', width: 80},
+                {field: 'equipmentTypeName', title: '主设备类型', align: 'center', width: 80},
+                {field: 'equipmentSupplierName', title: '供货厂家', align: 'center', width: 80},
+                {field: 'equipmentSupplierContacts', title: '供货厂家联系人', align: 'center', width: 80},
+                {field: 'equipmentUnitName', title: '施工单位', align: 'center', width: 80},
+                {field: 'equipmentUnitContacts', title: '施工单位联系人', align: 'center', width: 80},
+                {field: 'airConstructionMode', title: '建设方式', align: 'center', width: 80},
+                {field: 'conditioningBrandName', title: '空调品牌', align: 'center', width: 80},
+                {field: 'specificationTypeName', title: '规格型号', align: 'center', width: 80},
+                {field: 'airUnitName', title: '施工单位', align: 'center', width: 80},
+                {field: 'airConstructionContacts', title: '施工单位联系人', align: 'center', width: 80},
+                {field: 'fireConstructionMode', title: '建设方式', align: 'center', width: 80},
+                {field: 'handHeldNumber', title: '手提式灭火器数量(个)', align: 'center', width: 100},
+                {field: 'sprayingMethodNumber', title: '喷淋式灭火器数量(个)', align: 'center', width: 100},
+                {field: 'fireSupplierName', title: '供货厂家', align: 'center', width: 80},
+                {field: 'fireSupplierContacts', title: '供货厂家联系人', align: 'center', width: 80},
+                {field: 'installationUnitName', title: '安装单位', align: 'center', width: 80},
+                {field: 'installationUnitContacts', title: '安装单位联系人', align: 'center', width: 80},
+                {field: 'powerConstructionMode', title: '建设方式', align: 'center', width: 80},
+                {field: 'powerSupplierName', title: '供货厂家', align: 'center', width: 80},
+                {field: 'powerSupplierContacts', title: '供货厂家联系人', align: 'center', width: 80},
+                {field: 'powerUnitName', title: '施工单位', align: 'center', width: 80},
+                {field: 'powerUnitContacts', title: '施工单位联系人', align: 'center', width: 80},
+            ]]
+        });
+
+        // 获取按钮
+        var newUser = $('#newUser');
+        var removeUser = $('#removeUser');
+
+        // 添加记录
+        newUser.on('click', function () {
+            //form.form("clear");
+            dialog.dialog('open');// open
+            dialog.dialog({
+                title: '添加记录',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        var form_province=$("#form-province").find("option:selected").text();
+                        var form_city=$("#form-city").find("option:selected").text();
+                        var form_county=$("#form-county").find("option:selected").text();
+
+                        var holderBtn=$("#holder").linkbutton("options").disabled;
+                        var machineRoomBtn=$("#machine-room").linkbutton("options").disabled;
+                        var masterBtn=$("#master").linkbutton("options").disabled;
+                        var importBtn=$("#import").linkbutton("options").disabled;
+                        var airConditionBtn=$("#air-condition").linkbutton("options").disabled;
+                        var fireControlBtn=$("#fire-control").linkbutton("options").disabled;
+                        var powerBtn=$("#power").linkbutton("options").disabled;
+
+                        var operator =  $("#operator").combobox("getText")
+                        form.form('submit', {
+                            url: 'insertProjectProgress?operator='+operator+'&province='+form_province+'&city='+form_city+'&county='+form_county+'&skyBranchId='+skyBranchId+'&machineRoomId='+machineRoomId+'&electricPowerId='+electricPowerId+'&mainEquipmentId='+mainEquipmentId+'&airConditionerId='+airConditionerId+'&fireId='+fireId+'&powerMonitoringId='+powerMonitoringId,
+                            onSubmit: function () {
+                                //提交表单时验证按钮必须全部不可用
+                                if (one==1&&two==1&&three==1&&four==1&&five==1&&six==1&&seven==1) {
+                                    return form.form('validate');
+                                }else {
+                                    return false;
+                                }
+                            },
+                            success: function (data) {
+                                //添加成功后刷新datagrid数据
+                                if (data){
+                                    $("#datagrid").datagrid("load");
+                                    dialog.dialog('close');// close
+                                    form.form("reset");
+                                    $("#holder").linkbutton('enable');
+                                    $("#form-holder").form("reset");
+                                    $("#machine-room").linkbutton('enable');
+                                    $("#form-machine-room").form("reset");
+                                    $("#import").linkbutton('enable');
+                                    $("#form-import").form("reset");
+                                    $("#master").linkbutton('enable');
+                                    $("#form-master").form("reset");
+                                    $("#air-condition").linkbutton('enable');
+                                    $("#form-air-condition").form("reset");
+                                    $("#fire-control").linkbutton('enable');
+                                    $("#form-fire-control").form("reset");
+                                    $("#power").linkbutton('enable');
+                                    $("#form-power").form("reset");
+                                    $.messager.alert("添加记录","添加记录成功!")
+                                }else{
+                                    $.messager.alert("添加记录","添加数据失败!","error")
+                                }
+
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialog.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        // 移除记录
+        removeUser.on('click', function () {
+            // 移除选中的数据行
+            if (grid.datagrid('getSelected')) {
+                var row = grid.datagrid('getSelected');
+                //console.log(row.projectProgressId)
+                $.messager.confirm('移除记录', '确定移除吗?', function (result) {
+                    if (result){
+                        $.ajax({
+                            url:'deleteProjectProgressById',
+                            method:'post',
+                            data:{projectProgressId:row.projectProgressId},
+                            dataType:'json',
+                            success:function (data) {
+                                if (data){
+                                    //删除成功后刷新数据
+                                    $.messager.alert("删除记录","删除成功","info")
+
+                                    grid.datagrid("load")
+                                } else {
+                                    $.messager.alert("删除记录","删除失败","error")
+                                }
+                            }
+                        })
+                    }
+                });
+            } else {
+                alert('请选择一条数据！');
+            }
+        });
+        /**
+         * linkbutton方法扩展
+         * @param {Object} jq
+         */
+        $.extend($.fn.linkbutton.methods, {
+            /**
+             * 激活选项（覆盖重写）
+             * @param {Object} jq
+             */
+            enable: function (jq) {
+                return jq.each(function () {
+                    var state = $.data(this, 'linkbutton');
+                    if ($(this).hasClass('l-btn-disabled')) {
+                        var itemData = state._eventsStore;
+                        //恢复超链接
+                        if (itemData.href) {
+                            $(this).attr("href", itemData.href);
+                        }
+                        //回复点击事件
+                        if (itemData.onclicks) {
+                            for (var j = 0; j < itemData.onclicks.length; j++) {
+                                $(this).bind('click', itemData.onclicks[j]);
+                            }
+                        }
+                        //设置target为null，清空存储的事件处理程序
+                        itemData.target = null;
+                        itemData.onclicks = [];
+                        $(this).removeClass('l-btn-disabled');
+                    }
+                });
+            },
+            /**
+             * 禁用选项（覆盖重写）
+             * @param {Object} jq
+             */
+            disable: function (jq) {
+                return jq.each(function () {
+                    var state = $.data(this, 'linkbutton');
+                    if (!state._eventsStore)
+                        state._eventsStore = {};
+                    if (!$(this).hasClass('l-btn-disabled')) {
+                        var eventsStore = {};
+                        eventsStore.target = this;
+                        eventsStore.onclicks = [];
+                        //处理超链接
+                        var strHref = $(this).attr("href");
+                        if (strHref) {
+                            eventsStore.href = strHref;
+                            $(this).attr("href", "javascript:void(0)");
+                        }
+                        //处理直接耦合绑定到onclick属性上的事件
+                        var onclickStr = $(this).attr("onclick");
+                        if (onclickStr && onclickStr != "") {
+                            eventsStore.onclicks[eventsStore.onclicks.length] = new Function(onclickStr);
+                            $(this).attr("onclick", "");
+                        }
+                        //处理使用jquery绑定的事件
+                        var eventDatas = $(this).data("events") || $._data(this, 'events');
+                        if (eventDatas["click"]) {
+                            var eventData = eventDatas["click"];
+                            for (var i = 0; i < eventData.length; i++) {
+                                if (eventData[i].namespace != "menu") {
+                                    eventsStore.onclicks[eventsStore.onclicks.length] = eventData[i]["handler"];
+                                    $(this).unbind('click', eventData[i]["handler"]);
+                                    i--;
+                                }
+                            }
+                        }
+                        state._eventsStore = eventsStore;
+                        $(this).addClass('l-btn-disabled');
+                    }
+                });
+            }
+        });
+    });
+
+    //导出空表格
+    function importProjectProgressExcel(){
+        var rowDatas = $("#datagrid").datagrid("getSelections");
+        if(rowDatas.length==0){
+            var ids = new Array(rowDatas.length);
+            for(var i = 0; i<rowDatas.length; i++){
+                ids[i] = rowDatas[i].projectProgressId;
+            }
+            window.location.href="importProjectProgressExcel?time="+new Date();
+        }
+    }
+
+    //导出数据
+    function ProjectProgressExcel(){
+        var rowDatas = $("#datagrid").datagrid("getSelections");
+        //console.log(rowDatas+"信息数据");
+        if(rowDatas.length==0){
+            $.messager.alert("信息框","请选中要导出的数据","warning");
+        }else{
+            var ids = new Array(rowDatas.length);
+            for(var i = 0; i<rowDatas.length; i++){
+                ids[i] = rowDatas[i].projectProgressId;
+            }
+            //console.log(ids);
+            window.location.href="ProjectProgressExcel?ids="+ids+"&time="+new Date();
+        }
+    }
+
+    //导入数据
+    function importProjectProgress(){
+        // 输入框的值，过滤是否选择文件
+        var fileName = $("#fileName").filebox("getValue");
+        var fileNameStr = fileName.substr(fileName.indexOf(".")+1);
+        //console.log("fileName:"+fileName)
+        //console.log("fileNameStr:"+fileNameStr)
+        if(fileName==null || fileName==""){
+            alert("请选择要导入的excel文件");
+        }else if(fileNameStr=="xls" || fileNameStr=="xlsx"){
+            var flag=true;
+            if(flag){
+                $.messager.confirm("确定对话框","确认导入吗？",function(n){
+                    if(n){
+                        $("#excelForm").form("submit",{
+                            url:"parseExcelProjectProgress",
+                            success:function (data) {
+                                var jsObj = JSON.parse(data);
+                                $.messager.alert("信息框",jsObj.isParse,"warning");
+                                if(jsObj.isParse=="导入成功"){
+                                    // $("#combobox-module").combobox('reload');
+                                    $("#datagrid").datagrid("reload");
+                                    var value = $("#fileName").textbox('getValue')  //获取值
+                                    $("#fileName").textbox('setValue','')
+                                }
+                            }
+                        })
+
+                    }
+                })
+            }
+        }else{
+            $.messager.alert("提示框","文件类型不一致",'warning');
+        }
+    }
+</script>
+</body>
+</html>

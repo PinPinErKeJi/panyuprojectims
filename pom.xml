@@ -49,13 +49,9 @@
 
 		<!-- mybatis的分页插件-->
 		<dependency>
-
 			<groupId>com.baiduedu</groupId>
-
 			<artifactId>pagehelper</artifactId>
-
 			<version>5.1.2</version>
-
 		</dependency>
 
 
@@ -72,13 +68,9 @@
 
 		<!--oracle数据库配置-->
 		<dependency>
-
 		<groupId>com.github.noraui</groupId>
-
 		<artifactId>ojdbc7</artifactId>
-
 		<version>12.1.0.2</version>
-
 	</dependency>
 
 
@@ -122,6 +114,7 @@
 			<artifactId>poi-ooxml-schemas</artifactId>
 			<version>3.10-FINAL</version>
 		</dependency>
+
 
 	</dependencies>
 
