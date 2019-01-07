@@ -10,10 +10,11 @@
 	top: 0;
 	left: 0;
 	background: rgba(0,0,0,0.2);
+	z-index: 1000;
 }
 .mask>div{
 	width: 400px;
-	height: 500px;
+	height: 550px;
 	background: #fff;
 	margin: 100px auto 0;
 	text-align: center;
@@ -22,4 +23,20 @@
 .mask>div>p{
 	font-size: 18px;
 	font-weight: bold;
+	padding-top: 10px;
+}
+.mask>div>div{
+	width: 90%;
+	margin: 0 auto;
+	font-size: 14px;
+	text-align: left;
+	text-indent: 20px;
+}
+.mask .btn{
+	width: 80px;
+	height: 30px;
+	background: orange!important; ;
+	color: #fff;
+	border: 0;
+	margin: 20px auto 0;
 }
