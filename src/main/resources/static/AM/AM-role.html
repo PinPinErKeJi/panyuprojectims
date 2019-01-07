@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>角色管理</title>
+    <link rel="stylesheet" href="../easyui/easyui.css" />
+    <link rel="stylesheet" href="../css/icon.css" />
+    <link rel="stylesheet" type="text/css" href="../css/demo.css"/>
+</head>
+<body>
+
+<a href="javascript:;" class="easyui-linkbutton" iconCls="icon-add" id="newUser">添加</a>
+<table id="dg" class="easyui-datagrid" title="角色管理" style="width:460px;"
+       data-options="rownumbers:true,singleSelect:true,url:'datagrid_data1.json',method:'get'">
+    <thead>
+    <tr>
+        <th data-options="field:'ck',checkbox:true"></th>
+        <th data-options="field:'itemid',width:180">用户名</th>
+        <th data-options="field:'productid',width:220">角色</th>
+    </tr>
+
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <input type="checkbox" name="userName" value="" />
+        </td>
+        <td>张三</td>
+        <td>
+            <select name="" style="width: 100px;" id="select">
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="checkbox" name="userName" value="" />
+        </td>
+        <td>张三</td>
+        <td>
+            <select name="" style="width: 100px;" id="select">
+            </select>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<!--弹窗-->
+<div id="dialog" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form method="post" id="form">
+        <div style="margin: 10px 0 0 10px;"><input name="adminRole" type="checkbox" value="监理"/>监理 </div> <br />
+        <div style="margin: 10px 0 0 10px;"><input name="adminRole" type="checkbox" value="业务主管" />业务主管 </div> <br />
+        <div style="margin: 10px 0 0 10px;"><input name="adminRole" type="checkbox" value="经理" />经理 </div> <br />
+        <div style="margin: 10px 0 0 10px;"><input name="adminRole" type="checkbox" value="总经理" />总经理 </div> <br />
+
+    </form>
+</div>
+</div>
+
+
+</body>
+<script src="../js/jquery.min.js" type="text/javascript"
+        charset="utf-8"></script>
+<script src="../js/jquery.easyui.min.js" type="text/javascript"
+        charset="utf-8"></script>
+<script src="../js/easyui-lang-zh_CN.js" type="text/javascript"
+        charset="utf-8"></script>
+<script type="text/javascript">
+
+
+
+
+    $(function () {
+//      var one=0;
+//      var two=0;
+//      var three=0;
+//      var four=0;
+//      var five=0;
+//      var six=0;
+//      var seven=0;
+
+
+        var dialog = $('#dialog');
+        var form = $('#form');
+
+        // 隐藏弹窗
+        dialog.dialog('close');
+
+        // 数据表格
+        var grid = $('#datagrid').datagrid({
+            url: 'selectProjectProgress',
+            pagination: true,
+            //singleSelect: true,
+            pageNumber: 1,
+            pageSize: 15,
+            pageList: [15, 30, 45, 60],
+            //toolbar: '#toolbar',
+            columns: [[
+                {field:'ck',checkbox:"true",rowspan:2},
+                {field: 'projectProgressId', title: '序号', rowspan: 2, width: 80,align: 'center',hidden:true},
+                {field: 'adminName', title: '用户名', rowspan: 2, align: 'center', width: 200},
+                {field: 'adminPwd', title: '密码', rowspan: 2, align: 'center', width: 200},
+            ], [
+
+            ]]
+        });
+
+        // 获取按钮
+        var newUser = $('#newUser');
+        var removeUser = $('#removeUser');
+
+        // 添加记录
+        newUser.on('click', function () {
+            //form.form("clear");
+            //dialog.dialog('open');// open
+            dialog.dialog({
+                title: '添加记录',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function chenkOnclick() { // 新增数据
+                        var str=document.getElementsByName("adminRole");
+                        var shosetype=document.getElementById("select");
+                        var objarray=str.length;
+                        var chestr="";
+                        var option = '';
+                        for (i=0;i<objarray;i++)
+                        {
+                            if(str[i].checked == true)
+                            {
+                                chestr+=str[i].value+",";
+                                option += '<option value="' + i + '">' + str[i].value + '</option>';
+                            }
+                        }
+                        shosetype.innerHTML=option;
+                        if(chestr == "")
+                        {
+                            alert("请先选择一个角色～！");
+                        }
+                        dialog.dialog('close');
+                    },
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialog.dialog('close');// close
+                    }
+                }]
+            });
+        });
+
+
+
+//      $("#newUser").click(function () {
+//      if ($('#dg').prop("checked")) {
+//           dialog.dialog('open');
+//			alert('选中');
+//       } else {
+//           alert("请选择一条数据！");
+//           dialog.dialog('close');
+//      }
+//	    });
+
+
+
+
+
+
+
+
+
+
+        /**
+         * linkbutton方法扩展
+         * @param {Object} jq
+         */
+        $.extend($.fn.linkbutton.methods, {
+            /**
+             * 激活选项（覆盖重写）
+             * @param {Object} jq
+             */
+            enable: function (jq) {
+                return jq.each(function () {
+                    var state = $.data(this, 'linkbutton');
+                    if ($(this).hasClass('l-btn-disabled')) {
+                        var itemData = state._eventsStore;
+                        //恢复超链接
+                        if (itemData.href) {
+                            $(this).attr("href", itemData.href);
+                        }
+                        //回复点击事件
+                        if (itemData.onclicks) {
+                            for (var j = 0; j < itemData.onclicks.length; j++) {
+                                $(this).bind('click', itemData.onclicks[j]);
+                            }
+                        }
+                        //设置target为null，清空存储的事件处理程序
+                        itemData.target = null;
+                        itemData.onclicks = [];
+                        $(this).removeClass('l-btn-disabled');
+                    }
+                });
+            },
+            /**
+             * 禁用选项（覆盖重写）
+             * @param {Object} jq
+             */
+            disable: function (jq) {
+                return jq.each(function () {
+                    var state = $.data(this, 'linkbutton');
+                    if (!state._eventsStore)
+                        state._eventsStore = {};
+                    if (!$(this).hasClass('l-btn-disabled')) {
+                        var eventsStore = {};
+                        eventsStore.target = this;
+                        eventsStore.onclicks = [];
+                        //处理超链接
+                        var strHref = $(this).attr("href");
+                        if (strHref) {
+                            eventsStore.href = strHref;
+                            $(this).attr("href", "javascript:void(0)");
+                        }
+                        //处理直接耦合绑定到onclick属性上的事件
+                        var onclickStr = $(this).attr("onclick");
+                        if (onclickStr && onclickStr != "") {
+                            eventsStore.onclicks[eventsStore.onclicks.length] = new Function(onclickStr);
+                            $(this).attr("onclick", "");
+                        }
+                        //处理使用jquery绑定的事件
+                        var eventDatas = $(this).data("events") || $._data(this, 'events');
+                        if (eventDatas["click"]) {
+                            var eventData = eventDatas["click"];
+                            for (var i = 0; i < eventData.length; i++) {
+                                if (eventData[i].namespace != "menu") {
+                                    eventsStore.onclicks[eventsStore.onclicks.length] = eventData[i]["handler"];
+                                    $(this).unbind('click', eventData[i]["handler"]);
+                                    i--;
+                                }
+                            }
+                        }
+                        state._eventsStore = eventsStore;
+                        $(this).addClass('l-btn-disabled');
+                    }
+                });
+            }
+        });
+    });
+
+    //选中之后按钮才能被点击
+    $(function(){
+        var regBtn = $("#newUser");
+        $("#dg").change(function(){
+            var that = $(this);
+            that.prop("checked",that.prop("checked"));
+            if(that.prop("checked")){
+                regBtn.prop("disabled",false)
+            }else{
+                regBtn.prop("disabled",true)
+            }
+        });
+    });
+
+
+
+</script>
+</html>
