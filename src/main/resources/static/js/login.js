@@ -8,8 +8,8 @@ $("form :input.required").each(function () {
 
 //为表单元素添加失去焦点事件
 $("form :input").blur(function(){
-//               var $parent = $(this).parent();
-    //$parent.find(".msg").remove(); //删除以前的提醒元素（find()：查找匹配元素集中元素的所有匹配元素）
+    var $parent = $(this).parent();
+    $parent.find(".msg").remove(); //删除以前的提醒元素（find()：查找匹配元素集中元素的所有匹配元素）
     //验证公司名
     if($(this).is("#companyName")){
         var nameVal = $.trim(this.value); //原生js去空格方式：this.replace(/(^\s*)|(\s*$)/g, "")
@@ -147,6 +147,12 @@ $("#send").click(function(){
     alert("注册成功！");
 });
 
-//用户协议
-
+//用户协议,控制显示隐藏
+$('.mask').hide();
+$('#agreement').on('click',function () {
+    $('.mask').show();
+});
+$('.btn').on('click',function () {
+    $('.mask').hide();
+})
 
