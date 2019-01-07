@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>角色管理</title>
@@ -27,7 +27,7 @@
         </td>
         <td>张三</td>
         <td>
-            <select name="" style="width: 100px;" id="select">
+            <select name="" style="width: 100px;">
             </select>
         </td>
     </tr>
@@ -37,7 +37,7 @@
         </td>
         <td>张三</td>
         <td>
-            <select name="" style="width: 100px;" id="select">
+            <select name="" style="width: 100px;">
             </select>
         </td>
     </tr>
@@ -121,7 +121,7 @@
                     iconCls: 'icon-save',
                     handler: function chenkOnclick() { // 新增数据
                         var str=document.getElementsByName("adminRole");
-                        var shosetype=document.getElementById("select");
+                        var shosetype=document.querySelector("select");
                         var objarray=str.length;
                         var chestr="";
                         var option = '';
