@@ -97,7 +97,8 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 拦截器.
         Map<String, String> map = new HashMap<String, String>();
-        String login = "/login/login.html";
+
+        String login = "";
         map.put("/static/**", "anon");
         map.put("/login/**", "anon");
         map.put("/css/**","anon");
@@ -106,6 +107,7 @@ public class ShiroConfiguration {
         map.put("/bootstrap/**","anon");
         map.put("/easyui/**","anon");
         map.put("/pages/**","anon");
+
 
         map.put(login, "anon");
         map.put("/logout", "logout");
