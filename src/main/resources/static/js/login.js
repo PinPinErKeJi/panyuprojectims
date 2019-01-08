@@ -48,8 +48,7 @@ $("form :input").blur(function(){
         var numVal = $.trim(this.value);
         //原生js去空格方式：this.replace(/(^\s*)|(\s*$)/g, "")
         var regNum = /^\d{18}$/;
-        if(numVal == "" ||
-            regNum.test(numVal)){
+        if(numVal == "" || regNum.test(numVal)){
             var errorMsg = " 请输入工号！";
             //class='msg onError' 中间的空格是层叠样式的格式
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
