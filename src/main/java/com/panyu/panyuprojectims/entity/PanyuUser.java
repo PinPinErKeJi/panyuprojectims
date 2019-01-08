@@ -9,11 +9,12 @@ public class PanyuUser {
     private String userName;
     private String userEmail;
     private String userPwd;
+    private String userState;
     public PanyuUser() {
         super();
     }
-    public PanyuUser(String userId,String userProvince,String userCity,String userCounty,String userCompanyName,String userCompanycccNumber,String userName,String userEmail,String userPwd) {
-        super();
+
+    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userPwd, String userState) {
         this.userId = userId;
         this.userProvince = userProvince;
         this.userCity = userCity;
@@ -23,9 +24,11 @@ public class PanyuUser {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPwd = userPwd;
+        this.userState = userState;
     }
+
     public String getUserId() {
-        return this.userId;
+        return userId;
     }
 
     public void setUserId(String userId) {
@@ -33,7 +36,7 @@ public class PanyuUser {
     }
 
     public String getUserProvince() {
-        return this.userProvince;
+        return userProvince;
     }
 
     public void setUserProvince(String userProvince) {
@@ -41,7 +44,7 @@ public class PanyuUser {
     }
 
     public String getUserCity() {
-        return this.userCity;
+        return userCity;
     }
 
     public void setUserCity(String userCity) {
@@ -49,7 +52,7 @@ public class PanyuUser {
     }
 
     public String getUserCounty() {
-        return this.userCounty;
+        return userCounty;
     }
 
     public void setUserCounty(String userCounty) {
@@ -57,7 +60,7 @@ public class PanyuUser {
     }
 
     public String getUserCompanyName() {
-        return this.userCompanyName;
+        return userCompanyName;
     }
 
     public void setUserCompanyName(String userCompanyName) {
@@ -65,7 +68,7 @@ public class PanyuUser {
     }
 
     public String getUserCompanycccNumber() {
-        return this.userCompanycccNumber;
+        return userCompanycccNumber;
     }
 
     public void setUserCompanycccNumber(String userCompanycccNumber) {
@@ -73,7 +76,7 @@ public class PanyuUser {
     }
 
     public String getUserName() {
-        return this.userName;
+        return userName;
     }
 
     public void setUserName(String userName) {
@@ -81,7 +84,7 @@ public class PanyuUser {
     }
 
     public String getUserEmail() {
-        return this.userEmail;
+        return userEmail;
     }
 
     public void setUserEmail(String userEmail) {
@@ -89,11 +92,19 @@ public class PanyuUser {
     }
 
     public String getUserPwd() {
-        return this.userPwd;
+        return userPwd;
     }
 
     public void setUserPwd(String userPwd) {
         this.userPwd = userPwd;
+    }
+
+    public String getUserState() {
+        return userState;
+    }
+
+    public void setUserState(String userState) {
+        this.userState = userState;
     }
 
     @Override
@@ -108,6 +119,7 @@ public class PanyuUser {
                 ", userName='" + userName + '\'' +
                 ", userEmail='" + userEmail + '\'' +
                 ", userPwd='" + userPwd + '\'' +
+                ", userState='" + userState + '\'' +
                 '}';
     }
 }
