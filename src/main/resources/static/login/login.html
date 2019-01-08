@@ -40,9 +40,12 @@
 		<!--[if lt IE 9]>
 		<script src="assets/js/html5shiv.min.js"></script>
 		<script src="assets/js/respond.min.js"></script>
+
 		<![endif]-->
 		<!--弹窗-->
 		<link rel="stylesheet" href="../css/login.css">
+		<script type="text/javascript" src="assets/js/jquery-3.2.1.min.js" ></script>
+		<script type="text/javascript" src="assets/js/login.js"></script>
 	</head>
 
 	<body class="login-layout">
@@ -198,12 +201,12 @@
 											<div class="space-6"></div>
 											<p>填写信息: </p>
 
-											<form>
+											<form id="Reform">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input
-																	type="text" class="form-control" placeholder="公司名" id="companyName"/>
+																	type="text"  name="userCompanyName class="form-control" placeholder="公司名" id="companyName"/>
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
@@ -211,7 +214,7 @@
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input
-																	type="text" class="form-control" placeholder="用户名" id="userName"/>
+																	type="text" name="userName" class="form-control" placeholder="用户名" id="userName"/>
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
@@ -219,7 +222,7 @@
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input
-																	type="text" class="form-control" placeholder="工号" id="companyNumber"/>
+																	type="text" name="userCompanycccNumber" class="form-control" placeholder="工号" id="companyNumber"/>
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
@@ -227,7 +230,7 @@
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input
-																	type="email" class="form-control" placeholder="邮箱" id="email"/>
+																	type="email" name="userEmail" class="form-control" placeholder="邮箱" id="email"/>
 															<i class="ace-icon fa fa-envelope"></i>
 														</span>
 													</label>
@@ -236,7 +239,7 @@
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input
-																	type="password" class="form-control" placeholder="密码" id="password"/>
+																	type="password"  name="userPwd"  class="form-control" placeholder="密码" id="password"/>
 															<i class="ace-icon fa fa-lock"></i>
 														</span>
 													</label>
@@ -253,7 +256,7 @@
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input
-																	type="text" class="form-control" placeholder="手机号" id="tel"/>
+																	type="text"  name="user_tel"  class="form-control" placeholder="手机号" id="tel"/>
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
@@ -291,7 +294,7 @@
 															<span class="bigger-110">重置</span>
 														</button>
 
-														<button type="button" class="width-65 pull-right btn btn-sm btn-success">
+														<button type="button"  id="register" class="width-65 pull-right btn btn-sm btn-success">
 															<span class="bigger-110">注册</span>
 
 															<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
