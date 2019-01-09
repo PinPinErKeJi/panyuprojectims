@@ -114,7 +114,7 @@ $("form :input").blur(function(){
     //验证码
     if($(this).is("#code")){
         var codeVal = $.trim(this.value);
-        var regCode = /.+@.+\.[a-zA-Z]{2,4}$/;
+        var regCode = /^\d{6}$/;
         if(codeVal== ""){
             var errorMsg = " 请输入验证码！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
