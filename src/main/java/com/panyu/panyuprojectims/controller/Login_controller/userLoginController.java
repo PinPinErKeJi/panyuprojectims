@@ -14,8 +14,9 @@ public class userLoginController {
     @ResponseBody
     public Object userlogin(String userCompanyName ,String userName, String  userCompanycccNumber,String userEmail, String userPwd ,String user_tel){
 
-        System.out.println("我是conroller");
-        System.out.println(userCompanyName);
+        System.out.println("+++++++"+"你好");
+        System.out.println("+++++++"+userCompanyName);
+        System.out.println("+++++++"+userName);
 
         return null;
     }
