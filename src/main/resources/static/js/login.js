@@ -46,10 +46,13 @@ $("form :input").blur(function(){
     if($(this).is("#companyNumber")){
         var numVal = $.trim(this.value);
         //原生js去空格方式：this.replace(/(^\s*)|(\s*$)/g, "")
-        var regNum = /^\d{18}$/;
-        if(numVal == "" || regNum.test(numVal)){
+        var regNum = /[0-9A-Z]{18}/;
+        if(numVal == "" ){
             var errorMsg = " 请输入工号！";
             //class='msg onError' 中间的空格是层叠样式的格式
+            $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+        }else if(regNum.test(numVal)){
+            var errorMsg = " 统一社会信用代码由18位数字或大写字母组成！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }
         else{
@@ -81,8 +84,7 @@ $("form :input").blur(function(){
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }
         else{
-            var okMsg=" 输入正确";
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //确认密码
