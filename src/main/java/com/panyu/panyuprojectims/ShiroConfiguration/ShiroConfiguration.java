@@ -108,9 +108,12 @@ public class ShiroConfiguration {
         map.put("/easyui/**","anon");
         map.put("/pages/**","anon");
 
+        map.put("/dologin", "anon");
         map.put("/login.html", "anon");
+        map.put("/doRegister", "anon");
+        map.put("/register", "anon");
         map.put("/logout", "logout");
-        map.put("/logon", "anon");
+
 
         //对所有用户认证
        // map.put("/**", "authc");

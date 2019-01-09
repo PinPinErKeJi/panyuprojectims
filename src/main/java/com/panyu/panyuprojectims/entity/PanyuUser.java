@@ -8,13 +8,27 @@ public class PanyuUser {
     private String userCompanycccNumber;
     private String userName;
     private String userEmail;
+    private String userTel;
     private String userPwd;
     private String userState;
     public PanyuUser() {
         super();
     }
+    public PanyuUser( String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState) {
 
-    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userPwd, String userState) {
+        this.userProvince = userProvince;
+        this.userCity = userCity;
+        this.userCounty = userCounty;
+        this.userCompanyName = userCompanyName;
+        this.userCompanycccNumber = userCompanycccNumber;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userTel = userTel;
+        this.userPwd = userPwd;
+        this.userState = userState;
+    }
+
+    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState) {
         this.userId = userId;
         this.userProvince = userProvince;
         this.userCity = userCity;
@@ -23,6 +37,7 @@ public class PanyuUser {
         this.userCompanycccNumber = userCompanycccNumber;
         this.userName = userName;
         this.userEmail = userEmail;
+        this.userTel = userTel;
         this.userPwd = userPwd;
         this.userState = userState;
     }
@@ -107,6 +122,14 @@ public class PanyuUser {
         this.userState = userState;
     }
 
+    public String getUserTel() {
+        return userTel;
+    }
+
+    public void setUserTel(String userTel) {
+        this.userTel = userTel;
+    }
+
     @Override
     public String toString() {
         return "PanyuUser{" +
@@ -118,6 +141,7 @@ public class PanyuUser {
                 ", userCompanycccNumber='" + userCompanycccNumber + '\'' +
                 ", userName='" + userName + '\'' +
                 ", userEmail='" + userEmail + '\'' +
+                ", userTel='" + userTel + '\'' +
                 ", userPwd='" + userPwd + '\'' +
                 ", userState='" + userState + '\'' +
                 '}';
