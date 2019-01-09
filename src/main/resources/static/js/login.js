@@ -22,8 +22,7 @@ $("form :input").blur(function(){
             var errorMsg = " 公司名长度4位以上，不包含特殊字符！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         } else{
-            var okMsg=" 输入正确";
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //验证用户名
@@ -38,8 +37,7 @@ $("form :input").blur(function(){
             var errorMsg = " 用户名长度2位以上，不包含特殊字符！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }else{
-            var okMsg=" 输入正确";
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //验证工号
@@ -56,8 +54,7 @@ $("form :input").blur(function(){
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }
         else{
-            var okMsg=" 输入正确";
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //验证邮箱
@@ -71,8 +68,7 @@ $("form :input").blur(function(){
             var errorMsg = " 邮箱格式不正确！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }else{
-            var okMsg=" 输入正确";
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //验证密码
@@ -98,8 +94,7 @@ $("form :input").blur(function(){
             var errorM = " 密码不一致！";
             $parent.append("<span class='msg onError'>" + errorM + "</span>");
         }else{
-            var okMsg=" 输入正确";
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //验证手机号
@@ -127,9 +122,7 @@ $("form :input").blur(function(){
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }
         else{
-            var okMsg=" 输入正确";
-            $parent.find(".high").remove();
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
 }).keyup(function(){
@@ -146,8 +139,9 @@ $("#send").click(function(){
     var numError = $("form .onError").length;
     if(numError){
         return false;
+    }else{
+        alert("注册成功！");
     }
-    alert("注册成功！");
 });
 
 //用户协议,控制显示隐藏
