@@ -14,15 +14,15 @@ $("form :input").blur(function(){
     if($(this).is("#companyName")){
         var nameVal = $.trim(this.value); //原生js去空格方式：this.replace(/(^\s*)|(\s*$)/g, "")
         var regCompany = /[~#^$@%&!*()<>:;'"{}【】  ]/;
-        if(nameVal == "" || nameVal.length < 6 ||
-            regCompany.test(nameVal)){
-            var errorMsg = " 公司名非空，长度6位以上，不包含特殊字符！";
+        if( nameVal == ""){
+            var errorMsg = " 请输入公司名！";
             //class='msg onError' 中间的空格是层叠样式的格式
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
-        }
-        else{
+        }else if(nameVal.length < 4 || regCompany.test(nameVal)){
+            var errorMsg = " 公司名长度4位以上，不包含特殊字符！";
+            $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+        } else{
             var okMsg=" 输入正确";
-            $parent.find(".high").remove();
             $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
         }
     }
@@ -31,15 +31,14 @@ $("form :input").blur(function(){
         var userVal = $.trim(this.value);
         //原生js去空格方式：this.replace(/(^\s*)|(\s*$)/g, "")
         var regUser = /[~#^$@%&!*()<>:;'"{}【】  ]/;
-        if(userVal == "" || userVal.length < 2 ||
-            regUser.test(userVal)){
-            var errorMsg = " 用户名非空，长度2位以上，不包含特殊字符！";
-            //class='msg onError' 中间的空格是层叠样式的格式
+        if(userVal == ""){
+            var errorMsg = " 请输入用户名！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
-        }
-        else{
+        }else if(userVal.length < 2 || regUser.test(userVal)){
+            var errorMsg = " 用户名长度2位以上，不包含特殊字符！";
+            $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+        }else{
             var okMsg=" 输入正确";
-            $parent.find(".high").remove();
             $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
         }
     }
@@ -48,15 +47,13 @@ $("form :input").blur(function(){
         var numVal = $.trim(this.value);
         //原生js去空格方式：this.replace(/(^\s*)|(\s*$)/g, "")
         var regNum = /^\d{18}$/;
-        if(numVal == "" ||
-            regNum.test(numVal)){
+        if(numVal == "" || regNum.test(numVal)){
             var errorMsg = " 请输入工号！";
             //class='msg onError' 中间的空格是层叠样式的格式
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }
         else{
             var okMsg=" 输入正确";
-            $parent.find(".high").remove();
             $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
         }
     }
@@ -64,40 +61,42 @@ $("form :input").blur(function(){
     if($(this).is("#email")){
         var emailVal = $.trim(this.value);
         var regEmail = /.+@.+\.[a-zA-Z]{2,4}$/;
-        if(emailVal== "" || (emailVal != "" && !regEmail.test(emailVal))){
+        if(emailVal== ""){
             var errorMsg = " 请输入E-Mail！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
-        }
-        else{
+        }else if (emailVal != "" && !regEmail.test(emailVal)){
+            var errorMsg = " 邮箱格式不正确！";
+            $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+        }else{
             var okMsg=" 输入正确";
-            $parent.find(".high").remove();
             $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
         }
     }
     //验证密码
     if($(this).is("#password")){
         var pwdVal = $.trim(this.value);
-        var regPwd = /^[A-Za-z0-9]+$ 或 ^[A-Za-z0-9]{6,8}$/;
+        var regPwd = /^[A-Za-z0-9]{6,8}$/;
         if(pwdVal== "" || (pwdVal != "" && !regPwd.test(pwdVal))){
             var errorMsg = " 请输入密码！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }
         else{
             var okMsg=" 输入正确";
-            $parent.find(".high").remove();
             $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
         }
     }
     //确认密码
     if($(this).is("#surePassword")){
         var sureVal = $.trim(this.value);
-        if(sureVal != pwdVal){
-            var errorMsg = " 密码不一致！";
+        var pwdVal = $('#password').val();
+        if(sureVal == ""){
+            var errorMsg = " 请再次输入密码！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
-        }
-        else{
+        }else if (sureVal != pwdVal){
+            var errorM = " 密码不一致！";
+            $parent.append("<span class='msg onError'>" + errorM + "</span>");
+        }else{
             var okMsg=" 输入正确";
-            $parent.find(".high").remove();
             $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
         }
     }
@@ -105,11 +104,13 @@ $("form :input").blur(function(){
     if($(this).is("#tel")){
         var telVal = $.trim(this.value);
         var regTel = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;
-        if(telVal== "" || (telVal != "" && !regTel.test(telVal))){
+        if(telVal== ""){
             var errorMsg = " 请输入手机号！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
-        }
-        else{
+        }else if(telVal != "" && !regTel.test(telVal)){
+            var errorMsg = " 请输入有效手机号！";
+            $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+        }else{
             var okMsg=" 输入正确";
             $parent.find(".high").remove();
             $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");

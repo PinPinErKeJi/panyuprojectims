@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>权限管理</title>
+</head>
+<link rel="stylesheet" type="text/css" href="../easyui/easyui.css"/>
+<link rel="stylesheet" type="text/css" href="../css/icon.css"/>
+<script src="../js/jquery.min.js" type="text/javascript"
+        charset="utf-8"></script>
+<script src="../js/jquery.easyui.min.js" type="text/javascript"
+        charset="utf-8"></script>
+<script src="../js/easyui-lang-zh_CN.js" type="text/javascript"
+        charset="utf-8"></script>
+<body>
+<input id="depts">
+</body>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#depts').combotree({
+            url: 'limit.json',
+            multiple:true,//复选框
+            checkbox:true,//
+            cascadeCheck:false//true:选中父节点后下面的所有子节点选中，false:选中父节点后下面的子节点不选中
+        });
+    });
+</script>
+</html>
