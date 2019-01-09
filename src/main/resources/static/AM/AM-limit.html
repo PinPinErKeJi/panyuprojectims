@@ -1,28 +1,444 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>权限管理</title>
+    <link rel="stylesheet" type="text/css" href="../easyui/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/icon.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/AM-limit.css"/>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="../js/AM-limit.js" type="text/javascript"
+            charset="utf-8"></script>
+    <script src="../js/jquery.min.js" type="text/javascript"
+            charset="utf-8"></script>
+    <script src="../js/jquery.easyui.min.js" type="text/javascript"
+            charset="utf-8"></script>
+    <script src="../js/easyui-lang-zh_CN.js" type="text/javascript"
+            charset="utf-8"></script>
 </head>
-<link rel="stylesheet" type="text/css" href="../easyui/easyui.css"/>
-<link rel="stylesheet" type="text/css" href="../css/icon.css"/>
-<script src="../js/jquery.min.js" type="text/javascript"
-        charset="utf-8"></script>
-<script src="../js/jquery.easyui.min.js" type="text/javascript"
-        charset="utf-8"></script>
-<script src="../js/easyui-lang-zh_CN.js" type="text/javascript"
-        charset="utf-8"></script>
-<body>
-<input id="depts">
+<body class="easyui-layout">
+<div data-options="region:'west',title:'用户信息',split:true" style="width:100%;">
+    <table id="dg1" class="easyui-datagrid" title="" style="width:1000px;height:350px;margin-left: 100px;"
+           data-options="fitColumns:true,singleSelect:true,pagination:true">
+
+        <thead>
+        <tr>
+            <th data-options="field:'UserId',width:60"> </th>
+            <th data-options="field:'UserName',width:200">用户名</th>
+            <th data-options="field:'UserPwd',width:200">角色</th>
+            <th data-options="field:'_operate',width:200,align:'center',formatter:formatOper">操作</th>
+        </tr>
+        </thead>
+    </table>
+    <div id="tb1">
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">增加用户</a>
+    </div>
+
+
+    <div class="limit">
+        <p>角色菜单权限</p>
+
+        <div  class="wrapper">
+            <div class="aiui">
+                <div class="ai-treenav">
+                    <ul>
+                        <li>
+                            <ul class="nav-trunk">
+                                <li ><a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">基站</span></a>
+                                    <ul class="nav-trunk fold ">
+                                        <li ><a  class="item-name c-f" title="基站模块库"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >基站模块库</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="基站工程基本信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >基站工程基本信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="基站图片库"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >基站图片库</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="基站工程进度信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >基站工程进度信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+
+                                <li ><a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">设备</span></a>
+                                    <ul class="nav-trunk fold ">
+                                        <li ><a  class="item-name c-f" title="设备模块库"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >设备模块库</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="设备工程基本信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >设备工程基本信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="设备工程进度信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >设备工程进度信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="设备图片库"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >设备图片库</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="设备到货统计信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >设备到货统计信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+
+                                <li ><a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">驻地网</span></a>
+                                    <ul class="nav-trunk fold ">
+                                        <li ><a  class="item-name c-f" title="驻地网模块库"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >驻地网模块库</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="驻地网工程基本信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >驻地网工程基本信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="驻地网图片库"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >驻地网图片库</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="驻地网工程进度信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >驻地网工程进度信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+
+                                <li ><a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">室内覆盖</span></a>
+                                    <ul class="nav-trunk fold ">
+                                        <li ><a  class="item-name c-f" title="室内覆盖模块库"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >室内覆盖模块库</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="室内覆盖工程基本信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >室内覆盖工程基本信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="室内覆盖图片库"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >室内覆盖图片库</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="室内覆盖工程进度信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >室内覆盖工程进度信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+
+                                <li ><a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">线路</span></a>
+                                    <ul class="nav-trunk fold ">
+                                        <li ><a  class="item-name c-f" title="线路模块库"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >线路模块库</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="线路工程基本信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >线路工程基本信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="线路图片库"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >线路图片库</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="线路盖工程进度信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >线路工程进度信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+
+                                <li ><a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">电源</span></a>
+                                    <ul class="nav-trunk fold ">
+                                        <li ><a  class="item-name c-f" title="电源模块库"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >电源模块库</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="电源基本信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >电源基本信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="电源工程进度信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >电源工程进度信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="电源图片库"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >电源图片库</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li ><a  class="item-name c-f" title="电源到货统计信息"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename" >电源到货统计信息</span></a>
+                                            <ul class="nav-trunk fold">
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">新增</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">删除</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">修改</span></a>
+                                                </li>
+                                                <li> <a  class="item-name c-f"><i></i><span class="pull-left"><div class="checkbox"><input type="checkbox"></div></span><span class="pull-left filename">查看</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <div style="margin-left: 20px;vertical-align: middle">
+                <input style="vertical-align: middle" type="checkbox" value="全选"
+                       class="all"
+                       name="allSelect"/>全选
+            </div>
+            <div class="btn">
+                <button class="reset">重置</button>
+                <button class="submit">提交</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+<!-- ++++++++++++++++++++弹出的增加用户框++++++++++++++++++++++++++++++++++++++++ -->
+<div class="easyui-dialog" id="add"
+     data-options="title:'增加用户',closable:true,closed:true,
+        buttons:[{text:'确定',handler:queding},
+        {text:'关闭',handler:function(){$('#add').dialog('close')}}]">
+
+    <form action="">
+        <div>
+            <label>用户名：</label><input type="text" id="username"/>
+        </div>
+        <div>
+            <label>角色：</label><input type="text" id="rolename" />
+        </div>
+    </form>
+</div>
+
 </body>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#depts').combotree({
-            url: 'limit.json',
-            multiple:true,//复选框
-            checkbox:true,//
-            cascadeCheck:false//true:选中父节点后下面的所有子节点选中，false:选中父节点后下面的子节点不选中
-        });
+    //++++++++++增加用户按钮++++++++
+    $("#dg1").datagrid({
+        toolbar:'#tb1'
     });
 </script>
 </html>
