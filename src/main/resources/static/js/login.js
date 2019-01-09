@@ -22,8 +22,7 @@ $("form :input").blur(function(){
             var errorMsg = " 公司名长度4位以上，不包含特殊字符！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         } else{
-            var okMsg=" 输入正确";
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //验证用户名
@@ -38,23 +37,24 @@ $("form :input").blur(function(){
             var errorMsg = " 用户名长度2位以上，不包含特殊字符！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }else{
-            var okMsg=" 输入正确";
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //验证工号
     if($(this).is("#companyNumber")){
         var numVal = $.trim(this.value);
         //原生js去空格方式：this.replace(/(^\s*)|(\s*$)/g, "")
-        var regNum = /^\d{18}$/;
-        if(numVal == "" || regNum.test(numVal)){
+        var regNum = /[0-9A-Z]{18}/;
+        if(numVal == "" ){
             var errorMsg = " 请输入工号！";
             //class='msg onError' 中间的空格是层叠样式的格式
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+        }else if(regNum.test(numVal)){
+            var errorMsg = " 统一社会信用代码由18位数字或大写字母组成！";
+            $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }
         else{
-            var okMsg=" 输入正确";
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //验证邮箱
@@ -68,8 +68,7 @@ $("form :input").blur(function(){
             var errorMsg = " 邮箱格式不正确！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }else{
-            var okMsg=" 输入正确";
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //验证密码
@@ -81,8 +80,7 @@ $("form :input").blur(function(){
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }
         else{
-            var okMsg=" 输入正确";
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //确认密码
@@ -96,8 +94,7 @@ $("form :input").blur(function(){
             var errorM = " 密码不一致！";
             $parent.append("<span class='msg onError'>" + errorM + "</span>");
         }else{
-            var okMsg=" 输入正确";
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //验证手机号
@@ -111,23 +108,21 @@ $("form :input").blur(function(){
             var errorMsg = " 请输入有效手机号！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }else{
-            var okMsg=" 输入正确";
-            $parent.find(".high").remove();
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //验证码
     if($(this).is("#code")){
         var codeVal = $.trim(this.value);
         var regCode = /.+@.+\.[a-zA-Z]{2,4}$/;
-        if(codeVal== "" || (codeVal != "" && !regCode.test(codeVal))){
+        if(codeVal== ""){
             var errorMsg = " 请输入验证码！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
-        }
-        else{
-            var okMsg=" 输入正确";
-            $parent.find(".high").remove();
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+        }else if(codeVal != "" && !regCode.test(codeVal)){
+            var errorMsg = " 验证码错误！";
+            $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+        }else{
+            $parent.find(".onError").remove();
         }
     }
 }).keyup(function(){
@@ -144,8 +139,9 @@ $("#send").click(function(){
     var numError = $("form .onError").length;
     if(numError){
         return false;
+    }else{
+        alert("注册成功！");
     }
-    alert("注册成功！");
 });
 
 //用户协议,控制显示隐藏

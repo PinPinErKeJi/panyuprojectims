@@ -2,7 +2,7 @@
     $(function () {
         var formData=new FormData($("#Reform")[0]);
         $("#register").click( function () {
-           alert(123);
+           // alert(123);
             $.ajax({
                 url:'userLoginController/userlogin',
                 type:'post',
