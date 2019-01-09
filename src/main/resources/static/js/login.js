@@ -108,20 +108,20 @@ $("form :input").blur(function(){
             var errorMsg = " 请输入有效手机号！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
         }else{
-            var okMsg=" 输入正确";
-            $parent.find(".high").remove();
-            $parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+            $parent.find(".onError").remove();
         }
     }
     //验证码
     if($(this).is("#code")){
         var codeVal = $.trim(this.value);
         var regCode = /.+@.+\.[a-zA-Z]{2,4}$/;
-        if(codeVal== "" || (codeVal != "" && !regCode.test(codeVal))){
+        if(codeVal== ""){
             var errorMsg = " 请输入验证码！";
             $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
-        }
-        else{
+        }else if(codeVal != "" && !regCode.test(codeVal)){
+            var errorMsg = " 验证码错误！";
+            $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+        }else{
             $parent.find(".onError").remove();
         }
     }
