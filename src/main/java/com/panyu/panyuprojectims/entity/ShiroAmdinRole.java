@@ -1,35 +1,36 @@
 package com.panyu.panyuprojectims.entity;
 public class ShiroAmdinRole {
     private String adminRoleId;
-    private String adminId;
+    private String userId;
     private String roleId;
     public ShiroAmdinRole() {
         super();
     }
-    public ShiroAmdinRole(String adminRoleId,String adminId,String roleId) {
-        super();
+
+    public ShiroAmdinRole(String adminRoleId, String userId, String roleId) {
         this.adminRoleId = adminRoleId;
-        this.adminId = adminId;
+        this.userId = userId;
         this.roleId = roleId;
     }
+
     public String getAdminRoleId() {
-        return this.adminRoleId;
+        return adminRoleId;
     }
 
     public void setAdminRoleId(String adminRoleId) {
         this.adminRoleId = adminRoleId;
     }
 
-    public String getAdminId() {
-        return this.adminId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setAdminId(String adminId) {
-        this.adminId = adminId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getRoleId() {
-        return this.roleId;
+        return roleId;
     }
 
     public void setRoleId(String roleId) {
@@ -40,7 +41,7 @@ public class ShiroAmdinRole {
     public String toString() {
         return "ShiroAmdinRole{" +
                 "adminRoleId='" + adminRoleId + '\'' +
-                ", adminId='" + adminId + '\'' +
+                ", userId='" + userId + '\'' +
                 ", roleId='" + roleId + '\'' +
                 '}';
     }
