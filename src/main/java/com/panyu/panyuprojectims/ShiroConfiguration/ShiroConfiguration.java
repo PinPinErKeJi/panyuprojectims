@@ -110,6 +110,7 @@ public class ShiroConfiguration {
         map.put("/login/**","anon");
 
         map.put("/userLoginController/userlogin","anon");//匿名注册
+       // map.put("/userLoginController/userlogin","anon");
         map.put("/login.html","anon");
         map.put("/register","anon");
         map.put("/logout", "logout");
