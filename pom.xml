@@ -144,6 +144,11 @@
 			<artifactId>shiro-ehcache</artifactId>
 			<version>${shiro.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-all</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
 		<!-- ehcache-core -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
