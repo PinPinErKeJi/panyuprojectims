@@ -8,17 +8,31 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
+import javax.servlet.DispatcherType;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 
 @Configuration
 public class ShiroConfiguration {
+
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean(){
+        FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
+        filterRegistrationBean.setFilter(new DelegatingFilterProxy("shiroFilterFactoryBean"));
+        filterRegistrationBean.setEnabled(true);
+        filterRegistrationBean.addUrlPatterns("/*"); //过滤规则，即所有的请求
+        filterRegistrationBean.setDispatcherTypes(DispatcherType.REQUEST);
+
+        return filterRegistrationBean;
+    }
     // 1. 配置 SecurityManager!
     @Bean(name = "securityManager")
     public DefaultWebSecurityManager securityManager(@Qualifier(value = "myShiroRealm")MyShiroRealm myShiroRealm,
@@ -52,12 +66,31 @@ public class ShiroConfiguration {
         return ehCacheManager;
 
     }
+
+    @Bean(name="sessionManager")
+    public DefaultWebSessionManager defaultWebSessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+
+        sessionManager.setGlobalSessionTimeout(1800000);
+        sessionManager.setDeleteInvalidSessions(true);
+        sessionManager.setSessionValidationSchedulerEnabled(true);
+        sessionManager.setDeleteInvalidSessions(true);
+        sessionManager.setSessionIdCookie(rememberMeCookie());
+        return sessionManager;
+    }
+
     //cookie对象;
-    @Bean
+    @Bean(name = "rememberMeCookie")
     public SimpleCookie rememberMeCookie(){
         // 这个参数是cookie的名称，对应前端的checkbox 的name = rememberMe
         SimpleCookie simpleCookie=new SimpleCookie("rememberMe");
-        simpleCookie.setMaxAge(300);
+        //HttpOnly标志的引入是为了防止设置了该标志的cookie被JavaScript读取，
+        simpleCookie.setHttpOnly(true);
+        /**
+         * 设置浏览器cookie过期时间，如果不设置默认为-1，表示关闭浏览器即过期
+         * cookie的单位为秒 比如60*60为1小时
+         */
+        simpleCookie.setMaxAge(-1);
         return simpleCookie;
 
     }
@@ -90,9 +123,10 @@ public class ShiroConfiguration {
         authorizationAttributeSourceAdvisor.setSecurityManager((org.apache.shiro.mgt.SecurityManager) securityManager);
         return authorizationAttributeSourceAdvisor;
     }
-    @Bean
+    @Bean(name = "shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(@Qualifier("securityManager") DefaultWebSecurityManager securityManager){
         ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
+      //  ShiroFilterFactoryBean shiroFilterFactoryBean=new MShiroFilterFactoryBean();
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 拦截器.
@@ -113,23 +147,22 @@ public class ShiroConfiguration {
        // map.put("/userLoginController/userlogin","anon");
         map.put("/login.html","anon");
         map.put("/register","anon");
+        map.put("/error.html","anon");
         map.put("/logout", "logout");
-
-
         //对所有用户认证
-
         map.put("/*", "authc");
         map.put("/*.*", "authc");
-       // map.put("/**", "authc");
+     //   map.put("/**", "authc");
         // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setSuccessUrl("/index");
         // 未授权界面;
         shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
-
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
 
         return shiroFilterFactoryBean;
     }
+
+
 }
