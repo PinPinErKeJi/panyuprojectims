@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
+
 @Mapper
 public interface PanyuUserDao{
     public int register(   @Param("userProvince")String userProvince,
@@ -16,4 +18,5 @@ public interface PanyuUserDao{
                             @Param("userTel")String userTel,
                             @Param("userPwd")String userPwd
                            );
+    public PanyuUser queryInfoByUsername(String userName);
 }
