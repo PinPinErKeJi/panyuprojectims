@@ -1,13 +1,14 @@
 package com.panyu.panyuprojectims.controller.Login_controller;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.panyu.panyuprojectims.entity.PanyuUser;
 import com.panyu.panyuprojectims.service.Impl.PanyuUserServiceImpl;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -33,5 +34,40 @@ public class userLoginController {
         String newPs = new SimpleHash("MD5", userPwd, salt, 1024).toHex();
         int count=panyuUserService.register(userProvince,userCity,userCounty,userCompanyName,userCompanycccNumber,userName,userEmail,userTel,newPs);
         return count;
+    }
+
+    @RequestMapping("/startlogin")
+    public String startlogin(PanyuUser panyuUser){
+        String userName=panyuUser.getUserName();
+        String userPwd=panyuUser.getUserPwd();
+        //获取当前的用户
+        Subject currentUser = SecurityUtils.getSubject();
+        //判断当前的用户是否已经认证（当前是否已经登录）
+        if(!currentUser.isAuthenticated()){//如果当前没有登录
+            //创建一个登录用户对象，传递用户名和密码
+            UsernamePasswordToken token= new UsernamePasswordToken(userName,userPwd);
+            //记住密码
+            token.setRememberMe(true);
+
+            try { //执行登录
+                currentUser.login(token);
+            } catch ( UnknownAccountException uae) {
+                System.out.println("------------用户名错误----There is no user with username of " + token.getPrincipal());
+                return "error";
+            }catch (IncorrectCredentialsException ice) {
+                System.out.println("------------密码错误----Password for account " + token.getPrincipal() + " was incorrect!");
+                return "error";
+            } catch (LockedAccountException lae) {
+                System.out.println("------账号被锁定---The account for username " + token.getPrincipal() + " is locked.  " +
+                        "Please contact your administrator to unlock it.");
+                return "error";
+            } catch (AuthenticationException ae) {
+                //unexpected condition?  error?
+                return "error";
+            }
+
+        }
+
+        return "redirect:/index.html";
     }
 }
