@@ -56,7 +56,7 @@ public class ShiroConfiguration {
     @Bean
     public SimpleCookie rememberMeCookie(){
         // 这个参数是cookie的名称，对应前端的checkbox 的name = rememberMe
-        SimpleCookie simpleCookie=new SimpleCookie();
+        SimpleCookie simpleCookie=new SimpleCookie("rememberMe");
         simpleCookie.setMaxAge(300);
         return simpleCookie;
 
