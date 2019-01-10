@@ -1,10 +1,12 @@
 package com.panyu.panyuprojectims.service;
 import java.util.List;
+import java.util.Map;
+
 import com.panyu.panyuprojectims.entity.PanyuUser;
 import org.apache.ibatis.annotations.Param;
 
 public interface PanyuUserService{
-    public int register(   @Param("userProvince")String userProvince,
+    public int register(  @Param("userProvince")String userProvince,
                            @Param("userCity")String userCity,
                            @Param("userCounty")String userCounty,
                            @Param("userCompanyName")String userCompanyName,
@@ -14,4 +16,5 @@ public interface PanyuUserService{
                            @Param("userTel")String userTel,
                            @Param("userPwd")String userPwd
                            );
+    public PanyuUser queryInfoByUsername(String userName);
 }
