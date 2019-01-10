@@ -1,9 +1,14 @@
 package com.panyu.panyuprojectims.service.Impl;
 import com.panyu.panyuprojectims.dao.PanyuUserDao;
+
 import com.panyu.panyuprojectims.entity.PanyuUser;
 import com.panyu.panyuprojectims.service.PanyuUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class PanyuUserServiceImpl implements PanyuUserService{
     @Autowired
@@ -16,4 +21,11 @@ public class PanyuUserServiceImpl implements PanyuUserService{
 
         return panyuUserDao.register( userProvince,  userCity,  userCounty,  userCompanyName,  userCompanycccNumber,  userName,  userEmail,  userTel,  userPwd);
     }
+
+    @Override
+    public PanyuUser queryInfoByUsername(String userName) {
+        return panyuUserDao.queryInfoByUsername(userName);
+    }
+
+
 }
