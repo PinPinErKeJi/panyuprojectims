@@ -2,6 +2,7 @@ package com.panyu.panyuprojectims.controller.Login_controller;
 
 import com.panyu.panyuprojectims.entity.PanyuUser;
 import com.panyu.panyuprojectims.service.Impl.PanyuUserServiceImpl;
+import com.panyu.panyuprojectims.service.PanyuUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class userLoginController {
     @Autowired
-    private PanyuUserServiceImpl panyuUserService;
+    private PanyuUserService panyuUserService;
     @RequestMapping("/userlogin")
    @ResponseBody
     public int userlogin(String userProvince,String userCity,String userCounty, String userCompanyName ,String  userCompanycccNumber,String userName, String userEmail, String userPwd ,String userTel){
