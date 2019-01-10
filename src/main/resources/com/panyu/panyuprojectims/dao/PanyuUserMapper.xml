@@ -16,7 +16,7 @@
         <result column="USER_STATE" property="userState" />
     </resultMap>
     
-    <select id="queryInfoByUsername" parameterType="com.panyu.panyuprojectims.entity.PanyuUser">
+    <select id="queryInfoByUsername" resultMap="result_PanyuUser_Map">
             select * from panyu_user where user_name = #{userName,jdbcType=VARCHAR}
     </select>
     <insert id="register" parameterType="com.panyu.panyuprojectims.entity.PanyuUser">
