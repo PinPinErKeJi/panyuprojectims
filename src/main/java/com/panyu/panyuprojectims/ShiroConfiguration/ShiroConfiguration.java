@@ -132,15 +132,7 @@ public class ShiroConfiguration {
         // 拦截器.
         Map<String, String> map = new HashMap<String, String>();
 
-
-
         map.put("/static/**","anon");
-        map.put("/css/**","anon");
-        map.put("/js/**","anon");
-        map.put("/img/**","anon");
-        map.put("/bootstrap/**","anon");
-        map.put("/easyui/**","anon");
-        map.put("/pages/**","anon");
         map.put("/login/**","anon");
 
         map.put("/userLoginController/userlogin","anon");//匿名注册
@@ -151,7 +143,7 @@ public class ShiroConfiguration {
         //对所有用户认证
         map.put("/*", "authc");
         map.put("/*.*", "authc");
-        // map.put("/**", "authc");
+       // map.put("/**", "authc");
         // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         // 登录成功后要跳转的链接
