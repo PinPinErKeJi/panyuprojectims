@@ -151,5 +151,4 @@ $('#agreement').on('click',function () {
 });
 $('.btn').on('click',function () {
     $('.mask').hide();
-})
-
+});

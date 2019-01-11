@@ -1,110 +1,57 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="../easyui/easyui.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/icon.css"/>
-    <script src="../js/jquery.min.js" type="text/javascript"
-            charset="utf-8"></script>
-    <script src="../js/jquery.easyui.min.js" type="text/javascript"
-            charset="utf-8"></script>
-    <script src="../js/easyui-lang-zh_CN.js" type="text/javascript"
-            charset="utf-8"></script>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="easyui/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="css/icon.css"/>
+    <script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/easyui-lang-zh_CN.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
+
 <div>
-    <input class="easyui-textbox" name="username" id="user-name"
-           placeholder="请输入关键字">
+    <!--搜索框-->
+    <input class="easyui-textbox" name="userName" id="user-name" placeholder="请输入关键字">
     <a id="user-search" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
+    <!--创建表格-->
+    <div id="datagrid" class="easyui-datagrid" style="width: 100%" ></div>
+
+    <!--添加弹窗-->
+    <div class="easyui-dialog" id="dialog" style="width: 300px; height: 300px;"data-options="resizable:true,modal:true,closable:true,closed:true,">
+        <form style="padding: 10px;" method="post">
+            <div style="margin: 20px;">
+                <label>用户名：</label><input type="text" id="username"class="easyui-textbox"/>
+            </div>
+            <div style="margin-left: 30px;">
+                <label>角色：</label><input type="text" id="rolename" class="easyui-textbox"/>
+            </div>
+        </form>
+    </div>
 </div>
-<table id="st" style="width: 100%;"></table>
-<div class="easyui-dialog" id="saveStu" style="width:400px;height:300px;"
-     title="添加用户" data-options="{closed:true,modal:true,
-buttons:[{text:'保存',iconCls:'icon-save',handler:function(){
-$('#form1').form('submit',{
-    url:'SaveStudentServlet?type='+type,
-    onSubmit:function(){
-    var isValid = $(this).form('validate');
 
-                if (!isValid){
-                    $.messager.show({
-                        title:'消息',
-                        msg:'数据验证未通过'
-                    });
-                }
-                return isValid;
-    },
-    success:function(data){
-    var msg=eval('(' +data+ ')');
-                if(!msg.success)
-                    {
-                    $.messager.show({title:'提示',msg:msg.message});
-                    }
-                else
-                {
-                $('#st').datagrid('reload');
-                $.messager.show({title:'提示',msg:msg.message});
-                $('#saveStu').dialog('close');
-                }
-    }
 
-});
-}},
-{text:'取消',iconCls:'icon-cancel',handler:function(){$('#saveStu').dialog('close')}}]}"
->
-    <form action="" id="form1" method="post">
-        <br><br>
-        <table border="0" width="100%">
-            <tr>
-                <td align="right" width="30%">用户名：</td>
-                <td><input class="easyui-textbox" id="username"
-                           name="username"
-                           data-options="{validType:'length[2,6]'}"></td>
-            </tr>
-            <tr>
-                <td align="right" width="30%">密码：</td>
-                <td><input class="easyui-textbox" id="password"
-                           name="password"
-                           data-options="{validType:'length[6,8]'}"></td>
-            </tr>
-        </table>
-
-    </form>
-
-</div>
 
 </body>
 <script type="text/javascript">
 
-    //点击搜索
-    $("#user-search").on("click",function () {
-        var f=$("#user-name").serialize();
-        $("#st").datagrid({url:"StudentServlet?"+f}).datagrid('load');
-    });
+    var dialog = $('#dialog');
+    var form = $('form');
 
+    $(function () {
+        dialog.dialog('close');
+    })
 
-    var type="add";
-
-    $(function(){
-        //创建data_grid
-        $("#st").datagrid({
-
-            url:'StudentServlet', //数据来源
-            //冻结列
-            //列的定义
+    $(function () {
+        dialog.dialog('close');
+        $('#datagrid').datagrid({
+            url:'',//数据来源
             columns:[[
-                {field:'idd',checkbox:true},
-                {field:'userId',title:'编号',width:80,align:'center'},
+                {field:'',checkbox:true},
                 {field:'username',title:'用户名',width:300,align:'center'},
                 {field:'password',title:'密码',width:300,align:'center'},
             ]],
-
-//      fitColumns:true,//列自适应宽度，不能和冻结列同时设置为true
-            striped:true,//斑马线效果
-            idField:'sno',//主键列
             rownumbers:true,//显示行号
             singleSelect:false,//是否单选
             pagination:true,//显示分页栏
@@ -113,87 +60,116 @@ $('#form1').form('submit',{
             remoteSort:true,//是否服务器端排序，设成false，才能客户端排序
             sortName:'sno',//设置排序列
             sortOrder:'desc',//排序方式
-            toolbar:[{iconCls:'icon-add',text:'添加',handler:function(){
-
-                type="add";
-                //清楚表单的旧数据
-                $("#sno").textbox({readonly:false});
-                $("#form1").form("reset");
-                $("#saveStu").dialog('open');
-
-            }},{iconCls:'icon-edit',text:'修改',handler:function(){
-
-                type="edit";
-                //判断是否选中一条记录
-                var data=$('#st').datagrid('getSelected');
-                if(data)
+            idField:'id',
+            toolbar:[
                 {
-                    //alert(data);
-                    //设置主键字段只读
-                    $("#sno").textbox({readonly:true});
+                    iconCls:'icon-add',
+                    text:'添加',
+                    handler:function () {
+                        dialog.dialog('open');
 
-                    $("#form1").form("reset");
-                    $('#form1').form('load',{sno:data.sno,
-                        sname:data.sname,ssex:data.ssex,sbirthday:getDate(data.sbirthday),
-                        sclass:data.sclass
-                    });
-                    //没有databox可以使用
-                    //$('#form1').form('load',data);
-                    $("#saveStu").dialog({title:'编辑用户'}).dialog('open');
-
-                }
-                else
+                    }
+                },
                 {
-                    alert('请选中一条数据！');
-                }
-
-
-
-            }},{iconCls:'icon-remove',text:'删除',handler:function(){
-
-                var data=$('#st').datagrid('getSelections');
-
-                if(data.length>0)
-                {
-                    //alert("选中条数="+data.length);
-                    $.messager.confirm("确认","确实要删除吗？",function(r){
-                        if(r)
+                    iconCls:'icon-remove',
+                    text:'删除',
+                    handler:function () {
+                        var data=$("#datagrid").datagrid("getSelections");
+                        if(data.length>0)
                         {
-                            //alert("执行删除sno="+data[0].sno);
-                            //$.get("DeleteStudentServlet?sno="+data[0].sno,
-                            //利用数组，保存选中记录的主键
-                            var snos=[];
-                            for(var i=0;i<data.length;i++)
-                            {
-                                snos[i]=data[i].sno;
-                            }
-
-
-                            $.get("DeleteStudentServlet?snos="+snos,
-                                function(rtn){
-                                    var msg=eval("("+rtn+")");
-                                    if(msg.success)
+                            //alert("选中条数="+data.length);
+                            $.messager.confirm("确认","确实要删除吗？",function(r){
+                                if(r)
+                                {
+                                    //alert("执行删除sno="+data[0].sno);
+                                    //$.get("DeleteStudentServlet?sno="+data[0].sno,
+                                    //利用数组，保存选中记录的主键
+                                    var snos=[];
+                                    for(var i=0;i<data.length;i++)
                                     {
-                                        $('#st').datagrid('reload');
+                                        snos[i]=data[i].sno;
                                     }
-                                    alert('请选中一条数据！');
 
-                                });
+
+                                    $.get("DeleteStudentServlet?snos="+snos,
+                                        function(rtn){
+                                            var msg=eval("("+rtn+")");
+                                            if(msg.success)
+                                            {
+                                                $('#st').datagrid('reload');
+                                            }
+                                            alert('请选中一条数据！');
+
+                                        });
+
+                                }
+                            });
+
 
                         }
-                    });
+                        else
+                        {
+                            alert('请选中一条数据！');
+                        }
 
-
-                }
-                else
-                {
-                    alert('请选中一条数据！');
-                }
-
-
-
-            }}]
-        });
+                    }
+                },
+            ]
+        })
     })
+
+    $(function () {
+        dialog.dialog({
+            title:'添加用户',
+            buttons:[{
+                text:'保存',
+                iconCls:'icon-save',
+                handler:function () {
+
+                    var message={
+                        "username":$("#username").val(),
+                        "rolename":$("#rolename").val(),
+                    };
+                    if($("#username").val()!=""&&$("#password").val()!="")
+                    {
+                        $.ajax({
+                            type:"post",
+                            url:"servlet/adduserServlet",
+                            data:{"Message":JSON.stringify(message)},
+                            success:function(){
+                                $('#datagrid').datagrid('reload');
+                                alert("添加成功！");
+                                $("#username").val("");
+                                $("#password").val("");
+                            }
+                        })
+
+
+                    }
+                    else{alert("请填写完整！");
+                        $("#username").val("");
+                        $("#password").val("");
+                    }
+
+                },
+            },
+                {
+                    text:'取消',
+                    iconCls:'icon-remove',
+                    handler:function () {
+                        dialog.dialog('close');
+                    },
+                }]
+        })
+
+    });
+
+
+    //点击搜索
+    $("#user-search").on("click",function () {
+        var f=$("form").serialize();
+        $("#datagrid").datagrid({url:"StudentServlet?"+f}).datagrid('load');
+    });
+
 </script>
 </html>
