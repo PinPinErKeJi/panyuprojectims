@@ -18,6 +18,8 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 
+        //获取当前登录的用户名
+        String userName = (String) principals.fromRealm(getName()).iterator().next();
 
         return null;
 
