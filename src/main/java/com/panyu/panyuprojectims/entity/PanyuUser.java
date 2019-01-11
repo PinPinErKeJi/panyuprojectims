@@ -1,5 +1,6 @@
 package com.panyu.panyuprojectims.entity;
 public class PanyuUser {
+    //用户属性
     private String userId;
     private String userProvince;
     private String userCity;
@@ -11,24 +12,24 @@ public class PanyuUser {
     private String userTel;
     private String userPwd;
     private String userState;
+    //角色属性
+    private String roleId;
+    private String roleName;
+    private String roleCreateTime;
+    private String roleUpdateTime;
+    //权限属性
+    private String resourceId;
+    private String resourceName;
+    private String resourceUrl;
+    private String resourceCode;
+    private String parectResourceId;
+
+
     public PanyuUser() {
         super();
     }
-    public PanyuUser( String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState) {
 
-        this.userProvince = userProvince;
-        this.userCity = userCity;
-        this.userCounty = userCounty;
-        this.userCompanyName = userCompanyName;
-        this.userCompanycccNumber = userCompanycccNumber;
-        this.userName = userName;
-        this.userEmail = userEmail;
-        this.userTel = userTel;
-        this.userPwd = userPwd;
-        this.userState = userState;
-    }
-
-    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState) {
+    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState, String roleId, String roleName, String roleCreateTime, String roleUpdateTime, String resourceId, String resourceName, String resourceUrl, String resourceCode, String parectResourceId) {
         this.userId = userId;
         this.userProvince = userProvince;
         this.userCity = userCity;
@@ -40,6 +41,15 @@ public class PanyuUser {
         this.userTel = userTel;
         this.userPwd = userPwd;
         this.userState = userState;
+        this.roleId = roleId;
+        this.roleName = roleName;
+        this.roleCreateTime = roleCreateTime;
+        this.roleUpdateTime = roleUpdateTime;
+        this.resourceId = resourceId;
+        this.resourceName = resourceName;
+        this.resourceUrl = resourceUrl;
+        this.resourceCode = resourceCode;
+        this.parectResourceId = parectResourceId;
     }
 
     public String getUserId() {
@@ -106,6 +116,14 @@ public class PanyuUser {
         this.userEmail = userEmail;
     }
 
+    public String getUserTel() {
+        return userTel;
+    }
+
+    public void setUserTel(String userTel) {
+        this.userTel = userTel;
+    }
+
     public String getUserPwd() {
         return userPwd;
     }
@@ -122,12 +140,76 @@ public class PanyuUser {
         this.userState = userState;
     }
 
-    public String getUserTel() {
-        return userTel;
+    public String getRoleId() {
+        return roleId;
     }
 
-    public void setUserTel(String userTel) {
-        this.userTel = userTel;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getRoleCreateTime() {
+        return roleCreateTime;
+    }
+
+    public void setRoleCreateTime(String roleCreateTime) {
+        this.roleCreateTime = roleCreateTime;
+    }
+
+    public String getRoleUpdateTime() {
+        return roleUpdateTime;
+    }
+
+    public void setRoleUpdateTime(String roleUpdateTime) {
+        this.roleUpdateTime = roleUpdateTime;
+    }
+
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public String getResourceName() {
+        return resourceName;
+    }
+
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
+    }
+
+    public String getResourceUrl() {
+        return resourceUrl;
+    }
+
+    public void setResourceUrl(String resourceUrl) {
+        this.resourceUrl = resourceUrl;
+    }
+
+    public String getResourceCode() {
+        return resourceCode;
+    }
+
+    public void setResourceCode(String resourceCode) {
+        this.resourceCode = resourceCode;
+    }
+
+    public String getParectResourceId() {
+        return parectResourceId;
+    }
+
+    public void setParectResourceId(String parectResourceId) {
+        this.parectResourceId = parectResourceId;
     }
 
     @Override
@@ -144,6 +226,15 @@ public class PanyuUser {
                 ", userTel='" + userTel + '\'' +
                 ", userPwd='" + userPwd + '\'' +
                 ", userState='" + userState + '\'' +
+                ", roleId='" + roleId + '\'' +
+                ", roleName='" + roleName + '\'' +
+                ", roleCreateTime='" + roleCreateTime + '\'' +
+                ", roleUpdateTime='" + roleUpdateTime + '\'' +
+                ", resourceId='" + resourceId + '\'' +
+                ", resourceName='" + resourceName + '\'' +
+                ", resourceUrl='" + resourceUrl + '\'' +
+                ", resourceCode='" + resourceCode + '\'' +
+                ", parectResourceId='" + parectResourceId + '\'' +
                 '}';
     }
 }
