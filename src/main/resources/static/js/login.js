@@ -133,7 +133,7 @@ $("form :input").blur(function(){
 });
 
 //点击重置按钮时，通过trigger()来触发文本框的失去焦点事件
-$("#send").click(function(){
+$("#register").click(function(){
     //trigger 事件执行完后，浏览器会为submit按钮获得焦点
     $("form .required:input").trigger("blur");
     var numError = $("form .onError").length;
