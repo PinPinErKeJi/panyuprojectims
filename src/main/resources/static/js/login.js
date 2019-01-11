@@ -158,7 +158,6 @@ $('.btn').on('click',function () {
 
 
 $(function () {
-
     var companyName = $('#companyName').val();
     var userName = $('#userName').val();
     var companyNumber = $('#companyNumber').val();
