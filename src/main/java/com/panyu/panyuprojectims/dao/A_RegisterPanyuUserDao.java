@@ -9,7 +9,6 @@ public interface A_RegisterPanyuUserDao {
 
     //注册账号之前查询改用户是否存在
     int selectUserEmail(@Param("userEmail") String userEmail);
-
     //注册
     int register(
             @Param("userProvince")String userProvince,
