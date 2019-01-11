@@ -38,9 +38,11 @@ public class userLoginController {
     }
 
     @RequestMapping("/startlogin")
-    public String startlogin(PanyuUser panyuUser){
-        String userName=panyuUser.getUserName();
-        String userPwd=panyuUser.getUserPwd();
+    @ResponseBody
+    public String startlogin(String userName,String userPwd){
+       // String userName=panyuUser.getUserName();
+       // String userPwd=panyuUser.getUserPwd();
+        String msg="";
         //获取当前的用户
         Subject currentUser = SecurityUtils.getSubject();
         //判断当前的用户是否已经认证（当前是否已经登录）
@@ -54,21 +56,24 @@ public class userLoginController {
                 currentUser.login(token);
             } catch ( UnknownAccountException uae) {
                 System.out.println("------------用户名错误----There is no user with username of " + token.getPrincipal());
-                return "redirect:/error.html";
+                msg="1";
+                // return "redirect:/error.html";
             }catch (IncorrectCredentialsException ice) {
                 System.out.println("------------密码错误----Password for account " + token.getPrincipal() + " was incorrect!");
-                return "redirect:/error.html";
+                msg="2";
+                //  return "redirect:/error.html";
             } catch (LockedAccountException lae) {
                 System.out.println("------账号被锁定---The account for username " + token.getPrincipal() + " is locked.  " +
                         "Please contact your administrator to unlock it.");
-                return "redirect:/error.html";
+                msg="3";
+              //  return "redirect:/error.html";
             } catch (AuthenticationException ae) {
                 //unexpected condition?  error?
-                return "redirect:/error.html";
+              //  return "redirect:/error.html";
             }
 
         }
 
-        return "redirect:/index.html";
+        return msg;
     }
 }
