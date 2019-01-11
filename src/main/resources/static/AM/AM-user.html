@@ -1,83 +1,194 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <title>用户管理</title>
-    <link rel="stylesheet" type="text/css" href="../css/AM-user.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../easyui/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/icon.css"/>
+    <script src="../js/jquery.min.js" type="text/javascript"
+            charset="utf-8"></script>
+    <script src="../js/jquery.easyui.min.js" type="text/javascript"
+            charset="utf-8"></script>
+    <script src="../js/easyui-lang-zh_CN.js" type="text/javascript"
+            charset="utf-8"></script>
 </head>
-<div style="margin-left: 50px;margin-top: 30px;">
-    <button onclick="qx()" class="quan">全选</button>
-    <button onclick="fx()" class="fan">反选</button>
-    <button onclick="dellist ()" class="pi">批量删除</button>
-    <table style="width: 700px;" border="1" cellpadding="10" cellspacing="0">
-        <tr style="background-color: lightskyblue;" align="center">
-            <td>编号</td>
-            <td>用户名</td>
-            <td>密码</td>
-            <td>操作</td>
-        </tr>
-    </table>
+<body>
+<div>
+    <input class="easyui-textbox" name="username" id="username" placeholder="请输入关键字">
+    <a id="user-search" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
 </div>
+<table id="st" style="width: 100%;"></table>
+<div class="easyui-dialog" id="saveStu" style="width:400px;height:300px;"
+     title="添加用户" data-options="{closed:true,modal:true,
+buttons:[{text:'保存',iconCls:'icon-save',handler:function(){
+$('#form1').form('submit',{
+    url:'SaveStudentServlet?type='+type,
+    onSubmit:function(){
+    var isValid = $(this).form('validate');
 
-<div class="form">
-    <p style="padding: 10px 0 0 20px;font-weight: bold">添加用户</p>
-    <div>
-        用户名：<input type="text" id="username" /><br>
-        <span id="name_span"></span>
-    </div>
-    <div>
-        密码：<input id="password" /><br>
-        <span id="price_span"></span>
-    </div>
-    <button onclick="save()">确定</button>
+                if (!isValid){
+                    $.messager.show({
+                        title:'消息',
+                        msg:'数据验证未通过'
+                    });
+                }
+                return isValid;
+    },
+    success:function(data){
+    var msg=eval('(' +data+ ')');
+                if(!msg.success)
+                    {
+                    $.messager.show({title:'提示',msg:msg.message});
+                    }
+                else
+                {
+                $('#st').datagrid('reload');
+                $.messager.show({title:'提示',msg:msg.message});
+                $('#saveStu').dialog('close');
+                }
+    }
+
+});
+}},
+{text:'取消',iconCls:'icon-cancel',handler:function(){$('#saveStu').dialog('close')}}]}"
+>
+    <form action="" id="form1" method="post">
+        <br><br>
+        <table border="0" width="100%">
+            <tr>
+                <td align="right" width="30%">用户名：</td>
+                <td><input class="easyui-textbox" id="username" name="username" data-options="{validType:'length[3,3]'}"></td>
+            </tr>
+            <tr>
+                <td align="right" width="30%">密码：</td>
+                <td><input class="easyui-textbox" id="password" name="password" data-options="{validType:'length[2,4]'}"></td>
+            </tr>
+        </table>
+
+    </form>
+
 </div>
 
 </body>
-<script type="text/javascript" src="../js/jquery.min.js"></script>
-<script>
-    //表单验证+添加
-    function save () {
-        //获取值
-        $("span").html("");
-        var username = $("#username").val();
-        var password =$("#password").val();
-        //表单验证
-        if(username.length<2||username.length>20||username==''){
-            $("#name_span").html("*用户名在2~20个字符").css("color","red");
-            return;
-        }
-        if(password.length<6||password.length>8||username==''){
-            $("#price_span").html("*密码在6~8个字符").css("color","red");
-            return;
-        }
-        //添加
-        $("table").append("<tr><td><input type='checkbox' id='qxx'></td><td>"+username+"</td><td>"+password+"</td><td><button onclick='del(this)'>删除</button></td></tr>");
-    }
-    //删除
-    function del (a) {
-        if (confirm("您是否删除本条数据！！！")) {
-            $(a).parent().parent().remove();
-        }
-    }
-    //批量删除
-    function dellist () {
-        var ids=$("#qxx:checked");
-        if (ids.length==0) {
-            alert("请选择一条数据");
-        }
-        ids.each(function  () {
-            $(this).parent().parent().remove();
-        })
-    }
-    //全选
-    function qx () {
-        var ids = $(":checkbox");
-        ids.prop("checked",true);
-    }
-    //反选
-    function fx () {
-        var ids = $(":checkbox");
-        ids.prop("checked",false);
-    }
+<script type="text/javascript">
+
+    //点击搜索
+    $("#user-search").on("click",function () {
+        var f=$("#username").serialize();
+        $("#st").datagrid({url:"StudentServlet?"+f}).datagrid('load');
+    });
+
+
+    var type="add";
+
+    $(function(){
+        //创建data_grid
+        $("#st").datagrid({
+
+            url:'StudentServlet', //数据来源
+            //冻结列
+            //列的定义
+            columns:[[
+                {field:'idd',checkbox:true},
+                {field:'userId',title:'编号',width:80,align:'center'},
+                {field:'username',title:'用户名',width:300,align:'center'},
+                {field:'password',title:'密码',width:300,align:'center'},
+            ]],
+
+//      fitColumns:true,//列自适应宽度，不能和冻结列同时设置为true
+            striped:true,//斑马线效果
+            idField:'sno',//主键列
+            rownumbers:true,//显示行号
+            singleSelect:false,//是否单选
+            pagination:true,//显示分页栏
+            pageList:[10,20,50,100],//每页行数选择列表
+            pageSize:10,//出示每页行数
+            remoteSort:true,//是否服务器端排序，设成false，才能客户端排序
+            sortName:'sno',//设置排序列
+            sortOrder:'desc',//排序方式
+            toolbar:[{iconCls:'icon-add',text:'添加',handler:function(){
+
+                type="add";
+                //清楚表单的旧数据
+                $("#sno").textbox({readonly:false});
+                $("#form1").form("reset");
+                $("#saveStu").dialog('open');
+
+            }},{iconCls:'icon-edit',text:'修改',handler:function(){
+
+                type="edit";
+                //判断是否选中一条记录
+                var data=$('#st').datagrid('getSelected');
+                if(data)
+                {
+                    //alert(data);
+                    //设置主键字段只读
+                    $("#sno").textbox({readonly:true});
+
+                    $("#form1").form("reset");
+                    $('#form1').form('load',{sno:data.sno,
+                        sname:data.sname,ssex:data.ssex,sbirthday:getDate(data.sbirthday),
+                        sclass:data.sclass
+                    });
+                    //没有databox可以使用
+                    //$('#form1').form('load',data);
+                    $("#saveStu").dialog({title:'编辑用户'}).dialog('open');
+
+                }
+                else
+                {
+                    alert('请选中一条数据！');
+                }
+
+
+
+            }},{iconCls:'icon-remove',text:'删除',handler:function(){
+
+                var data=$('#st').datagrid('getSelections');
+
+                if(data.length>0)
+                {
+                    //alert("选中条数="+data.length);
+                    $.messager.confirm("确认","确实要删除吗？",function(r){
+                        if(r)
+                        {
+                            //alert("执行删除sno="+data[0].sno);
+                            //$.get("DeleteStudentServlet?sno="+data[0].sno,
+                            //利用数组，保存选中记录的主键
+                            var snos=[];
+                            for(var i=0;i<data.length;i++)
+                            {
+                                snos[i]=data[i].sno;
+                            }
+
+
+                            $.get("DeleteStudentServlet?snos="+snos,
+                                function(rtn){
+                                    var msg=eval("("+rtn+")");
+                                    if(msg.success)
+                                    {
+                                        $('#st').datagrid('reload');
+                                    }
+                                    alert('请选中一条数据！');
+
+                                });
+
+                        }
+                    });
+
+
+                }
+                else
+                {
+                    alert('请选中一条数据！');
+                }
+
+
+
+            }}]
+        });
+    })
 </script>
 </html>
