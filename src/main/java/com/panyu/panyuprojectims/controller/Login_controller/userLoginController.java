@@ -54,17 +54,17 @@ public class userLoginController {
                 currentUser.login(token);
             } catch ( UnknownAccountException uae) {
                 System.out.println("------------用户名错误----There is no user with username of " + token.getPrincipal());
-                return "error";
+                return "redirect:/error.html";
             }catch (IncorrectCredentialsException ice) {
                 System.out.println("------------密码错误----Password for account " + token.getPrincipal() + " was incorrect!");
-                return "error";
+                return "redirect:/error.html";
             } catch (LockedAccountException lae) {
                 System.out.println("------账号被锁定---The account for username " + token.getPrincipal() + " is locked.  " +
                         "Please contact your administrator to unlock it.");
-                return "error";
+                return "redirect:/error.html";
             } catch (AuthenticationException ae) {
                 //unexpected condition?  error?
-                return "error";
+                return "redirect:/error.html";
             }
 
         }
