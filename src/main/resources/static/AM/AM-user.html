@@ -16,7 +16,8 @@
 </head>
 <body>
 <div>
-    <input class="easyui-textbox" name="username" id="username" placeholder="请输入关键字">
+    <input class="easyui-textbox" name="username" id="user-name"
+           placeholder="请输入关键字">
     <a id="user-search" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
 </div>
 <table id="st" style="width: 100%;"></table>
@@ -76,7 +77,7 @@ $('#form1').form('submit',{
 
     //点击搜索
     $("#user-search").on("click",function () {
-        var f=$("#username").serialize();
+        var f=$("#user-name").serialize();
         $("#st").datagrid({url:"StudentServlet?"+f}).datagrid('load');
     });
 
