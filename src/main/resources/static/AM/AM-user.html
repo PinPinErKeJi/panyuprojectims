@@ -60,11 +60,15 @@ $('#form1').form('submit',{
         <table border="0" width="100%">
             <tr>
                 <td align="right" width="30%">用户名：</td>
-                <td><input class="easyui-textbox" id="username" name="username" data-options="{validType:'length[3,3]'}"></td>
+                <td><input class="easyui-textbox" id="username"
+                           name="username"
+                           data-options="{validType:'length[2,6]'}"></td>
             </tr>
             <tr>
                 <td align="right" width="30%">密码：</td>
-                <td><input class="easyui-textbox" id="password" name="password" data-options="{validType:'length[2,4]'}"></td>
+                <td><input class="easyui-textbox" id="password"
+                           name="password"
+                           data-options="{validType:'length[6,8]'}"></td>
             </tr>
         </table>
 
