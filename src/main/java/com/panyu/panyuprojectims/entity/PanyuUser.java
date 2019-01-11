@@ -1,5 +1,6 @@
 package com.panyu.panyuprojectims.entity;
 public class PanyuUser {
+    //用户属性
     private String userId;
     private String userProvince;
     private String userCity;
@@ -11,24 +12,22 @@ public class PanyuUser {
     private String userTel;
     private String userPwd;
     private String userState;
+    //角色对象
+    private ShiroRole shiroRole;
+    //权限对象
+    private ShiroResource shiroResource;
+    //用户和角色中间表
+    private ShiroAmdinRole shiroAmdinRole;
+    //角色和权限中间表
+    private ShiroRoleResource shiroRoleResource;
+
+
+
     public PanyuUser() {
         super();
     }
-    public PanyuUser( String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState) {
 
-        this.userProvince = userProvince;
-        this.userCity = userCity;
-        this.userCounty = userCounty;
-        this.userCompanyName = userCompanyName;
-        this.userCompanycccNumber = userCompanycccNumber;
-        this.userName = userName;
-        this.userEmail = userEmail;
-        this.userTel = userTel;
-        this.userPwd = userPwd;
-        this.userState = userState;
-    }
-
-    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState) {
+    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState, ShiroRole shiroRole, ShiroResource shiroResource, ShiroAmdinRole shiroAmdinRole, ShiroRoleResource shiroRoleResource) {
         this.userId = userId;
         this.userProvince = userProvince;
         this.userCity = userCity;
@@ -40,6 +39,10 @@ public class PanyuUser {
         this.userTel = userTel;
         this.userPwd = userPwd;
         this.userState = userState;
+        this.shiroRole = shiroRole;
+        this.shiroResource = shiroResource;
+        this.shiroAmdinRole = shiroAmdinRole;
+        this.shiroRoleResource = shiroRoleResource;
     }
 
     public String getUserId() {
@@ -106,6 +109,14 @@ public class PanyuUser {
         this.userEmail = userEmail;
     }
 
+    public String getUserTel() {
+        return userTel;
+    }
+
+    public void setUserTel(String userTel) {
+        this.userTel = userTel;
+    }
+
     public String getUserPwd() {
         return userPwd;
     }
@@ -122,12 +133,36 @@ public class PanyuUser {
         this.userState = userState;
     }
 
-    public String getUserTel() {
-        return userTel;
+    public ShiroRole getShiroRole() {
+        return shiroRole;
     }
 
-    public void setUserTel(String userTel) {
-        this.userTel = userTel;
+    public void setShiroRole(ShiroRole shiroRole) {
+        this.shiroRole = shiroRole;
+    }
+
+    public ShiroResource getShiroResource() {
+        return shiroResource;
+    }
+
+    public void setShiroResource(ShiroResource shiroResource) {
+        this.shiroResource = shiroResource;
+    }
+
+    public ShiroAmdinRole getShiroAmdinRole() {
+        return shiroAmdinRole;
+    }
+
+    public void setShiroAmdinRole(ShiroAmdinRole shiroAmdinRole) {
+        this.shiroAmdinRole = shiroAmdinRole;
+    }
+
+    public ShiroRoleResource getShiroRoleResource() {
+        return shiroRoleResource;
+    }
+
+    public void setShiroRoleResource(ShiroRoleResource shiroRoleResource) {
+        this.shiroRoleResource = shiroRoleResource;
     }
 
     @Override
@@ -144,6 +179,10 @@ public class PanyuUser {
                 ", userTel='" + userTel + '\'' +
                 ", userPwd='" + userPwd + '\'' +
                 ", userState='" + userState + '\'' +
+                ", shiroRole=" + shiroRole +
+                ", shiroResource=" + shiroResource +
+                ", shiroAmdinRole=" + shiroAmdinRole +
+                ", shiroRoleResource=" + shiroRoleResource +
                 '}';
     }
 }

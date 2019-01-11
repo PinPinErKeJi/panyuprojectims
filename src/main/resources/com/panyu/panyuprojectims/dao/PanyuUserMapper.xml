@@ -14,8 +14,15 @@
         <result column="USER_TEL" property="userTel" />
         <result column="USER_PWD" property="userPwd" />
         <result column="USER_STATE" property="userState" />
+        <!--<association property="" javaType="">-->
+
+        <!--</association>-->
+        <!--<association property="" javaType="">-->
+
+        <!--</association>-->
     </resultMap>
-    
+
+
     <select id="queryInfoByUsername" resultMap="result_PanyuUser_Map">
             select * from panyu_user where user_name = #{userName,jdbcType=VARCHAR}
     </select>
