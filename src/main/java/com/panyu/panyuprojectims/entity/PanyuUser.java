@@ -12,24 +12,22 @@ public class PanyuUser {
     private String userTel;
     private String userPwd;
     private String userState;
-    //角色属性
-    private String roleId;
-    private String roleName;
-    private String roleCreateTime;
-    private String roleUpdateTime;
-    //权限属性
-    private String resourceId;
-    private String resourceName;
-    private String resourceUrl;
-    private String resourceCode;
-    private String parectResourceId;
+    //角色对象
+    private ShiroRole shiroRole;
+    //权限对象
+    private ShiroResource shiroResource;
+    //用户和角色中间表
+    private ShiroAmdinRole shiroAmdinRole;
+    //角色和权限中间表
+    private ShiroRoleResource shiroRoleResource;
+
 
 
     public PanyuUser() {
         super();
     }
 
-    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState, String roleId, String roleName, String roleCreateTime, String roleUpdateTime, String resourceId, String resourceName, String resourceUrl, String resourceCode, String parectResourceId) {
+    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState, ShiroRole shiroRole, ShiroResource shiroResource, ShiroAmdinRole shiroAmdinRole, ShiroRoleResource shiroRoleResource) {
         this.userId = userId;
         this.userProvince = userProvince;
         this.userCity = userCity;
@@ -41,15 +39,10 @@ public class PanyuUser {
         this.userTel = userTel;
         this.userPwd = userPwd;
         this.userState = userState;
-        this.roleId = roleId;
-        this.roleName = roleName;
-        this.roleCreateTime = roleCreateTime;
-        this.roleUpdateTime = roleUpdateTime;
-        this.resourceId = resourceId;
-        this.resourceName = resourceName;
-        this.resourceUrl = resourceUrl;
-        this.resourceCode = resourceCode;
-        this.parectResourceId = parectResourceId;
+        this.shiroRole = shiroRole;
+        this.shiroResource = shiroResource;
+        this.shiroAmdinRole = shiroAmdinRole;
+        this.shiroRoleResource = shiroRoleResource;
     }
 
     public String getUserId() {
@@ -140,76 +133,36 @@ public class PanyuUser {
         this.userState = userState;
     }
 
-    public String getRoleId() {
-        return roleId;
+    public ShiroRole getShiroRole() {
+        return shiroRole;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
+    public void setShiroRole(ShiroRole shiroRole) {
+        this.shiroRole = shiroRole;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public ShiroResource getShiroResource() {
+        return shiroResource;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setShiroResource(ShiroResource shiroResource) {
+        this.shiroResource = shiroResource;
     }
 
-    public String getRoleCreateTime() {
-        return roleCreateTime;
+    public ShiroAmdinRole getShiroAmdinRole() {
+        return shiroAmdinRole;
     }
 
-    public void setRoleCreateTime(String roleCreateTime) {
-        this.roleCreateTime = roleCreateTime;
+    public void setShiroAmdinRole(ShiroAmdinRole shiroAmdinRole) {
+        this.shiroAmdinRole = shiroAmdinRole;
     }
 
-    public String getRoleUpdateTime() {
-        return roleUpdateTime;
+    public ShiroRoleResource getShiroRoleResource() {
+        return shiroRoleResource;
     }
 
-    public void setRoleUpdateTime(String roleUpdateTime) {
-        this.roleUpdateTime = roleUpdateTime;
-    }
-
-    public String getResourceId() {
-        return resourceId;
-    }
-
-    public void setResourceId(String resourceId) {
-        this.resourceId = resourceId;
-    }
-
-    public String getResourceName() {
-        return resourceName;
-    }
-
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
-    }
-
-    public String getResourceUrl() {
-        return resourceUrl;
-    }
-
-    public void setResourceUrl(String resourceUrl) {
-        this.resourceUrl = resourceUrl;
-    }
-
-    public String getResourceCode() {
-        return resourceCode;
-    }
-
-    public void setResourceCode(String resourceCode) {
-        this.resourceCode = resourceCode;
-    }
-
-    public String getParectResourceId() {
-        return parectResourceId;
-    }
-
-    public void setParectResourceId(String parectResourceId) {
-        this.parectResourceId = parectResourceId;
+    public void setShiroRoleResource(ShiroRoleResource shiroRoleResource) {
+        this.shiroRoleResource = shiroRoleResource;
     }
 
     @Override
@@ -226,15 +179,10 @@ public class PanyuUser {
                 ", userTel='" + userTel + '\'' +
                 ", userPwd='" + userPwd + '\'' +
                 ", userState='" + userState + '\'' +
-                ", roleId='" + roleId + '\'' +
-                ", roleName='" + roleName + '\'' +
-                ", roleCreateTime='" + roleCreateTime + '\'' +
-                ", roleUpdateTime='" + roleUpdateTime + '\'' +
-                ", resourceId='" + resourceId + '\'' +
-                ", resourceName='" + resourceName + '\'' +
-                ", resourceUrl='" + resourceUrl + '\'' +
-                ", resourceCode='" + resourceCode + '\'' +
-                ", parectResourceId='" + parectResourceId + '\'' +
+                ", shiroRole=" + shiroRole +
+                ", shiroResource=" + shiroResource +
+                ", shiroAmdinRole=" + shiroAmdinRole +
+                ", shiroRoleResource=" + shiroRoleResource +
                 '}';
     }
 }
