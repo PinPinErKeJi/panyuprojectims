@@ -20,14 +20,11 @@
     <select id="selectUserEmail" resultType="java.lang.Integer">
         select count(*) from panyu_user where user_email = #{userEmail,jdbcType=VARCHAR}
     </select>
-
     <select id="queryInfoByUsername" resultMap="Register_PanyuUser_Map">
             select * from panyu_user where user_name = #{userName,jdbcType=VARCHAR}
     </select>
-
     <insert id="register" parameterType="com.panyu.panyuprojectims.entity.PanyuUser">
         insert into panyu_user (USER_ID, USER_PROVINCE, USER_CITY, USER_COUNTY, USER_COMPANY_NAME, USER_COMPANYCCC_NUMBER, USER_NAME, USER_EMAIL,user_tel ,USER_PWD,user_state)
         values (sys_guid(), #{userProvince,jdbcType=VARCHAR}, #{userCity,jdbcType=VARCHAR}, #{userCounty,jdbcType=VARCHAR},#{userCompanyName,jdbcType=VARCHAR}, #{userCompanycccNumber,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR},#{userTel,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},0)
     </insert>
-
 </mapper>

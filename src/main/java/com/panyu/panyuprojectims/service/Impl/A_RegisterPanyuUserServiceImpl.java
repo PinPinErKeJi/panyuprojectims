@@ -16,7 +16,6 @@ public class A_RegisterPanyuUserServiceImpl implements A_RegisterPanyuUserServic
     public int selectUserEmail(String userEmail) {
         return a_registerPanyuUserDao.selectUserEmail(userEmail);
     }
-
     @Override
     public int register(
             String userProvince,

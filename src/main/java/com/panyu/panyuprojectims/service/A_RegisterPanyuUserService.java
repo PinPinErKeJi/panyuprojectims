@@ -7,7 +7,6 @@ public interface A_RegisterPanyuUserService {
 
     //注册账号之前查询改用户是否存在
     int selectUserEmail(String userEmail);
-
     //注册用户
     int register( @Param("userProvince")String userProvince,
                           @Param("userCity")String userCity,
