@@ -44,7 +44,6 @@ public class A_RegisterPanyuUserController {
          * 第四个参数为加密次数 *
          * 最后用toHex()方法将加密后的密码转成String
          *  */
-
         int result = 0;
         int count = a_registerPanyuUserService.selectUserEmail(userEmail);
         System.out.println("数量:"+count);
