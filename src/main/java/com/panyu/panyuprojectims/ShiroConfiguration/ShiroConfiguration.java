@@ -126,7 +126,7 @@ public class ShiroConfiguration {
     @Bean(name = "shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(@Qualifier("securityManager") DefaultWebSecurityManager securityManager){
         ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
-      //  ShiroFilterFactoryBean shiroFilterFactoryBean=new MShiroFilterFactoryBean();
+
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 拦截器.
@@ -144,7 +144,6 @@ public class ShiroConfiguration {
         map.put("/login/**","anon");
 
         map.put("/userLoginController/userlogin","anon");//匿名注册
-       // map.put("/userLoginController/userlogin","anon");
         map.put("/login.html","anon");
         map.put("/register","anon");
         map.put("/error.html","anon");
@@ -152,7 +151,7 @@ public class ShiroConfiguration {
         //对所有用户认证
         map.put("/*", "authc");
         map.put("/*.*", "authc");
-     //   map.put("/**", "authc");
+        // map.put("/**", "authc");
         // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         // 登录成功后要跳转的链接
