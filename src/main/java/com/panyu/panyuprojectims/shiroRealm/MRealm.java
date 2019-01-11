@@ -26,7 +26,6 @@ public class MRealm extends AuthorizingRealm {
         String userName=curtoken.getUsername();
         //根据当前登录的用户名从数据库查询，获取用户对象
         PanyuUser panyuUser= a_registerPanyuUserService.queryInfoByUsername(userName);
-
         if(panyuUser==null){
             System.out.println("用户名不存在");
             return null;
