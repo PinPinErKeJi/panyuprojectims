@@ -176,33 +176,49 @@ $(function () {
 
 
 //记住用户名密码
-function Save() {
-    if ($("#rember").attr("checked")) {
-        var str_username = $("#userName1").val();
-        var str_password = $("#userPwd").val();
-        // var str_role = $("input:radio[name='role']:checked").val();
-        $.cookie("rmbUser", "true", { expires: 7 }); //存储一个带7天期限的cookie
-        $.cookie("userName1", str_username, { expires: 7 });
-        $.cookie("userPwd", str_password, { expires: 7 });
-        // $.cookie("role", str_role, { expires: 7 });
+window.onload = function(){
+    var oForm = document.getElementById('loginForm');
+    var oUser = document.getElementById('userName1');
+    var oPswd = document.getElementById('userPwd');
+    var oRemember = document.getElementById('remember');
+    //页面初始化时，如果帐号密码cookie存在则填充
+    if(getCookie('userName1') && getCookie('userPwd')){
+        oUser.value = getCookie('userName1');
+        oPswd.value = getCookie('userPwd');
+        oRemember.checked = true;
     }
-    else {
-        $.cookie("rmbUser", "false", { expire: -1 });
-        $.cookie("userName1", "", { expires: -1 });
-        $.cookie("userPwd", "", { expires: -1 });
-        // $.cookie("role", "", { expires: -1 });
+    //复选框勾选状态发生改变时，如果未勾选则清除cookie
+    oRemember.onchange = function(){
+        if(!this.checked){
+            delCookie('userName1');
+            delCookie('userPwd');
+        }
+    };
+    //表单提交事件触发时，如果复选框是勾选状态则保存cookie
+    oForm.onsubmit = function(){
+        if(remember.checked){
+            setCookie('userName1',oUser.value,7); //保存帐号到cookie，有效期7天
+            setCookie('userPwd',oPswd.value,7); //保存密码到cookie，有效期7天
+        }
+    };
+};
+//设置cookie
+function setCookie(name,value,day){
+    var date = new Date();
+    date.setDate(date.getDate() + day);
+    document.cookie = name + '=' + value + ';expires='+ date;
+};
+//获取cookie
+function getCookie(name){
+    var reg = RegExp(name+'=([^;]+)');
+    var arr = document.cookie.match(reg);
+    if(arr){
+        return arr[1];
+    }else{
+        return '';
     }
 };
-$(document).ready(function () {
-    // var role=$.cookie("role");
-    if ($.cookie("rmbUser") == "true") {
-        $("#rember").attr("checked", true);
-        // var _o=document.getElementsByName("role");
-        // for(i=0;i<_o.length;i++)
-        // {
-        //     if(_o[i].value==role){_o[i].checked=true;}
-        // }
-        $("#userName1").val($.cookie("userName1"));
-        $("#userPwd").val($.cookie("userPwd"));
-    }
-});
+//删除cookie
+function delCookie(name){
+    setCookie(name,null,-1);
+};
