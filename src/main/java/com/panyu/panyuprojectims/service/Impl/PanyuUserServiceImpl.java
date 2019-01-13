@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -26,6 +27,16 @@ public class PanyuUserServiceImpl implements PanyuUserService{
     @Override
     public PanyuUser queryInfoByUsername(String userName) {
         return panyuUserDao.queryInfoByUsername(userName);
+    }
+
+    @Override
+    public List<String> queryRolesByUsername(String userName) {
+        return panyuUserDao.queryRolesByUsername(userName);
+    }
+
+    @Override
+    public List<String> queryResByUsername(String userName) {
+        return panyuUserDao.queryResByUsername(userName);
     }
 
 
