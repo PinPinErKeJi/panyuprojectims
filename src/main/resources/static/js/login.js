@@ -125,30 +125,6 @@ $("form :input").blur(function(){
             $parent.find(".onError").remove();
         }
     }
-    var companyName = $('#companyName').val();
-    var userName = $('#userName').val();
-    var companyNumber = $('#companyNumber').val();
-    var email = $('#email').val();
-    var password = $('#password').val();
-    var surePassword = $('#surePassword').val();
-    var tel = $('#tel').val();
-    var code = $('#code').val();
-
-    $('#register').on('click',function () {
-        if (companyName==''&&userName==''&&companyNumber==''&&email==''
-            &&password==''&&surePassword==''&&tel==''&&code==''){
-            return false;
-            alert("请填写完整信息")
-        }
-        $(".ace").click(function () {
-            if ($(this).prop("checked")) {
-
-            }else{
-                return false;
-                alert("请勾选用户协议");
-            }
-        });
-    })
 }).keyup(function(){
     //triggerHandler 防止事件执行完后，浏览器自动为标签获得焦点
     $(this).triggerHandler("blur");
@@ -157,7 +133,7 @@ $("form :input").blur(function(){
 });
 
 //点击重置按钮时，通过trigger()来触发文本框的失去焦点事件
-$("#register").click(function(){
+$("#reset").click(function(){
     //trigger 事件执行完后，浏览器会为submit按钮获得焦点
     // $("form .required:input").trigger("blur");
     var numError = $("form .onError").length;
@@ -179,5 +155,28 @@ $('.btn').on('click',function () {
 
 
 
+$(function () {
+    var companyName = $('#companyName').val();
+    var userName = $('#userName').val();
+    var companyNumber = $('#companyNumber').val();
+    var email = $('#email').val();
+    var password = $('#password').val();
+    var surePassword = $('#surePassword').val();
+    var tel = $('#tel').val();
+    var code = $('#code').val();
 
+        if (companyName==''&&userName==''&&companyNumber==''&&email==''
+            &&password==''&&surePassword==''&&tel==''&&code==''){
+            return false;
+            alert("请填写完整信息");
+            document.getElementById('#register').isDisabled = false;
+        }
+        $(".ace").click(function () {
+            if ($(this).prop("checked")) {
 
+            }else{
+                return false;
+                alert("请勾选用户协议");
+            }
+        });
+    })
