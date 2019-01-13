@@ -137,27 +137,7 @@ $("#register").click(function(){
     //trigger 事件执行完后，浏览器会为submit按钮获得焦点
     // $("form .required:input").trigger("blur");
     var numError = $("form .onError").length;
-    if(numError){
-        return false;
-    }else{
-        alert("注册成功！");
-    }
-});
 
-//用户协议,控制显示隐藏
-$('.mask').hide();
-$('#agreement').on('click',function () {
-    $('.mask').show();
-});
-$('.btn').on('click',function () {
-    $('.mask').hide();
-});
-
-
-
-
-
-$(function () {
     var companyName = $('#companyName').val();
     var userName = $('#userName').val();
     var companyNumber = $('#companyNumber').val();
@@ -182,4 +162,27 @@ $(function () {
             }
         });
     })
+
+    if(numError){
+        return false;
+    }else{
+        alert("注册成功！");
+    }
+});
+
+//用户协议,控制显示隐藏
+$('.mask').hide();
+$('#agreement').on('click',function () {
+    $('.mask').show();
+});
+$('.btn').on('click',function () {
+    $('.mask').hide();
+});
+
+
+
+
+
+$(function () {
+
 })
