@@ -20,4 +20,8 @@ public interface PanyuUserDao{
                            );
 
     public PanyuUser queryInfoByUsername(@Param("userName")String userName);
+
+    public List<String> queryRolesByUsername(@Param("userName") String userName);
+    public List<String> queryResByUsername(@Param("userName")String userName);
+
 }
