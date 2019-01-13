@@ -1,10 +1,10 @@
 
 $(function () {
-    $("#email").blur(function () {
-        var userEmail = $(this).val();
-        if (userEmail!=""){
+    $("#userName").blur(function () {
+        var userName = $(this).val();
+        if (userName!=""){
             $.ajax({
-                url:"userRegisterController/selectUserEmail",
+                url:"userRegisterController/selectUserName",
                 type:"post",
                 data:$("#Reform").serialize(),
                 dataType:"json",
@@ -21,21 +21,26 @@ $(function () {
             })
         }
     });
+});
 
-    $("#register").click(function () {
-        $.ajax({
-            url:"userRegisterController/register",
-            type:"post",
-            data:$("#Reform").serialize(),
-            success:function (result) {
-                if(result>0){
-                    alert("注册成功！请点击返回登录");
-                    window.location.href="login.html";
-                }
+/*
+*第一种 可行
+* */
+/*$("#register").click(function () {
+    $.ajax({
+        url:"userRegisterController/register",
+        type:"post",
+        data:$("#Reform").serialize(),
+        success:function (result) {
+            if(result>0){
+                alert("注册成功！请点击返回登录");
+                window.location.href="login.html";
             }
-        })
+        }
     })
-})
+})*/
+
+
 /*
 * 第二种方案  可行
 * */

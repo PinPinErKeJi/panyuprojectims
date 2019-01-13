@@ -14,12 +14,29 @@
         <result column="USER_TEL" property="userTel" />
         <result column="USER_PWD" property="userPwd" />
         <result column="USER_STATE" property="userState" />
-        <!--<association property="" javaType="">-->
-
-        <!--</association>-->
-        <!--<association property="" javaType="">-->
-
-        <!--</association>-->
+        <association property="shiroRole" javaType="ShiroRole">
+            <id column="ROLE_ID" property="roleId" />
+            <result column="ROLE_NAME" property="roleName" />
+            <result column="ROLE_CREATE_TIME" property="roleCreateTime" />
+            <result column="ROLE_UPDATE_TIME" property="roleUpdateTime" />
+        </association>
+        <association property="shiroResource" javaType="ShiroResource">
+            <id column="RESOURCE_ID" property="resourceId" />
+            <result column="RESOURCE_NAME" property="resourceName" />
+            <result column="RESOURCE_URL" property="resourceUrl" />
+            <result column="RESOURCE_CODE" property="resourceCode" />
+            <result column="PARECT_RESOURCE_ID" property="parectResourceId" />
+        </association>
+        <association property="shiroAmdinRole" javaType="ShiroAmdinRole">
+            <id column="ADMIN_ROLE_ID" property="adminRoleId" />
+            <result column="ADMIN_ID" property="adminId" />
+            <result column="ROLE_ID" property="roleId" />
+        </association>
+        <association property="shiroRoleResource" javaType="ShiroRoleResource">
+            <id column="ROLE_RESOURCE_ID" property="roleResourceId" />
+            <result column="ROLE_ID" property="roleId" />
+            <result column="RESOURCE_ID" property="resourceId" />
+        </association>
     </resultMap>
 
 
@@ -30,5 +47,15 @@
         insert into panyu_user (USER_ID, USER_PROVINCE, USER_CITY, USER_COUNTY, USER_COMPANY_NAME, USER_COMPANYCCC_NUMBER, USER_NAME, USER_EMAIL,user_tel ,USER_PWD,user_state)
         values (sys_guid(), #{userProvince,jdbcType=VARCHAR}, #{userCity,jdbcType=VARCHAR}, #{userCounty,jdbcType=VARCHAR},#{userCompanyName,jdbcType=VARCHAR}, #{userCompanycccNumber,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR},#{userTel,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},0)
     </insert>
-
+    <!-- 根据当前登录的用户查询用户所拥有的所有角色 -->
+    <select id="queryRolesByUsername" resultMap="result_PanyuUser_Map">
+        select s_role.role_name from shiro_role s_role inner join shiro_amdin_role s_a_r on s_role.role_id=s_a_r.role_id
+        inner join panyu_user p_u on p_u.user_id=s_a_r.user_id where p_u.user_name= #{userName,jdbcType=VARCHAR}
+    </select>
+    <!-- 根据当前登录的用户查询用户所拥有的所有权限 -->
+    <select id="queryResByUsername" resultMap="result_PanyuUser_Map">
+        select s_res.resource_name from shiro_resource s_res ,shiro_role_resource s_r_res ,shiro_amdin_role s_a_r,panyu_user p_y
+        where s_res.resource_id=s_r_res.resource_id and s_r_res.role_resource_id=s_a_r.admin_role_id and s_a_r.user_id=p_y.user_id and
+        p_y.user_name=#{userName,jdbcType=VARCHAR}
+    </select>
 </mapper>
