@@ -173,3 +173,36 @@ $(function () {
        return true;
    })
     })
+
+
+//记住用户名密码
+function Save() {
+    if ($("#rember").attr("checked")) {
+        var str_username = $("#userName1").val();
+        var str_password = $("#userPwd").val();
+        // var str_role = $("input:radio[name='role']:checked").val();
+        $.cookie("rmbUser", "true", { expires: 7 }); //存储一个带7天期限的cookie
+        $.cookie("userName1", str_username, { expires: 7 });
+        $.cookie("userPwd", str_password, { expires: 7 });
+        // $.cookie("role", str_role, { expires: 7 });
+    }
+    else {
+        $.cookie("rmbUser", "false", { expire: -1 });
+        $.cookie("userName1", "", { expires: -1 });
+        $.cookie("userPwd", "", { expires: -1 });
+        // $.cookie("role", "", { expires: -1 });
+    }
+};
+$(document).ready(function () {
+    // var role=$.cookie("role");
+    if ($.cookie("rmbUser") == "true") {
+        $("#rember").attr("checked", true);
+        // var _o=document.getElementsByName("role");
+        // for(i=0;i<_o.length;i++)
+        // {
+        //     if(_o[i].value==role){_o[i].checked=true;}
+        // }
+        $("#userName1").val($.cookie("userName1"));
+        $("#userPwd").val($.cookie("userPwd"));
+    }
+});
