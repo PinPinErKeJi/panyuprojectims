@@ -157,7 +157,7 @@ $('.btn').on('click',function () {
 
 $(function () {
    var register = document.getElementById('degister');
-   register.onclick = function () {
+   $('#register').on('click',function () {
        for (var i = 0; i < $('#Reform')[0].elements.length - 1;i++){
            if($('#Reform')[0].elements[i].value=="")
            {
@@ -167,5 +167,5 @@ $(function () {
            }
        }
        return true;
-   }
+   })
     })
