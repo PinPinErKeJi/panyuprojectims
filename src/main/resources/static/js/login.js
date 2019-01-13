@@ -188,12 +188,12 @@ window.onload = function(){
         oRemember.checked = true;
     }
     //复选框勾选状态发生改变时，如果未勾选则清除cookie
-    // oRemember.onchange = function(){
-    //     if(!this.checked){
-    //         delCookie('userName1');
-    //         delCookie('userPwd');
-    //     }
-    // };
+    oRemember.onchange = function(){
+        if(!this.checked){
+            delCookie('userName1');
+            delCookie('userPwd');
+        }
+    };
     //表单提交事件触发时，如果复选框是勾选状态则保存cookie
     oForm.onsubmit = function(){
         if(remember.checked){
