@@ -166,11 +166,9 @@ $(function () {
                return false;
            }
        }
-       if ("$('.ace'):checkbox:checked"){
-                    return true;
-       }else {
-                    return false;
-                    alert('请勾选用户协议')
+       if ("$('.ace'):checkbox:checkbox") {
+           return false;
+           alert('请勾选用户协议')
        }
        return true;
    })
