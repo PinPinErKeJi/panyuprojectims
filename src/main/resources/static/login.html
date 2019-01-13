@@ -446,7 +446,15 @@
 			 
 			});
 
-
+		window.onload = function () {
+            //复选框勾选状态发生改变时，如果未勾选则清除cookie
+            oRemember.onchange = function(){
+                if(!this.checked){
+                    delCookie('userName1');
+                    delCookie('userPwd');
+                }
+            };
+        }
 		</script>
 	</body>
 </html>
