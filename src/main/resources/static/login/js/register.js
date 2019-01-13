@@ -29,7 +29,7 @@ $(function () {
             data:$("#Reform").serialize(),
             success:function (result) {
                 if(result>0){
-                    alert("注册成功！请点击返回登录");
+                    // alert("注册成功！请点击返回登录");
                     window.location.href="login.html";
                 }
             }
