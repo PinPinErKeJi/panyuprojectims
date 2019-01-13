@@ -23,30 +23,6 @@ $(function () {
     });
 
     $("#register").click(function () {
-        var companyName = $('#companyName').val();
-        var userName = $('#userName').val();
-        var companyNumber = $('#companyNumber').val();
-        var email = $('#email').val();
-        var password = $('#password').val();
-        var surePassword = $('#surePassword').val();
-        var tel = $('#tel').val();
-        var code = $('#code').val();
-
-        $('#register').on('click',function () {
-            if (companyName==''&&userName==''&&companyNumber==''&&email==''
-                &&password==''&&surePassword==''&&tel==''&&code==''){
-                return false;
-                alert("请填写完整信息")
-            }
-            $(".ace").click(function () {
-                if ($(this).prop("checked")) {
-
-                }else{
-                    return false;
-                    alert("请勾选用户协议");
-                }
-            });
-        });
         $.ajax({
             url:"userRegisterController/register",
             type:"post",
