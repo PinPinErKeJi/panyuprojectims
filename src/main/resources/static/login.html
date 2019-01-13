@@ -79,7 +79,8 @@
 
 											<div class="space-6"></div>
 
-											<form action="userLoginController/startlogin" method="post">
+											<form
+													action="userLoginController/startlogin" method="post" name="loginForm">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -99,11 +100,14 @@
 
 													<div class="clearfix">
 														<label class="inline">
-															<input type="checkbox" class="ace" />
-															<span class="lbl"> 记住</span>
+															<input
+																	type="checkbox" class="ace" id="rember"/>
+															<span
+																	class="lbl"> 下次自动登录</span>
 														</label>
 
-														<button type="button" id="loginbutton" class="width-35 pull-right btn btn-sm btn-primary">
+														<button type="button"
+																id="loginbutton" class="width-35 pull-right btn btn-sm btn-primary" onclick="Save()">
 															<i class="ace-icon fa fa-key"></i>
 															<span class="bigger-110">登录</span>
 														</button>
