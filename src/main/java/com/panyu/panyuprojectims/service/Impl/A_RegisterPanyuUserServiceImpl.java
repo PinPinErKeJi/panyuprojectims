@@ -1,7 +1,6 @@
 package com.panyu.panyuprojectims.service.Impl;
 
 import com.panyu.panyuprojectims.dao.A_RegisterPanyuUserDao;
-import com.panyu.panyuprojectims.entity.PanyuUser;
 import com.panyu.panyuprojectims.service.A_RegisterPanyuUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +12,10 @@ public class A_RegisterPanyuUserServiceImpl implements A_RegisterPanyuUserServic
     private A_RegisterPanyuUserDao a_registerPanyuUserDao;
 
     @Override
-    public int selectUserEmail(String userEmail) {
-        return a_registerPanyuUserDao.selectUserEmail(userEmail);
+    public int selectUserName(String userName) {
+        return a_registerPanyuUserDao.selectUserName(userName);
     }
-    @Override
+    /*@Override
     public int register(
             String userProvince,
             String userCity,
@@ -42,5 +41,5 @@ public class A_RegisterPanyuUserServiceImpl implements A_RegisterPanyuUserServic
     @Override
     public PanyuUser queryInfoByUsername(String userName) {
         return a_registerPanyuUserDao.queryInfoByUsername(userName);
-    }
+    }*/
 }
