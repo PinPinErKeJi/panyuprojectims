@@ -9,6 +9,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Map;
 
 public class MyShiroRealm extends AuthorizingRealm {
@@ -17,10 +18,19 @@ public class MyShiroRealm extends AuthorizingRealm {
     /**授权**/
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-
+        System.out.println("我是授权");
         //获取当前登录的用户名
         String userName = (String) principals.fromRealm(getName()).iterator().next();
-
+        //根据用户名，查询当前登录的用户所拥有的所有角色
+        List<String> roleList=panyuUserService.queryRolesByUsername(userName);
+        //根据用户名，查询当前登录的用户所拥有的所有权限
+        List<String> funList=panyuUserService.queryResByUsername(userName);
+        for (String roleName : roleList){
+            System.out.println("role----------------"+roleName);
+        }
+        for (String funName : funList) {
+            System.out.println("fun----------------"+funName);
+        }
         return null;
 
     }
