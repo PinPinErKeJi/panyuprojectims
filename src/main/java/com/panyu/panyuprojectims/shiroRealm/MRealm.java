@@ -9,7 +9,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class MRealm extends AuthorizingRealm {
+/*public class MRealm extends AuthorizingRealm {
 
     @Autowired
     private A_RegisterPanyuUserService a_registerPanyuUserService;
@@ -37,4 +37,4 @@ public class MRealm extends AuthorizingRealm {
             return  new SimpleAuthenticationInfo(uuserName,password,salt,getName());
         }
     }
-}
+}*/

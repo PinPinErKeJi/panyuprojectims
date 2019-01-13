@@ -1,13 +1,11 @@
 package com.panyu.panyuprojectims.service;
 
-import com.panyu.panyuprojectims.entity.PanyuUser;
-import org.apache.ibatis.annotations.Param;
-
 public interface A_RegisterPanyuUserService {
 
     //注册账号之前查询改用户是否存在
-    int selectUserEmail(String userEmail);
-    //注册用户
+    int selectUserName(String userName);
+    /*
+    注册用户
     int register( @Param("userProvince")String userProvince,
                           @Param("userCity")String userCity,
                           @Param("userCounty")String userCounty,
@@ -19,5 +17,5 @@ public interface A_RegisterPanyuUserService {
                           @Param("userPwd")String userPwd
     );
 
-    PanyuUser queryInfoByUsername(String userName);
+    PanyuUser queryInfoByUsername(String userName);*/
 }

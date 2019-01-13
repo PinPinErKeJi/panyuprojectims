@@ -133,9 +133,9 @@ $("form :input").blur(function(){
 });
 
 //点击重置按钮时，通过trigger()来触发文本框的失去焦点事件
-$("#register").click(function(){
+$("#reset").click(function(){
     //trigger 事件执行完后，浏览器会为submit按钮获得焦点
-    $("form .required:input").trigger("blur");
+    // $("form .required:input").trigger("blur");
     var numError = $("form .onError").length;
     if(numError){
         return false;
@@ -155,8 +155,6 @@ $('.btn').on('click',function () {
 
 
 
-
-
 $(function () {
     var companyName = $('#companyName').val();
     var userName = $('#userName').val();
@@ -167,11 +165,11 @@ $(function () {
     var tel = $('#tel').val();
     var code = $('#code').val();
 
-    $('#register').on('click',function () {
         if (companyName==''&&userName==''&&companyNumber==''&&email==''
             &&password==''&&surePassword==''&&tel==''&&code==''){
             return false;
-            alert("请填写完整信息")
+            alert("请填写完整信息");
+            document.getElementById('#register').isDisabled = false;
         }
         $(".ace").click(function () {
             if ($(this).prop("checked")) {
@@ -182,4 +180,3 @@ $(function () {
             }
         });
     })
-})

@@ -1,6 +1,5 @@
 package com.panyu.panyuprojectims.dao;
 
-import com.panyu.panyuprojectims.entity.PanyuUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -8,8 +7,8 @@ import org.apache.ibatis.annotations.Param;
 public interface A_RegisterPanyuUserDao {
 
     //注册账号之前查询改用户是否存在
-    int selectUserEmail(@Param("userEmail") String userEmail);
-    //注册
+    int selectUserName(@Param("userName") String userName);
+    /*注册
     int register(
             @Param("userProvince")String userProvince,
             @Param("userCity")String userCity,
@@ -22,5 +21,5 @@ public interface A_RegisterPanyuUserDao {
             @Param("userPwd")String userPwd
     );
 
-    PanyuUser queryInfoByUsername(@Param("userName")String userName);
+    PanyuUser queryInfoByUsername(@Param("userName")String userName);*/
 }
