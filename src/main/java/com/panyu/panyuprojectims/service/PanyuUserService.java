@@ -17,4 +17,6 @@ public interface PanyuUserService{
                            @Param("userPwd")String userPwd
                            );
     public PanyuUser queryInfoByUsername(String userName);
+    public List<String> queryRolesByUsername(String userName);
+    public List<String> queryResByUsername(String userName);
 }
