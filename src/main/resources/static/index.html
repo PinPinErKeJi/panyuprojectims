@@ -22,11 +22,11 @@
     </div>
     <div class="home-toolbar">
         <ul>
-            <li><a href="/login">登陆</a></li>
+            <li><shiro:hasRole name="gga"><a href="/login">登陆</a></shiro:hasRole></li>
             <li><a href="javascript:;">退出</a></li>
         </ul>
         <ul class="login-info">
-            <li><a href="javascript:;">管理员：admin</a></li>
+            <li><a href="javascript:;">管理员：<shiro: principal="userName"></shiro:></a></li>
             <li><a href="javascript:;">消息：5</a></li>
         </ul>
     </div>
