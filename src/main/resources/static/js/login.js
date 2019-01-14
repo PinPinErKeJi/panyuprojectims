@@ -139,6 +139,8 @@ $("#reset").click(function(){
     var numError = $("form .onError").length;
     if(numError){
         return false;
+    }else{
+        alert("注册成功！");
     }
 });
 
@@ -153,14 +155,39 @@ $('.btn').on('click',function () {
 
 
 
-    $('#register').on('click',function () {
-        if (nameVal == ''&& userVal ==''){
-                    return false;
-        }else {
-            alert('注册成功')
-        }
-    })
+$(function () {
+   var register = document.getElementById('degister');
+   $('#register').on('click',function () {
+       for (var i = 0; i < $('#Reform')[0].elements.length - 1;i++){
+           if($('#Reform')[0].elements[i].value=="")
+           {
+               $('#Reform')[0].elements[i].focus();
+               return false;
+           }
+       }
+       return true;
+           var companyName=$("#companyName").val();
+           var userName=$("#userName").val();
+           var companyNumber=$("#companyNumber").val();
+           var email=$("#email").val();
+           var password=$("#password").val();
+           var tel=$("#tel").val();
+           var province=$("#province").val();
+           var city=$("#city").val();
+           var county=$("#county").val();
 
+
+           $.post("userLoginController/userlogin",
+               {"userCompanyName":companyName,"userName":userName,"userCompanycccNumber":companyNumber,"userEmail":email,"userPwd":password,"userTel":tel,
+               "userProvince":province,"userCity":city,"userCounty":county},
+               function(msg){
+                   if(msg>0){
+                       alert("注册成功！请点击返回登录");
+                       window.location.href="login.html";
+                   }
+           });
+   })
+    })
 
 
 //记住用户名密码
@@ -176,12 +203,12 @@ window.onload = function(){
         oRemember.checked = true;
     }
     //复选框勾选状态发生改变时，如果未勾选则清除cookie
-    oRemember.on('change',function () {
+    oRemember.onchange = function(){
         if(!this.checked){
             delCookie('userName1');
             delCookie('userPwd');
         }
-    })
+    };
     //表单提交事件触发时，如果复选框是勾选状态则保存cookie
     oForm.onsubmit = function(){
         if(remember.checked){
