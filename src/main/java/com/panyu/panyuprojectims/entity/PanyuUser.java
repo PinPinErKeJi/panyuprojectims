@@ -12,6 +12,7 @@ public class PanyuUser {
     private String userTel;
     private String userPwd;
     private String userState;
+
     //角色对象
     private ShiroRole shiroRole;
     //权限对象
