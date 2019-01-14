@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
@@ -79,8 +80,7 @@
 
 											<div class="space-6"></div>
 
-											<form
-													action="userLoginController/startlogin" method="post" id="loginForm">
+											<form action="userLoginController/startlogin" method="post">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -100,16 +100,16 @@
 
 													<div class="clearfix">
 														<label class="inline">
-															<input
-																	type="checkbox" class="ace" id="remember" />
+															<input type="checkbox" name="rememberMe" class="ace" />
 															<span class="lbl"> 记住</span>
 														</label>
-														<button type="submit"
-																id="loginbutton" class="width-35 pull-right btn btn-sm btn-primary">
+
+														<button type="button" id="loginbutton" class="width-35 pull-right btn btn-sm btn-primary">
 															<i class="ace-icon fa fa-key"></i>
 															<span class="bigger-110">登录</span>
 														</button>
 													</div>
+
 													<div class="space-4"></div>
 												</fieldset>
 											</form>
@@ -296,13 +296,12 @@
 													<div class="space-24"></div>
 
 													<div class="clearfix">
-														<button type="reset"
-																class="width-30 pull-left btn btn-sm" id="reset">
+														<button type="reset" class="width-30 pull-left btn btn-sm">
 															<i class="ace-icon fa fa-refresh"></i>
 															<span class="bigger-110">重置</span>
 														</button>
 
-														<button type="button"  id="register" class="width-65 pull-right btn btn-sm btn-success">
+														<button  type="button"  id="register" class="width-65 pull-right btn btn-sm btn-success">
 															<span class="bigger-110">注册</span>
 
 															<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
