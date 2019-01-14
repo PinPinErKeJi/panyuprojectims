@@ -156,20 +156,36 @@ $('.btn').on('click',function () {
 
 
 $(function () {
-   var register = document.getElementById('degister');
    $('#register').on('click',function () {
        for (var i = 0; i < $('#Reform')[0].elements.length - 1;i++){
            if($('#Reform')[0].elements[i].value=="")
            {
-               alert("当前表单不能有空项");
+               $('#register').attr('disabled',true);
                $('#Reform')[0].elements[i].focus();
                return false;
            }
        }
-       if ("$('.ace'):checkbox:checkbox") {
-           return false;
-           alert('请勾选用户协议')
-       }
+       var companyName=$("#companyName").val();
+       var userName=$("#userName").val();
+       var companyNumber=$("#companyNumber").val();
+       var email=$("#email").val();
+       var password=$("#password").val();
+       var tel=$("#tel").val();
+       var province=$("#province").val();
+       var city=$("#city").val();
+       var county=$("#county").val();
+
+
+       $.post("userLoginController/userlogin",
+           {"userCompanyName":companyName,"userName":userName,"userCompanycccNumber":companyNumber,"userEmail":email,"userPwd":password,"userTel":tel,
+               "userProvince":province,"userCity":city,"userCounty":county},
+           function(msg){
+               if(msg>0){
+                   alert("注册成功！请点击返回登录");
+                   window.location.href="login.html";
+               }
+           });
+       $('#register').attr('disabled',false);
        return true;
    })
     })
