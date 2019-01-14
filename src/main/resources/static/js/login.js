@@ -44,7 +44,7 @@ $("form :input").blur(function(){
     if($(this).is("#companyNumber")){
         var numVal = $.trim(this.value);
         //原生js去空格方式：this.replace(/(^\s*)|(\s*$)/g, "")
-        var regNum = /[^_IOZSVa-z\W]{2}\d{6}[^_IOZSVa-z\W]{10}/g;
+        var regNum = /^[A-Z0-9]{18}$/;
         if(numVal == "" ){
             var errorMsg = " 请输入工号！";
             //class='msg onError' 中间的空格是层叠样式的格式
@@ -169,10 +169,9 @@ $(function () {
         var province=$("#province").val();
         var city=$("#city").val();
         var county=$("#county").val();
-        // var agree = $('.agree :checkbox:checked');
+        var agree = $('.agree').prop('checked');
             if (companyName ==''||userName==''||companyNumber==''||email==''||password==''||tel==''
-            || !$('.agree :checkbox:checked')
-            ){
+            || !agree){
                     $('#register').attr('checked',true);
                     return false;
             }else{
