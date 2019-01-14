@@ -163,6 +163,8 @@ $(function () {
                $('#register').attr('disabled',true);
                $('#Reform')[0].elements[i].focus();
                return false;
+           }else {
+               $('#register').attr('disabled',false);
            }
        }
        var companyName=$("#companyName").val();
@@ -185,7 +187,7 @@ $(function () {
                    window.location.href="login.html";
                }
            });
-       $('#register').attr('disabled',false);
+
        return true;
    })
     })
