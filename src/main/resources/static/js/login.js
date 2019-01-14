@@ -170,23 +170,23 @@ $(function () {
         var city=$("#city").val();
         var county=$("#county").val();
         var agree = $('.agree').prop('checked');
-            if (companyName ==''||userName==''||companyNumber==''||email==''||password==''||tel==''
+        if (companyName ==''||userName==''||companyNumber==''||email==''||password==''||tel==''
             || !agree){
-                    $('#register').attr('checked',true);
-                    return false;
-            }else{
-                $.post("userLoginController/userlogin",
-                    {"userCompanyName":companyName,"userName":userName,"userCompanycccNumber":companyNumber,"userEmail":email,"userPwd":password,"userTel":tel,
-                        "userProvince":province,"userCity":city,"userCounty":county},
-                    function(msg){
-                        if(msg>0){
-                            $('#register').attr('checked',false);
-                            alert("注册成功！请点击返回登录");
-                            window.location.href="login.html";
-                        }
-                    });
-                return true;
-            }
+            $('#register').attr('checked',true);
+            return false;
+        }else{
+            $.post("userLoginController/userlogin",
+                {"userCompanyName":companyName,"userName":userName,"userCompanycccNumber":companyNumber,"userEmail":email,"userPwd":password,"userTel":tel,
+                    "userProvince":province,"userCity":city,"userCounty":county},
+                function(msg){
+                    if(msg>0){
+                        $('#register').attr('checked',false);
+                        alert("注册成功！请点击返回登录");
+                        window.location.href="login.html";
+                    }
+                });
+            return true;
+        }
 
 
     });

@@ -46,7 +46,7 @@
 		<!--弹窗-->
 		<link rel="stylesheet" href="css/login.css">
 		<script type="text/javascript" src="login/js/jquery-3.2.1.min.js" ></script>
-		<!--<script type="text/javascript" src="login/js/login.js"></script>-->
+		<script type="text/javascript" src="login/js/login.js"></script>
 		<script type="text/javascript" src="login/js/startLogin.js"></script>
         <script type="text/javascript" src="js/login.js"></script>
 		<script type="text/javascript" src="login/js/register.js"></script>
@@ -80,8 +80,7 @@
 
 											<div class="space-6"></div>
 
-											<form
-													action="userLoginController/startlogin" method="post" autocomplete="off">
+											<form action="userLoginController/startlogin" method="post">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -206,7 +205,7 @@
 											<div class="space-6"></div>
 											<p>填写信息: </p>
 
-											<form id="Reform"  method="post" autocomplete="off">
+											<form id="Reform"  method="post">
 
 												<fieldset>
 													<label class="block clearfix">
@@ -216,7 +215,7 @@
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
-													
+
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input
@@ -225,7 +224,7 @@
 															<div id="divMsg"></div>
 														</span>
 													</label>
-													
+
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input
@@ -233,7 +232,7 @@
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
-													
+
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input
@@ -259,7 +258,7 @@
 															<i class="ace-icon fa fa-retweet"></i>
 														</span>
 													</label>
-													
+
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input
@@ -267,7 +266,7 @@
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
-													
+
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right" style="position: relative;">
 															<input
@@ -275,8 +274,8 @@
 															<a href="#" style="text-decoration: none;color: dodgerblue;display: inline-block;position: absolute;right: 10px;top: 5px;">发送验证码</a>
 														</span>
 													</label>
-													
-													
+
+
 													<div data-toggle="distpicker" style="margin-bottom: 10px;">
 															<p style="text-align: left;">注册地址：</p>
 														    <select  id="province" name="userProvince" class="border" data-province="河南省" style="width: 90px; margin-right: 5px;"></select>
@@ -284,8 +283,7 @@
 														    <select  id="county" name="userCounty" class="border" data-district="中原区" style="width: 90px;"></select>
 													</div>
 													<label class="block">
-														<input
-																type="checkbox" class="ace agree" />
+														<input type="checkbox" class="ace" />
 														<span class="lbl">
 															接受
 															<span
@@ -444,7 +442,7 @@
 				$('body').attr('class', 'login-layout blur-login');
 				$('#id-text2').attr('class', 'white');
 				$('#id-company-text').attr('class', 'light-blue');
-				
+
 				e.preventDefault();
 			 });
 			 

@@ -11,7 +11,7 @@ public class PanyuUser {
     private String userEmail;
     private String userTel;
     private String userPwd;
-    private String userState;
+    private String userLogPwd;
     //角色对象
     private ShiroRole shiroRole;
     //权限对象
@@ -27,7 +27,7 @@ public class PanyuUser {
         super();
     }
 
-    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState, ShiroRole shiroRole, ShiroResource shiroResource, ShiroAmdinRole shiroAmdinRole, ShiroRoleResource shiroRoleResource) {
+    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userLogPwd, ShiroRole shiroRole, ShiroResource shiroResource, ShiroAmdinRole shiroAmdinRole, ShiroRoleResource shiroRoleResource) {
         this.userId = userId;
         this.userProvince = userProvince;
         this.userCity = userCity;
@@ -38,7 +38,7 @@ public class PanyuUser {
         this.userEmail = userEmail;
         this.userTel = userTel;
         this.userPwd = userPwd;
-        this.userState = userState;
+        this.userLogPwd = userLogPwd;
         this.shiroRole = shiroRole;
         this.shiroResource = shiroResource;
         this.shiroAmdinRole = shiroAmdinRole;
@@ -125,12 +125,12 @@ public class PanyuUser {
         this.userPwd = userPwd;
     }
 
-    public String getUserState() {
-        return userState;
+    public String getUserLogPwd() {
+        return userLogPwd;
     }
 
-    public void setUserState(String userState) {
-        this.userState = userState;
+    public void setUserLogPwd(String userLogPwd) {
+        this.userLogPwd = userLogPwd;
     }
 
     public ShiroRole getShiroRole() {
@@ -178,7 +178,7 @@ public class PanyuUser {
                 ", userEmail='" + userEmail + '\'' +
                 ", userTel='" + userTel + '\'' +
                 ", userPwd='" + userPwd + '\'' +
-                ", userState='" + userState + '\'' +
+                ", userLogPwd='" + userLogPwd + '\'' +
                 ", shiroRole=" + shiroRole +
                 ", shiroResource=" + shiroResource +
                 ", shiroAmdinRole=" + shiroAmdinRole +
