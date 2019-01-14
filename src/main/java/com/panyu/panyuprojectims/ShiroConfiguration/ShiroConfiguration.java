@@ -145,7 +145,7 @@ public class ShiroConfiguration {
         map.put("/register","anon");
         map.put("/error.html","anon");
         map.put("/logout", "logout");
-       map.put("/BS/getItemList", "roles[总监]");
+       //map.put("/BS/getItemList", "roles[总监]");
        //map.put("/BS", "roles[总]");
 
         //对所有用户认证
