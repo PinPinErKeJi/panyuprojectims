@@ -79,7 +79,8 @@
 
 											<div class="space-6"></div>
 
-											<form action="userLoginController/startlogin" method="post">
+											<form
+													action="userLoginController/startlogin" method="post" id="loginForm">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -99,16 +100,16 @@
 
 													<div class="clearfix">
 														<label class="inline">
-															<input type="checkbox" class="ace" />
+															<input
+																	type="checkbox" class="ace" id="remember" />
 															<span class="lbl"> 记住</span>
 														</label>
-
-														<button type="button" id="loginbutton" class="width-35 pull-right btn btn-sm btn-primary">
+														<button type="submit"
+																id="loginbutton" class="width-35 pull-right btn btn-sm btn-primary">
 															<i class="ace-icon fa fa-key"></i>
 															<span class="bigger-110">登录</span>
 														</button>
 													</div>
-
 													<div class="space-4"></div>
 												</fieldset>
 											</form>
@@ -295,7 +296,8 @@
 													<div class="space-24"></div>
 
 													<div class="clearfix">
-														<button type="reset" class="width-30 pull-left btn btn-sm">
+														<button type="reset"
+																class="width-30 pull-left btn btn-sm" id="reset">
 															<i class="ace-icon fa fa-refresh"></i>
 															<span class="bigger-110">重置</span>
 														</button>

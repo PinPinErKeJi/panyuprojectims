@@ -44,7 +44,7 @@ $("form :input").blur(function(){
     if($(this).is("#companyNumber")){
         var numVal = $.trim(this.value);
         //原生js去空格方式：this.replace(/(^\s*)|(\s*$)/g, "")
-        var regNum = /[0-9A-Z]{18}/;
+        var regNum = /^[^_IOZSVa-z\W]{2}\d{6}[^_IOZSVa-z\W]{10}$/g;
         if(numVal == "" ){
             var errorMsg = " 请输入工号！";
             //class='msg onError' 中间的空格是层叠样式的格式
@@ -156,27 +156,69 @@ $('.btn').on('click',function () {
 
 
 $(function () {
-    var companyName = $('#companyName').val();
-    var userName = $('#userName').val();
-    var companyNumber = $('#companyNumber').val();
-    var email = $('#email').val();
-    var password = $('#password').val();
-    var surePassword = $('#surePassword').val();
-    var tel = $('#tel').val();
-    var code = $('#code').val();
-
-        if (companyName==''&&userName==''&&companyNumber==''&&email==''
-            &&password==''&&surePassword==''&&tel==''&&code==''){
-            return false;
-            alert("请填写完整信息");
-            document.getElementById('#register').isDisabled = false;
-        }
-        $(".ace").click(function () {
-            if ($(this).prop("checked")) {
-
-            }else{
-                return false;
-                alert("请勾选用户协议");
-            }
-        });
+   var register = document.getElementById('degister');
+   $('#register').on('click',function () {
+       for (var i = 0; i < $('#Reform')[0].elements.length - 1;i++){
+           if($('#Reform')[0].elements[i].value=="")
+           {
+               alert("当前表单不能有空项");
+               $('#Reform')[0].elements[i].focus();
+               return false;
+           }
+       }
+       if ("$('.ace'):checkbox:checkbox") {
+           return false;
+           alert('请勾选用户协议')
+       }
+       return true;
+   })
     })
+
+
+//记住用户名密码
+window.onload = function(){
+    var oForm = document.getElementById('loginForm');
+    var oUser = document.getElementById('userName1');
+    var oPswd = document.getElementById('userPwd');
+    var oRemember = document.getElementById('remember');
+    //页面初始化时，如果帐号密码cookie存在则填充
+    if(getCookie('userName1') && getCookie('userPwd')){
+        oUser.value = getCookie('userName1');
+        oPswd.value = getCookie('userPwd');
+        oRemember.checked = true;
+    }
+    //复选框勾选状态发生改变时，如果未勾选则清除cookie
+    oRemember.onchange = function(){
+        if(!this.checked){
+            delCookie('userName1');
+            delCookie('userPwd');
+        }
+    };
+    //表单提交事件触发时，如果复选框是勾选状态则保存cookie
+    oForm.onsubmit = function(){
+        if(remember.checked){
+            setCookie('userName1',oUser.value,7); //保存帐号到cookie，有效期7天
+            setCookie('userPwd',oPswd.value,7); //保存密码到cookie，有效期7天
+        }
+    };
+};
+//设置cookie
+function setCookie(name,value,day){
+    var date = new Date();
+    date.setDate(date.getDate() + day);
+    document.cookie = name + '=' + value + ';expires='+ date;
+};
+//获取cookie
+function getCookie(name){
+    var reg = RegExp(name+'=([^;]+)');
+    var arr = document.cookie.match(reg);
+    if(arr){
+        return arr[1];
+    }else{
+        return '';
+    }
+};
+//删除cookie
+function delCookie(name){
+    setCookie(name,null,-1);
+};
