@@ -1,5 +1,6 @@
 package com.panyu.panyuprojectims.ShiroConfiguration;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.panyu.panyuprojectims.shiroRealm.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
@@ -66,6 +67,10 @@ public class ShiroConfiguration {
         return ehCacheManager;
 
     }
+    @Bean
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
+    }
 
     @Bean(name="sessionManager")
     public DefaultWebSessionManager defaultWebSessionManager() {
@@ -90,7 +95,7 @@ public class ShiroConfiguration {
          * 设置浏览器cookie过期时间，如果不设置默认为-1，表示关闭浏览器即过期
          * cookie的单位为秒 比如60*60为1小时
          */
-        simpleCookie.setMaxAge(-1);
+        simpleCookie.setMaxAge(864000);
         return simpleCookie;
 
     }
@@ -140,6 +145,9 @@ public class ShiroConfiguration {
         map.put("/register","anon");
         map.put("/error.html","anon");
         map.put("/logout", "logout");
+       map.put("/BS/getItemList", "roles[总监]");
+       //map.put("/BS", "roles[总]");
+
         //对所有用户认证
         map.put("/*", "authc");
         map.put("/*.*", "authc");

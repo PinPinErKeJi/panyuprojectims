@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
     <meta charset="UTF-8">
     <title>信息管理界面</title>
     <script type="text/javascript" src="js/jquery.min.js"></script>
@@ -37,12 +39,13 @@
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
-                    <a href="BS/BS-module-repository.html">基站模块库</a>
+                    <a href="BS/BS-module-repository.html" shiro:hasRole="基站模块库">基站模块库</a>
+
                 </li>
 
                 <li>
                     <i class="panel-icon icon-avatar"></i>
-                    <a href="BS/BS-project-message.html">基站工程基本信息</a>
+                    <a href="BS/BS-project-message.html" shiro:hasPermission="基站工程基本信息">基站工程基本信息</a>
                 </li>
 
                 <li>

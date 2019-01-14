@@ -48,12 +48,12 @@
         values (sys_guid(), #{userProvince,jdbcType=VARCHAR}, #{userCity,jdbcType=VARCHAR}, #{userCounty,jdbcType=VARCHAR},#{userCompanyName,jdbcType=VARCHAR}, #{userCompanycccNumber,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR},#{userTel,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},0)
     </insert>
     <!-- 根据当前登录的用户查询用户所拥有的所有角色 -->
-    <select id="queryRolesByUsername" resultMap="result_PanyuUser_Map">
+    <select id="queryRolesByUsername" parameterType="com.panyu.panyuprojectims.entity.PanyuUser" resultType="String" >
         select s_role.role_name from shiro_role s_role inner join shiro_amdin_role s_a_r on s_role.role_id=s_a_r.role_id
         inner join panyu_user p_u on p_u.user_id=s_a_r.user_id where p_u.user_name= #{userName,jdbcType=VARCHAR}
     </select>
     <!-- 根据当前登录的用户查询用户所拥有的所有权限 -->
-    <select id="queryResByUsername" resultMap="result_PanyuUser_Map">
+    <select id="queryResByUsername" parameterType="com.panyu.panyuprojectims.entity.PanyuUser" resultType="String" >
         select s_res.resource_name from shiro_resource s_res ,shiro_role_resource s_r_res ,shiro_amdin_role s_a_r,panyu_user p_y
         where s_res.resource_id=s_r_res.resource_id and s_r_res.role_resource_id=s_a_r.admin_role_id and s_a_r.user_id=p_y.user_id and
         p_y.user_name=#{userName,jdbcType=VARCHAR}

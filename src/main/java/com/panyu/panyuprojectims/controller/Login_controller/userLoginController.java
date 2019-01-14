@@ -5,12 +5,14 @@ import com.panyu.panyuprojectims.service.Impl.PanyuUserServiceImpl;
 import com.panyu.panyuprojectims.service.PanyuUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @RequestMapping("/userLoginController")
@@ -36,7 +38,6 @@ public class userLoginController {
         int count=panyuUserService.register(userProvince,userCity,userCounty,userCompanyName,userCompanycccNumber,userName,userEmail,userTel,newPs);
         return count;
     }
-
     @RequestMapping("/startlogin")
     @ResponseBody
     public String startlogin(String userName,String userPwd){
