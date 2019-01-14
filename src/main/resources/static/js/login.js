@@ -1,10 +1,10 @@
 //为表单的必填文本框添加提示信息（选择form中的所有后代input元素）
-$("form :input.required").each(function () {
-    //通过jquery api：$("HTML字符串") 创建jquery对象
-    var $required = $("<strong class='high'>*</strong>");
-    //添加到this对象的父级对象下
-    $(this).parent().append($required);
-});
+// $("form :input.required").each(function () {
+//     //通过jquery api：$("HTML字符串") 创建jquery对象
+//     var $required = $("<strong class='high'>*</strong>");
+//     //添加到this对象的父级对象下
+//     $(this).parent().append($required);
+// });
 
 //为表单元素添加失去焦点事件
 $("form :input").blur(function(){
@@ -44,7 +44,7 @@ $("form :input").blur(function(){
     if($(this).is("#companyNumber")){
         var numVal = $.trim(this.value);
         //原生js去空格方式：this.replace(/(^\s*)|(\s*$)/g, "")
-        var regNum = /[0-9A-Z]{18}/;
+        var regNum = /[^_IOZSVa-z\W]{2}\d{6}[^_IOZSVa-z\W]{10}/g;
         if(numVal == "" ){
             var errorMsg = " 请输入工号！";
             //class='msg onError' 中间的空格是层叠样式的格式
@@ -169,9 +169,11 @@ $(function () {
         var province=$("#province").val();
         var city=$("#city").val();
         var county=$("#county").val();
+        // var agree = $('.agree :checkbox:checked');
             if (companyName ==''||userName==''||companyNumber==''||email==''||password==''||tel==''
-            || !$('.agree:checkbox:checked')
+            || !$('.agree :checkbox:checked')
             ){
+                    $('#register').attr('checked',true);
                     return false;
             }else{
                 $.post("userLoginController/userlogin",
@@ -179,7 +181,8 @@ $(function () {
                         "userProvince":province,"userCity":city,"userCounty":county},
                     function(msg){
                         if(msg>0){
-                            alert("注册成功！请点击返回登录");
+                            $('#register').attr('checked',false);
+                            // alert("注册成功！请点击返回登录");
                             window.location.href="login.html";
                         }
                     });
