@@ -1,5 +1,6 @@
 package com.panyu.panyuprojectims.controller.Login_controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.panyu.panyuprojectims.entity.PanyuUser;
 import com.panyu.panyuprojectims.service.Impl.PanyuUserServiceImpl;
 import com.panyu.panyuprojectims.service.PanyuUserService;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
 
 @RequestMapping("/userLoginController")
 @Controller
@@ -40,7 +43,7 @@ public class userLoginController {
     }
     @RequestMapping("/startlogin")
     @ResponseBody
-    public String startlogin(String userName,String userPwd){
+    public String startlogin(String userName, String userPwd, @RequestParam(value = "rememberMe",required = false) boolean rememberMe, HttpSession session){
        // String userName=panyuUser.getUserName();
        // String userPwd=panyuUser.getUserPwd();
         String msg="";
@@ -51,10 +54,11 @@ public class userLoginController {
             //创建一个登录用户对象，传递用户名和密码
             UsernamePasswordToken token= new UsernamePasswordToken(userName,userPwd);
             //记住密码
-            token.setRememberMe(true);
+            token.setRememberMe(rememberMe);
 
             try { //执行登录
                 currentUser.login(token);
+                session.setAttribute("userName",userName);
             } catch ( UnknownAccountException uae) {
                 System.out.println("------------用户名错误----There is no user with username of " + token.getPrincipal());
                 msg="1";
