@@ -164,8 +164,9 @@ $(function () {
                $('#Reform')[0].elements[i].focus();
                return false;
            }else {
-               return true;
                $('#register').attr('disabled',false);
+               return true;
+
            }
        }
        var companyName=$("#companyName").val();
