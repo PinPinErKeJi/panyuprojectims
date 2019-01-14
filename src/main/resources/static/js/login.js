@@ -160,13 +160,9 @@ $(function () {
        for (var i = 0; i < $('#Reform')[0].elements.length - 1;i++){
            if($('#Reform')[0].elements[i].value=="")
            {
-               $('#register').attr('disabled',true);
+               // $('#register').attr('disabled',true);
                $('#Reform')[0].elements[i].focus();
                return false;
-           }else {
-               $('#register').attr('disabled',false);
-               return true;
-
            }
        }
        var companyName=$("#companyName").val();
