@@ -44,7 +44,7 @@ $("form :input").blur(function(){
     if($(this).is("#companyNumber")){
         var numVal = $.trim(this.value);
         //原生js去空格方式：this.replace(/(^\s*)|(\s*$)/g, "")
-        var regNum = /^[A-Z0-9]{18}$/;
+        var regNum = /[1-9A-GY]{1}[1239]{1}[1-5]{1}[0-9]{5}[0-9A-Z]{10}/;
         if(numVal == "" ){
             var errorMsg = " 请输入工号！";
             //class='msg onError' 中间的空格是层叠样式的格式
@@ -133,16 +133,16 @@ $("form :input").blur(function(){
 });
 
 //点击重置按钮时，通过trigger()来触发文本框的失去焦点事件
-$("#reset").click(function(){
-    //trigger 事件执行完后，浏览器会为submit按钮获得焦点
-    // $("form .required:input").trigger("blur");
-    var numError = $("form .onError").length;
-    if(numError){
-        return false;
-    }else{
-        alert("注册成功！");
-    }
-});
+// $("#reset").click(function(){
+//     //trigger 事件执行完后，浏览器会为submit按钮获得焦点
+//     // $("form .required:input").trigger("blur");
+//     var numError = $("form .onError").length;
+//     if(numError){
+//         return false;
+//     }else{
+//         alert("注册成功！");
+//     }
+// });
 
 //用户协议,控制显示隐藏
 $('.mask').hide();
@@ -181,7 +181,7 @@ $(function () {
                     function(msg){
                         if(msg>0){
                             $('#register').attr('checked',false);
-                            // alert("注册成功！请点击返回登录");
+                            alert("注册成功！请点击返回登录");
                             window.location.href="login.html";
                         }
                     });
