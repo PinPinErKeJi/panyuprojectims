@@ -46,7 +46,7 @@
 		<!--弹窗-->
 		<link rel="stylesheet" href="css/login.css">
 		<script type="text/javascript" src="login/js/jquery-3.2.1.min.js" ></script>
-		<script type="text/javascript" src="login/js/login.js"></script>
+		<!--<script type="text/javascript" src="login/js/login.js"></script>-->
 		<script type="text/javascript" src="login/js/startLogin.js"></script>
         <script type="text/javascript" src="js/login.js"></script>
 		<script type="text/javascript" src="login/js/register.js"></script>
@@ -80,7 +80,8 @@
 
 											<div class="space-6"></div>
 
-											<form action="userLoginController/startlogin" method="post">
+											<form
+													action="userLoginController/startlogin" method="post" autocomplete="off">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -205,7 +206,7 @@
 											<div class="space-6"></div>
 											<p>填写信息: </p>
 
-											<form id="Reform"  method="post">
+											<form id="Reform"  method="post" autocomplete="off">
 
 												<fieldset>
 													<label class="block clearfix">
@@ -283,7 +284,8 @@
 														    <select  id="county" name="userCounty" class="border" data-district="中原区" style="width: 90px;"></select>
 													</div>
 													<label class="block">
-														<input type="checkbox" class="ace" />
+														<input
+																type="checkbox" class="ace agree" />
 														<span class="lbl">
 															接受
 															<span
