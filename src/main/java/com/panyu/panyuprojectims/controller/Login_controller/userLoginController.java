@@ -58,7 +58,6 @@ public class userLoginController {
 
             try { //执行登录
                 currentUser.login(token);
-                session.setAttribute("userName",userName);
             } catch ( UnknownAccountException uae) {
                 System.out.println("------------用户名错误----There is no user with username of " + token.getPrincipal());
                 msg="1";
