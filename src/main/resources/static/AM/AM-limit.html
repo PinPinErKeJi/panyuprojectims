@@ -19,26 +19,32 @@
             charset="utf-8"></script>
 </head>
 <body class="easyui-layout">
-<div data-options="region:'west',title:'用户信息',split:true" style="width:100%;">
-    <table id="dg1" class="easyui-datagrid" title="" style="width:1000px;height:350px;margin-left: 100px;"
-           data-options="fitColumns:true,singleSelect:true,pagination:true">
+<div>
 
-        <thead>
-        <tr>
-            <th data-options="field:'UserId',width:60"> </th>
-            <th data-options="field:'UserName',width:200">用户名</th>
-            <th data-options="field:'UserPwd',width:200">角色</th>
-            <th data-options="field:'_operate',width:200,align:'center',formatter:formatOper">操作</th>
-        </tr>
-        </thead>
-    </table>
-    <div id="tb1">
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">增加用户</a>
+    <div>
+        <!--搜索框-->
+        <input class="easyui-textbox" name="userName" id="user-name" placeholder="请输入关键字">
+        <a id="user-search" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
+        <!--创建表格-->
+        <div id="datagrid" class="easyui-datagrid" style="width: 100%" ></div>
+
+        <!--添加弹窗-->
+        <div class="easyui-dialog" id="dialog" style="width: 300px; height: 300px;"data-options="resizable:true,modal:true,closable:true,closed:true,">
+            <form id="addForm" style="padding: 10px;" method="post">
+                <div style="margin: 20px;">
+                    <label>角色名：</label><input type="text" name="userName"
+                                             id="username"class="easyui-textbox"/>
+                </div>
+                <div style="margin-left: 30px;">
+                    <label>角色：</label><input type="text" name="userlogpwd"
+                                            id="password" class="easyui-textbox"/>
+                </div>
+            </form>
+        </div>
     </div>
 
-
     <div class="limit">
-        <p>角色菜单权限</p>
+        <h3>角色菜单权限</h3>
 
         <div  class="wrapper">
             <div class="aiui">
@@ -400,12 +406,12 @@
                 </div>
             </div>
         </div>
-        
+
         <div style="margin-top: 20px;">
             <div style="margin-left: 20px;vertical-align: middle">
                 <input style="vertical-align: middle" type="checkbox" value="全选"
                        class="all"
-                       name="allSelect"/>全选
+                       name="allSelect" data-options="checkbox:true"/>全选
             </div>
             <div class="btn">
                 <button class="reset">重置</button>
@@ -414,31 +420,9 @@
         </div>
     </div>
 
-
-
-
 </div>
-<!-- ++++++++++++++++++++弹出的增加用户框++++++++++++++++++++++++++++++++++++++++ -->
-<div class="easyui-dialog" id="add"
-     data-options="title:'增加用户',closable:true,closed:true,
-        buttons:[{text:'确定',handler:queding},
-        {text:'关闭',handler:function(){$('#add').dialog('close')}}]">
-
-    <form action="">
-        <div>
-            <label>用户名：</label><input type="text" id="username"/>
-        </div>
-        <div>
-            <label>角色：</label><input type="text" id="rolename" />
-        </div>
-    </form>
-</div>
-
 </body>
 <script type="text/javascript">
-    //++++++++++增加用户按钮++++++++
-    $("#dg1").datagrid({
-        toolbar:'#tb1'
-    });
+
 </script>
 </html>
