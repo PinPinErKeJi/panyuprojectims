@@ -12,6 +12,7 @@ public class PanyuUser {
     private String userTel;
     private String userPwd;
     private String userState;
+    private String userlogpwd;
 
     //角色对象
     private ShiroRole shiroRole;
@@ -27,8 +28,26 @@ public class PanyuUser {
     public PanyuUser() {
         super();
     }
+    public PanyuUser( String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState, String userlogpwd, ShiroRole shiroRole, ShiroResource shiroResource, ShiroAmdinRole shiroAmdinRole, ShiroRoleResource shiroRoleResource) {
 
-    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState, ShiroRole shiroRole, ShiroResource shiroResource, ShiroAmdinRole shiroAmdinRole, ShiroRoleResource shiroRoleResource) {
+        this.userProvince = userProvince;
+        this.userCity = userCity;
+        this.userCounty = userCounty;
+        this.userCompanyName = userCompanyName;
+        this.userCompanycccNumber = userCompanycccNumber;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userTel = userTel;
+        this.userPwd = userPwd;
+        this.userState = userState;
+        this.userlogpwd = userlogpwd;
+        this.shiroRole = shiroRole;
+        this.shiroResource = shiroResource;
+        this.shiroAmdinRole = shiroAmdinRole;
+        this.shiroRoleResource = shiroRoleResource;
+    }
+
+    public PanyuUser(String userId, String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd, String userState, String userlogpwd, ShiroRole shiroRole, ShiroResource shiroResource, ShiroAmdinRole shiroAmdinRole, ShiroRoleResource shiroRoleResource) {
         this.userId = userId;
         this.userProvince = userProvince;
         this.userCity = userCity;
@@ -40,6 +59,7 @@ public class PanyuUser {
         this.userTel = userTel;
         this.userPwd = userPwd;
         this.userState = userState;
+        this.userlogpwd = userlogpwd;
         this.shiroRole = shiroRole;
         this.shiroResource = shiroResource;
         this.shiroAmdinRole = shiroAmdinRole;
@@ -166,6 +186,13 @@ public class PanyuUser {
         this.shiroRoleResource = shiroRoleResource;
     }
 
+    public String getUserlogpwd() {
+        return userlogpwd;
+    }
+    public void setUserlogpwd(String userlogpwd) {
+        this.userlogpwd = userlogpwd;
+    }
+
     @Override
     public String toString() {
         return "PanyuUser{" +
@@ -180,6 +207,7 @@ public class PanyuUser {
                 ", userTel='" + userTel + '\'' +
                 ", userPwd='" + userPwd + '\'' +
                 ", userState='" + userState + '\'' +
+                ", userlogpwd='" + userlogpwd + '\'' +
                 ", shiroRole=" + shiroRole +
                 ", shiroResource=" + shiroResource +
                 ", shiroAmdinRole=" + shiroAmdinRole +
