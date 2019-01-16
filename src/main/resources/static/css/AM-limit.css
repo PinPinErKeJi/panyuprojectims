@@ -42,6 +42,7 @@ table{
 .limit{
     width: 1000px;
     overflow: hidden;
+    padding: 20px;
 }
 .btn{
     float: right;
