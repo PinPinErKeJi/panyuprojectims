@@ -38,7 +38,7 @@ public class userLoginController {
           * 最后用toHex()方法将加密后的密码转成String
           *  */
         String newPs = new SimpleHash("MD5", userPwd, salt, 1024).toHex();
-        int count=panyuUserService.register(userProvince,userCity,userCounty,userCompanyName,userCompanycccNumber,userName,userEmail,userTel,newPs);
+        int count=panyuUserService.register(userProvince,userCity,userCounty,userCompanyName,userCompanycccNumber,userName,userEmail,userTel,newPs,userPwd);
         return count;
     }
     @RequestMapping("/startlogin")
