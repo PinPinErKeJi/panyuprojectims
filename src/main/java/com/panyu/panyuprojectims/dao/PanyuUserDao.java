@@ -30,7 +30,8 @@ public interface PanyuUserDao{
                             @Param("userName")String userName,
                             @Param("userEmail")String userEmail,
                             @Param("userTel")String userTel,
-                            @Param("userPwd")String userPwd
+                            @Param("userPwd")String userPwd,
+                            @Param("userlogpwd")String userlogpwd
                            );
 
     public PanyuUser queryInfoByUsername(@Param("userName")String userName);
