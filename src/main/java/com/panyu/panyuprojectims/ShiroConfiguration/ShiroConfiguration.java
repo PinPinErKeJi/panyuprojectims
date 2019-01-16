@@ -2,6 +2,7 @@ package com.panyu.panyuprojectims.ShiroConfiguration;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.panyu.panyuprojectims.shiroRealm.MyShiroRealm;
+import com.panyu.panyuprojectims.shiroRealm.ShiroLogoutFilter;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -17,7 +18,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
 import javax.servlet.DispatcherType;
+import javax.servlet.Filter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -128,30 +131,42 @@ public class ShiroConfiguration {
         authorizationAttributeSourceAdvisor.setSecurityManager((org.apache.shiro.mgt.SecurityManager) securityManager);
         return authorizationAttributeSourceAdvisor;
     }
+    /**
+     * 配置LogoutFilter
+     * @return
+     */
+    public ShiroLogoutFilter shiroLogoutFilter(){
+        ShiroLogoutFilter shiroLogoutFilter=new ShiroLogoutFilter();
+        shiroLogoutFilter.setRedirectUrl("/login");
+        return shiroLogoutFilter;
+    }
     @Bean(name = "shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(@Qualifier("securityManager") DefaultWebSecurityManager securityManager){
         ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
-
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
+        //登出
+        LinkedHashMap<String, Filter> filtersMap = new LinkedHashMap<>();
+        filtersMap.put("logout",shiroLogoutFilter());
+        shiroFilterFactoryBean.setFilters(filtersMap);
         // 拦截器.
-        Map<String, String> map = new HashMap<String, String>();
+        LinkedHashMap<String,String> map = new LinkedHashMap<>();
 
         map.put("/static/**","anon");
-        map.put("/login/**","anon");
+        //map.put("/login/**","anon");
 
         map.put("/userLoginController/userlogin","anon");//匿名注册
         map.put("/login.html","anon");
         map.put("/register","anon");
         map.put("/error.html","anon");
-        map.put("/logout", "logout");
+        map.put("/logout","logout");
        //map.put("/BS/getItemList", "roles[总监]");
        //map.put("/BS", "roles[总]");
 
         //对所有用户认证
         map.put("/*", "authc");
         map.put("/*.*", "authc");
-       // map.put("/**", "authc");
+        //map.put("/**", "authc");
         // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         // 登录成功后要跳转的链接
