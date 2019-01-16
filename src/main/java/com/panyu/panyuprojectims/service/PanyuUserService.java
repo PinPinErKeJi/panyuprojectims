@@ -3,9 +3,21 @@ import java.util.List;
 import java.util.Map;
 
 import com.panyu.panyuprojectims.entity.PanyuUser;
+import com.panyu.panyuprojectims.utils.PageHelperUtil;
 import org.apache.ibatis.annotations.Param;
 
 public interface PanyuUserService{
+
+    //删除用户
+    boolean deletePanyuUser(String[] ids);
+
+    //添加用户
+    boolean addPanyuUser(String userName,
+                         String userPwd,
+                         String userlogpwd);
+    //分页展示用户
+    PageHelperUtil queryAllPanyuUser(int page, int rows, String userName);
+
     public int register(  @Param("userProvince")String userProvince,
                            @Param("userCity")String userCity,
                            @Param("userCounty")String userCounty,
