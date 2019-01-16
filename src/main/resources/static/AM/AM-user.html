@@ -23,12 +23,12 @@
 
     <!--添加弹窗-->
     <div class="easyui-dialog" id="dialog" style="width: 300px; height: 300px;"data-options="resizable:true,modal:true,closable:true,closed:true,">
-        <form style="padding: 10px;" method="post">
+        <form id="addForm" style="padding: 10px;" method="post">
             <div style="margin: 20px;">
-                <label>用户名：</label><input type="text" id="username"class="easyui-textbox"/>
+                <label>用户名：</label><input type="text" name="userName" id="username"class="easyui-textbox"/>
             </div>
             <div style="margin-left: 30px;">
-                <label>密码：</label><input type="text" id="password" class="easyui-textbox"/>
+                <label>密码：</label><input type="text" name="userlogpwd" id="password" class="easyui-textbox"/>
             </div>
         </form>
     </div>
@@ -39,21 +39,23 @@
 </body>
 <script type="text/javascript">
 
+
     var dialog = $('#dialog');
     var form = $('form');
 
     $(function () {
         dialog.dialog('close');
-    })
+    });
 
     $(function () {
         dialog.dialog('close');
         $('#datagrid').datagrid({
-            url:'',//数据来源
+            url:'queryAllPanyuUser',//数据来源
             columns:[[
                 {field:'',checkbox:true},
-                {field:'username',title:'用户名',width:300,align:'center'},
-                {field:'password',title:'密码',width:300,align:'center'},
+                {field:'userId',title:'密码',width:300,align:'center',hidden:true},
+                {field:'userName',title:'用户名',width:300,align:'center'},
+                {field:'userlogpwd',title:'密码',width:300,align:'center'},
             ]],
             rownumbers:true,//显示行号
             singleSelect:false,//是否单选
@@ -61,47 +63,50 @@
             pageList:[10,20,50,100],//每页行数选择列表
             pageSize:10,//出示每页行数
             remoteSort:true,//是否服务器端排序，设成false，才能客户端排序
-            sortName:'sno',//设置排序列
-            sortOrder:'desc',//排序方式
-            idField:'id',
+            //  sortName:'sno',//设置排序列
+            // sortOrder:'desc',//排序方式
+            //  idField:'id',
             toolbar:[
                 {
                     iconCls:'icon-add',
                     text:'添加',
                     handler:function () {
                         dialog.dialog('open');
-
                     }
                 },
                 {
                     iconCls:'icon-remove',
                     text:'删除',
                     handler:function () {
-                        var data=$("#datagrid").datagrid("getSelections");
-                        if(data.length>0)
+                        var id=$("#datagrid").datagrid("getSelections");
+                        if(id.length==0)
                         {
-                            //alert("选中条数="+data.length);
+                            alert('请选中一条数据！');
+                        }
+                        else
+                        {
+
+                            alert("选中条数="+id.length);
                             $.messager.confirm("确认","确实要删除吗？",function(r){
                                 if(r)
                                 {
-                                    //alert("执行删除sno="+data[0].sno);
-                                    //$.get("DeleteStudentServlet?sno="+data[0].sno,
                                     //利用数组，保存选中记录的主键
                                     var snos=[];
-                                    for(var i=0;i<data.length;i++)
+                                    for(var i=0;i<id.length;i++)
                                     {
-                                        snos[i]=data[i].sno;
+                                        snos[i]=id[i].userId;
+                                        console.log("ids:"+snos[i])
                                     }
 
 
-                                    $.get("DeleteStudentServlet?snos="+snos,
-                                        function(rtn){
-                                            var msg=eval("("+rtn+")");
-                                            if(msg.success)
-                                            {
-                                                $('#st').datagrid('reload');
-                                            }
-                                            alert('请选中一条数据！');
+                                    $.get("deletePanyuUser?ids="+snos,
+                                        function(data){
+                                            //var msg=eval("("+rtn+")");
+                                            console.log("data:"+data);
+                                            /* if(data==true)
+                                             {*/
+                                            $('#datagrid').datagrid('reload');
+                                            /*  }*/
 
                                         });
 
@@ -110,17 +115,12 @@
 
 
                         }
-                        else
-                        {
-                            alert('请选中一条数据！');
-                        }
 
                     }
                 },
             ]
         })
     })
-
     $(function () {
         dialog.dialog({
             title:'添加用户',
@@ -129,19 +129,25 @@
                 iconCls:'icon-save',
                 handler:function () {
 
-                    var message={
-                        "username":$("#username").val(),
-                        "password":$("#password").val(),
-                    };
+                    /*var message={*/
+                    var  userName=$("#username").val().trim();
+                    var userlogpwd=$("#password").val().trim();
+                    //console.log("userName:"+userName);
+                    // console.log("userlogpwd:"+userlogpwd);
+                    /*  };*/
+
                     if($("#username").val()!=""&&$("#password").val()!="")
                     {
                         $.ajax({
                             type:"post",
-                            url:"servlet/adduserServlet",
-                            data:{"Message":JSON.stringify(message)},
+                            url:"addPanyuUser",
+                            data:{"userName":userName,"userlogpwd":userlogpwd},
                             success:function(){
-                                $('#datagrid').datagrid('reload');
                                 alert("添加成功！");
+
+                                dialog.dialog('close');
+                                $("#addForm").form("clear");
+                                $('#datagrid').datagrid('reload');
                                 $("#username").val("");
                                 $("#password").val("");
                             }
@@ -168,11 +174,17 @@
     });
 
 
+
     //点击搜索
     $("#user-search").on("click",function () {
-        var f=$("form").serialize();
-        $("#datagrid").datagrid({url:"StudentServlet?"+f}).datagrid('load');
+        var  userName=$("#user-name").val().trim();
+        console.log("名字:"+userName);
+        $("#datagrid").datagrid({url:"queryAllPanyuUser?userName="+userName}).datagrid('load');
     });
+
+
+
+
 
 </script>
 </html>

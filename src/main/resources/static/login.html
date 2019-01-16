@@ -80,7 +80,8 @@
 
 											<div class="space-6"></div>
 
-											<form action="userLoginController/startlogin" method="post">
+											<form
+													action="userLoginController/startlogin" method="post" id="loginForm">
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
@@ -99,12 +100,15 @@
 													<div class="space"></div>
 													<div class="clearfix">
 														<label class="inline">
-															<input id="idcheckbox" type="checkbox" name="rememberMe"  title="记住我" class="ace" />
+															<input
+																	id="idcheckbox" type="checkbox" name="rememberMe"  title="记住我" class="ace remember" />
 															<span class="lbl"> 记住</span>
 														</label>
-														<button type="button" id="loginbutton" class="width-35 pull-right btn btn-sm btn-primary">
+														<button type="button"
+																id="loginbutton" class="width-35 pull-right btn btn-sm btn-primary loginbutton">
 															<i class="ace-icon fa fa-key"></i>
-															<span class="bigger-110">登录</span>
+															<span
+																	class="bigger-110">登录</span>
 														</button>
 													</div>
 
@@ -203,7 +207,7 @@
 											<div class="space-6"></div>
 											<p>填写信息: </p>
 
-											<form id="Reform"  method="post">
+											<form id="Reform"  method="post" autocomplete="off">
 
 												<fieldset>
 													<label class="block clearfix">
@@ -281,7 +285,8 @@
 														    <select  id="county" name="userCounty" class="border" data-district="中原区" style="width: 90px;"></select>
 													</div>
 													<label class="block">
-														<input type="checkbox" class="ace" />
+														<input
+																type="checkbox" class="ace agree" />
 														<span class="lbl">
 															接受
 															<span
@@ -417,23 +422,23 @@
 				$(target).addClass('visible');//show target
 			 });
 			});
-			
-			
-			
+
+
+
 			//you don't need this, just used for changing background
 			jQuery(function($) {
 			 $('#btn-login-dark').on('click', function(e) {
 				$('body').attr('class', 'login-layout');
 				$('#id-text2').attr('class', 'white');
 				$('#id-company-text').attr('class', 'blue');
-				
+
 				e.preventDefault();
 			 });
 			 $('#btn-login-light').on('click', function(e) {
 				$('body').attr('class', 'login-layout light-login');
 				$('#id-text2').attr('class', 'grey');
 				$('#id-company-text').attr('class', 'blue');
-				
+
 				e.preventDefault();
 			 });
 			 $('#btn-login-blur').on('click', function(e) {
@@ -443,7 +448,7 @@
 
 				e.preventDefault();
 			 });
-			 
+
 			});
 
 

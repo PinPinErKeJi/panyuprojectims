@@ -39,6 +39,47 @@
         </association>
     </resultMap>
 
+    <!--删除用户-->
+    <delete id="deletePanyuUser">
+        delete from panyu_user where user_id in
+        <foreach collection="array" open="(" separator="," close=")" item="ids">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <!--添加用户-->
+    <insert id="addPanyuUser">
+        insert into panyu_user (USER_ID,USER_NAME,USER_PWD,USER_STATE,user_log_pwd)
+        values (
+        sys_guid(),
+        #{userName,jdbcType=VARCHAR},
+        #{userPwd,jdbcType=VARCHAR},
+        '0',
+        #{userlogpwd,jdbcType=VARCHAR})
+    </insert>
+
+    <!--分页展示用户名和登录密码-->
+    <select id="queryPanyuUserList" resultMap="result_PanyuUser_Map">
+        select * from (select u.*,rownum r from (select * from panyu_user
+        <where>
+            <if test="userName !=null and userName !=''">
+                and USER_NAME like #{userName}
+            </if>
+        </where>
+        )u)
+        where r between #{start} and #{end}
+    </select>
+
+    <!--查询用户的总数-->
+    <select id="queryCountPanyuUser" resultType="long">
+        select count(*) from panyu_user
+        <where>
+            <if test="userName !=null and userName !=''">
+                and USER_NAME like #{userName}
+            </if>
+        </where>
+    </select>
+
 
     <select id="queryInfoByUsername" resultMap="result_PanyuUser_Map">
             select * from panyu_user where user_name = #{userName,jdbcType=VARCHAR}
