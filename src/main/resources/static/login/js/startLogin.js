@@ -11,6 +11,7 @@ $(function () {
                 }else if(msg==2){
                     alert("对不起密码输入错误")
                 }else if(msg==""){
+                    sessionStorage.setItem("userName",userName1)
                     window.location.href="index.html";
                 }
         });
