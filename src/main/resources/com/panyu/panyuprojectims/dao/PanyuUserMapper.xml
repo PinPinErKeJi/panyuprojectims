@@ -14,6 +14,7 @@
         <result column="USER_TEL" property="userTel" />
         <result column="USER_PWD" property="userPwd" />
         <result column="USER_STATE" property="userState" />
+        <result column="user_log_pwd" property="userlogpwd" />
         <association property="shiroRole" javaType="ShiroRole">
             <id column="ROLE_ID" property="roleId" />
             <result column="ROLE_NAME" property="roleName" />
@@ -85,8 +86,8 @@
             select * from panyu_user where user_name = #{userName,jdbcType=VARCHAR}
     </select>
     <insert id="register" parameterType="com.panyu.panyuprojectims.entity.PanyuUser">
-        insert into panyu_user (USER_ID, USER_PROVINCE, USER_CITY, USER_COUNTY, USER_COMPANY_NAME, USER_COMPANYCCC_NUMBER, USER_NAME, USER_EMAIL,user_tel ,USER_PWD,user_state)
-        values (sys_guid(), #{userProvince,jdbcType=VARCHAR}, #{userCity,jdbcType=VARCHAR}, #{userCounty,jdbcType=VARCHAR},#{userCompanyName,jdbcType=VARCHAR}, #{userCompanycccNumber,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR},#{userTel,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},0)
+        insert into panyu_user (USER_ID, USER_PROVINCE, USER_CITY, USER_COUNTY, USER_COMPANY_NAME, USER_COMPANYCCC_NUMBER, USER_NAME, USER_EMAIL,user_tel ,USER_PWD,user_state,user_log_pwd)
+        values (sys_guid(), #{userProvince,jdbcType=VARCHAR}, #{userCity,jdbcType=VARCHAR}, #{userCounty,jdbcType=VARCHAR},#{userCompanyName,jdbcType=VARCHAR}, #{userCompanycccNumber,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR},#{userTel,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},0,#{userlogpwd,jdbcType=VARCHAR})
     </insert>
     <!-- 根据当前登录的用户查询用户所拥有的所有角色 -->
     <select id="queryRolesByUsername" parameterType="com.panyu.panyuprojectims.entity.PanyuUser" resultType="String" >
