@@ -9,10 +9,17 @@ import java.util.Map;
 @Mapper
 public interface PanyuUserDao{
 
+
+    //删除用户
+    boolean deletePanyuUser(String[] ids);
+    //添加用户
+    boolean addPanyuUser(@Param("userName")String userName,
+                         @Param("userPwd")String userPwd,
+                         @Param("userlogpwd")String userlogpwd);
     //查询所有的用户
-    List<PanyuUser> queryPanyuUserList(@Param("start")int start,@Param("end")int end);
+    List<PanyuUser> queryPanyuUserList(@Param("start")int start,@Param("end")int end,@Param("userName")String userName);
     //查询所有的用户个数据
-    long queryCountPanyuUser();
+    long queryCountPanyuUser(@Param("userName")String userName);
 
 
     public int register(   @Param("userProvince")String userProvince,
