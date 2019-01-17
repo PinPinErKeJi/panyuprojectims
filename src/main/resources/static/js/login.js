@@ -1,4 +1,3 @@
-
 $(function () {
     //为表单元素添加失去焦点事件
     $("form :input").blur(function(){
@@ -185,8 +184,6 @@ $("#register").click( function () {
     }
 
 });
-
-
 
 //记住用户名密码
 window.onload = function () {
