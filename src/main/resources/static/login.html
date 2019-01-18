@@ -12,11 +12,6 @@
 			.onError{
 				color: red;
 			}
-			.msgs{position: absolute;
-				width:50px;color:#fff;
-				font-size:12px;text-align:center;
-				height:90%;line-height:30px;background:#0697DA;cursor:pointer;}
-			.msgs1{background:#E6E6E6;color:#818080;}
 		</style>
 
 		<meta name="description" content="User login page" />
@@ -48,10 +43,12 @@
 		<script src="login/js/respond.min.js"></script>
 
 		<![endif]-->
+		<!--验证码插件-->
+		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<!--弹窗-->
 		<link rel="stylesheet" href="css/login.css">
-		<script type="text/javascript" src="login/js/jquery-3.2.1.min.js" ></script>
 		<script type="text/javascript" src="login/js/login.js"></script>
+		<script type="text/javascript" src="login/js/jquery-3.2.1.min.js" ></script>
 		<script type="text/javascript" src="login/js/startLogin.js"></script>
         <script type="text/javascript" src="js/login.js"></script>
 		<script type="text/javascript" src="login/js/register.js"></script>
@@ -177,15 +174,18 @@
 												<fieldset>
 													<label class="block clearfix">
 														<span
-																class="block input-icon input-icon-right error">
+																class="block input-icon input-icon-right">
 															<input
 																	type="email" class="form-control email" placeholder="Email"/>
 															<i class="ace-icon fa fa-envelope"></i>
 														</span>
+														<span
+																class="onError error"></span>
 													</label>
 
 													<div class="clearfix">
-														<button type="button" class="width-35 pull-right btn btn-sm btn-danger">
+														<button type="button"
+																class="width-35 pull-right btn btn-sm btn-danger send">
 															<i class="ace-icon fa fa-lightbulb-o"></i>
 															<span class="bigger-110">发送邮件</span>
 														</button>
@@ -368,11 +368,14 @@
 			</div>
 		</div>
 
+		<div id="mpanel4" style="margin-top:50px;">
+		</div>
+
 
 		<!-- basic scripts -->
 
 		<!--[if !IE]> -->
-		<script src="login/js/jquery.2.1.1.min.js"></script>
+		<!--<script src="login/js/jquery.2.1.1.min.js"></script>-->
 		<!--注册登录js-->
 		<script src="js/login.js" type="text/javascript"
 				charset="utf-8"></script>
@@ -449,8 +452,6 @@
 			 });
 
 			});
-
-
 		</script>
 	</body>
 </html>
