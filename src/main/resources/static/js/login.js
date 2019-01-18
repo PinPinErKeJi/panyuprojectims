@@ -107,20 +107,6 @@ $(function () {
                 $parent.find(".onError").remove();
             }
         }
-        //验证码
-        if($(this).is("#code")){
-            var codeVal = $.trim(this.value);
-            var regCode = /^\d{6}$/;
-            if(codeVal== ""){
-                var errorMsg = " 请输入验证码！";
-                $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
-            }else if(codeVal != "" && !regCode.test(codeVal)){
-                var errorMsg = " 验证码错误！";
-                $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
-            }else{
-                $parent.find(".onError").remove();
-            }
-        }
     }).keyup(function(){
         //triggerHandler 防止事件执行完后，浏览器自动为标签获得焦点
         $(this).triggerHandler("blur");
@@ -160,13 +146,12 @@ $("#register").click( function () {
     var password=$("#password").val();
     var sureVal = $('#surePassword').val();
     var tel=$("#tel").val();
-    var code=$("#code").val();
     var province=$("#province").val();
     var city=$("#city").val();
     var county=$("#county").val();
     var agree = $('.agree:checkbox:checked').val();
 
-    if(companyName !=''&&userName !=''&&companyNumber!=''&&email !=''&&password!=''&&tel!=''&&agree!=null){
+    if(companyName !=''&&userName !=''&&companyNumber!=''&&email !=''&&password!=''&&sureVal!=''&&tel!=''&&agree!=null){
         var numError = $("form .onError").length;
         if (!numError){
             $.post("userLoginController/userlogin",
