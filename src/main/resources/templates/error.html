@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>error统一错误页面</title>
+</head>
+<body>
+    <h1>对不起 ⌒_⌒ 出错啦</h1>
+    <p>
+   <p><span th:text="${result.message}"></span>（<span th:text="${result.data}"></span>）</p>
+</body>
+</html>
