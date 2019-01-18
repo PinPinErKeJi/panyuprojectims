@@ -1,9 +1,13 @@
 $(function () {
-    $('.email').blur(function () {
+    //邮箱验证
+    $('.send').click(function () {
         var Email = /.+@.+\.[a-zA-Z]{2,4}$/;
-        if (!Email.test($('.email').val())){
-            var errorMsg = " 邮箱格式不正确！";
-            $('.error').append("<span class='msg onError'>" + errorMsg + "</span>");
+        if($('.email').val()==''){
+            $('.error').text('请输入邮箱！');
+        }else if (!Email.test($('.email').val())){
+            $('.error').text('邮箱格式不正确！');
+        }else {
+            $('.error').text('');
         }
-    })
+    });
 })
