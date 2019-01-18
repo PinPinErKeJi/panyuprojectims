@@ -12,6 +12,11 @@
 			.onError{
 				color: red;
 			}
+			.msgs{position: absolute;
+				width:50px;color:#fff;
+				font-size:12px;text-align:center;
+				height:90%;line-height:30px;background:#0697DA;cursor:pointer;}
+			.msgs1{background:#E6E6E6;color:#818080;}
 		</style>
 
 		<meta name="description" content="User login page" />
@@ -171,8 +176,10 @@
 											<form>
 												<fieldset>
 													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="email" class="form-control" placeholder="Email" />
+														<span
+																class="block input-icon input-icon-right error">
+															<input
+																	type="email" class="form-control email" placeholder="Email"/>
 															<i class="ace-icon fa fa-envelope"></i>
 														</span>
 													</label>
@@ -266,14 +273,6 @@
 															<input
 																	type="text"  name="user_tel"  class="form-control" placeholder="手机号" id="tel"/>
 															<i class="ace-icon fa fa-user"></i>
-														</span>
-													</label>
-
-													<label class="block clearfix">
-														<span class="block input-icon input-icon-right" style="position: relative;">
-															<input
-																	type="text" class="form-control" placeholder="验证码" id="code" />
-															<a href="#" style="text-decoration: none;color: dodgerblue;display: inline-block;position: absolute;right: 10px;top: 5px;">发送验证码</a>
 														</span>
 													</label>
 

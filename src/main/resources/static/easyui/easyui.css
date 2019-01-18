@@ -1,5 +1,5 @@
 .panel {
-  overflow: hidden;
+  /*overflow: hidden;*/
   text-align: left;
   margin: 0;
   border: 0;
@@ -45,7 +45,7 @@
   top: 50%;
   margin-top: -8px;
   height: 16px;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 .panel-icon {
   left: 5px;
@@ -76,7 +76,7 @@
   padding: 11px 0px 10px 30px;
 }
 .panel-noscroll {
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 .panel-fit,
 .panel-fit body {
@@ -84,7 +84,7 @@
   margin: 0;
   padding: 0;
   border: 0;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 .panel-loading {
   background: url('images/loading.gif') no-repeat 10px 10px;
