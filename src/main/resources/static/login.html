@@ -12,6 +12,9 @@
 		.onError{
 			color: red;
 		}
+        img{
+            vertical-align: top;
+        }
 	</style>
 
 	<meta name="description" content="User login page" />
@@ -53,6 +56,12 @@
 </head>
 
 <body class="login-layout">
+<!--验证-->
+<iframe src="verify-master/verify.html" frameborder="0"
+        width="100%" height="100%"
+        style="position: absolute;z-index: 1;display: none;"
+        class="verify"></iframe>
+
 <div class="main-container">
 	<div class="main-content">
 		<div class="row">
@@ -365,20 +374,17 @@
 		<button class="btn">确定</button>
 	</div>
 </div>
-
-
-<!-- basic scripts -->
-
+</body>
 <!--[if !IE]> -->
 <script src="login/js/jquery.2.1.1.min.js"></script>
 <!--注册登录js-->
 <script src="js/login.js" type="text/javascript"
-		charset="utf-8"></script>
+        charset="utf-8"></script>
 <!--地址插件-->
 <script src="js/jquery.min.js" type="text/javascript"
-		charset="utf-8"></script>
+        charset="utf-8"></script>
 <script src="js/distpicker/distpicker.js" type="text/javascript"
-		charset="utf-8"></script>
+        charset="utf-8"></script>
 <script type="text/javascript">
     $("#distpicker3").distpicker({
         province: '浙江省',
@@ -402,7 +408,7 @@
 
 <!--[if IE]>
 <script type="text/javascript">
-	window.jQuery || document.write("<script src='login/js/jquery1x.min.js'>"+"<"+"/script>");
+    window.jQuery || document.write("<script src='login/js/jquery1x.min.js'>"+"<"+"/script>");
 </script>
 <![endif]-->
 <script type="text/javascript">
@@ -450,5 +456,4 @@
 
 
 </script>
-</body>
 </html>
