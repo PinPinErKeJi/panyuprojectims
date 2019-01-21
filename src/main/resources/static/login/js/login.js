@@ -8,6 +8,7 @@ $(function () {
             $('.error').text('邮箱格式不正确！');
         }else {
             $('.error').text('');
+            $('.verify').show();
         }
     });
 })
