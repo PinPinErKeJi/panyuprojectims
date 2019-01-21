@@ -11,8 +11,7 @@ $(function () {
                 success:function (data) {
                     console.log(data);
                     if(data.msg==1){
-                        $('#divMsg').css("color","green");
-                        $('#divMsg').html("该用户可以注册,请继续");
+                        $('#divMsg').html("");
                     } else{
                         $('#divMsg').css("color","red");
                         $('#divMsg').html("该用户已注册,请重新注册");
