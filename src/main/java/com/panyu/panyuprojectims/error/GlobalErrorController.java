@@ -50,7 +50,7 @@ public class GlobalErrorController  extends AbstractErrorController {
         return mav;
     }
 
-    @RequestMapping
+    @RequestMapping("/ajaxerror")
     @ResponseBody
     //设置响应状态码为：200，结合前端约定的规范处理。也可不设置状态码，前端ajax调用使用error函数进行控制处理
     @ResponseStatus(value = HttpStatus.OK)
