@@ -5,6 +5,7 @@ import com.panyu.panyuprojectims.shiroRealm.MyShiroRealm;
 import com.panyu.panyuprojectims.shiroRealm.ShiroLogoutFilter;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
@@ -19,9 +20,8 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
+
 
 
 @Configuration
@@ -74,12 +74,16 @@ public class ShiroConfiguration {
     public ShiroDialect shiroDialect() {
         return new ShiroDialect();
     }
+    @Bean(name = "sessionDAO")
+    public MemorySessionDAO memorySessionDAO(){
+        return new MemorySessionDAO();
+    }
 
     @Bean(name="sessionManager")
     public DefaultWebSessionManager defaultWebSessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-
-        sessionManager.setGlobalSessionTimeout(1800000);
+        sessionManager.setSessionDAO(memorySessionDAO());
+        sessionManager.setGlobalSessionTimeout(6000);
         sessionManager.setDeleteInvalidSessions(true);
         sessionManager.setSessionValidationSchedulerEnabled(true);
         sessionManager.setDeleteInvalidSessions(true);
@@ -98,7 +102,7 @@ public class ShiroConfiguration {
          * 设置浏览器cookie过期时间，如果不设置默认为-1，表示关闭浏览器即过期
          * cookie的单位为秒 比如60*60为1小时
          */
-        simpleCookie.setMaxAge(864000);
+        simpleCookie.setMaxAge(60*60);
         return simpleCookie;
 
     }
