@@ -170,7 +170,7 @@
             imgName : ['1.jpg', '2.jpg'],
             imgSize : {
 	        	width: '400px',
-	        	height: '300px',
+	        	height: '260px',
 	        },
 	        blockSize : {
 	        	width: '50px',
