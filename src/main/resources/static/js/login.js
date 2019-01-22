@@ -67,12 +67,12 @@ $(function () {
         //验证密码
         if($(this).is("#password")){
             var pwdVal = $.trim(this.value);
-            var regPwd = /^[A-Za-z0-9]{6,8}$/;
+            var regPwd = /^[A-Za-z0-9]{6,16}$/;
             if(pwdVal== ""){
                 var errorMsg = " 请输入密码！";
                 $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
             }else if(regPwd.test(pwdVal)==false){
-                var errorMsg = " 密码6~8位字母和数字组成！";
+                var errorMsg = " 密码6~16位字母和数字组成！";
                 $parent.append("<span class='msg onError'>" + errorMsg + "</span>");
             }
             else{
@@ -151,7 +151,7 @@ $("#register").click( function () {
     var county=$("#county").val();
     var agree = $('.agree:checkbox:checked').val();
 
-    if(companyName !=''&&userName !=''&&companyNumber!=''&&email !=''&&password!=''&&sureVal!=''&&tel!=''&&agree!=null){
+    if(companyName !=''&&userName !=''&&companyNumber!=''&&email !=''&&password!=''&&tel!=''&&agree!=null){
         var numError = $("form .onError").length;
         if (!numError){
             $.post("userLoginController/userlogin",
