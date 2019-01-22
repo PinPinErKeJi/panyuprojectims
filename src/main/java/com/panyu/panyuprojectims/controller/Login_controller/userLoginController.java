@@ -1,13 +1,12 @@
 package com.panyu.panyuprojectims.controller.Login_controller;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-import com.panyu.panyuprojectims.entity.PanyuUser;
-import com.panyu.panyuprojectims.service.Impl.PanyuUserServiceImpl;
+
 import com.panyu.panyuprojectims.service.PanyuUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +16,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collection;
 
 @RequestMapping("/userLoginController")
 @Controller
 public class userLoginController {
     @Autowired
     private PanyuUserService panyuUserService;
+    @Autowired
+    private SessionDAO sessionDAO;
     @RequestMapping("/userlogin")
-   @ResponseBody
+    @ResponseBody
     public int userlogin(String userProvince,String userCity,String userCounty, String userCompanyName ,String  userCompanycccNumber,String userName, String userEmail, String userPwd ,String userTel){
        // String md5pwd= DigestUtils.md5DigestAsHex(userPwd.getBytes());
         // 将用户名作为盐值
@@ -60,24 +62,22 @@ public class userLoginController {
                 currentUser.login(token);
             } catch ( UnknownAccountException uae) {
                 System.out.println("------------用户名错误----There is no user with username of " + token.getPrincipal());
-                msg="1";
+                msg="对不起用户名错误";
                 // return "redirect:/error.html";
             }catch (IncorrectCredentialsException ice) {
                 System.out.println("------------密码错误----Password for account " + token.getPrincipal() + " was incorrect!");
-                msg="2";
+                msg="对不起密码输入错误";
                 //  return "redirect:/error.html";
             } catch (LockedAccountException lae) {
                 System.out.println("------账号被锁定---The account for username " + token.getPrincipal() + " is locked.  " +
                         "Please contact your administrator to unlock it.");
-                msg="3";
-              //  return "redirect:/error.html";
+                msg="账号被锁定";
+                //  return "redirect:/error.html";
             } catch (AuthenticationException ae) {
                 //unexpected condition?  error?
-              //  return "redirect:/error.html";
+                //  return "redirect:/error.html";
             }
-
         }
-
         return msg;
     }
 }

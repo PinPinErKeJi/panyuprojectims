@@ -193,6 +193,8 @@ window.onload = function () {
             localStorage.setItem('pass', '');
         }
     }
+
+    window.history.forward();
 }
 
 

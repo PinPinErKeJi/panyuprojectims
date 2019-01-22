@@ -9,9 +9,8 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
-import java.util.Map;
+
 
 public class MyShiroRealm extends AuthorizingRealm {
     @Autowired
@@ -52,7 +51,6 @@ public class MyShiroRealm extends AuthorizingRealm {
             info.addStringPermissions(funList);
         }
         return info;
-
     }
     /**认证**/
     @Override
@@ -69,8 +67,6 @@ public class MyShiroRealm extends AuthorizingRealm {
         }else{
             String uuserName =panyuUser.getUserName();
             String password=panyuUser.getUserPwd();
-
-            //System.out.println(uuserName);
             //盐值
             ByteSource salt=ByteSource.Util.bytes(userName);
             return  new SimpleAuthenticationInfo(uuserName,password,salt,getName());
