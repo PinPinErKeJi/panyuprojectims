@@ -9,6 +9,7 @@ $(function () {
         }else {
             $('.error').text('');
             $('.verify').show();
+            $('#forgot-box').hide();
         }
     });
 })
