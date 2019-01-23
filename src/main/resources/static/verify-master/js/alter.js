@@ -96,6 +96,8 @@ $(function () {
             $('.error1').text('');
             $('.error2').text('');
             alert('修改成功！')
+            $('.verifyPwd').hide();
+            parent.location.reload();
         }
     });
 })
