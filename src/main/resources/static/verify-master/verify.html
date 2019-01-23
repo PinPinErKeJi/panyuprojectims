@@ -1,61 +1,61 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>滑动验证</title>
-		<style type="text/css">
-			.error{color: red}
-			form{margin:100px auto;width:380px;background: #fff;border: 1px solid gainsboro;}
-			input{width:180px;height:38px;border-style:none;border:1px solid
-			#C8C8C8;outline:none;margin-left: 35px;}
-			.msgs{display:inline-block;width:104px;color:#fff;font-size:12px;border:1px solid #0697DA;text-align:center;height:30px;line-height:30px;background:#0697DA;cursor:pointer;margin-left: 10px;}
-			form .msgs1{background:#E6E6E6;color:#818080;border:1px solid #CCCCCC;}
-			form>p{text-align: center;font-size: 30px;}
-			form .next{
-				background:#0697DA;
-				cursor: pointer;
-				margin: 30px 0 30px 100px;
-			}
-			.verifyPwd>div{width: 90%;margin: 0 auto}
-			.verifyPwd>div label{line-height: 42px;text-align: right}
-			.verifyPwd>div input{width: 220px;
-				margin-left: 20px!important;padding-left: 10px}
-		</style>
-	</head>
-	<link rel="stylesheet" type="text/css" href="css/verify.css"/>
-	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/verify.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/alter.js" type="text/javascript" charset="utf-8"></script>
-	<body>
-		 <div id="mpanel4" style="margin: 100px auto;background:
+<head>
+    <meta charset="UTF-8">
+    <title>滑动验证</title>
+    <style type="text/css">
+        .error{color: red}
+        form{margin:100px auto;width:380px;background: #fff;border: 1px solid gainsboro;}
+        input{width:180px;height:38px;border-style:none;border:1px solid
+        #C8C8C8;outline:none;margin-left: 35px;}
+        .msgs{display:inline-block;width:104px;color:#fff;font-size:12px;border:1px solid #0697DA;text-align:center;height:30px;line-height:30px;background:#0697DA;cursor:pointer;margin-left: 10px;}
+        form .msgs1{background:#E6E6E6;color:#818080;border:1px solid #CCCCCC;}
+        form>p{text-align: center;font-size: 30px;}
+        form .next{
+            background:#0697DA;
+            cursor: pointer;
+            margin: 30px 0 30px 100px;
+        }
+        .verifyPwd>div{width: 90%;margin: 0 auto}
+        .verifyPwd>div label{line-height: 42px;text-align: right}
+        .verifyPwd>div input{width: 220px;
+            margin-left: 20px!important;padding-left: 10px}
+    </style>
+</head>
+<link rel="stylesheet" type="text/css" href="css/verify.css"/>
+<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/verify.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/alter.js" type="text/javascript" charset="utf-8"></script>
+<body>
+<div id="mpanel4" style="margin: 100px auto;background:
 		 #fff;width:402px;" class="slideVerify">
-        </div>
-		 <form class="verifyTel" style="display: none">
-			 <p>安全验证</p>
-			 <input type="text" class="tel" placeholder="手机号"
-					style="padding-left:
+</div>
+<form class="verifyTel" style="display: none">
+    <p>安全验证</p>
+    <input type="text" class="tel" placeholder="手机号"
+           style="padding-left:
 			 10px;width: 300px;"> <br>
-			 <span class="error"
-				   style="margin-left: 32px"></span><br>
-			 <input type="text" class="c_code_msg"
-					style="padding-left: 10px;margin-top: 10px;"placeholder="短信验证码">
-			 <span class="msgs">获取短信验证码</span>
-			 <input type="button" value="下一步" class="next" id="next"/>
-		 </form>
+    <span class="error"
+          style="margin-left: 32px"></span><br>
+    <input type="text" class="c_code_msg"
+           style="padding-left: 10px;margin-top: 10px;"placeholder="短信验证码">
+    <span class="msgs">获取短信验证码</span>
+    <input type="button" value="下一步" class="next" id="next"/>
+</form>
 
-		 <form class="verifyPwd" style="display: none">
-			 <p>修改密码</p>
-			 <div>
-				 <label>新密码：</label><input type="password" class="pwd"
-										   style="margin-left: 36px!important;"
-										   placeholder="由6~16位字母和数字组成"><br>
-				 <span class="error error1"></span>
-			 </div>
-			 <div style="margin-top: 20px">
-				 <label>确认密码：</label><input type="password" class="surePwd"><br>
-				 <span class="error error2"></span>
-			 </div>
-			 <input type="button" value="确定" class="next" id="sure"/>
-		 </form>
-	</body>
+<form class="verifyPwd" style="display: none">
+    <p>修改密码</p>
+    <div>
+        <label>新密码：</label><input type="password" class="pwd"
+                                  style="margin-left: 36px!important;"
+                                  placeholder="由6~16位字母和数字组成"><br>
+        <span class="error error1"></span>
+    </div>
+    <div style="margin-top: 20px">
+        <label>确认密码：</label><input type="password" class="surePwd"><br>
+        <span class="error error2"></span>
+    </div>
+    <input type="button" value="确定" class="next" id="sure"/>
+</form>
+</body>
 </html>
