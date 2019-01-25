@@ -1,11 +1,15 @@
 package com.panyu.panyuprojectims.ShiroConfiguration;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import com.panyu.panyuprojectims.filter.KickoutSessionFilter;
 import com.panyu.panyuprojectims.shiroRealm.MyShiroRealm;
 import com.panyu.panyuprojectims.shiroRealm.ShiroLogoutFilter;
+import net.sf.ehcache.CacheException;
+import net.sf.ehcache.CacheManager;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
-import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
+import org.apache.shiro.io.ResourceUtils;
+import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
@@ -20,6 +24,8 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 
@@ -44,8 +50,13 @@ public class ShiroConfiguration {
     ){
 
         DefaultWebSecurityManager securityManager=new DefaultWebSecurityManager();
+
         //设置realm
         securityManager.setRealm(myShiroRealm);
+        //注入ehcache缓存管理器;
+        securityManager.setCacheManager(ehCacheManager());
+        //注入session管理器;
+        securityManager.setSessionManager(defaultWebSessionManager());
         //设置rememberMe管理器
         securityManager.setRememberMeManager(cookieRememberMeManage);
 
@@ -63,10 +74,20 @@ public class ShiroConfiguration {
         return myShiroRealm;
     }
     //缓存管理器
+
     @Bean(value="ehCacheManager")
     public  EhCacheManager ehCacheManager(){
         EhCacheManager ehCacheManager=new EhCacheManager();
-        ehCacheManager.setCacheManagerConfigFile("classpath:ehcache.xml");
+        CacheManager cacheManager = CacheManager.getCacheManager("shiro");
+        if(cacheManager == null){
+            try {
+                cacheManager = CacheManager.create(ResourceUtils.getInputStreamForPath("classpath:ehcache.xml"));
+            } catch (CacheException | IOException e) {
+                e.printStackTrace();
+            }
+            //ehCacheManager.setCacheManagerConfigFile("classpath:ehcache.xml");
+        }
+        ehCacheManager.setCacheManager(cacheManager);
         return ehCacheManager;
 
     }
@@ -74,20 +95,28 @@ public class ShiroConfiguration {
     public ShiroDialect shiroDialect() {
         return new ShiroDialect();
     }
-    @Bean(name = "sessionDAO")
-    public MemorySessionDAO memorySessionDAO(){
-        return new MemorySessionDAO();
+
+    /**
+     * EnterpriseCacheSessionDAO shiro sessionDao层的实现；
+     * 提供了缓存功能的会话维护，默认情况下使用MapCache实现，内部使用ConcurrentHashMap保存缓存的会话。
+     */
+      @Bean
+    public EnterpriseCacheSessionDAO enterpriseCacheSessionDAO(){
+        EnterpriseCacheSessionDAO enterpriseCacheSessionDAO = new EnterpriseCacheSessionDAO();
+        //添加ehcache活跃缓存名称（必须和ehcache缓存名称一致）
+        enterpriseCacheSessionDAO.setActiveSessionsCacheName("activeSessionCache");
+        return  enterpriseCacheSessionDAO;
     }
 
     @Bean(name="sessionManager")
     public DefaultWebSessionManager defaultWebSessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setSessionDAO(memorySessionDAO());
-        sessionManager.setGlobalSessionTimeout(6000);
-        sessionManager.setDeleteInvalidSessions(true);
-        sessionManager.setSessionValidationSchedulerEnabled(true);
-        sessionManager.setDeleteInvalidSessions(true);
-        sessionManager.setSessionIdCookie(rememberMeCookie());
+        sessionManager.setSessionDAO(enterpriseCacheSessionDAO());
+//        sessionManager.setGlobalSessionTimeout(6000);
+//        sessionManager.setDeleteInvalidSessions(true);
+//        sessionManager.setSessionValidationSchedulerEnabled(true);
+//        sessionManager.setDeleteInvalidSessions(true);
+        sessionManager.setSessionIdCookie(sessionIdCookie());
         return sessionManager;
     }
 
@@ -96,13 +125,11 @@ public class ShiroConfiguration {
     public SimpleCookie rememberMeCookie(){
         // 这个参数是cookie的名称，对应前端的checkbox 的name = rememberMe
         SimpleCookie simpleCookie=new SimpleCookie("rememberMe");
-        //HttpOnly标志的引入是为了防止设置了该标志的cookie被JavaScript读取，
-        simpleCookie.setHttpOnly(true);
         /**
          * 设置浏览器cookie过期时间，如果不设置默认为-1，表示关闭浏览器即过期
-         * cookie的单位为秒 比如60*60为1小时
+         * //记住我cookie生效时间30天 ,单位秒  [10天]
          */
-        simpleCookie.setMaxAge(60*60);
+        simpleCookie.setMaxAge(864000);
         return simpleCookie;
 
     }
@@ -114,6 +141,37 @@ public class ShiroConfiguration {
         cookieRememberMeManager.setCookie(rememberMeCookie());
         return cookieRememberMeManager;
     }
+    /*
+    自定义cookie中session名称等配置
+    */
+    @Bean
+    public SimpleCookie sessionIdCookie(){
+        SimpleCookie simpleCookie = new SimpleCookie();
+        //如果在Cookie中设置了"HttpOnly"属性，那么通过程序(JS脚本、Applet等)将无法读取到Cookie信息，这样能有效的防止XSS攻击。
+        simpleCookie.setHttpOnly(true);
+        simpleCookie.setName("SHRIOSESSIONID");
+        //单位秒
+        simpleCookie.setMaxAge(86400);
+        return simpleCookie;
+
+    }
+    /*
+    kickoutSessionFilter同一个用户多设备登录限制
+
+    @Bean
+    public KickoutSessionFilter kickoutSessionFilter(){
+        KickoutSessionFilter kickoutSessionFilter = new KickoutSessionFilter();
+        kickoutSessionFilter.setCacheManager(ehCacheManager());
+        //用于根据会话ID，获取会话进行踢出操作的；
+        kickoutSessionFilter.setSessionManager(defaultWebSessionManager());
+        //是否踢出后来登录的，默认是false；即后者登录的用户踢出前者登录的用户；踢出顺序。
+        kickoutSessionFilter.setKickoutAfter(false);
+        //同一个用户最大的会话数，默认1；比如2的意思是同一个用户允许最多同时两个人登录；
+        kickoutSessionFilter.setMaxSession(1);
+        //被踢出后重定向到的地址；
+        kickoutSessionFilter.setKickoutUrl("/toLogin.html?kickout=1");
+        return kickoutSessionFilter;
+    }  */
     //密码匹配凭证管理器
     @Bean(name = "hashedCredentialsMatcher")
     public HashedCredentialsMatcher hashedCredentialsMatcher(){
@@ -149,17 +207,21 @@ public class ShiroConfiguration {
         ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
+        //添加kickout认证
+        HashMap<String,Filter> hashMap=new HashMap<String,Filter>();
+       // hashMap.put("kickout",kickoutSessionFilter());
+        //shiroFilterFactoryBean.setFilters(hashMap);
         //登出
-        LinkedHashMap<String, Filter> filtersMap = new LinkedHashMap<>();
-        filtersMap.put("logout",shiroLogoutFilter());
-        shiroFilterFactoryBean.setFilters(filtersMap);
+       // LinkedHashMap<String, Filter> filtersMap = new LinkedHashMap<>();
+        hashMap.put("logout",shiroLogoutFilter());
+        shiroFilterFactoryBean.setFilters(hashMap);
         // 拦截器.
         LinkedHashMap<String,String> map = new LinkedHashMap<>();
 
         map.put("/static/**","anon");
-        //map.put("/login/**","anon");
 
         map.put("/userLoginController/userlogin","anon");//匿名注册
+       // map.put("/toLogin.html","anon");
         map.put("/login.html","anon");
         map.put("/register","anon");
         map.put("/error.html","anon");
@@ -168,10 +230,12 @@ public class ShiroConfiguration {
        //map.put("/BS", "roles[总]");
 
         //对所有用户认证
+        //map.put("/*", "kickout");
         map.put("/*", "authc");
         map.put("/*.*", "authc");
         //map.put("/**", "authc");
         // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
+        //shiroFilterFactoryBean.setLoginUrl("/toLogin.html");
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setSuccessUrl("/index");

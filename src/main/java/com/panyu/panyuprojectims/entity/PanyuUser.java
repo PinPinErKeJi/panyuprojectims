@@ -1,5 +1,9 @@
 package com.panyu.panyuprojectims.entity;
-public class PanyuUser {
+
+import java.io.Serializable;
+
+public class PanyuUser implements Serializable{
+    private static final long serialVersionUID = -3096736268081409238L;
     //用户属性
     private String userId;
     private String userProvince;
