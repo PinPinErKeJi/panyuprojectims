@@ -60,14 +60,10 @@ public class userLoginController {
             currentUser.login(token);
             Collection<Session> sessions = sessionDAO.getActiveSessions();
             //判断当前的用户是否已经认证（当前是否已经登录）
-            System.out.println("我是"+sessions);
-            if(currentUser.isAuthenticated()) {//如果当前没有登录
-                System.out.println("我进1 if循环了");
+            if(currentUser.isAuthenticated()) {
                 for (Session session1 : sessions) {
-                    System.out.println("我进2 for循环了");
                     //方法一、当第二次登录时，给出提示“用户已登录”，停留在登录页面
                     if (userName.equals(session1.getAttribute("loginedUser"))) {
-                        System.out.println("我登录了");
                         currentUser.logout();
                         throw new RuntimeException();
                     }
