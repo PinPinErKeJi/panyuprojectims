@@ -43,10 +43,13 @@ public class ShiroConfiguration {
 
         return filterRegistrationBean;
     }
-    // 1. 配置 SecurityManager!
+    /**
+     * shiro安全管理器设置realm认证和ehcache缓存管理
+     *
+     */
     @Bean(name = "securityManager")
-    public DefaultWebSecurityManager securityManager(@Qualifier(value = "myShiroRealm")MyShiroRealm myShiroRealm,
-                                                     @Qualifier(value="cookieRememberMeManage")CookieRememberMeManager cookieRememberMeManage
+    public DefaultWebSecurityManager securityManager(@Qualifier(value = "myShiroRealm")MyShiroRealm myShiroRealm
+
     ){
 
         DefaultWebSecurityManager securityManager=new DefaultWebSecurityManager();
@@ -58,7 +61,7 @@ public class ShiroConfiguration {
         //注入session管理器;
         securityManager.setSessionManager(defaultWebSessionManager());
         //设置rememberMe管理器
-        securityManager.setRememberMeManager(cookieRememberMeManage);
+        securityManager.setRememberMeManager(rememberMeManager());
 
         return securityManager;
     }
@@ -85,7 +88,6 @@ public class ShiroConfiguration {
             } catch (CacheException | IOException e) {
                 e.printStackTrace();
             }
-            //ehCacheManager.setCacheManagerConfigFile("classpath:ehcache.xml");
         }
         ehCacheManager.setCacheManager(cacheManager);
         return ehCacheManager;
@@ -116,7 +118,10 @@ public class ShiroConfiguration {
         return sessionManager;
     }
 
-    //cookie对象;
+    /**
+     * 设置记住我cookie过期时间
+     * @return
+     */
     @Bean(name = "rememberMeCookie")
     public SimpleCookie rememberMeCookie(){
         // 这个参数是cookie的名称，对应前端的checkbox 的name = rememberMe
@@ -129,7 +134,9 @@ public class ShiroConfiguration {
         return simpleCookie;
 
     }
-    //记住我管理器 cookie管理对象;
+    /**
+     * 配置cookie记住我管理器
+     */
     @Bean(name = "cookieRememberMeManage")
     public CookieRememberMeManager rememberMeManager(){
 
@@ -146,7 +153,7 @@ public class ShiroConfiguration {
         //如果在Cookie中设置了"HttpOnly"属性，那么通过程序(JS脚本、Applet等)将无法读取到Cookie信息，这样能有效的防止XSS攻击。
         simpleCookie.setHttpOnly(true);
         simpleCookie.setName("SHRIOSESSIONID");
-        //单位秒
+        //单位秒 （24小时）
         simpleCookie.setMaxAge(86400);
         return simpleCookie;
 
@@ -182,17 +189,16 @@ public class ShiroConfiguration {
         shiroLogoutFilter.setRedirectUrl("/login");
         return shiroLogoutFilter;
     }
+    /*
+    *ShiroFilterFactoryBean 处理拦截资源文件过滤器
+    * */
     @Bean(name = "shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(@Qualifier("securityManager") DefaultWebSecurityManager securityManager){
         ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        //添加kickout认证
         HashMap<String,Filter> hashMap=new HashMap<String,Filter>();
-       // hashMap.put("kickout",kickoutSessionFilter());
-        //shiroFilterFactoryBean.setFilters(hashMap);
         //登出
-       // LinkedHashMap<String, Filter> filtersMap = new LinkedHashMap<>();
         hashMap.put("logout",shiroLogoutFilter());
         shiroFilterFactoryBean.setFilters(hashMap);
         // 拦截器.
@@ -213,7 +219,6 @@ public class ShiroConfiguration {
         map.put("/*.*", "authc");
         //map.put("/**", "authc");
         // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
-        //shiroFilterFactoryBean.setLoginUrl("/toLogin.html");
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setSuccessUrl("/index");
