@@ -6,7 +6,7 @@ $(function () {
         imgName : ['1.jpg', '2.jpg'],
         imgSize : {
             width: '400px',
-            height: '300px',
+            height: '260px',
         },
         blockSize : {
             width: '40px',
@@ -63,8 +63,8 @@ $(function () {
 
             //下一步
             $("#next").click(function(){
-                    $('.verifyTel').hide();
-                    $('.verifyPwd').show();
+                $('.verifyTel').hide();
+                $('.verifyPwd').show();
             });
         }
     })
@@ -73,15 +73,17 @@ $(function () {
 
     //修改密码
     $("#sure").click(function(){
+        var pwd = $('.pwd').val();
+        var regPwd = /^[A-Za-z0-9]{6,16}$/;
+        var surePwd = $('.surePwd').val();
         $('.verifyPwd .pwd').blur(function () {
-            var pwd = $('.pwd').val();
-            var regPwd = /^[A-Za-z0-9]{6,16}$/;
             if (!regPwd.test(pwd)){
                 $('.error1').text('密码6~16位字母和数字组成！');
             }else {
                 $('.error1').text('');
             }
             $('.surePwd').blur(function () {
+                var pwd = $('.pwd').val();
                 var surePwd = $('.surePwd').val();
                 if (surePwd != pwd){
                     $('.error2').text('密码不一致！');
@@ -90,6 +92,12 @@ $(function () {
                 }
             })
         })
+        if (pwd!=''&&surePwd!=''&&regPwd.test(pwd)==true&&pwd==surePwd){
+            $('.error1').text('');
+            $('.error2').text('');
+            alert('修改成功！')
+            $('.verifyPwd').hide();
+            parent.location.reload();
+        }
     });
-
 })

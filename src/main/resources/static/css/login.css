@@ -9,34 +9,28 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	background: rgba(0,0,0,0.2);
+	display: none;
 	z-index: 1000;
 }
 .mask>div{
-	width: 400px;
-	height: 550px;
+	width: 100%;
 	background: #fff;
-	margin: 100px auto 0;
 	text-align: center;
+	padding: 30px;
+}
+.mask>div>p{
+	font-size: 30px;
+	line-height: 50px;
+}
+.mask .sureBut{
+	width: 150px;
+	height: 50px;
+	line-height: 50px;
+	background: dodgerblue;
+	color: #fff;
+	margin: 30px auto 0;
+	margin-bottom: 50px;
+	cursor: pointer;
+	font-size: 16px;
 }
 
-.mask>div>p{
-	font-size: 18px;
-	font-weight: bold;
-	padding-top: 10px;
-}
-.mask>div>div{
-	width: 90%;
-	margin: 0 auto;
-	font-size: 14px;
-	text-align: left;
-	text-indent: 20px;
-}
-.mask .btn{
-	width: 80px;
-	height: 30px;
-	background: orange!important; ;
-	color: #fff;
-	border: 0;
-	/***margin: 20px auto 0;*/
-}
