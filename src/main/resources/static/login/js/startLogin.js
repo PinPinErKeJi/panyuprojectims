@@ -13,7 +13,6 @@ $(function () {
             }else{
                 alert(msg)
             }
-
         });
 
     })

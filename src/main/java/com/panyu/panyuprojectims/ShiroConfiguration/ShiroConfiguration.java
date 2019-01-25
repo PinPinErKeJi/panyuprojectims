@@ -112,10 +112,6 @@ public class ShiroConfiguration {
     public DefaultWebSessionManager defaultWebSessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setSessionDAO(enterpriseCacheSessionDAO());
-//        sessionManager.setGlobalSessionTimeout(6000);
-//        sessionManager.setDeleteInvalidSessions(true);
-//        sessionManager.setSessionValidationSchedulerEnabled(true);
-//        sessionManager.setDeleteInvalidSessions(true);
         sessionManager.setSessionIdCookie(sessionIdCookie());
         return sessionManager;
     }
@@ -155,23 +151,7 @@ public class ShiroConfiguration {
         return simpleCookie;
 
     }
-    /*
-    kickoutSessionFilter同一个用户多设备登录限制
 
-    @Bean
-    public KickoutSessionFilter kickoutSessionFilter(){
-        KickoutSessionFilter kickoutSessionFilter = new KickoutSessionFilter();
-        kickoutSessionFilter.setCacheManager(ehCacheManager());
-        //用于根据会话ID，获取会话进行踢出操作的；
-        kickoutSessionFilter.setSessionManager(defaultWebSessionManager());
-        //是否踢出后来登录的，默认是false；即后者登录的用户踢出前者登录的用户；踢出顺序。
-        kickoutSessionFilter.setKickoutAfter(false);
-        //同一个用户最大的会话数，默认1；比如2的意思是同一个用户允许最多同时两个人登录；
-        kickoutSessionFilter.setMaxSession(1);
-        //被踢出后重定向到的地址；
-        kickoutSessionFilter.setKickoutUrl("/toLogin.html?kickout=1");
-        return kickoutSessionFilter;
-    }  */
     //密码匹配凭证管理器
     @Bean(name = "hashedCredentialsMatcher")
     public HashedCredentialsMatcher hashedCredentialsMatcher(){
@@ -221,7 +201,6 @@ public class ShiroConfiguration {
         map.put("/static/**","anon");
 
         map.put("/userLoginController/userlogin","anon");//匿名注册
-       // map.put("/toLogin.html","anon");
         map.put("/login.html","anon");
         map.put("/register","anon");
         map.put("/error.html","anon");
@@ -230,7 +209,6 @@ public class ShiroConfiguration {
        //map.put("/BS", "roles[总]");
 
         //对所有用户认证
-        //map.put("/*", "kickout");
         map.put("/*", "authc");
         map.put("/*.*", "authc");
         //map.put("/**", "authc");
@@ -242,9 +220,6 @@ public class ShiroConfiguration {
         // 未授权界面;
         shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
-
         return shiroFilterFactoryBean;
     }
-
-
 }
