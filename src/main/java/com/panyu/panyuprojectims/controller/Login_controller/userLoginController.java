@@ -69,7 +69,7 @@ public class userLoginController {
                     }
                 }
             }
-            currentUser.getSession().setTimeout(30000);//三十秒
+            currentUser.getSession().setTimeout(2592000);//一个月
             currentUser.getSession().setAttribute("loginedUser",userName);
 
         } catch ( UnknownAccountException uae) {
