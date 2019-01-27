@@ -9,7 +9,24 @@ import java.util.Map;
 @Mapper
 public interface PanyuUserDao{
 
+    //修改用户
+    boolean updatePanyuUser(PanyuUser panyuUser);
+    //修改用户时先查询分配的角色个数
+    long getCountByRoleName(@Param("roleId")String roleId,@Param("userName")String userName);
+    // 添加用户角色中间表
+    boolean insertPanyuUserAndRole(@Param("userId")String userId,@Param("roleId")String roleId);
+    //删除用户及拥有的角色
+    void deletePanyuUserAndRoleByUserId(@Param("userId") String userId);
+    //删除用户
+    void deletePanyuUser(@Param("userId")String userId);
 
+    //添加用户
+    boolean addPanyuUser(@Param("userName")String userName,
+                         @Param("userPwd")String userPwd,
+                         @Param("userlogpwd")String userlogpwd,
+                         @Param("userTel")String userTel,
+                         @Param("userEmail")String userEmail
+    );
     //删除用户
     boolean deletePanyuUser(String[] ids);
     //添加用户
