@@ -3,13 +3,88 @@
 <mapper namespace="com.panyu.panyuprojectims.dao.ShiroResourceDao">
     <!-- ShiroResource的resultMap,column是给数据库列起的别名,它对应property类的属性-->
     <resultMap id="result_ShiroResource_Map" type="com.panyu.panyuprojectims.entity.ShiroResource">
-        <id column="RESOURCE_ID" property="resourceId" />
-        <result column="RESOURCE_NAME" property="resourceName" />
+        <id column="RESOURCE_ID" property="id" />
+        <result column="RESOURCE_NAME" property="text" />
         <result column="RESOURCE_URL" property="resourceUrl" />
         <result column="RESOURCE_CODE" property="resourceCode" />
         <result column="PARECT_RESOURCE_ID" property="parectResourceId" />
     </resultMap>
 
-   
+    <!--删除功能资源-->
+    <delete id="deleteResourceById">
+        delete from shiro_resource where resource_id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <!--根据父id查询拥有的资源-->
+    <select id="selectResourceById" resultMap="result_ShiroResource_Map">
+        select * from shiro_resource where parect_resource_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加资源-->
+    <insert id="insertResource">
+        insert into shiro_resource values(sys_guid(),
+        #{text,jdbcType=VARCHAR},
+        #{resourceUrl,jdbcType=VARCHAR},
+        #{resourceCode,jdbcType=VARCHAR},
+        #{parectResourceId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--根据资源名查询个数-->
+    <select id="countResourceByResourceName" resultType="long">
+        select count(*) from shiro_resource where resource_name = #{text,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据资源名查询资源对象-->
+    <select id="selectResourceByResourceName" resultMap="result_ShiroResource_Map">
+        select * from shiro_resource where resource_name = #{text,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加角色资源中间表-->
+    <insert id="insertRoleAndResource">
+        insert into shiro_role_resource values (sys_guid(),#{roleId},#{id})
+    </insert>
+
+    <!--查询父id为空的所有的资源-->
+    <select id="selectAllResource" resultMap="result_ShiroResource_Map">
+        select * from shiro_resource where parect_resource_id is null
+    </select>
+
+    <!--  查询父类别下的子类别 -->
+    <select id="selectSonResByRoleName" resultMap="result_ShiroResource_Map">
+        select DISTINCT s1.* from shiro_resource s1 left join shiro_role_resource s2
+        on s1.resource_id = s2.resource_id
+        where s1.parect_resource_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据角色名查询拥有的权限-->
+    <select id="selectResourceByRoleName" resultMap="result_ShiroResource_Map">
+        select s1.* from shiro_resource s1 left join shiro_role_resource s2
+        on s1.resource_id = s2.resource_id
+        left join shiro_role s3
+        on s2.role_id = s3.role_id
+        where s3.role_name in
+        <foreach collection="list" item="role" open="(" separator="," close=")" >
+            #{role.roleName}
+        </foreach>
+        <choose>
+            <when test="id!=null">
+                and s1.parect_resource_id =#{id,jdbcType=VARCHAR}
+            </when>
+            <otherwise>
+                and s1.parect_resource_id is null
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--分页展示权限资源-->
+    <select id="showAllShiroResource" resultMap="result_ShiroResource_Map">
+        select * from (select s.*,rownum r from (select * from shiro_resource)s)
+        where r between #{start,jdbcType=VARCHAR} and #{end,jdbcType=VARCHAR}
+    </select>
+
+    <!--查询权限的总数-->
+    <select id="countAllShiroResource" resultType="long">
+        select count(*) from shiro_resource
+    </select>
 
 </mapper>

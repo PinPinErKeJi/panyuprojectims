@@ -40,25 +40,49 @@
         </association>
     </resultMap>
 
+    <!--修改用户-->
+    <update id="updatePanyuUser">
+        update  panyu_user set user_name = #{userName,jdbcType=VARCHAR},user_pwd =#{userPwd,jdbcType=VARCHAR} ,user_log_pwd=#{userlogpwd,jdbcType=VARCHAR},user_tel=#{userTel,jdbcType=VARCHAR},user_email=#{userEmail,jdbcType=VARCHAR}where user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+
+    <!--修改用户时先查询分配的角色个数-->
+    <select id="getCountByRoleName" resultType="long">
+        select count(*) from panyu_user p left join shiro_amdin_role s
+        on p.user_id = s.user_id
+        left join shiro_role s1
+        on s1.role_id = s.role_id
+        where s1.role_id=#{roleId,jdbcType=VARCHAR}
+        and p.user_name = #{userName,jdbcType=VARCHAR}
+    </select>
+
+    <!--添加用户和角色中间表-->
+    <insert id="insertPanyuUserAndRole">
+        insert into shiro_amdin_role values(sys_guid(),#{userId,jdbcType=VARCHAR},#{roleId,jdbcType=VARCHAR})
+    </insert>
+
+    <!--删除用户及拥有的角色-->
+    <delete id="deletePanyuUserAndRoleByUserId">
+        delete from shiro_amdin_role where user_id = #{userId,jdbcType=VARCHAR}
+    </delete>
+
     <!--删除用户-->
     <delete id="deletePanyuUser">
-        delete from panyu_user where user_id in
-        <foreach collection="array" open="(" separator="," close=")" item="ids">
-            #{ids}
-        </foreach>
+        delete from panyu_user where user_id =#{userId,jdbcType=VARCHAR}
     </delete>
 
     <!--添加用户-->
     <insert id="addPanyuUser">
-        insert into panyu_user (USER_ID,USER_NAME,USER_PWD,USER_STATE,user_log_pwd)
+        insert into panyu_user (USER_ID,USER_NAME,USER_PWD,USER_STATE,USER_LOG_PWD,USER_TEL,USER_EMAIL)
         values (
         sys_guid(),
         #{userName,jdbcType=VARCHAR},
         #{userPwd,jdbcType=VARCHAR},
         '0',
-        #{userlogpwd,jdbcType=VARCHAR})
+        #{userlogpwd,jdbcType=VARCHAR},
+        #{userTel,jdbcType=VARCHAR},
+        #{userEmail,jdbcType=VARCHAR}
+        )
     </insert>
-
     <!--分页展示用户名和登录密码-->
     <select id="queryPanyuUserList" resultMap="result_PanyuUser_Map">
         select * from (select u.*,rownum r from (select * from panyu_user

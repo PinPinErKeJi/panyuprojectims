@@ -9,6 +9,60 @@
         <result column="ROLE_UPDATE_TIME" property="roleUpdateTime" />
     </resultMap>
 
-   
+    <!--修改角色-->
+    <update id="updateRole">
+        update shiro_role set role_name = #{roleName,jdbcType=VARCHAR}, role_update_time=sysdate  where role_id = #{roleId,jdbcType=VARCHAR}
+    </update>
+
+    <!--删除角色-->
+    <delete id="deleteRole">
+        delete from shiro_role where role_id = #{ids,jdbcType=VARCHAR}
+    </delete>
+
+    <!--删除角色权限中间表-->
+    <delete id="deleteRoleAndResource">
+        delete from shiro_role_resource where role_id = #{ids,jdbcType=VARCHAR}
+    </delete>
+
+    <!--分页展示角色-->
+    <select id="showPageRole" resultMap="result_ShiroRole_Map">
+        select * from(select s.*,rownum r from (select * from shiro_role)s)
+        where r between #{start} and #{end}
+    </select>
+
+    <!--查询角色总数-->
+    <select id="countAllRole" resultType="long">
+        select count(*) from  shiro_role
+    </select>
+
+    <!--添加角色-->
+    <insert id="insertRole">
+        insert into shiro_role values(sys_guid(),#{roleName,jdbcType=VARCHAR},sysdate,sysdate)
+    </insert>
+
+    <!--根据角色名查询角色对象-->
+    <select id="selectRoleByRoleName" resultMap="result_ShiroRole_Map">
+        select  * from shiro_role where role_name = #{roleName,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据角色名查询个数-->
+    <select id="countByRoleName" resultType="long">
+        select count(*) from shiro_role where role_name = #{roleName,jdbcType=VARCHAR}
+    </select>
+
+    <!--查询所有的角色-->
+    <select id="selectAllRole" resultMap="result_ShiroRole_Map">
+        select  * from shiro_role
+    </select>
+
+    <!--根据用户名查询拥有的角色-->
+    <select id="selectRoleByUserName" resultMap="result_ShiroRole_Map">
+        select s1.user_name,s3.role_name from
+        panyu_user s1 left join shiro_amdin_role s2
+        on s1.user_id = s2.user_id
+        left join shiro_role s3
+        on s2.role_id = s3.role_id
+        where s1.user_name = #{userName,jdbcType=VARCHAR}
+    </select>
 
 </mapper>
