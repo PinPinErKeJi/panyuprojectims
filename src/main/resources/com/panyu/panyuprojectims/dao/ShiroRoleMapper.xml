@@ -55,6 +55,7 @@
         select  * from shiro_role
     </select>
 
+
     <!--根据用户名查询拥有的角色-->
     <select id="selectRoleByUserName" resultMap="result_ShiroRole_Map">
         select s1.user_name,s3.role_name from
