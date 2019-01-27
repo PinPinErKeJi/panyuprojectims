@@ -8,13 +8,22 @@ import org.apache.ibatis.annotations.Param;
 
 public interface PanyuUserService{
 
+    //根据用户名修改角色
+    void updatePanyuuserRole(PanyuUser panyuUser,String[] roleIds);
+
+    //修改用户信息
+    void updatePanyuuser(PanyuUser panyuUser);
+
     //删除用户
-    boolean deletePanyuUser(String[] ids);
+    void deletePanyuUser(String[] ids);
 
     //添加用户
     boolean addPanyuUser(String userName,
                          String userPwd,
-                         String userlogpwd);
+                         String userlogpwd,
+                         String userTel,
+                         String userEmail
+    );
     //分页展示用户
     PageHelperUtil queryAllPanyuUser(int page, int rows, String userName);
 
