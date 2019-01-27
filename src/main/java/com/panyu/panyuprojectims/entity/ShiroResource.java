@@ -1,39 +1,60 @@
 package com.panyu.panyuprojectims.entity;
-public class ShiroResource {
-    private String resourceId;
-    private String resourceName;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.TreeSet;
+
+
+public class ShiroResource implements Serializable,Comparable<ShiroResource> {
+    private String id;
+    private String text;
+    private List<ShiroResource> children;
     private String resourceUrl;
     private String resourceCode;
     private String parectResourceId;
+    private String state="open";
+    private boolean checked;
     public ShiroResource() {
         super();
     }
-    public ShiroResource(String resourceId,String resourceName,String resourceUrl,String resourceCode,String parectResourceId) {
-        super();
-        this.resourceId = resourceId;
-        this.resourceName = resourceName;
+
+    public ShiroResource(String id, String text, List<ShiroResource> children, String resourceUrl, String resourceCode, String parectResourceId, String state, boolean checked) {
+        this.id = id;
+        this.text = text;
+        this.children = children;
         this.resourceUrl = resourceUrl;
         this.resourceCode = resourceCode;
         this.parectResourceId = parectResourceId;
-    }
-    public String getResourceId() {
-        return this.resourceId;
-    }
-
-    public void setResourceId(String resourceId) {
-        this.resourceId = resourceId;
+        this.state = state;
+        this.checked = checked;
     }
 
-    public String getResourceName() {
-        return this.resourceName;
+    public String getId() {
+        return id;
     }
 
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public List<ShiroResource> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<ShiroResource> children) {
+        this.children = children;
     }
 
     public String getResourceUrl() {
-        return this.resourceUrl;
+        return resourceUrl;
     }
 
     public void setResourceUrl(String resourceUrl) {
@@ -41,7 +62,7 @@ public class ShiroResource {
     }
 
     public String getResourceCode() {
-        return this.resourceCode;
+        return resourceCode;
     }
 
     public void setResourceCode(String resourceCode) {
@@ -49,21 +70,45 @@ public class ShiroResource {
     }
 
     public String getParectResourceId() {
-        return this.parectResourceId;
+        return parectResourceId;
     }
 
     public void setParectResourceId(String parectResourceId) {
         this.parectResourceId = parectResourceId;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
     @Override
     public String toString() {
         return "ShiroResource{" +
-                "resourceId='" + resourceId + '\'' +
-                ", resourceName='" + resourceName + '\'' +
+                "id='" + id + '\'' +
+                ", text='" + text + '\'' +
+                ", children=" + children +
                 ", resourceUrl='" + resourceUrl + '\'' +
                 ", resourceCode='" + resourceCode + '\'' +
                 ", parectResourceId='" + parectResourceId + '\'' +
+                ", state='" + state + '\'' +
+                ", checked=" + checked +
                 '}';
+    }
+
+    @Override
+    public int compareTo(ShiroResource o) {
+        return 0;
     }
 }

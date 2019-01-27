@@ -18,17 +18,41 @@ public class PanyuUserServiceImpl implements PanyuUserService{
     @Autowired
     private PanyuUserDao panyuUserDao;
 
+    //根据用户名修改拥有的角色
+    @Override
+    public void updatePanyuuserRole(PanyuUser panyuUser, String[] roleIds) {
+        panyuUserDao.deletePanyuUserAndRoleByUserId(panyuUser.getUserId());
+        for (String roleId:roleIds) {
+            boolean b1 = panyuUserDao.insertPanyuUserAndRole(panyuUser.getUserId(), roleId);
+            long count = panyuUserDao.getCountByRoleName(roleId,panyuUser.getUserName());
+            if(count == 0){
+                boolean b2 = panyuUserDao.insertPanyuUserAndRole(panyuUser.getUserId(), roleId);
+            }
+        }
+    }
+    //修改用户信息
+    @Override
+    public void updatePanyuuser(PanyuUser panyuUser) {
+        boolean b = panyuUserDao.updatePanyuUser(panyuUser);
+
+    }
+
     //删除用户
     @Override
-    public boolean deletePanyuUser(String[] ids) {
-        return panyuUserDao.deletePanyuUser(ids);
+    public void deletePanyuUser(String[] ids) {
+        for (String userId:ids) {
+            panyuUserDao.deletePanyuUserAndRoleByUserId(userId);
+            panyuUserDao.deletePanyuUser(userId);
+        }
     }
 
     //添加用户
     @Override
-    public boolean addPanyuUser(String userName, String userPwd, String userlogpwd) {
-        return panyuUserDao.addPanyuUser(userName,userPwd,userlogpwd);
+    public boolean addPanyuUser(String userName, String userPwd, String userlogpwd,String userTel,
+                                String userEmail) {
+        return panyuUserDao.addPanyuUser(userName,userPwd,userlogpwd,userTel,userEmail);
     }
+
 
     //分页展示用户数据
     @Override
