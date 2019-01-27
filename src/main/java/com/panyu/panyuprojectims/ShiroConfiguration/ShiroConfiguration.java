@@ -44,7 +44,7 @@ public class ShiroConfiguration {
         return filterRegistrationBean;
     }
     /**
-     * shiro安全管理器设置realm认证和ehcache缓存管理
+     * shiro安全管理器设置
      *
      */
     @Bean(name = "securityManager")
@@ -62,7 +62,6 @@ public class ShiroConfiguration {
         securityManager.setSessionManager(defaultWebSessionManager());
         //设置rememberMe管理器
         securityManager.setRememberMeManager(rememberMeManager());
-
         return securityManager;
     }
     //realm
@@ -205,14 +204,11 @@ public class ShiroConfiguration {
         LinkedHashMap<String,String> map = new LinkedHashMap<>();
 
         map.put("/static/**","anon");
-
         map.put("/userLoginController/userlogin","anon");//匿名注册
         map.put("/login.html","anon");
         map.put("/register","anon");
-        map.put("/error.html","anon");
         map.put("/logout","logout");
-       //map.put("/BS/getItemList", "roles[总监]");
-       //map.put("/BS", "roles[总]");
+        //map.put("/BS/getItemList", "roles[总监]");
 
         //对所有用户认证
         map.put("/*", "authc");
