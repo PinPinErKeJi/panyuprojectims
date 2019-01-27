@@ -5,116 +5,288 @@
     <title>角色管理</title>
     <link rel="stylesheet" href="../easyui/easyui.css" />
     <link rel="stylesheet" href="../css/icon.css" />
-    <script src="../js/jquery.min.js" type="text/javascript"
-            charset="utf-8"></script>
-    <script src="../js/jquery.easyui.min.js" type="text/javascript"
-            charset="utf-8"></script>
-    <script src="../js/easyui-lang-zh_CN.js" type="text/javascript"
-            charset="utf-8"></script>
+    <!--<link rel="stylesheet" type="text/css" href="../css/demo.css"/>-->
 </head>
 <body>
-<div>
-    <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-add" id="newUser">添加角色</a>
-    <table id="dg" class="easyui-datagrid" title="角色管理" style="width:80%;"
-           data-options="rownumbers:true,singleSelect:true,">
-        <thead>
-        <tr>
-            <th data-options="field:'ck',checkbox:true"></th>
-            <th data-options="field:'username',width:200">用户名</th>
-            <th data-options="field:'rolename',width:300">角色</th>
-        </tr>
 
-        </thead>
-        <tbody>
-        <tr>
-            <td data-options="field:'ck',checkbox:true"></td>
-            <td>张三</td>
-            <td>
-                <select name="" style="width: 200px;">
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td data-options="field:'ck',checkbox:true"></td>
-            <td>张三</td>
-            <td>
-                <select name="" style="width: 200px;">
-                </select>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<a href="javascript:;" class="easyui-linkbutton" iconCls="icon-add"  onclick="toAdd()">添加</a>
+<a href="javascript:;" class="easyui-linkbutton" iconCls="icon-add"  onclick="toUpdate()">修改</a>
+<a href="javascript:;" class="easyui-linkbutton" iconCls="icon-add"  onclick="toDelete()">删除</a>
 
+<table id="dg" class="easyui-datagrid" title="角色管理" style="width:460px;"></table>
 
-    <!--弹窗-->
-    <div id="dialog" class="easyui-dialog" style="width: 400px;height: 300px;" data-options="resizable:true,modal:true">
-        <form method="post" id="form">
-            <div style="margin: 10px 0 0 10px;"><input name="adminRole" type="checkbox" value="监理"/>监理 </div> <br />
-            <div style="margin: 10px 0 0 10px;"><input name="adminRole" type="checkbox" value="业务主管" />业务主管 </div> <br />
-            <div style="margin: 10px 0 0 10px;"><input name="adminRole" type="checkbox" value="经理" />经理 </div> <br />
-            <div style="margin: 10px 0 0 10px;"><input name="adminRole" type="checkbox" value="总经理" />总经理 </div> <br />
-
-        </form>
-    </div>
+<!--添加角色的对话框-->
+<div id="addRoleDialog" class="easyui-dialog"
+     data-options="modal:true,closed: true, width: 300,
+    height: 300,title: 'My Dialog',">
+    <form id="addRoleForm"  method="post" style="margin-left: 50px"><br>
+        <ul id="t1" class="easyui-tree"></ul>
+        角色名：<input id="name" name="roleName" class="easyui-validatebox" data-options="required:true"><br>
+        <a class="easyui-linkbutton" data-options="plain:true,width:60,iconCls:'icon-add'" onclick="doAddRole()">确定</a>
+        <a class="easyui-linkbutton" data-options="plain:true,width:60,iconCls:'icon-remove'" onclick="addQuit()">取消</a>
+    </form>
+</div>
+<!--修改角色的对话框-->
+<div id="updateRole" class="easyui-dialog"
+     data-options="modal:true,closed: true, width: 400,
+    height: 200,title: 'My Dialog',onClose:function (){
+    	$('#t2').tree('reload');
+    }">
+    <form id="updateRoleform" method="post">
+        <ul id="t2" class="easyui-tree"></ul>
+        <input name="roleId" id="roleid" hidden="hidden">
+        <input name="oldRoleName" id="oldRoleName" hidden="hidden"/>
+        角色名字：<input id="roleName" name="roleName" type="text" class="easyui-validatebox" data-options="required:true">
+        <div align="center">
+            <input onClick="doURole();" class="easyui-linkbutton" value="确定" data-options="width:50"/>
+            <input onClick="quitRole();" class="easyui-linkbutton" value="取消" data-options="width:50"/>
+        </div>
+    </form>
 </div>
 </body>
-
+<script src="../js/jquery.min.js" type="text/javascript"
+        charset="utf-8"></script>
+<script src="../js/jquery.easyui.min.js" type="text/javascript"
+        charset="utf-8"></script>
+<script src="../js/easyui-lang-zh_CN.js" type="text/javascript"
+        charset="utf-8"></script>
 <script type="text/javascript">
-        $(function () {
-            // 获取按钮
-            var newUser = $('#newUser');
-            var dialog = $('#dialog');
-            dialog.dialog('close');
-            // 添加记录
-            newUser.on('click',function () {
-                var rows = $('#dg').datagrid('getSelected');
-                if (rows) {
-                    dialog.dialog('open');
-                    dialog.dialog({
-                        title:'添加角色',
-                        buttons:[{
-                            text:'保存',
-                            iconCls:'icon-save',
-                            handler:function () {
-                                if ($('form input:checkbox:checked')) {
-                                    var str=document.getElementsByName("adminRole");
-                                    var shosetype=document.querySelector("select");
-                                    var objarray=str.length;
-                                    var chestr="";
-                                    var option = '';
-                                    for (i=0;i<objarray;i++)
-                                    {
-                                        if(str[i].checked == true)
-                                        {
-                                            chestr+=str[i].value+",";
-                                            option += '<option value="' + i + '">' + str[i].value + '</option>';
+
+    $(function () {
+        $("#dg").datagrid({
+            url:'showPageRole',
+            pagination:true,
+            columns:[[
+                {field:'',checkbox:true,width:100},
+                {field:'roleId',title:'角色编号',width:100,hidden:true,},
+                {field:'roleName',title:'角色名',width:100},
+                {field:'resource',title:'拥有权限',width:100,formatter: function(value,row,index){
+                    var content="<select style='width: 100px;'>";
+                    if (row.roleName){
+                        //console.log("角色名:"+row.roleName);
+                        $.ajax({
+                            url:"showResByRoleName",
+                            data:{
+                                "roleName":row.roleName,
+                                "roleId":row.roleId,
+                            },
+                            dataType:"JSON",
+                            async:false,
+                            success:function (data) {
+                                //console.log(data);
+                                $.each(data,function (index,val) {
+                                    //展示一级资源
+                                    content+="<option>"+val.text+"</option>";
+                                    $.each(val.children,function (index2,val2) {
+                                        //展示二级资源
+                                        content+="<option>&nbsp;&nbsp;&nbsp;"+val2.text+"</option>";
+                                        if(val2.children){
+                                            //展示三级资源
+                                            $.each(val2.children,function (index3,val3) {
+                                                content+="<option>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+val3.text+"</option>";
+                                            })
                                         }
-                                    }
-                                    shosetype.innerHTML=option;
-                                    if(chestr == "")
-                                    {
-                                        alert("请先选择一个角色～！");
-                                    }
-                                    dialog.dialog('close');
-                                    $('#form').form('clear');
-                                }
+                                    });
+                                });
+                                content+="</select>";
                             }
-                        },
-                            {
-                                text:'取消',
-                                iconCls:'icon-remove',
-                                handler:function () {
-                                    dialog.dialog('close');
-                                },
-                            }]
-                    })
-                } else{
-                    alert('请选中一条数据!');
-                }
-
-
-            })
+                        });
+                        return content;
+                    }
+                }},
+            ]],
+        });
+        //tree，展示所有的角色资源
+        $("#t1").tree({
+            url:"showAllRes",
+            checkbox:true,
+            loadFilter: function(data){
+                //console.log("data:"+data);
+                return data;
+            }
         })
-    
+        // 加载修改  tree
+        $("#t2").tree({
+            url: "showAllRes",
+            checkbox:true,
+            loadFilter: function(data){
+                return data;
+            }
+        });
+    });
+
+    //添加角色开始
+    //1.点击添加打开添加的对话框
+    function toAdd() {
+        $("#addRoleForm").form("reset");
+        $("#t1").tree("reload");
+        $("#addRoleDialog").dialog("open");
+    }
+    //2.取消对话框
+    function addQuit() {
+        $("#addRoleDialog").dialog("close");
+    }
+    //3.执行添加
+    function doAddRole() {
+        var nodes = $('#t1').tree('getChecked', ['checked','indeterminate']);
+        var ids=new Array(nodes.length);
+        for(var i=0;i<nodes.length;i++){
+            ids[i]=nodes[i].id;
+        }
+        var roleName=$("#name").val();
+        $.ajax({
+            traditional:true,
+            url:"addRole",
+            dataType:"json",
+            data:{"ids":ids,"roleName":roleName},
+            success:function(data){
+                $('#dg').datagrid('reload');
+            }
+        })
+        $('#addRoleDialog').dialog('close');
+    }
+
+    //删除
+    function toDelete(){
+        var rows=$("#dg").datagrid("getSelections");
+        //console.log("length:"+rows.length);
+        if(rows.length==0){
+            $.messager.alert("删除警告", "请选择你要删除的数据","warning");
+        }else{
+            $.messager.confirm("确认删除", "你确定要删除吗",function(state){
+                if(state){
+                    var ids=new Array(rows.length);
+                    for (var i = 0; i < rows.length; i++) {
+                        ids[i]=rows[i].roleId;
+                        //console.log("id:"+ids[i])
+                    }
+                    $.ajax({
+                        traditional:true,
+                        url:"deleteRole",
+                        data:{"ids":ids},
+                        success:function(data){
+                        }
+                    });
+                    $("#dg").datagrid('reload');
+                }
+            });
+            $("#dg").datagrid('reload');
+        }
+    }
+    //修改开始
+    function toUpdate() {
+        var arr=$("#dg").datagrid("getSelections");
+        if(arr.length==0){
+            $.messager.alert("提示","还没有选中","info");
+        }else if(arr.length>1){
+            $.messager.alert("提示","一次只能选中一个","info");
+        }else {
+            var obj=arr[0];
+            //console.log("obj 对象:"+obj);
+            //往表里填充数据
+            //角色回显
+            //$("#t2").tree("reload");
+            $("#updateRoleform").form("reset");
+            $("#roleid").val(obj.roleId);
+            $("#roleName").val(obj.roleName);
+            //console.log("角色id:"+obj.roleId);
+            //console.log("角色名字:"+obj.roleName);
+            //资源回显
+            //根据ajax根据角色名和角色id去后台查询
+            $.ajax({
+                url:"showResByRoleName",
+                data:{
+                    "roleName":obj.roleName,
+                    "roleId":obj.roleId,
+                },
+                dataType:"JSON",
+                async:false,
+                success:function (data) {
+                    //获得节点，选中节点
+                    $.each(data,function (index,val) {
+                        //console.log("data:"+data);
+                        //console.log("选中节点:"+val);
+                        $.each(val.children,function (index2,val2) {
+                            //console.log("节点的子节点:"+val.children);
+                            //console.log("节点的子节点:"+val2.id);
+                            //----------node 是个空值
+                            var node = $("#t2").tree("find",val2.id);
+                            //console.log("node 节点:"+node);
+                            //先回显二级资源
+                            $("#t2").tree("check",node.target);
+                            //如果有三级资源,先取消父节点选中
+                            if(val2.children){
+                                //取消父节点选中
+                                var nodeP = $("#t2").tree("find",val2.id);
+                                $("#t2").tree("uncheck",nodeP.target);
+                                $.each(val2.children,function (index3,val3) {
+                                    //选中当前节点
+                                    var node3 = $("#t2").tree("find",val3.id);
+                                    $("#t2").tree("check",node3.target);
+                                })
+                            }
+                        })
+                    })
+                }
+            })
+            //打开修改对话框
+            $("#updateRole").dialog("open");
+        }
+    };
+    //取消修改
+    function quitRole() {
+        $("#updateRoleform").form("reset");
+        $("#t1").tree("reload");
+        $("#updateRole").dialog("close");
+    }
+    //执行修改
+    function doURole() {
+        //被选中的节点
+        var nodeRes = $("#t2").tree("getChecked");
+        //被选中的父节点
+        var nodePres = $("#t2").tree("getChecked","indeterminate");
+        //获取id
+        var pIds=[];
+        var sIds=[];
+        //console.log("pIds:"+pIds);
+        //console.log("sIds:"+sIds);
+        //把节点的id赋值给数组
+        $.each(nodePres,function (index,val) {
+            //console.log("111:"+val.id);
+            pIds.push(val.id);
+        });
+        $.each(nodeRes,function (index2,val2) {
+            //console.log(val2.id)
+            sIds.push(val2.id);
+        });
+
+
+        $("#updateRoleform").form("submit",{
+            url:"updateRole",
+            onSubmit:function () {
+                return true;
+            },
+            queryParams: {
+                "pIds": pIds,
+                "sIds":sIds,
+            },
+            success:function (data) {
+                //alert(data);
+                jsObj=JSON.parse(data);
+                //alert(jsObj==false);
+                if(jsObj){
+                    //修改成功
+                    $.messager.alert("提示","修改成功","info");
+                    $("#updateRole").dialog("close");
+                    $("#dg").datagrid("load");
+                }else {
+                    //修改失败
+                    $.messager.alert("提示","修改失败","info");
+                    $("#updateRole").dialog("close");
+                }
+            }
+        })
+    };
 </script>
+
 </html>
