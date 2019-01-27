@@ -18,23 +18,46 @@
     <!--搜索框-->
     <input class="easyui-textbox" name="userName" id="user-name" placeholder="请输入关键字">
     <a id="user-search" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
+    <a class="easyui-linkbutton"  id="role" onclick="toFenpei()">修改用户信息</a>
     <!--创建表格-->
     <div id="datagrid" class="easyui-datagrid" style="width: 100%" ></div>
 
-    <!--添加弹窗-->
-    <div class="easyui-dialog" id="dialog" style="width: 300px; height: 300px;"data-options="resizable:true,modal:true,closable:true,closed:true,">
+    <!--&lt;!&ndash;添加对话框&ndash;&gt;
+    <div class="easyui-dialog" id="dialog" style="width: 300px; height: 250px;"data-options="resizable:true,modal:true,closable:true,closed:true,">
         <form id="addForm" style="padding: 10px;" method="post">
-            <div style="margin: 20px;">
+            <div style="margin-left: 30px;">
                 <label>用户名：</label><input type="text" name="userName" id="username"class="easyui-textbox"/>
             </div>
+            &lt;!&ndash;<div style="margin-left: 30px;">
+                <label>密  码：</label><input type="text" name="userlogpwd" id="password" class="easyui-textbox"/>
+            </div>
             <div style="margin-left: 30px;">
-                <label>密码：</label><input type="text" name="userlogpwd" id="password" class="easyui-textbox"/>
+                <label>电  话：</label><input type="text" name="userTel" id="userTel" class="easyui-textbox"/>
+            </div>
+            <div style="margin-left: 30px;">
+                <label>邮  箱：</label><input type="text" name="userEmail" id="userEmail" class="easyui-textbox"/>
+            </div>&ndash;&gt;
+        </form>
+    </div>
+</div>-->
+
+    <!--修改对话框-->
+    <div id="updateUserDialog" class="easyui-dialog" data-options="modal:true,closed: true, width: 400,height: 200,title: 'My Dialog',">
+        <form id="updateUserForm" enctype="multipart/form-data" method="post">
+            <br>
+            用户名：<input name="userName" id="upUserName" ><br>
+            <!-- 密&nbsp;&nbsp;&nbsp;码：<input name="userlogpwd" id="upPassWord"><br>
+             电&nbsp;&nbsp;&nbsp;话：<input name="userTel" id="upUserTel"><br>
+             邮&nbsp;&nbsp;&nbsp;箱：<input name="userEmail" id="upUserEmail"><br>-->
+            角色分配：<ul id="cc"></ul>
+            <br>
+            <br>
+            <div id="lalala">
+                <a class="easyui-linkbutton" data-options="plain:true,width:60,iconCls:'icon-add'" onClick="upUser();">确定</a>
+                <a class="easyui-linkbutton" data-options="plain:true,width:60,iconCls:'icon-remove'" onClick="quitUser();">取消</a>
             </div>
         </form>
     </div>
-</div>
-
-
 
 </body>
 <script type="text/javascript">
@@ -53,10 +76,38 @@
             url:'queryAllPanyuUser',//数据来源
             columns:[[
                 {field:'',checkbox:true},
-                {field:'userId',title:'密码',width:300,align:'center',hidden:true},
-                {field:'userName',title:'用户名',width:300,align:'center'},
-                {field:'userlogpwd',title:'密码',width:300,align:'center'},
+                {field:'userId',title:'密码',width:200,align:'center',hidden:true},
+                {field:'userName',title:'用户名',width:200,align:'center'},
+                /*{field:'userlogpwd',title:'密码',width:200,align:'center'},
+                {field:'userTel',title:'电话',width:200,align:'center'},
+                {field:'userEmail',title:'邮箱',width:200,align:'center'},*/
+                {field:'roles',title:'拥有角色',width:100,formatter: function(value,row,index){
+                    var content="<select style='width: 100px;'>";
+                    console.log("角色名:"+row.userName);
+                    if (row.userName){
+                        $.ajax({
+                            url:"selectAllRoleByUserName",
+                            data:{"userName":row.userName,},
+                            type:"post",
+                            dataType:"JSON",
+                            async:false,
+                            success:function (data) {
+                                //console.log("data:"+data);
+                                $.each(data,function (index,val) {
+                                    //console.log("val:"+val)
+                                    //展示一级资源
+                                    if(val != null){
+                                        content+="<option>"+val.roleName+"</option>";
+                                    }
+                                });
+                                content+="</select>";
+                            }
+                        })
+                        return content;
+                    }
+                }},
             ]],
+            toolbar:$("#toolBar"),
             rownumbers:true,//显示行号
             singleSelect:false,//是否单选
             pagination:true,//显示分页栏
@@ -68,13 +119,6 @@
             //  idField:'id',
             toolbar:[
                 {
-                    iconCls:'icon-add',
-                    text:'添加',
-                    handler:function () {
-                        dialog.dialog('open');
-                    }
-                },
-                {
                     iconCls:'icon-remove',
                     text:'删除',
                     handler:function () {
@@ -85,7 +129,6 @@
                         }
                         else
                         {
-
                             alert("选中条数="+id.length);
                             $.messager.confirm("确认","确实要删除吗？",function(r){
                                 if(r)
@@ -97,82 +140,25 @@
                                         snos[i]=id[i].userId;
                                         console.log("ids:"+snos[i])
                                     }
-
-
                                     $.get("deletePanyuUser?ids="+snos,
                                         function(data){
-                                            //var msg=eval("("+rtn+")");
                                             console.log("data:"+data);
-                                            /* if(data==true)
-                                             {*/
                                             $('#datagrid').datagrid('reload');
-                                            /*  }*/
-
                                         });
-
                                 }
                             });
-
-
                         }
-
                     }
                 },
             ]
         })
+        $('#cc').combotree({
+            url: 'selectAllRole',
+            multiple:true,
+            width:150,
+        });
+
     })
-    $(function () {
-        dialog.dialog({
-            title:'添加用户',
-            buttons:[{
-                text:'保存',
-                iconCls:'icon-save',
-                handler:function () {
-
-                    /*var message={*/
-                    var  userName=$("#username").val().trim();
-                    var userlogpwd=$("#password").val().trim();
-                    //console.log("userName:"+userName);
-                    // console.log("userlogpwd:"+userlogpwd);
-                    /*  };*/
-
-                    if($("#username").val()!=""&&$("#password").val()!="")
-                    {
-                        $.ajax({
-                            type:"post",
-                            url:"addPanyuUser",
-                            data:{"userName":userName,"userlogpwd":userlogpwd},
-                            success:function(){
-                                alert("添加成功！");
-
-                                dialog.dialog('close');
-                                $("#addForm").form("clear");
-                                $('#datagrid').datagrid('reload');
-                                $("#username").val("");
-                                $("#password").val("");
-                            }
-                        })
-
-
-                    }
-                    else{alert("请填写完整！");
-                        $("#username").val("");
-                        $("#password").val("");
-                    }
-
-                },
-            },
-                {
-                    text:'取消',
-                    iconCls:'icon-remove',
-                    handler:function () {
-                        dialog.dialog('close');
-                    },
-                }]
-        })
-
-    });
-
 
 
     //点击搜索
@@ -182,9 +168,89 @@
         $("#datagrid").datagrid({url:"queryAllPanyuUser?userName="+userName}).datagrid('load');
     });
 
+    //修改-------------------------------------------------------------------------------------
+    function toFenpei() {
+        var arr=$("#datagrid").datagrid("getSelections");
+        if(arr.length==0){
+            $.messager.alert("提示","还没有选中","info");
+        }else if(arr.length>1){
+            $.messager.alert("提示","一次只能选中一个","info");
+        }else {
+            var obj=arr[0];
+            $("#upUserName").val(obj.userName);
+            /* $("#upPassWord").val(obj.userlogpwd);
+             $("#upUserTel").val(obj.userTel);
+             $("#upUserEmail").val(obj.userEmail);*/
+            $("#cc").combotree('setValue', " ");
+            //console.log("名字:"+obj.userName);
+            //console.log("密码:"+obj.userlogpwd);
+            //资源回显
+            //根据ajax根据角色名和角色id去后台查询
+            $.ajax({
+                url:"selectAllRoleByUserName",
+                data:{"userName":obj.userName,},
+                dataType:"JSON",
+                success:function (data) {
+                    //console.log("data 1:"+data);
+                    //获得节点，选中节点
+                    if(data.length>0 && data != null){
+                        //alert(123);
+                        $.each(data,function (index,val) {
+                            console.log("val:"+val);
+                        })
+                    }
+                },
+            });
+            $("#updateUserDialog").dialog("open");
+        }
+    };
+    //取消分配
+    function quitUser() {
+        $("#updateUserForm").form("clear");
+        $("#updateUserDialog").dialog("close");
+    }
+    //执行修改
+    function upUser() {
+        var arr=$("#datagrid").datagrid("getSelections");
+        //console.log("用户:"+arr);
+        var obj=arr[0];
+        var tree = $('#cc').combotree('tree');	// 获取树对象
+        var nodes = tree.tree('getChecked');	// 获取选择的节点
+        //获取id
+        var roleIds=[];
+        //把节点的id赋值给数组
+        $.each(nodes,function (index,val) {
+            //console.log(val.id);
+            roleIds.push(val.id);
+        });
 
+        $("#updateUserForm").form("submit",{
+            url:"updatePanyuUserRole",
+            onSubmit:function () {
+                return true;
+            },
+            queryParams: {
+                "userId": obj.userId,
+                "roleIds": roleIds,
+            },
+            success:function (data) {
+                //alert(data);
+                jsObj=JSON.parse(data);
+                //alert(jsObj==false);
+                if(jsObj){
+                    //修改成功
+                    $.messager.alert("提示","修改成功","info");
+                    $("cc").combobox("clear");
+                    $("#datagrid").datagrid("load");
+                    $("#updateUserDialog").dialog("close");
 
-
-
+                }else {
+                    //修改失败
+                    $.messager.alert("提示","修改失败","info");
+                    $("#updateUserDialog").dialog("close");
+                }
+            }
+        })
+    }
 </script>
 </html>
