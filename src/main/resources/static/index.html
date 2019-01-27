@@ -22,7 +22,7 @@
     </div>
     <div class="home-toolbar">
         <ul>
-            <li><shiro:hasRole name="gga"><a href="/login">登陆</a></shiro:hasRole></li>
+            <li><a href="testController/test">登陆</a></li>
             <li><a href="logOutController/logout">退出</a></li>
         </ul>
         <ul class="login-info">
@@ -39,13 +39,13 @@
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
-                    <a href="BS/BS-module-repository.html" shiro:hasRole="基站模块库">基站模块库</a>
+                    <a href="BS/BS-module-repository.html">基站模块库</a>
 
                 </li>
 
                 <li>
                     <i class="panel-icon icon-avatar"></i>
-                    <a href="BS/BS-project-message.html" shiro:hasPermission="基站工程基本信息">基站工程基本信息</a>
+                    <a href="BS/BS-project-message.html">基站工程基本信息</a>
                 </li>
 
                 <li>
