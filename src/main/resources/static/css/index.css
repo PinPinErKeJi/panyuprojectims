@@ -53,13 +53,13 @@ iframe {
 
 .home-toolbar {
 	position: absolute;
-	right: 10px;
-	top: 0;
+	right: 20px;
+	top: 30px;
 }
 
-.home-toolbar ul {
-	margin-top: 10px;
-}
+/*.home-toolbar ul {*/
+	/*margin-top: 10px;*/
+/*}*/
 
 .home-toolbar li {
 	padding: 0 10px;
@@ -165,4 +165,27 @@ iframe {
 
 .home-content {
 
+}
+
+.message{
+	font-size: 14px;
+}
+.message div{
+	text-align: center;
+	margin-bottom: 10px;
+}
+.message div>p{
+	line-height: 25px;
+}
+.message ul li{
+	line-height: 30px;
+}
+.message ul li:hover{
+	background: lightskyblue;
+}
+.message a{
+	text-decoration: none;
+	color: black;
+	display: block;
+	padding-left: 30px;
 }
