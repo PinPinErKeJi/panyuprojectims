@@ -169,6 +169,7 @@ iframe {
 
 .message{
 	font-size: 14px;
+    display: none;
 }
 .message div{
 	text-align: center;
