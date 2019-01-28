@@ -81,6 +81,7 @@
         select * from (select s.*,rownum r from (select * from shiro_resource)s)
         where r between #{start,jdbcType=VARCHAR} and #{end,jdbcType=VARCHAR}
     </select>
+
     <!--查询权限的总数-->
     <select id="countAllShiroResource" resultType="long">
         select count(*) from shiro_resource

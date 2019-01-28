@@ -82,6 +82,7 @@
         #{userTel,jdbcType=VARCHAR},
         #{userEmail,jdbcType=VARCHAR}
         )
+
     </insert>
     <!--分页展示用户名和登录密码-->
     <select id="queryPanyuUserList" resultMap="result_PanyuUser_Map">
