@@ -206,6 +206,8 @@ public class ShiroConfiguration {
         map.put("/static/**","anon");
         map.put("/userLoginController/userlogin","anon");//匿名注册
         map.put("/login.html","anon");
+        map.put("/edit.html","anon");
+        map.put("/personal.html","anon");
         map.put("/register","anon");
         map.put("/logout","logout");
         //map.put("/BS/getItemList", "roles[总监]");
