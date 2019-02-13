@@ -2,17 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>个人资料</title>
+    <title>个人信息</title>
     <style type="text/css">
-        *{  margin: 0;padding: 0;  }
-        .personal{margin: 100px auto 0;width: 500px;border: 1px solid darkgray}
+        *{  margin: 0;padding: 0;}
+        body{background: url("img/002.jpg")no-repeat;background-size: 100%}
+        /*.personal{background:rgba(0,0,0,0.6);padding: 50px;margin: 100px auto 0;width: 500px;}*/
+        form{width: 400px;background: #fff;margin: 100px auto 0;padding: 30px 0 30px 0}
         form>div{overflow: hidden;margin-top: 20px}
-        form>div label{text-align: right;float: left;line-height: 30px;width: 100px}
-        form>div input{float: right;width: 300px;height: 30px;margin-right:
-                40px;text-indent: 1rem}
-        form select{width: 95px;height: 30px;margin-right: 5px;}
-        form .sub{width: 100px;height: 30px;border: 0;margin: 50px auto 0;display: block;
-            margin-bottom: 30px;color: #fff;background: dodgerblue}
+        form>div label{text-align: right;float: left;line-height: 30px;width: 100px;font-size: 14px}
+        form>div input{float: right;width: 220px;height: 30px;margin-right:
+                50px;text-indent: 1rem}
+        form select{width: 68.5px;height: 30px;margin-right: 5px;}
+        form .btn{overflow: hidden;width: 250px;margin:40px auto 0;}
+        form .btn>input{width: 100px;height: 30px;border: 0;display: block;color: #fff;cursor: pointer}
+        form .btn>.sub{background: dodgerblue;float: right}
+        form .btn>.update{background: orange;float: left}
 
     </style>
 </head>
@@ -42,13 +46,16 @@
             <div data-toggle="distpicker">
                 <label>注册地址:</label>
                 <select  id="province" name="userProvince" class="border"
-                         data-province="河南省" style="margin-left: 55px"></select>
+                         data-province="河南省" style="margin-left: 26px"></select>
                 <select  id="city" name="userCity" class="border"
                          data-city="郑州市"></select>
                 <select  id="county" name="userCounty" class="border"
                          data-district="中原区"></select>
             </div>
+            <p class="btn">
+                <input type="submit" value="修改" class="update">
                 <input type="submit" value="确定" class="sub">
+            </p>
         </form>
     </div>
 </body>
@@ -65,8 +72,17 @@
     });
     $(function () {
         $('form').submit(function () {
-            window.location.href = 'index.html';
             return false;
+        })
+        $('form .sub').click(function () {
+            window.location.href = 'index.html';
+        })
+            $('form').find('input').attr('readonly',true);
+            $('form').find('select').attr('disabled',true);
+
+        $('.update').click(function () {
+            $('form').find('input').attr('readonly',false);
+            $('form').find('select').attr('disabled',false);
         })
     })
 </script>
