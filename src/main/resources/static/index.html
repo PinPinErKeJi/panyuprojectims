@@ -247,7 +247,12 @@
         </div>
 
         <div class="accordion-title" title="系统管理" data-options="iconCls:'icon-save'">
-
+            <ul class="home-menu">
+                <li>
+                    <i class="panel-icon icon-menu"></i>
+                    <a href="">系统日志</a>
+                </li>
+            </ul>
         </div>
 
     </div>
@@ -268,7 +273,7 @@
         //添加我的桌面
         tabs.tabs('add',{
             title:'我的桌面',
-            content: '<iframe src="" width="100%" height="100%" frameborder="0"></iframe>'
+            content: '<iframe src="welcome.html" width="100%" height="100%" frameborder="0"></iframe>'
         })
 
         ul.on('click', 'a', function (ev) {
