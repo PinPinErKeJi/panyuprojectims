@@ -1,6 +1,7 @@
 $(function(){
     $('.personal').tooltip({
         hideEvent: 'none',
+        showEvent:'click',
         content: function(){
             return $('.message');
         },
