@@ -23,7 +23,7 @@
     <div class="home-toolbar">
         <ul class="login-info">
             <li><a href="javascript:;" class="personal">管理员：
-                <span id="userinfo"></span></a></li>
+                <span class="userinfo"></span></a></li>
             <li>
                 <a href="javascript:;">消息：5</a>
             </li>
@@ -33,14 +33,14 @@
 
 <div class="message">
     <div>
-        <p>admin</p>
+        <p class="userinfo">admin</p>
         <p>超级管理员</p>
     </div>
     <ul>
         <li>
             <a href="personal.html">
                 <i class="panel-icon icon-man"></i>
-                个人资料
+                个人信息
             </a>
         </li>
         <li>
@@ -246,6 +246,10 @@
             </ul>
         </div>
 
+        <div class="accordion-title" title="系统管理" data-options="iconCls:'icon-save'">
+
+        </div>
+
     </div>
 </div>
 
@@ -261,6 +265,11 @@
         var nav = $('#nav');
         var ul = $('.home-menu');
         var tabs = $('.easyui-tabs');
+        //添加我的桌面
+        tabs.tabs('add',{
+            title:'我的桌面',
+            content: '<iframe src="" width="100%" height="100%" frameborder="0"></iframe>'
+        })
 
         ul.on('click', 'a', function (ev) {
             ul.find('li').removeClass('active');
@@ -282,7 +291,7 @@
         });
 
         //userinfo
-        var userinfo=$("#userinfo");
+        var userinfo=$(".userinfo");
         var sUserName=sessionStorage.getItem("userName");
         userinfo.text(sUserName);
 
