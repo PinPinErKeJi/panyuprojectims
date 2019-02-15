@@ -1,59 +1,71 @@
 package com.panyu.panyuprojectims.config;
 
+import java.time.Duration;
+
+import com.panyu.panyuprojectims.utils.FastJson2JsonRedisSerializer;
+import com.panyu.panyuprojectims.utils.RedisTemplate;
 import com.panyu.panyuprojectims.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
-@PropertySource("classpath:config/redis.properties")
+@PropertySource("classpath:redis.properties")
 public class RedisConfig {
 
+    @Value("${redis.hostName}")
+    private String hostName;
+    
+    @Value("${redis.port}")
+    private Integer port;
+    
+//    @Value("${redis.password}")
+//    private String password;
+    
     @Value("${redis.maxIdle}")
     private Integer maxIdle;
-
+    
+    @Value("${redis.timeout}")
+    private Integer timeout;
+    
     @Value("${redis.maxTotal}")
     private Integer maxTotal;
-
+    
     @Value("${redis.maxWaitMillis}")
     private Integer maxWaitMillis;
-
+    
     @Value("${redis.minEvictableIdleTimeMillis}")
     private Integer minEvictableIdleTimeMillis;
-
+    
     @Value("${redis.numTestsPerEvictionRun}")
     private Integer numTestsPerEvictionRun;
-
+    
     @Value("${redis.timeBetweenEvictionRunsMillis}")
     private long timeBetweenEvictionRunsMillis;
-
+    
     @Value("${redis.testOnBorrow}")
     private boolean testOnBorrow;
-
+    
     @Value("${redis.testWhileIdle}")
     private boolean testWhileIdle;
-
-    /*@Value("${spring.redis.cluster.nodes}")
-    private String clusterNodes;
-
-    @Value("${spring.redis.cluster.max-redirects}")
-    private Integer mmaxRedirectsac;*/
-
-    /**
-     * JedisPoolConfig 连接池
-     * @return
-     */
+    
+    /*
+    * JedisPoolConfig 连接池
+    * @return
+    */
     @Bean
-    public JedisPoolConfig jedisPoolConfig() {
-        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        // 最大空闲数
+    public JedisPoolConfig JedisPoolConfig() {
+    	JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+    	 // 最大空闲数
         jedisPoolConfig.setMaxIdle(maxIdle);
         // 连接池的最大数据库连接数
         jedisPoolConfig.setMaxTotal(maxTotal);
@@ -69,71 +81,59 @@ public class RedisConfig {
         jedisPoolConfig.setTestOnBorrow(testOnBorrow);
         // 在空闲时检查有效性, 默认false
         jedisPoolConfig.setTestWhileIdle(testWhileIdle);
-        return jedisPoolConfig;
+		return jedisPoolConfig;
+    	
     }
-
-    /**
-     * 单机版配置
-     * @Title: JedisConnectionFactory
-     * @param @param jedisPoolConfig
-     * @param @return
-     * @return JedisConnectionFactory
-     * @throws
-     */
+    // 单机版配置
+  
     @Bean
-    public JedisConnectionFactory JedisConnectionFactory(JedisPoolConfig jedisPoolConfig){
-        JedisConnectionFactory JedisConnectionFactory = new JedisConnectionFactory(jedisPoolConfig);
-        //连接池
-        JedisConnectionFactory.setPoolConfig(jedisPoolConfig);
-        //IP地址
-        JedisConnectionFactory.setHostName("192.168.177.128");
-        //端口号
-        JedisConnectionFactory.setPort(6379);
-        //如果Redis设置有密码
-        //JedisConnectionFactory.setPassword(password);
-        //客户端超时时间单位是毫秒
-        JedisConnectionFactory.setTimeout(5000);
-        return JedisConnectionFactory;
+    public JedisConnectionFactory JedisConnectionFactory(){
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration ();
+        redisStandaloneConfiguration.setHostName(hostName);
+        redisStandaloneConfiguration.setPort(port);
+       // redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
+        JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
+        jedisClientConfiguration.connectTimeout(Duration.ofMillis(timeout));
+        JedisConnectionFactory factory = new JedisConnectionFactory(redisStandaloneConfiguration,
+                jedisClientConfiguration.build());
+        return factory;
     }
 
-    /**
-     * 实例化 RedisTemplate 对象
-     * @return
-     */
+    //实例化 RedisTemplate 对象
     @Bean
-    public RedisTemplate<String, Object> functionDomainRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        initDomainRedisTemplate(redisTemplate, redisConnectionFactory);
-        return redisTemplate;
+    public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    	
+    	RedisTemplate redisTemplate = new RedisTemplate();
+    	initRedisTemplate(redisTemplate, redisConnectionFactory);
+    	return redisTemplate;
     }
-
-    /**
-     * 设置数据存入 redis 的序列化方式,并开启事务
-     *
-     * @param redisTemplate
-     * @param factory
-     */
-    private void initDomainRedisTemplate(RedisTemplate<String, Object> redisTemplate, RedisConnectionFactory factory) {
+    
+    //引入自定义序列化
+    @Bean
+    public RedisSerializer fastredisSerializer() {
+    	return new FastJson2JsonRedisSerializer<Object>(Object.class);
+    }
+    
+    //设置数据存入 redis 的序列化方式,并开启事务
+    private void initRedisTemplate(RedisTemplate redisTemplate,RedisConnectionFactory factory) {
         //如果不配置Serializer，那么存储的时候缺省使用String，如果用User类型存储，那么会提示错误User can't cast to String！
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+    	redisTemplate.setKeySerializer(new StringRedisSerializer());
+    	redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+    	redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+    	redisTemplate.setValueSerializer(fastredisSerializer());
+    	
         // 开启事务
         redisTemplate.setEnableTransactionSupport(true);
         redisTemplate.setConnectionFactory(factory);
     }
-
-    /**
-     * 注入封装RedisTemplate
-     * @Title: redisUtil
-     * @return RedisUtil
-     * @throws
-     */
+    
+   // 注入封装RedisTemplate
     @Bean(name = "redisUtil")
-    public RedisUtil redisUtil(RedisTemplate<String, Object> redisTemplate) {
+    public RedisUtil redisUtil(RedisTemplate redisTemplate) {
+    	System.out.println("注入成功");
         RedisUtil redisUtil = new RedisUtil();
         redisUtil.setRedisTemplate(redisTemplate);
         return redisUtil;
     }
+
 }
