@@ -13,7 +13,7 @@
   border-style: solid;
 }
 .panel-header {
-  padding: 5px;
+  padding: 8px;
   position: relative;
 }
 .panel-title {
@@ -49,7 +49,8 @@
 }
 .panel-icon {
   left: 5px;
-  width: 16px;
+  width: 19px;
+  height: 19px;
 }
 .panel-tool {
   right: 5px;
@@ -123,10 +124,10 @@
 .panel-body {
   background-color: #ffffff;
   color: #000000;
-  font-size: 12px;
+  font-size: 13px;
 }
 .panel-title {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: bold;
   color: #0E2D5F;
   height: 16px;
@@ -295,12 +296,12 @@
   border-color: #95B8E7;
 }
 .accordion .accordion-header {
-  background: #E0ECFF;
+  /*background: #E0ECFF;*/
   filter: none;
 }
 .accordion .accordion-header-selected {
   /*background: #ffe48d;*/
-  background: #f0f6ff url(images/accordion-title.gif) bottom;
+  /*background: #f0f6ff url(images/accordion-title.gif) bottom;*/
 }
 .accordion .accordion-header-selected .panel-title {
   color: #000000;
@@ -1298,7 +1299,7 @@
   display: inline-block;
   text-decoration: none;
   margin: 0;
-  padding: 0 10px;
+  padding: 0 20px;
   height: 25px;
   line-height: 25px;
   text-align: center;
