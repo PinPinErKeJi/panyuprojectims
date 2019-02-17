@@ -20,7 +20,7 @@ iframe {
 	background: url("./icons/topbg.png") repeat-x;
 	position: relative;
 	overflow: hidden;
-    background-size: 100%;
+	background-size: 100%;
 }
 
 .home-logo {
@@ -61,7 +61,7 @@ iframe {
 }
 
 /*.home-toolbar ul {*/
-	/*margin-top: 10px;*/
+/*margin-top: 10px;*/
 /*}*/
 
 .home-toolbar li {
@@ -74,8 +74,8 @@ iframe {
 	/*border-radius:30px;*/
 	color: #b8ceda;
 	margin-right: 100px;
-    margin-top: 10px;
-    font-size: 14px;
+	margin-top: 10px;
+	font-size: 14px;
 	/*background-color: #09537a;*/
 }
 
@@ -140,14 +140,14 @@ iframe {
 }
 
 /*.home-menu li.active {*/
-	/*background: #A3F1B2;*/
-	/*border-bottom: 1px solid #6ECC81;*/
+/*background: #A3F1B2;*/
+/*border-bottom: 1px solid #6ECC81;*/
 /*}*/
 .home-menu li a:hover {
 	color: #2a83cf;
 }
 .home-menu li a:focus {
-    color: #2a83cf;
+	color: #2a83cf;
 }
 .home-menu a {
 	display: block;
@@ -181,7 +181,7 @@ iframe {
 
 .message{
 	font-size: 14px;
-    display: none;
+	display: none;
 }
 .message div{
 	text-align: center;
