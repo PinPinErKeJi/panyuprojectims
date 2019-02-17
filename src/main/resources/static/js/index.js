@@ -7,7 +7,7 @@ $(function(){
         },
         onUpdate: function(content){
             content.panel({
-                width: 200,
+                width: 160,
                 border: false,
             });
         },
