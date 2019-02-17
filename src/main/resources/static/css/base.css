@@ -51,14 +51,14 @@ dl, dt, dd, ol, ul, li{ list-style:none;}
 
 .placeholder{color:#ddd;}
 
-.button{display:inline-block;width:135px; height:35px; background:url(../images/dialog_btnbg.png);border:none; border-radius:3px;color:#fff; font-size:16px; cursor:pointer; font-family:'Microsoft Yahei','微软雅黑';outline:none;}
-.button.normal{width:133px; height:33px;background:url(../images/dialogbtn.png);color:#000;border:1px solid #c0c0c0;}
+/*.button{display:inline-block;width:135px; height:35px; background:url(../images/dialog_btnbg.png);border:none; border-radius:3px;color:#fff; font-size:16px; cursor:pointer; font-family:'Microsoft Yahei','微软雅黑';outline:none;}*/
+/*.button.normal{width:133px; height:33px;background:url(../images/dialogbtn.png);color:#000;border:1px solid #c0c0c0;}*/
 .button:active{}
 .button.long2{width:100px;}
 
 .select-wrap ul{ display:none; background:#fff;position:absolute; left:0; top:30px;  width:260px; border:1px solid #c5d6e0;border-top:none;z-index: 222;}
 .select-wrap ul li{ padding-left:10px; line-height:28px; cursor:pointer;}
-.select-wrap ul li:hover{ background:url(../images/formbtnbg.png) repeat-x;}
+/*.select-wrap ul li:hover{ background:url(../images/formbtnbg.png) repeat-x;}*/
 .emal_left{
     width: 18%;
     float: left;
@@ -93,7 +93,7 @@ dl, dt, dd, ol, ul, li{ list-style:none;}
     height: 16px;
     position: relative;
     display: inline-block;
-    background-image: url("../images/write.png");
+    /*background-image: url("../images/write.png");*/
     top:3px;
     margin-right: 5px;
 }
@@ -102,7 +102,7 @@ dl, dt, dd, ol, ul, li{ list-style:none;}
     height: 16px;
     position: relative;
     display: inline-block;
-    background-image: url("../images/get.png");
+    /*background-image: url("../images/get.png");*/
     top:3px;
     margin-right: 5px;
 }
@@ -190,7 +190,7 @@ dl, dt, dd, ol, ul, li{ list-style:none;}
     height: 8px;
     position: relative;
     display: inline-block;
-    background-image: url("../images/start.png");
+    /*background-image: url("../images/start.png");*/
 
     margin-right: 5px;
     margin-left: 3px;
@@ -365,7 +365,7 @@ dl, dt, dd, ol, ul, li{ list-style:none;}
     height: 8px;
     position: relative;
     display: inline-block;
-    background-image: url("../images/start.png");
+    /*background-image: url("../images/start.png");*/
 
     margin-right: 5px;
     top:-2px;
