@@ -296,10 +296,13 @@
   border-color: #95B8E7;
 }
 .accordion .accordion-header {
-  /*background: #E0ECFF;*/
+  background: #f1f8fc;
   filter: none;
 }
 .accordion .accordion-header-selected {
+  background: #6ec673;
+  border-color: #72b877;
+  /*background-size: 100%;*/
   /*background: #ffe48d;*/
   /*background: #f0f6ff url(images/accordion-title.gif) bottom;*/
 }
@@ -1769,7 +1772,7 @@
 .datagrid-body {
   margin: 0;
   padding: 0;
-  overflow: auto;
+  /*overflow: auto;*/
   zoom: 1;
 }
 .datagrid-view1 .datagrid-body-inner {
