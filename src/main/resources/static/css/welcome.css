@@ -4,8 +4,6 @@ body{ font-family:'微软雅黑';}
     font-size: 14px;
 }
 
-
-
 /*主体*/
 .article{ float:left; margin-top:6px; width:100%;}
 .article:first-child{ margin-top:0;}
