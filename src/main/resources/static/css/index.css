@@ -2,7 +2,9 @@
 	margin: 0;
 	padding: 0;
 }
-
+html,body{
+	font-family:'微软雅黑';
+}
 li {
 	list-style: none;
 }
@@ -67,15 +69,17 @@ iframe {
 }
 
 .home-toolbar .login-info{
-	padding: 5px;
-	border-radius:30px;
+	/*padding: 5px;*/
+	/*border-radius:30px;*/
 	color: #b8ceda;
-	background-color: #09537a;
+	margin-right: 100px;
+	/*background-color: #09537a;*/
 }
 
 .home-toolbar a {
 	color: #fff;
 	text-decoration: none;
+	padding-left: 20px;
 }
 
 /*new nav*/
@@ -118,7 +122,7 @@ iframe {
 }
 
 .home-accordion .panel-header {
-	padding: 4px 5px;
+	/*padding: 4px 5px;*/
 }
 
 .home-menu {
@@ -128,7 +132,7 @@ iframe {
 .home-menu li {
 	position: relative;
 	text-indent: 34px;
-	line-height: 23px;
+	line-height: 25px;
 	border-bottom: 1px solid #fff;
 }
 
@@ -190,3 +194,8 @@ iframe {
 	display: block;
 	padding-left: 30px;
 }
+
+.personal{
+	background: url('icons/user.png')no-repeat left;
+}
+
