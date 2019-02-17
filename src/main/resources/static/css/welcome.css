@@ -3,7 +3,6 @@ body{ font-family:'微软雅黑';}
 .page-container p{
     font-size: 14px;
 }
-
 /*主体*/
 .article{ float:left; margin-top:6px; width:100%;}
 .article:first-child{ margin-top:0;}
@@ -18,9 +17,9 @@ body{ font-family:'微软雅黑';}
 .article .title h2 ul{}
 .article .title h2 ul li{ width:98px;  border-left:1px solid transparent; border-right:1px solid transparent;float:left; padding-left:8px;}
 .article .title h2 ul li a{ display:block;line-height:35px; padding-left:22px; color:#000; font-size:14px; font-weight:normal;}
-.article .title h2 ul li.current{ border-left:1px solid #c1d3de; border-right:1px solid #c1d3de; background:url(../images/titlebg01.png) repeat-x;}
+/*.article .title h2 ul li.current{ border-left:1px solid #c1d3de; border-right:1px solid #c1d3de; background:url(../images/titlebg01.png) repeat-x;}*/
 .article .title h2 ul li.current a{ background:url(../images/titleico.png) no-repeat left center; font-weight:bold;}
-.article .title .more{ font-size:12px; float:right; margin-right:12px; color:#000; width:33px; background:url(../images/more.png) no-repeat right center;}
+/*.article .title .more{ font-size:12px; float:right; margin-right:12px; color:#000; width:33px; background:url(../images/more.png) no-repeat right center;}*/
 .article .title .more:hover{ text-decoration:underline;}
 
 /*内容*/
