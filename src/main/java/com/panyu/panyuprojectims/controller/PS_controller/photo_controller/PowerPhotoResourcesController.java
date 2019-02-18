@@ -13,10 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("PS")
@@ -72,6 +69,17 @@ public class PowerPhotoResourcesController {
             PowerPhotoResources powerPhotoResources,
             String powerProjectId,
             String powerInformationId){
+        //文件目录地址，年月作为文件夹名称
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) +1;
+        int day = calendar.get(Calendar.DATE);
+
+        String yearloadTargetPath = year+ "/";
+        String mothloadTargetPath =month+ "/";
+        String dayloadTargetPath =day+ "/";
+        String uploadTargetPath =  yearloadTargetPath + mothloadTargetPath +dayloadTargetPath+ "/";
+
         //根据parentID查询对应的图片信息个数
         long count = powerPhotoResourcesService.getPowerPhotoResourcesCountByProjectId(powerProjectId);
         try {
@@ -82,13 +90,13 @@ public class PowerPhotoResourcesController {
                     Date d = new Date();
                     String newFileName = replaceAll + "" + d.getTime() + "" + fileName;
                     if (count < 6) {
-                        File file = new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\PS\\photo");
+                        File file = new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\photo\\PS"+"\\"+uploadTargetPath);
                         if (!file.exists()) {
                             file.mkdirs();
                         }
-                        multipartFile.transferTo(new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\PS\\photo" + "/" + newFileName));
+                        multipartFile.transferTo(new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\photo\\PS" +"\\"+uploadTargetPath+"/"+ newFileName));
                         String finalFileName = newFileName;
-                        powerPhotoResources.setPowerPhotoName(finalFileName);
+                        powerPhotoResources.setPowerPhotoName("\\photo\\PS"+"\\"+uploadTargetPath+"/"+finalFileName);
                         powerPhotoResources.setPowerProjectId(powerProjectId);
                         powerPhotoResources.setPowerInformationId(powerInformationId);
                         powerPhotoResourcesService.insertPowerPhotoResources(powerPhotoResources);

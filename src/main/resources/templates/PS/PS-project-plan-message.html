@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/jdbc">
+<head>
+    <meta charset="UTF-8">
+    <title>电源工程进度统计信息</title>
+    <link rel="stylesheet" href="../easyui/easyui.css">
+    <link rel="stylesheet" href="../css/icon.css">
+    <link rel="stylesheet" href="../css/list.css">
+    <style>
+        .border{
+            height: 27px;
+            width: 120px;
+            border: 1px solid #95B8E7;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<form id="excelForm" method="post" enctype="multipart/form-data">
+    <div>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true"  data-options="iconCls:'icon-print'" onClick="ProjectProgressDegreeExcel();">导出工程进度基本信息</a>
+    </div>
+</form>
+<div data-toggle="distpicker" style="float: left">
+    <select  id="province" class="border" data-province="河南省"></select>
+    <select  id="city" class="border" data-city="郑州市"></select>
+    <select  id="county" class="border" data-district="中原区"></select>
+</div>
+<div>
+    <label>建设年份:</label><input id="construction-year" type="text" class="Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy'})">
+    <label>运营商:</label><input id="operator" class="easyui-combobox" placeholder="请选择运营商" style="width: 90px">
+    <label>建设项目名称：</label><input id="construction-project" class="easyui-textbox" style="width:90px">
+    <label>监理人员：</label><input id="supervisory" class="easyui-textbox" style="width:90px">
+    <a href="#" id="search" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
+</div>
+<div id="datagrid" class="easyui-datagrid panel-fit" style="height: 100%;width: 99.9%"></div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.easyui.min.js"></script>
+<script src="../js/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.js" ></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.common.js" ></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.esm.js" ></script>
+<script type="text/javascript" src="../js/My97DatePicker/WdatePicker.js"></script>
+<script th:inline="none" type="text/javascript">
+    $(function () {
+        //初始化运营商combobox
+        $("#operator").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            data:[{
+                id:'1',
+                name:'中国电信'
+            },{
+                id:'2',
+                name:'中国联通'
+            },{
+                id:'3',
+                name:'中国移动'
+            },{
+                id:'4',
+                name:'中国铁塔'
+            },{
+                id:'5',
+                name:'中国广电'
+            }]
+        })
+        //搜索点击事件
+        $("#search").bind("click",function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "county":$("#county").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operator").combobox("getText"),
+                "siteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "projectLeader":$("#supervisory").textbox("getValue").trim()
+            });
+        })
+        //点击省份change事件
+        $("#province").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operator").combobox("getText"),
+                "siteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "projectLeader":$("#supervisory").textbox("getValue").trim()
+            });
+        })
+        //点击城市change事件
+        $("#city").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operator").combobox("getText"),
+                "siteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "projectLeader":$("#supervisory").textbox("getValue").trim()
+            });
+        })
+        //点击区(县)change事件
+        $("#county").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "county":$("#county").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operator").combobox("getText"),
+                "siteSupervision":$("#supervisory").textbox("getValue").trim(),
+                "projectLeader":$("#supervisory").textbox("getValue").trim()
+            });
+        })
+        //运营商change事件
+        $("#operator").combobox({
+            onChange:function () {
+                $("#datagrid").datagrid("load",{
+                    "province":$("#province").find("option:selected").val(),
+                    "city":$("#city").find("option:selected").val(),
+                    "county":$("#county").find("option:selected").val(),
+                    "buildYear":$("#construction-year").val(),
+                    "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                    "operator":$("#operator").combobox("getText"),
+                    "siteSupervision":$("#supervisory").textbox("getValue").trim(),
+                    "projectLeader":$("#supervisory").textbox("getValue").trim()
+                });
+            }
+        })
+
+        //数据表格
+        $("#datagrid").datagrid({
+            url: '../PS/selectPowerSupplyProgress',
+            pagination: true,
+            pageNumber: 1,
+            pageSize: 2,
+            pageList: [2, 4, 8, 10, 20],
+            columns:[[
+                {field:'ck',checkbox:"true",rowspan:2},
+                {field: 'powerProgressId', title: '序号', rowspan: 2, width: 50, align: 'center',hidden:true},
+                {field: 'operator', title: '运营商', rowspan: 2, width: 60, align: 'center'},
+                {field: 'buildYear', title: '建设年份', rowspan: 2, align: 'center', width: 80},
+                {field: 'buildingProject', title: '建设项目名称', rowspan: 2, align: 'center', width: 120},
+                {field: 'motorRoomName', title: '机房名称', rowspan: 2, align: 'center', width: 80},
+                {field: 'motorRoomLongitude', title: '机房经度', rowspan: 2, align: 'center', width: 80},
+                {field: 'motorRoomLatitude', title: '机房纬度', rowspan: 2, align: 'center', width: 80},
+                {field: 'province', title: '省', rowspan: 2, align: 'center', width: 80},
+                {field: 'city', title: '市', rowspan: 2, align: 'center', width: 80},
+                {field: 'county', title: '区(县)', rowspan: 2, align: 'center', width: 80},
+                {field: 'siteSupervision', title: '现场监理', rowspan: 2, align: 'center', width: 100},
+                {field: 'projectLeader', title: '项目负责人', rowspan: 2, align: 'center', width: 100},
+                {title: '新增设备', colspan:8, align: 'center'},
+                {title: '新增电力电缆', colspan:7, align: 'center'},
+                {title: '新增走线架', colspan:4, align: 'center'},
+            ],[
+                {field: 'progressEquipmentNumber', title: '编号',  width: 50, align: 'center'},
+                {field: 'progressEquipmentType', title: '类型',  width: 50, align: 'center'},
+                {field: 'progressEquipmentModel', title: '型号', width: 50, align: 'center'},
+                {field: 'progressEquipmentSize', title: '尺寸',  width: 50, align: 'center'},
+                {field: 'constructionProgress', title: '施工进度',  width: 80, align: 'center'},
+                {field: 'equipmentArrivalTime', title: '到货时间',  width: 80, align: 'center'},
+                {field: 'installationTime', title: '安装时间',  width: 80, align: 'center'},
+                {field: 'chargingTime', title: '加电时间',  width: 80, align: 'center'},
+                {field: 'progressPowerCableNumber', title: '编号',  width: 50, align: 'center'},
+                {field: 'progressPowerCableModel', title: '规格型号',  width: 80, align: 'center'},
+                {field: 'progressPowerLength', title: '长度(m)', width: 80, align: 'center'},
+                {field: 'beFrom', title: 'From:',  width: 80, align: 'center'},
+                {field: 'beTo', title: 'To:',  width: 50, align: 'center'},
+                {field: 'constructionSchedule', title: '施工进度',  width: 80, align: 'center'},
+                {field: 'powerCableMakespan', title: '完工时间',  width: 80, align: 'center'},
+                {field: 'progressCablingRackNumber', title: '编号',  width: 50, align: 'center'},
+                {field: 'progressRackLength', title: '长度(m)',  width: 80, align: 'center'},
+                {field: 'rackConstructionProgress', title: '施工进度',  width: 80, align: 'center'},
+                {field: 'cablingRackMakespan', title: '完工时间',  width: 80, align: 'center'},
+            ]]
+        })
+    })
+    //导出数据
+    function ProjectProgressDegreeExcel(){
+        var rowDatas = $("#datagrid").datagrid("getSelections");
+        //console.log(rowDatas+"信息数据");
+        if(rowDatas.length==0){
+            $.messager.alert("信息框","请选中要导出的数据","warning");
+        }else{
+            var ids = new Array(rowDatas.length);
+            for(var i = 0; i<rowDatas.length; i++){
+                ids[i] = rowDatas[i].powerProgressId;
+            }
+            //console.log(ids);
+            window.location.href="../PS/importPowerSupplyProgressExcel?ids="+ids+"&time="+new Date();
+        }
+    }
+</script>
+</body>
+</html>

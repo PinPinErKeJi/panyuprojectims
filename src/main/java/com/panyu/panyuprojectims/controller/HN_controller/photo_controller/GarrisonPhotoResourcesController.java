@@ -12,10 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("HN")
@@ -67,7 +64,18 @@ public class GarrisonPhotoResourcesController {
             MultipartFile[] uploadFile,
             GarrisonPhotoResources garrisonPhotoResources,
             String garrisonProjectId,String garrisonInformationId){
-       int i = 0;
+        //文件目录地址，年月作为文件夹名称
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) +1;
+        int day = calendar.get(Calendar.DATE);
+
+        String yearloadTargetPath = year+ "/";
+        String mothloadTargetPath =month+ "/";
+        String dayloadTargetPath =day+ "/";
+        String uploadTargetPath =  yearloadTargetPath + mothloadTargetPath +dayloadTargetPath+ "/";
+
+        int i = 0;
         long garrisonPhotoResourcesCountByProjectId = garrisonPhotoResourcesService.getGarrisonPhotoResourcesCountByProjectId(garrisonProjectId);
         try {
             if (uploadFile!=null) {
@@ -78,13 +86,13 @@ public class GarrisonPhotoResourcesController {
                     Date d = new Date();
                     String newFileName = replaceAll + "" + d.getTime() + "" + fileName;
                     if (garrisonPhotoResourcesCountByProjectId < 6) {
-                        File file = new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\HN\\photo");
+                        File file = new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\photo\\HN"+"\\"+uploadTargetPath);
                         if (!file.exists()) {
                             file.mkdirs();
                         }
-                        multipartFile.transferTo(new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\HN\\photo" + "/" + newFileName));
+                        multipartFile.transferTo(new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\photo\\HN"+"\\"+uploadTargetPath+"/" + newFileName));
                         String finalFileName = newFileName;
-                        garrisonPhotoResources.setGarrisonPhotoName(finalFileName);
+                        garrisonPhotoResources.setGarrisonPhotoName("\\photo\\HN"+"\\"+uploadTargetPath+"/"+finalFileName);
                         garrisonPhotoResources.setGarrisonProjectId(garrisonProjectId);
                         garrisonPhotoResources.setGarrisonInformationId(garrisonInformationId);
                         i = garrisonPhotoResourcesService.insertGarrisonPhotoResources(garrisonPhotoResources);
