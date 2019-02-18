@@ -78,11 +78,11 @@ public class PhotoResourcesController {
                     Date d = new Date();
                     String newFileName = replaceAll + "" + d.getTime() + "" + fileName;
                     if (countPhotoResourcesByParentId < 6) {
-                        File file = new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\BS\\photo");
+                        File file = new File("D:\\磐羽科技\\代码备份\\1.14\\panyuprojectims\\src\\main\\resources\\static\\BS\\photo");
                         if (!file.exists()) {
                             file.mkdirs();
                         }
-                        multipartFile.transferTo(new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\BS\\photo" + "/" + newFileName));
+                        multipartFile.transferTo(new File("D:\\磐羽科技\\代码备份\\1.14\\panyuprojectims\\src\\main\\resources\\static\\BS\\photo" + "/" + newFileName));
                         String finalFileName = newFileName;
                         photoResources.setPhotoName(finalFileName);
                         photoResources.setParentId(parentId);
