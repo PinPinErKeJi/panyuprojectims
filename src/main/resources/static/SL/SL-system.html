@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统日志</title>
+    <link rel="stylesheet" href="../easyui/easyui.css">
+    <link rel="stylesheet" href="../css/icon.css">
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery.easyui.min.js"></script>
+    <script src="../js/easyui-lang-zh_CN.js"></script>
+</head>
+<body>
+       <div style="margin-bottom: 5px">
+           <input class="easyui-textbox" name="userName" placeholder="请输入关键字">
+           <a class="easyui-linkbutton" iconCls="icon-search">搜索</a>
+       </div>
+       <div id="datagrid" class="easyui-datagrid" style="height: 500px"></div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        var datagrid = $('#datagrid');
+        datagrid.datagrid({
+            url:'',//数据来源
+            columns:[[
+                {field:'userName',title:'用户名',width:200,sortable:true,align:'center'},
+                {field:'userIP',title:'登录IP',width:200,sortable:true,align:'center'},
+                {field:'date',title:'登陆时间',width:200,sortable:true,align:'center'},
+                {field:'type',title:'操作类型',width:200,sortable:true,align:'center'},
+
+            ]],
+            rownumbers:true,//显示行号
+            pagination:true,//显示分页栏
+            pageList:[10,20,50,100],//每页行数选择列表
+            pageSize:10,//出示每页行数
+        })
+    })
+</script>
+</html>

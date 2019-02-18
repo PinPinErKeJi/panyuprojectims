@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="../easyui/easyui.css" />
     <link rel="stylesheet" href="../css/icon.css" />
     <!--<link rel="stylesheet" type="text/css" href="../css/demo.css"/>-->
+    <style type="text/css">
+        #addRoleForm>div,#updateRoleform>div{overflow: hidden;margin-top: 30px}
+        #addRoleForm>div label,#updateRoleform>div label{text-align: right;line-height: 25px;float: left;padding-right: 15px;width: 65px}
+        #lalala,.lalala{width: 50%;margin: 20px auto 0}
+    </style>
 </head>
 <body>
 
@@ -13,33 +18,39 @@
 <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-add"  onclick="toUpdate()">修改</a>
 <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-add"  onclick="toDelete()">删除</a>
 
-<table id="dg" class="easyui-datagrid" title="角色管理" style="width:460px;"></table>
+<table id="dg" class="easyui-datagrid" title="角色管理" style="height: 100%"></table>
 
 <!--添加角色的对话框-->
 <div id="addRoleDialog" class="easyui-dialog"
      data-options="modal:true,closed: true, width: 300,
-    height: 300,title: 'My Dialog',">
-    <form id="addRoleForm"  method="post" style="margin-left: 50px"><br>
+    height: 180,title: '添加角色',">
+    <form id="addRoleForm"  method="post">
         <ul id="t1" class="easyui-tree"></ul>
-        角色名：<input id="name" name="roleName" class="easyui-validatebox" data-options="required:true"><br>
-        <a class="easyui-linkbutton" data-options="plain:true,width:60,iconCls:'icon-add'" onclick="doAddRole()">确定</a>
-        <a class="easyui-linkbutton" data-options="plain:true,width:60,iconCls:'icon-remove'" onclick="addQuit()">取消</a>
+        <div>
+            <label>角色名:</label><input id="name" name="roleName" class="easyui-validatebox" data-options="required:true">
+        </div>
+        <div id="lalala">
+            <a class="easyui-linkbutton" data-options="plain:true,width:60,iconCls:'icon-add'" onclick="doAddRole()">确定</a>
+            <a class="easyui-linkbutton" data-options="plain:true,width:60,iconCls:'icon-remove'" onclick="addQuit()">取消</a>
+        </div>
     </form>
 </div>
 <!--修改角色的对话框-->
 <div id="updateRole" class="easyui-dialog"
-     data-options="modal:true,closed: true, width: 400,
-    height: 200,title: 'My Dialog',onClose:function (){
+     data-options="modal:true,closed: true, width: 300,
+    height: 180,title: '修改角色',onClose:function (){
     	$('#t2').tree('reload');
     }">
     <form id="updateRoleform" method="post">
         <ul id="t2" class="easyui-tree"></ul>
         <input name="roleId" id="roleid" hidden="hidden">
         <input name="oldRoleName" id="oldRoleName" hidden="hidden"/>
-        角色名字：<input id="roleName" name="roleName" type="text" class="easyui-validatebox" data-options="required:true">
-        <div align="center">
-            <input onClick="doURole();" class="easyui-linkbutton" value="确定" data-options="width:50"/>
-            <input onClick="quitRole();" class="easyui-linkbutton" value="取消" data-options="width:50"/>
+        <div>
+            <label>角色名字:</label><input id="roleName" name="roleName" type="text" class="easyui-validatebox" data-options="required:true">
+        </div>
+        <div align="center" class="lalala">
+            <a class="easyui-linkbutton" data-options="plain:true,width:60,iconCls:'icon-add'" onClick="doURole();">确定</a>
+            <a class="easyui-linkbutton" data-options="plain:true,width:60,iconCls:'icon-remove'" onClick="quitRole();">取消</a>
         </div>
     </form>
 </div>

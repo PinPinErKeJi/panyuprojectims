@@ -1,12 +1,13 @@
 $(function(){
     $('.personal').tooltip({
         hideEvent: 'none',
+        showEvent:'click',
         content: function(){
             return $('.message');
         },
         onUpdate: function(content){
             content.panel({
-                width: 200,
+                width: 160,
                 border: false,
             });
         },

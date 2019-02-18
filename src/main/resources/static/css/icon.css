@@ -94,3 +94,40 @@
 .icon-large-chart{
 	background:url('icons/large_chart.png') no-repeat center center;
 }
+.icon-one{
+	background:url('icons/liicon01.png') no-repeat center center;
+	/*background-size: 80%;*/
+}
+.icon-two{
+	background:url('icons/liicon02.png') no-repeat center center;
+}
+.icon-three{
+	background:url('icons/liicon03.png') no-repeat center center;
+}
+.icon-four{
+	background:url('icons/liicon04.png') no-repeat center center;
+}
+.icon-five{
+	background:url('icons/liicon05.png') no-repeat center center;
+}
+.icon-six{
+	background:url('icons/liicon06.png') no-repeat center center;
+}
+.icon-seven{
+	background:url('icons/liicon07.png') no-repeat center center;
+}
+.icon-eight{
+	background:url('icons/liicon08.png') no-repeat center center;
+}
+.icon-nine{
+	background:url('icons/liicon09.png') no-repeat center center;
+}
+.icon-warning{
+	background:url('icons/warning.png') no-repeat center center;
+}
+.icon-man{
+	background:url('icons/man.png') no-repeat center center;
+}
+.icon-nav{
+	background:url('icons/icon0.png') no-repeat center center;
+}
