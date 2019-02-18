@@ -1,9 +1,4 @@
-/**
- * @author zhixin wen <wenzhixin2010@gmail.com>
- * version: 1.10.1
- * https://github.com/wenzhixin/bootstrap-table/
- */
-
+*{margin: 0;padding: 0}
 .bootstrap-table .table {
     margin-bottom: 0 !important;
     border: 1px solid #dddddd;
