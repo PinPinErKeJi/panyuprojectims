@@ -245,6 +245,13 @@ public class PanyuUserController {
         return "AM/AM-userinfo";
     }
 
+    //跳转我的桌面
+    @RequestMapping("skip43")
+    public static String skip43(){
+        System.out.println("controller");
+        return "AM/welcome";
+    }
+
 
     //跳转主页面
     @RequestMapping("skip")
