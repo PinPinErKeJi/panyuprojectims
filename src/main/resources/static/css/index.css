@@ -4,6 +4,7 @@
 }
 html,body{
 	font-family:'微软雅黑';
+	background: blue;
 }
 li {
 	list-style: none;
@@ -111,6 +112,7 @@ iframe {
 .home-sidebar {
 	width: 190px;
 	height: 100%;
+	border:1px solid #bdd0db; border-top:none; background:#f1f8fc;
 }
 
 .home-menubutton {
@@ -207,3 +209,6 @@ iframe {
 	background: url('icons/user.png')no-repeat left;
 }
 
+/*左侧栏导航*/
+.home-sidebar h2{  background:url(../images/lefttopbg.png) repeat-x; border-radius:2px 2px 0 0; }
+.home-sidebar h2 p{ margin-left:8px;padding-left:25px; line-height:35px;color:#fff; font-size:14px; font-weight:bold; background:url(../images/icon0.png) no-repeat left center;}

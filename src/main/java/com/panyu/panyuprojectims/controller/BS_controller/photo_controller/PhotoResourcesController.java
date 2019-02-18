@@ -12,10 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Controller
@@ -67,6 +64,18 @@ public class PhotoResourcesController {
                                                           PhotoResources photoResources,
                                                           String parentId,
                                                           String projectProgressId){
+
+        //文件目录地址，年月作为文件夹名称
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) +1;
+        int day = calendar.get(Calendar.DATE);
+
+        String yearloadTargetPath = year+ "/";
+        String mothloadTargetPath =month+ "/";
+        String dayloadTargetPath =day+ "/";
+        String uploadTargetPath =  yearloadTargetPath + mothloadTargetPath +dayloadTargetPath+ "/";
+
         int i = 0;
         long countPhotoResourcesByParentId = photoResourcesService.getCountPhotoResourcesByParentId(parentId);
         try {
@@ -78,13 +87,13 @@ public class PhotoResourcesController {
                     Date d = new Date();
                     String newFileName = replaceAll + "" + d.getTime() + "" + fileName;
                     if (countPhotoResourcesByParentId < 6) {
-                        File file = new File("D:\\磐羽科技\\代码备份\\1.14\\panyuprojectims\\src\\main\\resources\\static\\BS\\photo");
+                        File file = new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\photo\\BS"+"\\"+uploadTargetPath);
                         if (!file.exists()) {
                             file.mkdirs();
                         }
-                        multipartFile.transferTo(new File("D:\\磐羽科技\\代码备份\\1.14\\panyuprojectims\\src\\main\\resources\\static\\BS\\photo" + "/" + newFileName));
+                        multipartFile.transferTo(new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\photo\\BS"+"\\"+uploadTargetPath+"/" + newFileName));
                         String finalFileName = newFileName;
-                        photoResources.setPhotoName(finalFileName);
+                        photoResources.setPhotoName("\\photo\\BS"+"\\"+uploadTargetPath+"/"+finalFileName);
                         photoResources.setParentId(parentId);
                         photoResources.setProjectProgressId(projectProgressId);
                       i = photoResourcesService.insertPhotoResourcesData(photoResources);

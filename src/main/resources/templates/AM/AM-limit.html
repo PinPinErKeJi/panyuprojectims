@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.springframework.org/schema/jdbc">
+<head>
+    <meta charset="UTF-8">
+    <title>权限资源</title>
+    <link rel="stylesheet" href="../easyui/easyui.css">
+    <link rel="stylesheet" href="../css/icon.css">
+    <link rel="stylesheet" href="../css/list.css">
+    <style>
+        .right{
+            float:right;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <form id="queryUserForm"  method="post" enctype="multipart/form-data">
+        <input class="easyui-textbox" name="projectName" id="project-name" placeholder="请输入关键字">
+        <a id="module-search" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
+        <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-edit" id="newUser">模块编辑</a>
+    </form>
+
+</div>
+<div id="datagrid" class="easyui-datagrid" style="height: 100%"></div>
+
+<div id="dialog" class="easyui-dialog" style="width: 400px">
+    <form method="post" id="form">
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="一级菜单:" labelPosition="top"  id="combobox-module" name="text" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="二级菜单:" labelPosition="top" id="project" name="text" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="功能:" labelPosition="top" id="project-check" name="text" style="width:100%;">
+        </div>
+    </form>
+</div>
+
+<div id="dialog-module" class="easyui-dialog" style="width: 270px">
+    <form method="post" id="form-module">
+        <input class="easyui-textbox" label="一级菜单" labelPosition="top" id="module-name" name="text" data-options="required:true">
+        权限类型:菜单:<input type="radio" name="resourceCode" value="menu">功能:<input type="radio" name="resourceCode"value="function"><br>
+    </form>
+</div>
+
+<div id="dialog-project" class="easyui-dialog" style="width: 270px">
+    <form method="post" id="form-project">
+        <input class="easyui-textbox" label="二级菜单" labelPosition="top" id="project-name-new" name="text" data-options="required:true">
+        权限路径:<input class="easyui-textbox" name="resourceUrl"><br>
+        权限类型:菜单:<input type="radio" name="resourceCode" value="menu">功能:<input type="radio" name="resourceCode"value="function"><br>
+    </form>
+</div>
+
+<div id="dialog-project-check" class="easyui-dialog" style="width: 270px">
+    <form method="post" id="form-project-check">
+        <input class="easyui-textbox" label="功能" labelPosition="top" id="project-check-name" name="text" data-options="required:true">
+        权限路径:<input class="easyui-textbox" name="resourceUrl"><br>
+        权限类型:菜单:<input type="radio" name="resourceCode" value="menu">功能:<input type="radio" name="resourceCode"value="function"><br>
+    </form>
+</div>
+
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.easyui.min.js"></script>
+<script src="../js/easyui-lang-zh_CN.js"></script>
+
+<script th:inline="none" type="text/javascript">
+    $(function () {
+        var dialogModule=$("#dialog-module");
+        var formModule=$("#form-module");
+        var dialogProject=$("#dialog-project");
+        var formProject=$("#form-project");
+        var dialogProjectCheck=$("#dialog-project-check");
+        var formProjectCheck=$("#form-project-check");
+
+
+        dialogModule.dialog('close');
+        dialogProject.dialog('close');
+        dialogProjectCheck.dialog('close');
+
+
+        //初始化一级菜单-----------------------------------------------------------------------
+        $("#combobox-module").combobox({
+            url:'../AM/showAllRes',
+            iconWidth:22,
+            valueField: 'id',
+            textField: 'text',
+            editable:false,
+            onSelect:function(record){
+                var url='../AM/selectResourceById?parectResourceId='+record.id;
+                $("#project").combobox("clear");
+                $("#project-check").combobox("clear");
+                $('#project').combobox('reload',url);
+            },
+            icons:[{
+                iconCls:'icon-add',
+                handler:function(){
+                    dialogModule.dialog('open');// open
+                    $("#module-name").textbox("clear");
+                    dialogModule.dialog({
+                        title: '添加记录',
+                        iconCls: 'icon-save',
+                        buttons: [{
+                            text: '保存',
+                            iconCls: 'icon-save',
+                            handler: function () { // 新增数据
+                                formModule.form('submit', {
+                                    url: '../AM/addFirstResource',
+                                    onSubmit: function () {
+                                        return formModule.form('validate');
+                                    },
+                                    success: function (data) {
+                                        var data = JSON.parse(data);
+
+                                        //添加完成后刷新combobox数据
+                                        $("#combobox-module").combobox('reload');
+                                        $("#combobox-module").combobox('setValue',data.id);
+                                        //添加成功后默认选中
+                                        $("#combobox-module").combobox('setText',data.text);
+                                        dialogModule.dialog('close');
+                                    }
+                                });
+                            }
+                        }, {
+                            text: '取消',
+                            iconCls: 'icon-remove',
+                            handler: function () {
+                                dialogModule.dialog('close');
+                            }
+                        }]
+                    });
+                }
+            },{
+                iconCls:'icon-edit',
+                handler:function() {
+                    //修改选中的数据
+                    if (!$("#combobox-module").combobox('getValue')) {
+                        alert('请选择一条数据！');
+                    } else {
+                        dialogModule.dialog('open');
+                        var row = $("#combobox-module").combobox("getValue");
+                        var moduleName = $("#combobox-module").combobox("getText");
+                        $("#module-name").textbox("setText", moduleName);
+                        dialogModule.dialog({
+                            title: '修改记录',
+                            iconCls: 'icon-save',
+                            buttons: [{
+                                text: '保存',
+                                iconCls: 'icon-save',
+                                handler: function () {// 保存修改
+                                    formModule.form('submit', {
+                                        url: '../AM/updateMdouel?moduleId=' + row,
+                                        onSubmit: function () {
+                                            return formModule.form('validate');
+                                        },
+                                        success: function (data) {
+                                            var data = JSON.parse(data);
+                                            //修改完数据后默认选中
+                                            $("#combobox-module").combobox('setText', data.text);
+                                            dialogModule.dialog('close');
+                                        }
+                                    });
+                                }
+                            }, {
+                                text: '取消',
+                                iconCls: 'icon-remove',
+                                handler: function () {
+                                    dialogModule.dialog('close');
+                                }
+                            }]
+                        });
+                    }
+                }
+            },{
+                iconCls:'icon-remove',
+                handler:function(){
+                    // 移除选中的数据行
+                    if ($("#combobox-module").combobox("getValue")) {
+                        var row = $("#combobox-module").combobox("getValue");
+                        console.log("一级id:"+row);
+                        $.messager.confirm('移除记录', '确定移除吗?', function (data) {
+                            if (data){
+                                $.ajax({
+                                    url:'?id='+row,
+                                    method:'post',
+                                    data:{id:row},
+                                    dataType:'json',
+                                    success:function (data) {
+                                        if (data==true) {
+                                            //删除完成后刷新combobox数据
+                                            $("#combobox-module").combobox('reload');
+                                            $("#combobox-module").combobox('setValue','');
+                                            $("#project").combobox("clear");
+                                            $("#project").combobox("loadData",{});
+                                            $("#project-check").combobox("clear");
+                                            $("#project-check").combobox("loadData",{});
+                                            $("#module").combobox('reload');
+                                            $("#module").combobox('clear');
+                                            alert("删除成功");
+                                        }else{
+                                            alert("删除失败");
+                                        }
+                                    }
+                                })
+                            }
+                        });
+                    } else {
+                        alert('请选择一条数据！');
+                    }
+                }
+            }],
+            required:true
+        })
+
+        //初始化二级菜单------------------------------------------------------------------------------
+        $("#project").combobox({
+            iconWidth:22,
+            valueField: 'id',
+            textField: 'text',
+            editable:false,
+            onSelect:function(record){
+                var url='../AM/selectResourceById?parectResourceId='+record.id;
+                $("#project-check").combobox("clear");
+                $('#project-check').combobox('reload',url);
+            },
+            icons:[{
+                iconCls:'icon-add',
+                handler:function(){
+                    dialogProject.dialog('open');// open
+                    $("#project-name-new").textbox("clear");
+                    dialogProject.dialog({
+                        title: '添加记录',
+                        iconCls: 'icon-save',
+                        buttons: [{
+                            text: '保存',
+                            iconCls: 'icon-save',
+                            handler: function () { // 新增数据
+                                var id=$("#combobox-module").combobox("getValue");
+                                formProject.form('submit', {
+                                    url: '../AM/addFirstResource?parectResourceId='+id,
+                                    onSubmit: function () {
+                                        if (id == null|| id =="") {
+                                            return false;
+                                        }
+                                        return formProject.form('validate');
+                                    },
+                                    success: function (data) {
+                                        var data = JSON.parse(data);
+                                        //添加完成后刷新combobox数据
+                                        $("#project").combobox('reload');
+                                        $("#project").combobox('setValue',data.id);
+                                        //添加成功后默认选中
+                                        $("#project").combobox('setText',data.text);
+                                        dialogProject.dialog('close');
+                                    }
+                                });
+                            }
+                        }, {
+                            text: '取消',
+                            iconCls: 'icon-remove',
+                            handler: function () {
+                                dialogProject.dialog('close');
+                            }
+                        }]
+                    });
+                }
+            },{
+                iconCls:'icon-edit',
+                handler:function() {
+                    if (!$("#project").combobox("getValue")) {
+                        alert('请选择一条数据！');
+                    } else {
+                        dialogProject.dialog('open');
+                        var row = $("#project").combobox("getValue");
+                        var subWorkName = $("#project").combobox("getText");
+                        $("#project-name-new").textbox("setText", subWorkName);
+                        dialogProject.dialog({
+                            title: '修改记录',
+                            iconCls: 'icon-save',
+                            buttons: [{
+                                text: '保存',
+                                iconCls: 'icon-save',
+                                handler: function () {// 保存修改
+                                    formProject.form('submit', {
+                                        url: '../AM/updateSubWork?subId=' + row,
+                                        onSubmit: function () {
+                                            return formProject.form('validate');
+                                        },
+                                        success: function (data) {
+                                            var data = JSON.parse(data);
+                                            //修改完数据后默认选中
+                                            //$("#project").combobox('reload');
+                                            $("#project").combobox('setText', data.subName);
+                                            dialogProject.dialog('close');
+                                        }
+                                    });
+                                }
+                            }, {
+                                text: '取消',
+                                iconCls: 'icon-remove',
+                                handler: function () {
+                                    dialogProject.dialog('close');
+                                }
+                            }]
+                        });
+                    }
+                }
+            },{
+                iconCls:'icon-remove',
+                handler:function(){
+                    // 移除选中的数据行
+                    if ($("#project").combobox("getValue")) {
+                        var row = $("#project").combobox("getValue");
+                        $.messager.confirm('移除记录', '确定移除吗?', function (data) {
+                            if (data){
+                                $.ajax({
+                                    url:'?parectResourceId='+row,
+                                    method:'post',
+                                    data:{id:row},
+                                    dataType:'json',
+                                    success:function (data) {
+                                        if (data==true) {
+                                            //删除完成后刷新combobox数据
+                                            $("#project").combobox('reload');
+                                            $("#project").combobox('setValue','');
+                                            $("#project-check").combobox("clear");
+                                            $("#project-check").combobox("loadData",{});
+                                            alert("删除成功");
+                                        }else{
+                                            alert("删除失败");
+                                        }
+                                    }
+                                })
+                            }
+                        });
+                    } else {
+                        alert('请选择一条数据！');
+                    }
+                }
+            }],
+            required:true
+        })
+
+        //初始化功能---------------------------------------------------------------
+
+        $("#project-check").combobox({
+            iconWidth:22,
+            valueField:'id',
+            textField:'text',
+            editable:false,
+            onSelect:function(record){
+                var url='../AM/selectResourceById?parectResourceId='+record.id;
+            },
+            icons:[{
+                iconCls:'icon-add',
+                handler:function(){
+                    dialogProjectCheck.dialog('open');// open
+                    $("#project-check-name").textbox("clear");
+                    dialogProjectCheck.dialog({
+                        title: '添加记录',
+                        iconCls: 'icon-save',
+                        buttons: [{
+                            text: '保存',
+                            iconCls: 'icon-save',
+                            handler: function () { // 新增数据
+                                var id=$("#project").combobox("getValue");
+                                console.log("功能  id:"+id);
+                                formProjectCheck.form('submit', {
+                                    url: '../AM/addFirstResource?parectResourceId='+id,
+                                    onSubmit: function () {
+                                        if (id == null|| id =="") {
+                                            return false;
+                                        }
+                                        return formProjectCheck.form('validate');
+                                    },
+                                    success: function (data) {
+                                        var data = JSON.parse(data);
+                                        //添加完成后刷新combobox数据
+                                        $("#project-check").combobox('reload');
+                                        // $("#project-check").combobox('setValue',data.id);
+                                        //添加成功后默认选中
+                                        $("#project-check").combobox('setText',data.text);
+                                        dialogProjectCheck.dialog('close');
+                                    }
+                                });
+                            }
+                        }, {
+                            text: '取消',
+                            iconCls: 'icon-remove',
+                            handler: function () {
+                                dialogProjectCheck.dialog('close');
+                            }
+                        }]
+                    });
+                }
+            },{
+                iconCls:'icon-edit',
+                handler:function() {
+                    if (!$("#project-check").combobox("getValue")) {
+                        alert('请选择一条数据！');
+                    } else {
+                        var row = $("#project-check").combobox("getValue");
+                        var text = $("#project-check").combobox("getText");
+                        $("#project-check-name").textbox("setText", text);
+                        dialogProjectCheck.dialog({
+                            title: '修改记录',
+                            iconCls: 'icon-save',
+                            buttons: [{
+                                text: '保存',
+                                iconCls: 'icon-save',
+                                handler: function () {// 保存修改
+                                    formProjectCheck.form('submit', {
+                                        url: '../AM/updateProject?projectId=' + row,
+                                        onSubmit: function () {
+                                            return formProjectCheck.form('validate');
+                                        },
+                                        success: function (data) {
+                                            var data = JSON.parse(data);
+                                            //修改完数据后默认选中
+                                            $("#project-check").combobox('setText', data.text);
+                                            dialogProjectCheck.dialog('close');
+                                        }
+                                    });
+                                }
+                            }, {
+                                text: '取消',
+                                iconCls: 'icon-remove',
+                                handler: function () {
+                                    dialogProjectCheck.dialog('close');
+                                }
+                            }]
+                        });
+                    }
+                }
+            },{
+
+
+                iconCls:'icon-remove',
+                handler:function(){
+                    // 移除选中的数据行
+                    if ($("#project-check").combobox("getValue")) {
+                        var row = $("#project-check").combobox("getValue");
+                        console.log("功能:"+row);
+                        $.messager.confirm('移除记录', '确定移除吗?', function (data) {
+                            if (data){
+                                $.ajax({
+                                    url:'../AM/deleteResource?parectResourceId='+row,
+                                    method:'post',
+                                    //data:{id:row},
+                                    dataType:'json',
+                                    success:function (data) {
+                                        console.log("data:"+data);
+                                        if (data==true) {
+                                            //删除完成后刷新combobox数据
+                                            $("#project-check").combobox('reload');
+                                            $("#project-check").combobox('setValue','');
+                                            alert("删除成功");
+                                        }else{
+                                            alert("删除失败");
+                                        }
+                                    }
+                                })
+                            }
+                        });
+                    } else {
+                        alert('请选择一条数据！');
+                    }
+                }
+            }],
+            //required:true
+        })
+        var dialog = $('#dialog');
+        var form = $('#form');
+        // 隐藏弹窗
+        dialog.dialog('close');
+        var data1="";
+        var data2="";
+        // 数据表格  ?moduleId='+data1+"&projectName="+data2
+        var grid = $('#datagrid').datagrid({
+            url: '../AM/showAllShiroResource',
+            method:'post',
+            pagination: true,
+            pageNumber: 1,
+            pageSize: 15,
+            pageList: [15,30,45],
+            toolbar: '#toolbar',
+            columns: [[
+                {checkbox:true,field:""},
+                { field:'id',title:'权限id',width:100,align:'center',hidden:true},
+                { field:'text',title:'权限名字',width:100,align:'center'},
+                { field:'resourceUrl',title:'权限路径',width:100,align:'center'},
+                { field:'resourceCode',title:'权限类型',width:100,align:'center'},
+                { field:'parectResourceId',title:'权限父id',width:100,align:'center',hidden:true},
+            ]]
+        });
+
+        //加载数据
+        function loadData(url) {
+            $('#datagrid').datagrid({
+                url: url,
+                method:'post',
+                pagination: true,
+                pageNumber: 1,
+                pageSize: 15,
+                pageList: [15,30,45],
+                striped: true,
+                toolbar: '#toolbar',
+                columns: [[
+                    {checkbox:true,field:""},
+                    { field:'id',title:'权限id',width:100,align:'center',hidden:true},
+                    { field:'text',title:'权限名字',width:100,align:'center'},
+                    { field:'resourceUrl',title:'权限路径',width:100,align:'center'},
+                    { field:'resourceCode',title:'权限类型',width:100,align:'center'},
+                    { field:'parectResourceId',title:'权限父id',width:100,align:'center',hidden:true},
+                ]]
+            });
+        }
+
+        //点击搜索
+        $("#module-search").bind("click",function () {
+            var moduleId=$("#module").combobox("getValue");
+            var projectName=$("#project-name").textbox('getValue').trim();
+            var url = "../AM/getItemList?moduleId="+moduleId+"&projectName="+projectName;
+            loadData(url)
+        });
+
+        //模块名称发生改变事件
+        $("#module").combobox({
+            onChange:function () {
+                var moduleId=$("#module").combobox("getValue");
+                var projectName=$("#project-name").textbox('getValue').trim();
+                url="../AM/getItemList?moduleId="+moduleId+"&projectName="+projectName;
+                loadData(url)
+            }
+        });
+
+        // 获取按钮
+        var newUser = $('#newUser');
+
+        // 添加记录
+        newUser.on('click', function () {
+            $("#combobox-module").combobox("clear");
+            $("#project").combobox("clear");
+            $("#project-check").combobox("clear");
+            dialog.dialog('open');// open
+            dialog.dialog({
+                title: '添加记录',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () {
+                        var module_name=$("#combobox-module").combobox("getText");
+                        var project_name_new=$("#project").combobox("getText");
+                        var project_check_name=$("#project-check").combobox("getText");
+                        if (module_name != null && module_name != "" && project_name_new != null &&
+                            project_name_new != "" &&project_check_name!=null&&project_check_name!=""
+                        ) {
+                            $("#datagrid").datagrid("reload");
+                            $("#module").combobox('reload');
+                            $("#combobox-module").combobox('reload');
+                            dialog.dialog('close');
+                        };
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        $("#datagrid").datagrid("reload");
+                        $("#module").combobox('reload');
+                        $("#combobox-module").combobox('reload');
+                        dialog.dialog('close');
+                    }
+                }]
+            });
+        });
+    });
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.springframework.org/schema/jdbc">
+<head>
+    <meta charset="UTF-8">
+    <title>驻地网模块库</title>
+    <link rel="stylesheet" href="../easyui/easyui.css">
+    <link rel="stylesheet" href="../css/icon.css">
+    <link rel="stylesheet" href="../css/list.css">
+    <style>
+        .right{
+            float:right;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <form id="queryUserForm"  method="post" enctype="multipart/form-data">
+        <label>模块库:</label>
+        <input class="easyui-combobox" style="width: 100px" id="module" name="garrisonId" data-options="
+                url:'../HN/selectGarrison',
+                method:'post',
+                valueField:'garrisonId',
+                textField:'garrisonName',
+                editable:false,
+                panelHeight:200
+        ">
+        <label>检查项目:</label><input class="easyui-textbox" name="garrisonProjectName" id="project-name" placeholder="请输入关键字">
+        <a id="module-search" class="easyui-linkbutton" iconCls="icon-search">搜索</a>
+        <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-edit" id="newUser">模块编辑</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true"  data-options="iconCls:'icon-print'" onClick="exportExcel();">导出Excel空表格</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true"  data-options="iconCls:'icon-print'" onClick="exportGarrison();">导出模块数据</a>
+        <input  id="fileName" class="easyui-filebox" name="fileName"  style="width:200px;vertical-align:middle;" />
+        <a href="javascript:void(0)" onclick="importGarrison()" class="easyui-linkbutton">导入模块信息</a>
+    </form>
+
+</div>
+<div id="datagrid" class="easyui-datagrid" style="height: 100%"></div>
+
+<div id="dialog" class="easyui-dialog" style="width: 400px">
+    <form method="post" id="form">
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="模块:" labelPosition="top"  id="combobox-module" name="garrisonName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="分项工程:" labelPosition="top" id="project" name="garrisonSubWorkName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="检查项目:" labelPosition="top" id="project-check" name="garrisonProjectName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="标准规范:" labelPosition="top" id="content-check" name="garrisonCriterionName" style="width:100%;" data-options="required:true">
+        </div>
+    </form>
+</div>
+
+<div id="dialog-module" class="easyui-dialog" style="width: 270px">
+    <form method="post" id="form-module">
+        <input class="easyui-textbox" label="模块名称" labelPosition="top" id="module-name" name="garrisonName" data-options="required:true">
+    </form>
+</div>
+
+<div id="dialog-project" class="easyui-dialog" style="width: 270px">
+    <form method="post" id="form-project">
+        <input class="easyui-textbox" label="分项工程名称" labelPosition="top" id="project-name-new" name="garrisonSubWorkName" data-options="required:true">
+    </form>
+</div>
+
+<div id="dialog-project-check" class="easyui-dialog" style="width: 270px">
+    <form method="post" id="form-project-check">
+        <input class="easyui-textbox" label="检查项目名称" labelPosition="top" id="project-check-name" name="garrisonProjectName" data-options="required:true">
+    </form>
+</div>
+
+<div id="dialog-content-check" class="easyui-dialog" style="width: 270px">
+    <form method="post" id="form-content-check">
+        <input class="easyui-textbox" label="检查标准规范" labelPosition="top" id="content-check-name" name="garrisonCriterionName" data-options="required:true">
+    </form>
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.easyui.min.js"></script>
+<script src="../js/easyui-lang-zh_CN.js"></script>
+
+<script th:inline="none" type="text/javascript">
+    $(function () {
+        var dialogModule=$("#dialog-module");
+        var formModule=$("#form-module");
+        var dialogProject=$("#dialog-project");
+        var formProject=$("#form-project");
+        var dialogProjectCheck=$("#dialog-project-check");
+        var formProjectCheck=$("#form-project-check");
+        var dialogContentCheck=$("#dialog-content-check");
+        var formContentCheck=$("#form-content-check");
+
+        dialogModule.dialog('close');
+        dialogProject.dialog('close');
+        dialogProjectCheck.dialog('close');
+        dialogContentCheck.dialog('close');
+
+        //初始化模块combobox ----------------------------------------1 -------------------------------------------------
+        $("#combobox-module").combobox({
+            url:'../HN/selectGarrison',
+            iconWidth:22,
+            valueField: 'garrisonId',
+            textField: 'garrisonName',
+            editable:false,
+            onSelect:function(record){
+                var url='../HN/selectAllGarrisonSubWorkByGarrisonId?garrisonId='+record.garrisonId;
+                $("#project").combobox("clear");
+                $("#project-check").combobox("clear");
+                $("#content-check").combobox("clear");
+                $('#project').combobox('reload',url);
+            },
+            icons:[{
+                iconCls:'icon-add',
+                handler:function(){
+                    dialogModule.dialog('open');// open
+                    $("#module-name").textbox("clear");
+                    dialogModule.dialog({
+                        title: '添加记录',
+                        iconCls: 'icon-save',
+                        buttons: [{
+                            text: '保存',
+                            iconCls: 'icon-save',
+                            handler: function () { // 新增数据
+                                formModule.form('submit', {
+                                    url: '../HN/insertGarrison',
+                                    onSubmit: function () {
+                                        return formModule.form('validate');
+                                    },
+                                    success: function (data) {
+                                        var data = JSON.parse(data);
+                                        //添加完成后刷新combobox数据
+                                        $("#combobox-module").combobox('reload');
+                                        $("#combobox-module").combobox('setValue',data.garrisonId);
+                                        //添加成功后默认选中
+                                        $("#combobox-module").combobox('setText',data.garrisonName);
+                                        dialogModule.dialog('close');// close
+                                        //console.log(data.garrisonName+"模块名称");
+                                    }
+                                });
+                            }
+                        }, {
+                            text: '取消',
+                            iconCls: 'icon-remove',
+                            handler: function () {
+                                dialogModule.dialog('close');// close
+                            }
+                        }]
+                    });
+                    alert("添加模块的数据");
+                }
+            },{
+                iconCls:'icon-edit',
+                handler:function(){
+                    if(!$("#combobox-module").combobox("getValue")){
+                        alert('请选择一条数据！')
+                    }else {
+                        var row = $("#combobox-module").combobox("getValue");
+                        var moduleName = $("#combobox-module").combobox("getText");
+                        //console.log("模块名:"+moduleName);
+                        $("#module-name").textbox("setText",moduleName);
+                        dialogModule.dialog({
+                            title: '修改记录',
+                            iconCls: 'icon-save',
+                            buttons: [{
+                                text: '保存',
+                                iconCls: 'icon-save',
+                                handler: function () {// 保存修改
+                                    formModule.form('submit', {
+                                        url: '../HN/updateGarrison?garrisonId='+row,
+                                        onSubmit: function () {
+                                            return formModule.form('validate');
+                                        },
+                                        success: function (data) {
+                                            var data = JSON.parse(data);
+                                            //修改完数据后默认选中
+                                            $("#combobox-module").combobox('setText',data.garrisonName);
+                                            console.log("data.garrisonName:"+data.garrisonName);
+                                            //$("#combobox-module").combobox('reload');
+                                            dialogModule.dialog('close');// close
+                                            //console.log(data);
+                                        }
+                                    });
+                                }
+                            }, {
+                                text: '取消',
+                                iconCls: 'icon-remove',
+                                handler: function () {
+                                    dialogModule.dialog('close');// close
+                                }
+                            }]
+                        });
+                    }
+                   /* //修改完成后刷新combobox数据
+                    $("#combobox-module").combobox('reload');
+                    alert('edit');*/
+                }
+            },{
+                iconCls:'icon-remove',
+                handler:function(){
+                    // 移除选中的数据行
+                    if ($("#combobox-module").combobox("getValue")) {
+                        var row = $("#combobox-module").combobox("getValue");
+                        //console.log(row+"打印出模块id")
+                        $.messager.confirm('移除记录', '确定移除吗?', function (data) {
+                            if (data){
+                                $.ajax({
+                                    url:'../HN/deleteGarrison?garrisonId='+row,
+                                    method:'post',
+                                    data:{id:row},
+                                    dataType:'json',
+                                    success:function (data) {
+                                        //console.log(data+"模块")
+                                        if (data==true) {
+                                            //删除完成后刷新combobox数据
+                                            $("#combobox-module").combobox('reload');
+                                            $("#combobox-module").combobox('setValue','');
+                                            $("#project").combobox("clear");
+                                            $("#project").combobox("loadData",{});
+                                            $("#project-check").combobox("clear");
+                                            $("#project-check").combobox("loadData",{});
+                                            $("#content-check").combobox("clear");
+                                            $("#content-check").combobox("loadData",{});
+                                            $("#module").combobox('reload');
+                                            $("#module").combobox('clear');
+                                            alert("删除成功");
+                                        }else{
+                                            alert("删除失败");
+                                        }
+                                    }
+                                })
+                            }
+                            console.log('移除记录');
+                        });
+                    } else {
+                        alert('请选择一条数据！');
+                    }
+                    //alert('remove');
+                }
+            }],
+            required:true
+        })
+
+        //初始化分项工程combobox-----------------------------------------2 ---------------------------------------------
+        $("#project").combobox({
+            iconWidth:22,
+            valueField: 'garrisonSubWorkId',
+            textField: 'garrisonSubWorkName',
+            editable:false,
+            onSelect:function(record){
+                var url='../HN/selectAllGarrisonInspectionProjectByGarrisonSubWorkId?garrisonSubWorkId='+record.garrisonSubWorkId;
+                $("#project-check").combobox("clear");
+                $("#content-check").combobox("clear");
+                $('#project-check').combobox('reload',url);
+            },
+            icons:[{
+                iconCls:'icon-add',
+                handler:function(){
+                    dialogProject.dialog('open');// open
+                    $("#project-name-new").textbox("clear");
+                    dialogProject.dialog({
+                        title: '添加记录',
+                        iconCls: 'icon-save',
+                        buttons: [{
+                            text: '保存',
+                            iconCls: 'icon-save',
+                            handler: function () { // 新增数据
+                                var id=$("#combobox-module").combobox("getValue");
+                                formProject.form('submit', {
+                                    url: '../HN/insertGarrisonSubWork?garrisonId='+id,
+                                    onSubmit: function () {
+                                        if (id == null|| id =="") {
+                                            return false;
+                                        }
+                                        return formProject.form('validate');
+                                    },
+                                    success: function (data) {
+                                        var data = JSON.parse(data);
+                                        //添加完成后刷新combobox数据
+                                        $("#project").combobox('reload');
+                                        $("#project").combobox('setValue',data.garrisonSubWorkId);
+                                        //添加成功后默认选中
+                                        $("#project").combobox('setText',data.garrisonSubWorkName);
+                                        dialogProject.dialog('close');// close
+                                        //console.log(data.garrisonSubWorkName+"分项工程名称");
+                                        //console.log(data+"分项工程信息");
+                                    }
+                                });
+                            }
+                        }, {
+                            text: '取消',
+                            iconCls: 'icon-remove',
+                            handler: function () {
+                                dialogProject.dialog('close');// close
+                            }
+                        }]
+                    });
+                    //alert('添加分项工程信息');
+                }
+            },{
+                iconCls:'icon-edit',
+                handler:function(){
+                    if(!$("#project").combobox("getValue")){
+                        alert('请选择一条数据！')
+                    }else {
+                        var row = $("#project").combobox("getValue");
+                        var subWorkName = $("#project").combobox("getText");
+                        $("#project-name-new").textbox("setText",subWorkName);
+                        dialogProject.dialog({
+                            title: '修改记录',
+                            iconCls: 'icon-save',
+                            buttons: [{
+                                text: '保存',
+                                iconCls: 'icon-save',
+                                handler: function () {// 保存修改
+                                    formProject.form('submit', {
+                                        url: '../HN/updateGarrisonSubWork?garrisonSubWorkId='+row,
+                                        onSubmit: function () {
+                                            return formProject.form('validate');
+                                        },
+                                        success: function (data) {
+                                            var data = JSON.parse(data);
+                                            //修改完数据后默认选中
+                                            $("#project").combobox('setText',data.garrisonSubWorkName);
+                                            //$("#project").combobox('reload');
+                                            dialogProject.dialog('close');// close
+                                            //console.log(data);
+                                        }
+                                    });
+                                }
+                            }, {
+                                text: '取消',
+                                iconCls: 'icon-remove',
+                                handler: function () {
+                                    dialogProject.dialog('close');// close
+                                }
+                            }]
+                        });
+                    }
+                   /* //修改完成后刷新combobox数据
+                    $("#project").combobox('reload');
+                    alert('edit');*/
+                }
+            },{
+                iconCls:'icon-remove',
+                handler:function(){
+                    // 移除选中的数据行
+                    if ($("#project").combobox("getValue")) {
+                        var row = $("#project").combobox("getValue");
+                        //console.log(row+"打印出分项工程id")
+                        $.messager.confirm('移除记录', '确定移除吗?', function (data) {
+                            if (data){
+                                $.ajax({
+                                    url:'../HN/deleteGarrisonSubWork?garrisonSubWorkId='+row,
+                                    method:'post',
+                                    data:{id:row},
+                                    dataType:'json',
+                                    success:function (data) {
+                                        //console.log(data);
+                                        if (data==true) {
+                                            //删除完成后刷新combobox数据
+                                            $("#project").combobox('reload');
+                                            $("#project").combobox('setValue','');
+                                            $("#project-check").combobox("clear");
+                                            $("#project-check").combobox("loadData",{});
+                                            $("#content-check").combobox("clear");
+                                            $("#content-check").combobox("loadData",{});
+                                            alert("删除成功");
+                                        }else{
+                                            alert("删除失败");
+                                        }
+                                    }
+                                })
+                            }
+                            console.log('移除记录');
+                            //console.log(row);
+                        });
+                    } else {
+                        alert('请选择一条数据！');
+                    }
+                    //alert('remove');
+                }
+            }],
+            required:true
+        })
+
+        //初始化检查项目combobox--------------------------------3 ------------------------------------------------------
+        $("#project-check").combobox({
+            iconWidth:22,
+            valueField: 'garrisonProjectId',
+            textField: 'garrisonProjectName',
+            editable:false,
+            onSelect:function(record){
+                var url='../HN/selectAllGarrisonInspectionCriterionByGarrisonProjectId?garrisonProjectId='+record.garrisonProjectId;
+                $('#content-check').combobox('reload',url);
+            },
+            icons:[{
+                iconCls:'icon-add',
+                handler:function(){
+                    dialogProjectCheck.dialog('open');// open
+                    $("#project-check-name").textbox("clear");
+                    dialogProjectCheck.dialog({
+                        title: '添加记录',
+                        iconCls: 'icon-save',
+                        buttons: [{
+                            text: '保存',
+                            iconCls: 'icon-save',
+                            handler: function () { // 新增数据
+                                var id=$("#project").combobox("getValue");
+                                formProjectCheck.form('submit', {
+                                    url: '../HN/insertGarrisonInspectionProject?garrisonSubWorkId='+id,
+                                    onSubmit: function () {
+                                        if (id == null|| id =="") {
+                                            return false;
+                                        }
+                                        return formProjectCheck.form('validate');
+                                    },
+                                    success: function (data) {
+                                        var data = JSON.parse(data);
+                                        //添加完成后刷新combobox数据
+                                        $("#project-check").combobox('reload');
+                                        $("#project-check").combobox('setValue',data.garrisonProjectId);
+                                        //添加成功后默认选中
+                                        $("#project-check").combobox('setText',data.garrisonProjectName);
+                                        dialogProjectCheck.dialog('close');// close
+                                        //console.log(data.garrisonProjectName+"检查项目名称");
+                                        //console.log(data+"检查项目");
+                                    }
+                                });
+                            }
+                        }, {
+                            text: '取消',
+                            iconCls: 'icon-remove',
+                            handler: function () {
+                                dialogProjectCheck.dialog('close');// close
+                            }
+                        }]
+                    });
+                    //alert('添加检查项目数据');
+                }
+            },{
+                iconCls:'icon-edit',
+                handler:function(){
+                    if(!$("#project-check").combobox("getValue")){
+                        alert('请选择一条数据！');
+                    }else {
+                        var row = $("#project-check").combobox("getValue");
+                        var projectName = $("#project-check").combobox("getText");
+                        $("#project-check-name").textbox("setText",projectName);
+                        dialogProjectCheck.dialog({
+                            title: '修改记录',
+                            iconCls: 'icon-save',
+                            buttons: [{
+                                text: '保存',
+                                iconCls: 'icon-save',
+                                handler: function () {// 保存修改
+                                    formProjectCheck.form('submit', {
+                                        url: '../HN/updateGarrisonInspectionProject?garrisonProjectId='+row,
+                                        onSubmit: function () {
+                                            return formProjectCheck.form('validate');
+                                        },
+                                        success: function (data) {
+                                            var data = JSON.parse(data);
+                                            //修改完数据后默认选中
+                                            $("#project-check").combobox('setText',data.garrisonProjectName);
+                                            //$("#project-check").combobox('reload');
+                                            dialogProjectCheck.dialog('close');// close
+                                            //console.log(data);
+                                        }
+                                    });
+                                }
+                            }, {
+                                text: '取消',
+                                iconCls: 'icon-remove',
+                                handler: function () {
+                                    dialogProjectCheck.dialog('close');// close
+                                }
+                            }]
+                        });
+                    }
+                   /* //修改完成后刷新combobox数据
+                    $("#project-check").combobox('reload');
+                    alert('edit');*/
+                }
+            },{
+                iconCls:'icon-remove',
+                handler:function(){
+                    // 移除选中的数据行
+                    if ($("#project-check").combobox("getValue")) {
+                        var row = $("#project-check").combobox("getValue");
+                        //console.log(row+"打印出检查项目id")
+                        $.messager.confirm('移除记录', '确定移除吗?', function (data) {
+                            if (data){
+                                $.ajax({
+                                    url:'../HN/deleteGarrisonInspectionProject?garrisonProjectId='+row,
+                                    method:'post',
+                                    data:{id:row},
+                                    dataType:'json',
+                                    success:function (data) {
+                                        if (data==true) {
+                                            //删除完成后刷新combobox数据
+                                            $("#project-check").combobox('reload');
+                                            $("#project-check").combobox('setValue','');
+                                            $("#content-check").combobox("clear");
+                                            $("#content-check").combobox("loadData",{});
+                                            alert("删除成功");
+                                        }else{
+                                            alert("删除失败");
+                                        }
+                                    }
+                                })
+                            }
+                            console.log('移除记录');
+                            //console.log(row);
+                        });
+                    } else {
+                        alert('请选择一条数据！');
+                    }
+                    //alert('remove');
+                }
+            }],
+            required:true
+        })
+
+        //初始化标准规范combobox----------------------------------4-----------------------------------------------------
+        $("#content-check").combobox({
+            iconWidth:22,
+            editable:false,
+            valueField: 'garrisonCriterionId',
+            textField: 'garrisonCriterionName',
+            icons:[{
+                iconCls: 'icon-add',
+                handler: function () {
+                    dialogContentCheck.dialog('open');// open
+                    $("#content-check-name").textbox("clear");
+                    dialogContentCheck.dialog({
+                        title: '添加记录',
+                        iconCls: 'icon-save',
+                        buttons: [{
+                            text: '保存',
+                            iconCls: 'icon-save',
+                            handler: function () { // 新增数据
+                                //获取分项工程id
+                                var id=$("#project-check").combobox("getValue");
+                                formContentCheck.form('submit', {
+                                    url: '../HN/insertGarrisonInspectionCriterion?garrisonProjectId='+id,
+                                    onSubmit: function () {
+                                        if (id == null || id == "") {
+                                            return false;
+                                        }
+                                        return formContentCheck.form('validate');
+                                    },
+                                    success: function (data) {
+                                        //处理JSON格式对象,转换为JS对象
+                                        var data = JSON.parse(data);
+                                        //添加完成后刷新combobox数据
+                                        $("#content-check").combobox('reload');
+                                        //添加成功后默认选中data 后面跟的是后台传递数据的属性字段
+                                        $("#content-check").combobox('setValue', data.garrisonCriterionId);
+                                        $("#content-check").combobox('setText', data.garrisonCriterionName);
+                                        dialogContentCheck.dialog('close');// close
+                                        //console.log(data);
+                                        //console.log(data.garrisonCriterionName+"数据内容");
+                                        //console.log(data.garrisonCriterionId+"数据id")
+                                    }
+                                });
+                            }
+                        }, {
+                            text: '取消',
+                            iconCls: 'icon-remove',
+                            handler: function () {
+                                dialogContentCheck.dialog('close');// close
+                            }
+                        }]
+                    });
+                    alert('添加检查规范的内容');
+                }
+            },{
+                //修改
+                iconCls:'icon-edit',
+                handler:function(){
+                    if(!$("#content-check").combobox("getValue")){
+                        alert('请选择一条数据！');
+                    }else {
+                        var id=$("#content-check").combobox("getValue");
+                        var contentName=$("#content-check").combobox("getText");
+                        $("#content-check-name").textbox("setText",contentName);
+                        dialogContentCheck.dialog({
+                            title: '修改记录',
+                            iconCls: 'icon-save',
+                            buttons: [{
+                                text: '保存',
+                                iconCls: 'icon-save',
+                                handler: function () {// 保存修改
+                                    formContentCheck.form('submit', {
+                                        url: '../HN/updateGarrisonInspectionCriterion?garrisonCriterionId='+id,
+                                        onSubmit: function () {
+                                            return formContentCheck.form('validate');
+                                        },
+                                        success: function (data) {
+                                            //处理JSON格式对象,转换为JS对象
+                                            var data = JSON.parse(data);
+                                            //修改完数据后默认选中data 后面跟的是后台传递数据的属性字段
+                                            $("#content-check").combobox('setText', data.garrisonCriterionName);
+                                            $("#content-check").combobox('reload');
+                                            dialogContentCheck.dialog('close');// close
+                                            //console.log(data);
+                                        }
+                                    });
+                                    //修改完成后刷新combobox数据
+                                    $("#content-check").combobox('reload');
+                                }
+                            }, {
+                                text: '取消',
+                                iconCls: 'icon-remove',
+                                handler: function () {
+                                    dialogContentCheck.dialog('close');// close
+                                }
+                            }]
+                        });
+                    }
+                    /*alert('edit');*/
+                }
+            },{
+                iconCls:'icon-remove',
+                handler:function(){
+                    // 移除选中的数据行
+                    if ($("#content-check").combobox("getValue")) {
+                        var row = $("#content-check").combobox("getValue");
+                        //console.log(row+"打印出检查规范id")
+                        $.messager.confirm('移除记录', '确定移除吗?', function (data) {
+                            if (data){
+                                $.ajax({
+                                    url:'../HN/deleteGarrisonInspectionCriterion?garrisonCriterionId='+row,
+                                    method:'post',
+                                    data:{id:row},
+                                    dataType:'json',
+                                    success:function (data) {
+                                        if (data==true) {
+                                            //删除完成后刷新combobox数据
+                                            $("#content-check").combobox('reload');
+                                            $("#content-check").combobox('setValue','');
+                                            alert("删除成功");
+                                        }else{
+                                            alert("删除失败");
+                                        }
+                                    }
+                                })
+                            }
+                            console.log('移除记录');
+                            //console.log(row);
+                        });
+                    } else {
+                        alert('请选择一条数据！');
+                    }
+                    //alert('remove');
+                }
+            }],
+            required:true
+        })
+
+        var dialog = $('#dialog');
+        var form = $('#form');
+        // 隐藏弹窗
+        dialog.dialog('close');
+        var data1="";
+        var data2="";
+        // 数据表格
+        var grid = $('#datagrid').datagrid({
+            url:'../HN/selectAllGarrisonDTOList?garrisonId='+data1+"&garrisonProjectName="+data2,
+            method:'post',
+            pagination: true,
+            pageNumber: 1,
+            pageSize: 15,
+            pageList: [15,30,45],
+            toolbar: '#toolbar',
+            columns: [[
+                {checkbox:true,field:""},
+                { field:'garrisonProjectIddto',title:'检查项目编号',width:100,align:'center',hidden:true},
+                { field:'garrisonIddto',title:'模块编号',width:100,align:'center',hidden:true},
+                { field:'garrisonNamedto',title:'模块名称',width:100,align:'center'},
+                { field:'garrisonSubWorkNamedto',title:'分项工程',width:100,align:'center'},
+                { field:'garrisonProjectNamedto',title:'检查项目',width:100,align:'center'},
+                { field:'garrisonCriterionNamedto',title:'标准规范',width:180,align:'center'},
+                { field:'garrisonQualifieddto',title:'是否合格',width:80,align:'center'},
+                { field:'garrisonProblemdto',title:'问题描述',width:180,align:'center'},
+                { field:'garrisonPhotodto',title:'完整照片',width:100,align:'center'}
+            ]]
+        });
+
+        //加载数据
+        function loadData(url) {
+            $('#datagrid').datagrid({
+                url: url,
+                method:'post',
+                pagination: true,
+                pageNumber: 1,
+                pageSize: 15,
+                pageList: [15,30,45],
+                striped: true,
+                toolbar: '#toolbar',
+                columns: [[
+                    {checkbox:true,field:""},
+                    { field:'garrisonProjectIddto',title:'检查项目编号',width:100,align:'center',hidden:true},
+                    { field:'garrisonIddto',title:'模块编号',width:100,align:'center',hidden:true},
+                    { field:'garrisonNamedto',title:'模块名称',width:100,align:'center'},
+                    { field:'garrisonSubWorkNamedto',title:'分项工程',width:100,align:'center'},
+                    { field:'garrisonProjectNamedto',title:'检查项目',width:100,align:'center'},
+                    { field:'garrisonCriterionNamedto',title:'标准规范',width:180,align:'center'},
+                    { field:'garrisonQualifieddto',title:'是否合格',width:80,align:'center'},
+                    { field:'garrisonProblemdto',title:'问题描述',width:180,align:'center'},
+                    { field:'garrisonPhotodto',title:'完整照片',width:100,align:'center'}
+                ]]
+            });
+        }
+
+        //点击搜索
+        $("#module-search").bind("click",function () {
+            var garrisonId=$("#module").combobox("getValue");
+            var garrisonProjectName=$("#project-name").textbox('getValue').trim();
+            //alert(garrisonId+garrisonProjectName)
+            var url = "../HN/selectAllGarrisonDTOList?garrisonId="+garrisonId+"&garrisonProjectName="+garrisonProjectName;
+            loadData(url)
+        })
+
+        //模块名称发生改变事件
+        $("#module").combobox({
+            onChange:function () {
+                var garrisonId=$("#module").combobox("getValue");
+                var garrisonProjectName=$("#project-name").textbox('getValue').trim();
+                //alert(garrisonId+garrisonProjectName)
+                var url = "../HN/selectAllGarrisonDTOList?garrisonId="+garrisonId+"&garrisonProjectName="+garrisonProjectName;
+                loadData(url)
+            }
+        })
+
+        // 获取按钮
+        var newUser = $('#newUser');
+
+        // 添加记录
+        newUser.on('click', function () {
+            $("#combobox-module").combobox("clear");
+            $("#project").combobox("clear");
+            $("#project-check").combobox("clear");
+            $("#content-check").combobox("clear");
+            dialog.dialog('open');// open
+            dialog.dialog({
+                title: '添加记录',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () {
+                        var module_name=$("#combobox-module").combobox("getText");
+                        var project_name_new=$("#project").combobox("getText");
+                        var project_check_name=$("#project-check").combobox("getText");
+                        var content_check_name=$("#content-check").combobox("getText");
+                        if (module_name != null && module_name != "" && project_name_new != null &&
+                            project_name_new != "" &&project_check_name!=null&&project_check_name!=""
+                            &&content_check_name!=null&&content_check_name!="") {
+                            $("#datagrid").datagrid("reload");
+                            $("#module").combobox('reload');
+                            $("#combobox-module").combobox('reload');
+                            dialog.dialog('close');
+                        };
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        $("#datagrid").datagrid("reload");
+                        dialog.dialog('close');// close
+                    }
+                }]
+            });
+        });
+    });
+
+    //导出空表格
+    function exportExcel(){
+        var rowDatas = $("#datagrid").datagrid("getSelections");
+        //console.log(rowDatas+"模块数据信息");
+        if(rowDatas.length==0){
+            var ids = new Array(rowDatas.length);
+            for(var i = 0; i<rowDatas.length; i++){
+                ids[i] = rowDatas[i].garrisonId;
+            }
+            window.location.href="../HN/exportExcel_Garrison?ids="+ids+"&time="+new Date();
+        }
+    }
+
+    //导出模块数据
+    function exportGarrison(){
+        var rowDatas = $("#datagrid").datagrid("getSelections");
+        //console.log(rowDatas+"模块数据信息");
+        if(rowDatas.length==0){
+            $.messager.alert("信息框","请选中要导出的数据","warning");
+        }else{
+            var ids = new Array(rowDatas.length);
+            for(var i = 0; i<rowDatas.length; i++){
+                ids[i] = rowDatas[i].garrisonProjectIddto;
+            }
+            //console.log(ids);
+            window.location.href="../HN/exportGarrison?ids="+ids+"&time="+new Date();
+        }
+    }
+
+    //导入
+    function importGarrison(){
+        // 输入框的值，用来过滤是否选择文件
+        var fileName = $("#fileName").filebox("getValue");
+        var fileNameStr = fileName.substr(fileName.indexOf(".")+1).toUpperCase();
+        if(fileName==null || fileName==""){
+            alert("请选择要导入的excel文件");
+        }else if(fileNameStr=="XLS" || fileNameStr=="XLSX"){
+            var flag=true;
+            if(flag){
+                $.messager.confirm("确定对话框","确认导入吗？",function(n){
+                    if(n){
+                        $("#queryUserForm").form("submit",{
+                            url:"../HN/parseExcel_Garrison",
+                            success:function (data) {
+                                var jsObj = JSON.parse(data);
+                                $.messager.alert("信息框",jsObj.isParse,"warning");
+                                if(jsObj.isParse=="导入成功"){
+                                    $("#datagrid").datagrid("reload");
+                                    $("#module").combobox('reload');
+                                    $("#combobox-module").combobox('reload');
+                                    var value = $("#fileName").textbox('getValue')  //获取值
+                                    $("#fileName").textbox('setValue','')
+                                }
+                            }
+                        })
+                    }
+                })
+            }
+        }else{
+            $.messager.alert("提示框","文件类型不一致",'warning');
+        }
+    }
+</script>
+</body>
+</html>

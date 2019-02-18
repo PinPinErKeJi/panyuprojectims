@@ -12,10 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("IC")
@@ -59,6 +56,16 @@ public class IndoorCoveragePhotoController {
                                           MultipartFile[] uploadFile,
                                           IndoorCoveragePhoto indoorCoveragePhoto,
                                           String indoorProjectId, String indoorInformationId){
+        //文件目录地址，年月作为文件夹名称
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) +1;
+        int day = calendar.get(Calendar.DATE);
+
+        String yearloadTargetPath = year+ "/";
+        String mothloadTargetPath =month+ "/";
+        String dayloadTargetPath =day+ "/";
+        String uploadTargetPath =  yearloadTargetPath + mothloadTargetPath +dayloadTargetPath+ "/";
        //int i = 0;
         long countIndoorCoveragePhotoByIndoorProjectId = indoorCoveragePhotoService.getCountIndoorCoveragePhotoByIndoorProjectId(indoorProjectId);
         try {
@@ -71,13 +78,13 @@ public class IndoorCoveragePhotoController {
                     String newFileName = replaceAll + "" + d.getTime() + "" + fileName;
 
                     if (countIndoorCoveragePhotoByIndoorProjectId < 6) {
-                        File file = new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\IC\\photo");
+                        File file = new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\photo\\IC"+"\\"+uploadTargetPath);
                         if (!file.exists()) {
                             file.mkdirs();
                         }
-                        multipartFile.transferTo(new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\IC\\photo" + "/" + newFileName));
+                        multipartFile.transferTo(new File("E:\\IdeaWorkSpace\\panyuprojectims\\src\\main\\resources\\static\\photo\\IC"+"\\"+uploadTargetPath+"/"+ newFileName));
                         String finalFileName = newFileName;
-                        indoorCoveragePhoto.setIndoorName(finalFileName);
+                        indoorCoveragePhoto.setIndoorName("\\photo\\IC"+"\\"+uploadTargetPath+"/"+finalFileName);
                         indoorCoveragePhoto.setIndoorInformationId(indoorInformationId);
                         indoorCoveragePhoto.setIndoorProjectId(indoorProjectId);
                        int i = indoorCoveragePhotoService.insertIndoorCoveragePhoto(indoorCoveragePhoto);

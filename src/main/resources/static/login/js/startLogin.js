@@ -11,8 +11,9 @@ $(function () {
             $.post("userLoginController/startlogin",{"userName":userName1,"userPwd":userPwd,"rememberMe":rememberMe},function (msg) {
                 if(msg==""){
                     sessionStorage.setItem("userName",userName1)
-                    window.location.href="index.html";
-                }else{
+                    //window.location.href="templates/index.html";
+                    window.location='AM/skip'
+                    }else{
                     //alert(msg)
                     $('#infoSpan').text(msg)
                 }

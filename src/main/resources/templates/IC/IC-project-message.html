@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.springframework.org/schema/jdbc">
+<head>
+    <meta charset="UTF-8">
+    <title>室内覆盖基本信息</title>
+    <link rel="stylesheet" href="../easyui/easyui.css">
+    <link rel="stylesheet" href="../css/icon.css">
+    <link rel="stylesheet" href="../css/list.css">
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="../css/bootstrap-theme.css" />
+    <style>
+        .border{
+            height: 27px;
+            width: 120px;
+            border: 1px solid #95B8E7;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<form id="excelForm" method="post" enctype="multipart/form-data">
+    <div>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true"  data-options="iconCls:'icon-print'" onClick="importProjectProgressExcel();">导出Excel空表格</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true"  data-options="iconCls:'icon-print'" onClick="ProjectProgressExcel();">导出工程基本信息</a>
+        <input  id="fileName" class="easyui-filebox" name="fileName"  style="width:200px;vertical-align:middle;" />
+        <a href="javascript:void(0)" onclick="importProjectProgress()" class="easyui-linkbutton">导入工程基本信息</a>
+    </div>
+</form>
+<div data-toggle="distpicker" style="float: left">
+    <select  id="province" class="border" data-province="河南省"></select>
+    <select  id="city" class="border" data-city="郑州市"></select>
+    <select  id="county" class="border" data-district="中原区"></select>
+</div>
+<div>
+    <label>建设年份:</label><input id="construction-year" type="text" class="Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy'})">
+    <label>建设项目:</label><input id="construction-project" class="easyui-textbox" style="width: 120px">
+    <label>运营商：</label><input id="operatorSearch" class="easyui-combobox" style="width:120px">
+    <label>监理人员：</label><input id="supervisory" class="easyui-textbox" style="width:120px">
+    <a id="search" class="easyui-linkbutton" iconCls="icon-search" style="width: 60px">搜索</a>
+    <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-add" id="newUser">添加</a>
+    <!--<a href="javascript:;" class="easyui-linkbutton" iconCls="icon-edit" id="editUser">修改</a>-->
+    <a href="javascript:;" class="easyui-linkbutton" iconCls="icon-remove" id="removeUser">移除</a>
+</div>
+<div id="datagrid" class="easyui-datagrid panel-fit" style="height: 100%"></div>
+<div id="dialog" class="easyui-dialog" style="width: 500px;height: 400px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form method="post" id="form">
+        <div style="margin-bottom:20px">
+            <label>建设年份:</label><input type="text" name="buildYear" class="Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy'})">
+        </div>
+        <div style="margin-bottom:20px">
+            <div data-toggle="distpicker" style="float: left">
+                <select  id="form-province" class="border" data-province="河南省"></select>
+                <select  id="form-city" class="border" data-city="郑州市"></select>
+                <select  id="form-county" class="border" data-district="中原区"></select>
+            </div>
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-combobox" label="运营商:" labelPosition="top" id="operator" name="operator" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="建设项目名称:" labelPosition="top"  required name="buildingProject" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="规划站名:" labelPosition="top" required name="planStationName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="实际站名:" labelPosition="top" required name="actualStationName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="经度:" labelPosition="top" required name="indoorLongitude" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="纬度:" labelPosition="top" required name="indoorLatitude" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="所属部门:" labelPosition="top" required name="subordinateDepartment" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="覆盖类型:" labelPosition="top" required name="coverType" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="RRU数量:" labelPosition="top" required name="rruNumber" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="电表数量(端):" labelPosition="top" required name="ammeterNumber" style="width:100%;">
+        </div>
+        <a class="easyui-linkbutton" id="supervision">监理单位</a>
+        <a class="easyui-linkbutton" id="builder">施工单位</a>
+        <a class="easyui-linkbutton" id="design">设计单位</a>
+        <a class="easyui-linkbutton" id="BBU-number">BBU数量</a>
+        <a class="easyui-linkbutton" id="light-number">光分布设备数量(端)</a>
+        <a class="easyui-linkbutton" id="passive-components">无源器件数量(个)</a>
+        <a class="easyui-linkbutton" id="antenna-number">天线数量(个)</a>
+        <a class="easyui-linkbutton" id="cable-length">线缆长度(m)</a>
+    </form>
+</div>
+<!--监理单位-->
+<div id="dialog-supervision" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-supervision" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="现场负责人" labelPosition="top" required id="supervision-site" name="siteLeader" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="专业负责人" labelPosition="top" required id="professional-head" name="professionResponsiblePerson" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="区域负责人" labelPosition="top" required id="area-head" name="districtHead" style="width:100%;">
+        </div>
+    </form>
+</div>
+<!--施工单位-->
+<div id="dialog-builder" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-builder" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="公司名称" labelPosition="top" required id="company-name" name="icCorporateName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="负责人" labelPosition="top" required id="build-head" name="personInCharge" style="width:100%;">
+        </div>
+    </form>
+</div>
+<!--设计单位-->
+<div id="dialog-design" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-design" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="公司名称" labelPosition="top" required id="design-company-name" name="designCorporateName" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="负责人" labelPosition="top" required id="design-head" name="designPersonInCharge" style="width:100%;">
+        </div>
+    </form>
+</div>
+<!--BBU数量-->
+<div id="dialog-bbu" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-bbu" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="集中放置" labelPosition="top" required id="placed-centrally" name="centralization" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="小区挂墙" labelPosition="top" required id="hanging-wall" name="wallHangingWall" style="width:100%;">
+        </div>
+    </form>
+</div>
+<!--光分布设备数量（端）-->
+<div id="dialog-light" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-light" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="EasyMacro" labelPosition="top" required id="easy-macro" name="easyMacro" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="BOOK RRU（不集成天线)" labelPosition="top" required id="book-rru-no" name="bookrruNotIntegratedAntenna" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="BOOK RRU（集成天线）" labelPosition="top" required id="book-rru-yes" name="bookrruIntegratedAntenna" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="HUB" labelPosition="top" required id="hub" name="hub" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="PRU（集成天线）" labelPosition="top" required id="pru-yes" name="pruIntegratedAntenna" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="PRU（不集成天线）" labelPosition="top" required id="pru-no" name="pruNotIntegratedAntenna" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="接入单元（近端）" labelPosition="top" required id="access-units" name="accessUnit" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="扩展单元" labelPosition="top" required id="extension-units" name="extensionUnit" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="远端设备（室内）" labelPosition="top" required id="indoor" name="remoteDeviceIndoor" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="远端设备（室外）" labelPosition="top" required id="outdoor" name="remoteDeviceOutdoor" style="width:100%;">
+        </div>
+    </form>
+</div>
+<!--无源器件数量(个)-->
+<div id="dialog-passive" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-passive" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="功分器" labelPosition="top" required id="power-dividers" name="powerDivider" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="耦合器" labelPosition="top" required id="coupler" name="coupler" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="合路器" labelPosition="top" required id="combiner" name="roadConnector" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="负载" labelPosition="top" required id="load" name="loadNumber" style="width:100%;">
+        </div>
+    </form>
+</div>
+<!--天线数量（个）-->
+<div id="dialog-antenna" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-antenna" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="室内天线" labelPosition="top" required id="antenna-indoor" name="indoorAntenna" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="室外天线" labelPosition="top" required id="antenna-outdoor" name="outdoorAntenna" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="电梯天线" labelPosition="top" required id="antenna-elevator" name="elevatorAntenna" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-numberbox" label="GPS天线" labelPosition="top" required id="antenna-GPS" name="gpsAntenna" style="width:100%;">
+        </div>
+    </form>
+</div>
+<!--线缆长度（m）-->
+<div id="dialog-cable-length" class="easyui-dialog" style="width: 400px;height: 300px;overflow: scroll" data-options="resizable:true,modal:true">
+    <form id="form-cable-length" method="post">
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="网线" labelPosition="top" required id="cable-net" name="networkLine" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="光电复合缆" labelPosition="top" required id="cable-photoelectric" name="photoelectricCompositeCable" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="7/8馈线" labelPosition="top" required id="cable-eight" name="sevenEighthsFeeder" style="width:100%;">
+        </div>
+        <div style="margin-bottom:20px">
+            <input class="easyui-textbox" label="1/2馈线" labelPosition="top" required id="cable-two" name="ahalfFeeder" style="width:100%;">
+        </div>
+    </form>
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.easyui.min.js"></script>
+<script src="../js/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.js" ></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.common.js" ></script>
+<script type="text/javascript" src="../js/distpicker/distpicker.esm.js" ></script>
+<script type="text/javascript" src="../js/My97DatePicker/WdatePicker.js"></script>
+<script th:inline="none" type="text/javascript">
+    $(function () {
+        var one = 0
+        var two = 0
+        var three = 0
+        var four = 0
+        var five = 0
+        var six = 0
+        var seven = 0
+        var eight = 0
+
+
+        var icSupervisoryUnitId ;
+        var icConstructionId;
+        var icDesignUnitId;
+        var bbuNumberId;
+        var lightNumberId;
+        var passiveDeviceNumberId;
+        var antennaNumberId;
+        var cableLengthId;
+
+        //初始化搜素框运营商的combobox
+        $("#operatorSearch").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            data:[{
+                id:'1',
+                name:'中国电信'
+            },{
+                id:'2',
+                name:'中国联通'
+            },{
+                id:'3',
+                name:'中国移动'
+            },{
+                id:'4',
+                name:'中国铁塔'
+            },{
+                id:'5',
+                name:'中国广电'
+            }]
+        })
+        //初始化运营商combobox
+        $("#operator").combobox({
+            editable:false,
+            valueField:'id',
+            textField:'name',
+            panelHeight:'auto',
+            required:true,
+            data:[{
+                id:'1',
+                name:'中国电信'
+            },{
+                id:'2',
+                name:'中国联通'
+            },{
+                id:'3',
+                name:'中国移动'
+            },{
+                id:'4',
+                name:'中国铁塔'
+            },{
+                id:'5',
+                name:'中国广电'
+            }]
+        })
+
+        //搜索事件
+        $("#search").bind("click",function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "county":$("#county").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operatorSearch").combobox("getText"),
+                "professionResponsiblePerson":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+                "siteLeader":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击省份change事件
+        $("#province").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operatorSearch").combobox("getText"),
+                "professionResponsiblePerson":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+                "siteLeader":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击城市change事件
+        $("#city").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operatorSearch").combobox("getText"),
+                "professionResponsiblePerson":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+                "siteLeader":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //点击区(县)change事件
+        $("#county").change(function () {
+            $("#datagrid").datagrid("load",{
+                "province":$("#province").find("option:selected").val(),
+                "city":$("#city").find("option:selected").val(),
+                "county":$("#county").find("option:selected").val(),
+                "buildYear":$("#construction-year").val(),
+                "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                "operator":$("#operatorSearch").combobox("getText"),
+                "professionResponsiblePerson":$("#supervisory").textbox("getValue").trim(),
+                "districtHead":$("#supervisory").textbox("getValue").trim(),
+                "siteLeader":$("#supervisory").textbox("getValue").trim(),
+            });
+        })
+        //运营商change事件
+        $("#operatorSearch").combobox({
+            onChange:function () {
+                $("#datagrid").datagrid("load",{
+                    "province":$("#province").find("option:selected").val(),
+                    "city":$("#city").find("option:selected").val(),
+                    "county":$("#county").find("option:selected").val(),
+                    "buildYear":$("#construction-year").val(),
+                    "buildingProject":$("#construction-project").textbox("getValue").trim(),
+                    "operator":$("#operatorSearch").combobox("getText"),
+                    "professionResponsiblePerson":$("#supervisory").textbox("getValue").trim(),
+                    "districtHead":$("#supervisory").textbox("getValue").trim(),
+                    "siteLeader":$("#supervisory").textbox("getValue").trim()
+                });
+            }
+        })
+
+
+
+        var dialogSupervision=$("#dialog-supervision")
+        var formSupervision=$("#form-supervision")
+        var dialogBuilder=$("#dialog-builder")
+        var formBuilder=$("#form-builder")
+        var dialogDesign=$("#dialog-design")
+        var formDesign=$("#form-design")
+        var dialogBBU=$("#dialog-bbu")
+        var formBBU=$("#form-bbu")
+        var dialogLight=$("#dialog-light")
+        var formLight=$("#form-light")
+        var dialogPassive=$("#dialog-passive")
+        var formPassive=$("#form-passive")
+        var dialogAntenna=$("#dialog-antenna")
+        var formAntenna=$("#form-antenna")
+        var dialogCableLength=$("#dialog-cable-length")
+        var formCableLength=$("#form-cable-length")
+
+        //隐藏dialog窗口
+        dialogSupervision.dialog("close")
+        dialogBuilder.dialog("close")
+        dialogDesign.dialog("close")
+        dialogBBU.dialog("close")
+        dialogLight.dialog("close")
+        dialogPassive.dialog("close")
+        dialogAntenna.dialog("close")
+        dialogCableLength.dialog("close")
+
+        //监理单位的点击事件
+        $("#supervision").bind("click", function () {
+            dialogSupervision.dialog('open');// open
+            dialogSupervision.dialog({
+                title: '监理单位',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        formSupervision.form('submit', {
+                            url: '../IC/insertIcSupervisoryUnit',
+                            onSubmit: function () {
+                                return formSupervision.form('validate');
+                            },
+                            success: function (data) {
+                                icSupervisoryUnitId = data;
+                                one = 1;
+                                dialogSupervision.dialog('close');// close
+                                $("#supervision").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogSupervision.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //施工单位的点击事件
+        $("#builder").bind("click", function () {
+            dialogBuilder.dialog('open');// open
+            dialogBuilder.dialog({
+                title: '施工单位',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        formBuilder.form('submit', {
+                            url: '../IC/insertIcConstructionOrganization',
+                            onSubmit: function () {
+                                return formBuilder.form('validate');
+                            },
+                            success: function (data) {
+                                icConstructionId = data;
+                                two = 1;
+                                dialogBuilder.dialog('close');// close
+                                $("#builder").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogBuilder.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //设计单位的点击事件
+        $("#design").bind("click", function () {
+            dialogDesign.dialog('open');// open
+            dialogDesign.dialog({
+                title: '设计单位',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        formDesign.form('submit', {
+                            url: '../IC/insertIcDesignUnit',
+                            onSubmit: function () {
+                                return formDesign.form('validate');
+                            },
+                            success: function (data) {
+                                icDesignUnitId = data;
+                                three = 1;
+                                dialogDesign.dialog('close');// close
+                                $("#design").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogDesign.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //BBU数量的点击事件
+        $("#BBU-number").bind("click", function () {
+            dialogBBU.dialog('open');// open
+            dialogBBU.dialog({
+                title: 'BBU数量',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        formBBU.form('submit', {
+                            url: '../IC/insertIcBbuNumber',
+                            onSubmit: function () {
+                                return formBBU.form('validate');
+                            },
+                            success: function (data) {
+                                bbuNumberId = data;
+                                four = 1;
+                                dialogBBU.dialog('close');// close
+                                $("#BBU-number").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogBBU.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //光分布设备数量（端）的点击事件
+        $("#light-number").bind("click", function () {
+            dialogLight.dialog('open');// open
+            dialogLight.dialog({
+                title: '光分布设备数量（端',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        formLight.form('submit', {
+                            url: '../IC/insertIcLightDistriputionNumber',
+                            onSubmit: function () {
+                                return formLight.form('validate');
+                            },
+                            success: function (data) {
+                                lightNumberId = data;
+                                five = 1;
+                                dialogLight.dialog('close');// close
+                                $("#light-number").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogLight.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //无源器件数量（个）的点击事件
+        $("#passive-components").bind("click", function () {
+            dialogPassive.dialog('open');// open
+            dialogPassive.dialog({
+                title: '无源器件数量（个）',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        formPassive.form('submit', {
+                            url: '../IC/insertIcPassiveDeviceNumber',
+                            onSubmit: function () {
+                                return formPassive.form('validate');
+                            },
+                            success: function (data) {
+                                passiveDeviceNumberId = data;
+                                six = 1;
+                                dialogPassive.dialog('close');// close
+                                $("#passive-components").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogPassive.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //天线数量（个）的点击事件
+        $("#antenna-number").bind("click", function () {
+            dialogAntenna.dialog('open');// open
+            dialogAntenna.dialog({
+                title: '天线数量（个）',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        formAntenna.form('submit', {
+                            url: '../IC/insertIcAntennaNumber',
+                            onSubmit: function () {
+                                return formAntenna.form('validate');
+                            },
+                            success: function (data) {
+                                antennaNumberId = data;
+                                seven = 1;
+                                dialogAntenna.dialog('close');// close
+                                $("#antenna-number").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogAntenna.dialog('close');// close
+                    }
+                }]
+            });
+        });
+        //线缆长度（m）的点击事件
+        $("#cable-length").bind("click", function () {
+            dialogCableLength.dialog('open');// open
+            dialogCableLength.dialog({
+                title: '线缆长度（m）',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        formCableLength.form('submit', {
+                            url: '../IC/insertIcCableLength',
+                            onSubmit: function () {
+                                return formCableLength.form('validate');
+                            },
+                            success: function (data) {
+                                cableLengthId = data;
+                                eight = 1;
+                                dialogCableLength.dialog('close');// close
+                                $("#cable-length").linkbutton('disable');//添加数据成功后button设为不可点击
+                                //console.log(data);
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        dialogCableLength.dialog('close');// close
+                    }
+                }]
+            });
+        });
+
+        var dialog = $('#dialog');
+        var form = $('#form');
+
+        // 隐藏弹窗
+        dialog.dialog('close');
+        // 数据表格
+        $('#datagrid').datagrid({
+            url: '../IC/selectAllIndoorCoverageInformation',
+            pagination: true,
+            pageNumber: 1,
+            pageSize: 15,
+            pageList: [15, 30, 45, 60],
+            columns:[[
+                {field:'ck',checkbox:"true",rowspan:2},
+                {field: 'indoorInformationId', title: '序号', rowspan: 2, width: 50, align: 'center',hidden:true},
+                {field: 'operator', title: '运营商', rowspan: 2, width: 60, align: 'center'},
+                {field: 'buildingProject', title: '建设项目名称', rowspan: 2, align: 'center', width: 120},
+                {field: 'buildYear', title: '建设年份', rowspan: 2, align: 'center', width: 100},
+                {field: 'planStationName', title: '规划站名', rowspan: 2, align: 'center', width: 120},
+                {field: 'actualStationName', title: '实际站名', rowspan: 2, align: 'center', width: 120},
+                {field: 'indoorLongitude', title: '经度', rowspan: 2, align: 'center', width: 50},
+                {field: 'indoorLatitude', title: '纬度', rowspan: 2, align: 'center', width: 50},
+                {field: 'province', title: '省', rowspan: 2, align: 'center', width: 80},
+                {field: 'city', title: '市', rowspan: 2, align: 'center', width: 80},
+                {field: 'county', title: '区(县)', rowspan: 2, align: 'center', width: 80},
+                {field: 'subordinateDepartment', title: '所属部门', rowspan: 2, align: 'center', width: 100},
+                {field: 'coverType', title: '覆盖类型', rowspan: 2, align: 'center', width: 100},
+                {title: '监理单位', colspan:3, align: 'center'},
+                {title: '施工单位', colspan:2, align: 'center'},
+                {title: '设计单位', colspan:2, align: 'center'},
+                {title: 'BBU数量', colspan:2, align: 'center'},
+                {field: 'rruNumber', title: 'RRU数量', rowspan: 2, align: 'center', width: 100},
+                {title: '光分布设备数量（端）', colspan:10, align: 'center'},
+                {title: '无源器件数量（个）', colspan:4, align: 'center'},
+                {title: '天线数量（个）', colspan:4, align: 'center'},
+                {title: '线缆长度（m）', colspan:4, align: 'center'},
+                {field: 'ammeterNumber', title: '电表数量（端）', rowspan: 2, align: 'center', width: 100},
+            ],[
+                {field: 'professionResponsiblePerson', title: '专业负责人',  width: 100, align: 'center'},
+                {field: 'districtHead', title: '区域负责人',  width: 100, align: 'center'},
+                {field: 'siteLeader', title: '现场负责人', width: 100, align: 'center'},
+                {field: 'icCorporateName', title: '公司名称',  width: 100, align: 'center'},
+                {field: 'personInCharge', title: '负责人',  width: 80, align: 'center'},
+                {field: 'designCorporateName', title: '公司名称',  width: 80, align: 'center'},
+                {field: 'designPersonInCharge', title: '负责人',  width: 80, align: 'center'},
+                {field: 'centralization', title: '集中放置',  width: 80, align: 'center'},
+                {field: 'wallHangingWall', title: '小区挂墙',  width: 80, align: 'center'},
+                {field: 'easyMacro', title: 'EasyMacro',  width: 80, align: 'center'},
+                {field: 'bookrruNotIntegratedAntenna', title: 'BOOK RRU(不集成天线)',  width: 150, align: 'center'},
+                {field: 'bookrruIntegratedAntenna', title: 'BOOK RRU(集成天线)', width: 150, align: 'center'},
+                {field: 'hub', title: 'HUB',  width: 80, align: 'center'},
+                {field: 'pruIntegratedAntenna', title: 'PRU（集成天线）',  width: 120, align: 'center'},
+                {field: 'pruNotIntegratedAntenna', title: 'PRU（不集成天线）',  width: 120, align: 'center'},
+                {field: 'accessUnit', title: '接入单元（近端）',  width: 120, align: 'center'},
+                {field: 'extensionUnit', title: '扩展单元',  width: 100, align: 'center'},
+                {field: 'remoteDeviceIndoor', title: '远端设备（室内）',  width: 120, align: 'center'},
+                {field: 'remoteDeviceOutdoor', title: '远端设备（室外）',  width: 120, align: 'center'},
+                {field: 'powerDivider', title: '功分器',  width: 100, align: 'center'},
+                {field: 'coupler', title: '耦合器', width: 100, align: 'center'},
+                {field: 'roadConnector', title: '合路器',  width: 100, align: 'center'},
+                {field: 'loadNumber', title: '负载', width: 60, align: 'center'},
+                {field: 'indoorAntenna', title: '室内天线', width: 100, align: 'center'},
+                {field: 'outdoorAntenna', title: '室外天线',  width: 100, align: 'center'},
+                {field: 'elevatorAntenna', title: '电梯天线',  width: 100, align: 'center'},
+                {field: 'gpsAntenna', title: 'GPS天线',  width: 60, align: 'center'},
+                {field: 'networkLine', title: '网线',  width: 60, align: 'center'},
+                {field: 'photoelectricCompositeCable', title: '光电复合缆',  width: 120, align: 'center'},
+                {field: 'sevenEighthsFeeder', title: '7/8馈线',  width: 60, align: 'center'},
+                {field: 'ahalfFeeder', title: '1/2馈线',  width: 60, align: 'center'},
+            ]]
+        });
+
+        // 获取按钮
+        var newUser = $('#newUser');
+        var removeUser = $('#removeUser');
+
+        // 添加记录
+        newUser.on('click', function () {
+            //alert("123");
+            dialog.dialog('open');// open
+            dialog.dialog({
+                title: '添加记录',
+                iconCls: 'icon-save',
+                buttons: [{
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () { // 新增数据
+                        //获取运营商的值
+                        var operator=$("#operator").combobox("getText");
+                        //获取省市区的值
+                        var form_province=$("#form-province").find("option:selected").text();
+                        var form_city=$("#form-city").find("option:selected").text();
+                        var form_county=$("#form-county").find("option:selected").text();
+                        //alert(form_province+form_city+form_county);
+                        form.form('submit', {
+                            url: '../IC/insertIndoorCoverageInformation?province='+form_province+'&city='+form_city+'&county='+form_county+'&operator='+operator+'&icSupervisoryUnitId='+icSupervisoryUnitId+'&icConstructionId='+icConstructionId+'&icDesignUnitId='+icDesignUnitId+'&bbuNumberId='+bbuNumberId+'&lightNumberId='+lightNumberId+'&passiveDeviceNumberId='+passiveDeviceNumberId+'&antennaNumberId='+antennaNumberId+'&cableLengthId='+cableLengthId,
+                            onSubmit: function () {
+                                //提交表单时验证8个方法必须全都添加完成
+                                if (one == 1 && two == 1 && three == 1 && four == 1 && five == 1 &&
+                                    six == 1 && seven == 1 && eight == 1) {
+                                    return form.form('validate');
+                                }
+                                return false;
+                            },
+                            success: function (data) {
+                                //添加成功后刷新datagrid数据
+                                if (data){
+                                    $("#datagrid").datagrid("load")
+                                    dialog.dialog('close');// close
+
+                                    form.form("reset");
+                                    $("#supervision").linkbutton('enable');
+                                    $("#form-supervision").form("reset");
+                                    $("#builder").linkbutton('enable');
+                                    $("#form-builder").form("reset");
+                                    $("#design").linkbutton('enable');
+                                    $("#form-design").form("reset");
+                                    $("#BBU-number").linkbutton('enable');
+                                    $("#form-bbu").form("reset");
+                                    $("#light-number").linkbutton('enable');
+                                    $("#form-light").form("reset");
+                                    $("#passive-components").linkbutton('enable');
+                                    $("#form-passive").form("reset");
+                                    $("#antenna-number").linkbutton('enable');
+                                    $("#form-antenna").form("reset");
+                                    $("#cable-length").linkbutton('enable');
+                                    $("#form-cable-length").form("reset");
+
+
+                                    $.messager.alert("添加记录","添加记录成功!")
+                                    //console.log(data);
+                                }else{
+                                    $.messager.alert("添加记录","添加数据失败!","error")
+                                }
+
+                            }
+                        });
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        //点击取消也刷新数据,清除form表单已填入的数据
+                        $("#datagrid").datagrid("load")
+                        dialog.dialog('close');// close
+                    }
+                }]
+            });
+        });
+
+        // 移除记录
+        removeUser.on('click', function () {
+            // 移除选中的数据行
+            if ($("#datagrid").datagrid('getSelected')) {
+                var row = $("#datagrid").datagrid('getSelected');
+                $.messager.confirm('移除记录', '确定移除吗?', function (result) {
+                    if (result){
+                        $.ajax({
+                            url:'../IC/deleteIndoorCoverageInformationByIndoorInformationId',
+                            method:'post',
+                            data:{indoorInformationId:row.indoorInformationId},
+                            dataType:'json',
+                            success:function (data) {
+                                if (data){
+                                    //删除成功后刷新数据
+                                    $.messager.alert("删除记录","删除成功","info")
+                                    $("#datagrid").datagrid("load")
+                                } else {
+                                    $.messager.alert("删除记录","删除失败","error")
+                                }
+                            }
+                        })
+                    }
+                });
+            } else {
+                alert('请选择一条数据！');
+            }
+        });
+        /**
+         * linkbutton方法扩展
+         * @param {Object} jq
+         */
+        $.extend($.fn.linkbutton.methods, {
+            /**
+             * 激活选项（覆盖重写）
+             * @param {Object} jq
+             */
+            enable: function (jq) {
+                return jq.each(function () {
+                    var state = $.data(this, 'linkbutton');
+                    if ($(this).hasClass('l-btn-disabled')) {
+                        var itemData = state._eventsStore;
+                        //恢复超链接
+                        if (itemData.href) {
+                            $(this).attr("href", itemData.href);
+                        }
+                        //回复点击事件
+                        if (itemData.onclicks) {
+                            for (var j = 0; j < itemData.onclicks.length; j++) {
+                                $(this).bind('click', itemData.onclicks[j]);
+                            }
+                        }
+                        //设置target为null，清空存储的事件处理程序
+                        itemData.target = null;
+                        itemData.onclicks = [];
+                        $(this).removeClass('l-btn-disabled');
+                    }
+                });
+            },
+            /**
+             * 禁用选项（覆盖重写）
+             * @param {Object} jq
+             */
+            disable: function (jq) {
+                return jq.each(function () {
+                    var state = $.data(this, 'linkbutton');
+                    if (!state._eventsStore)
+                        state._eventsStore = {};
+                    if (!$(this).hasClass('l-btn-disabled')) {
+                        var eventsStore = {};
+                        eventsStore.target = this;
+                        eventsStore.onclicks = [];
+                        //处理超链接
+                        var strHref = $(this).attr("href");
+                        if (strHref) {
+                            eventsStore.href = strHref;
+                            $(this).attr("href", "javascript:void(0)");
+                        }
+                        //处理直接耦合绑定到onclick属性上的事件
+                        var onclickStr = $(this).attr("onclick");
+                        if (onclickStr && onclickStr != "") {
+                            eventsStore.onclicks[eventsStore.onclicks.length] = new Function(onclickStr);
+                            $(this).attr("onclick", "");
+                        }
+                        //处理使用jquery绑定的事件
+                        var eventDatas = $(this).data("events") || $._data(this, 'events');
+                        if (eventDatas["click"]) {
+                            var eventData = eventDatas["click"];
+                            for (var i = 0; i < eventData.length; i++) {
+                                if (eventData[i].namespace != "menu") {
+                                    eventsStore.onclicks[eventsStore.onclicks.length] = eventData[i]["handler"];
+                                    $(this).unbind('click', eventData[i]["handler"]);
+                                    i--;
+                                }
+                            }
+                        }
+                        state._eventsStore = eventsStore;
+                        $(this).addClass('l-btn-disabled');
+                    }
+                });
+            }
+        });
+    });
+    //导出空表格
+    function importProjectProgressExcel(){
+        var rowDatas = $("#datagrid").datagrid("getSelections");
+        if(rowDatas.length==0){
+            var ids = new Array(rowDatas.length);
+            for(var i = 0; i<rowDatas.length; i++){
+                ids[i] = rowDatas[i].indoorInformationId;
+            }
+            window.location.href="../IC/ICExportIndoorCoverageNullExcel?time="+new Date();
+        }
+    }
+
+    //导出数据
+    function ProjectProgressExcel(){
+        var rowDatas = $("#datagrid").datagrid("getSelections");
+        //console.log(rowDatas+"信息数据");
+        if(rowDatas.length==0){
+            $.messager.alert("信息框","请选中要导出的数据","warning");
+        }else{
+            var ids = new Array(rowDatas.length);
+            for(var i = 0; i<rowDatas.length; i++){
+                ids[i] = rowDatas[i].indoorInformationId;
+            }
+            //console.log(ids);
+            window.location.href="../IC/ICExportIndoorCoverageExcel?ids="+ids+"&time="+new Date();
+        }
+    }
+
+    //导入数据
+    function importProjectProgress(){
+        // 输入框的值，过滤是否选择文件
+        var fileName = $("#fileName").filebox("getValue");
+        var fileNameStr = fileName.substr(fileName.indexOf(".")+1);
+        //console.log("fileName:"+fileName)
+        //console.log("fileNameStr:"+fileNameStr)
+        if(fileName==null || fileName==""){
+            alert("请选择要导入的excel文件");
+        }else if(fileNameStr=="xls" || fileNameStr=="xlsx"){
+            var flag=true;
+            if(flag){
+                $.messager.confirm("确定对话框","确认导入吗？",function(n){
+                    if(n){
+                        $("#excelForm").form("submit",{
+                            url:"../IC/IndoorCoverage_parseExcel",
+                            success:function (data) {
+                                var jsObj = JSON.parse(data);
+                                $.messager.alert("信息框",jsObj.isParse,"warning");
+                                if(jsObj.isParse=="导入成功"){
+                                    // $("#combobox-module").combobox('reload');
+                                    $("#datagrid").datagrid("reload");
+                                    var value = $("#fileName").textbox('getValue')  //获取值
+                                    $("#fileName").textbox('setValue','')
+                                }
+                            }
+                        })
+
+                    }
+                })
+            }
+        }else{
+            $.messager.alert("提示框","文件类型不一致",'warning');
+        }
+    }
+</script>
+</body>
+</html>
