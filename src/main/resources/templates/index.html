@@ -22,10 +22,14 @@
     </div>
     <div class="home-toolbar">
         <ul class="login-info">
-            <li><a href="javascript:;" class="personal">管理员：
-                <span id="userinfo"></span></a></li>
+            <li class="login-info-one">
+                <a href="javascript:;" class="personal">管理员:
+                    <span class="userinfo"></span>
+                    <img src="../easyui/images/combo_arrow.png" alt="" style="vertical-align: bottom">
+                </a></li>
             <li>
-                <a href="javascript:;">消息：5</a>
+                <a href="javascript:;" style="background: url('../easyui/images/topmail.png') no-repeat left;vertical-align: bottom">消息</a>
+                <a href="javascript:void(0)" style="background:url('../images/countbg.png')no-repeat right;margin-left: -15px !important;">10</a>
             </li>
         </ul>
     </div>
@@ -38,13 +42,13 @@
     </div>
     <ul>
         <li>
-            <a href="../static/personal.html">
+            <a href="../personal.html">
                 <i class="panel-icon icon-man"></i>
                 个人资料
             </a>
         </li>
         <li>
-            <a href="../static/edit.html" style="background:
+            <a href="../edit.html" style="background:
             url('../static/css/icons/lock.png')no-repeat left center">
                 修改密码
             </a>
@@ -62,7 +66,7 @@
 <div class="home-sidebar" data-options="region:'west'">
     <div class="home-accordion easyui-accordion" data-options="border:0">
 
-        <div class="accordion-title" title="基站" data-options="iconCls:'icon-save'">
+        <div class="accordion-title" title="基站" data-options="iconCls:'icon-one'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
@@ -90,7 +94,7 @@
             </ul>
         </div>
 
-        <div class="accordion-title" title="设备" data-options="iconCls:'icon-save'">
+        <div class="accordion-title" title="设备" data-options="iconCls:'icon-three'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
@@ -125,7 +129,7 @@
             </ul>
         </div>
 
-        <div class="accordion-title" title="驻地网" data-options="iconCls:'icon-save'">
+        <div class="accordion-title" title="驻地网" data-options="iconCls:'icon-nine'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
@@ -152,7 +156,7 @@
                 </li>
             </ul>
         </div>
-        <div class="accordion-title" title="室内覆盖" data-options="iconCls:'icon-save'">
+        <div class="accordion-title" title="室内覆盖" data-options="iconCls:'icon-six'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
@@ -179,7 +183,7 @@
                 </li>
             </ul>
         </div>
-        <div class="accordion-title" title="线路" data-options="iconCls:'icon-save'">
+        <div class="accordion-title" title="线路" data-options="iconCls:'icon-four'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
@@ -207,7 +211,7 @@
             </ul>
         </div>
 
-        <div class="accordion-title" title="电源" data-options="iconCls:'icon-save'">
+        <div class="accordion-title" title="电源" data-options="iconCls:'icon-five'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
@@ -247,15 +251,15 @@
 
         </div>
 
-        <div class="accordion-title" title="权限管理" data-options="iconCls:'icon-save'">
+        <div class="accordion-title" title="权限管理" data-options="iconCls:'icon-eight'">
             <ul class="home-menu">
                 <li>
-                    <i class="panel-icon icon-menu"></i>
+                    <i class="panel-icon icon-man"></i>
                     <!--<a href="AM/AM-userinfo.html">用户信息</a>-->
                     <a href="skip42">用户信息</a>
                 </li>
                 <li>
-                    <i class="panel-icon icon-menu"></i>
+                    <i class="panel-icon icon-section"></i>
                     <!--<a href="AM/AM-user.html">用户管理</a>-->
                     <a href="skip40">用户管理</a>
                 </li>
@@ -265,9 +269,17 @@
                     <a href="skip41">角色管理</a>
                 </li>
                 <li>
-                    <i class="panel-icon icon-section"></i>
+                    <i class="panel-icon icon-warning"></i>
                     <!--<a href="AM/AM-limit.html">权限管理</a>-->
                     <a href="skip39">权限管理</a>
+                </li>
+            </ul>
+        </div>
+        <div class="accordion-title" title="系统管理" data-options="iconCls:'icon-two'">
+            <ul class="home-menu">
+                <li>
+                    <i class="panel-icon icon-menu"></i>
+                    <a href="SL/SL-system.html">系统日志</a>
                 </li>
             </ul>
         </div>
@@ -283,6 +295,44 @@
 
 <script>
     $(function () {
+        // control + g
+        var nav = $('#nav');
+        var ul = $('.home-menu');
+        var tabs = $('.easyui-tabs');
+        //添加我的桌面
+        tabs.tabs('add',{
+            title:'我的桌面',
+            content: '<iframe src="skip43" width="100%" height="100%" frameborder="0"></iframe>'
+        })
+
+        ul.on('click', 'a', function (ev) {
+            ul.find('li').removeClass('active');
+            $(this).parent().addClass('active');
+
+            var url = $(this).attr('href');
+            var title = $(this).text();
+
+            if (tabs.tabs('exists', title)) {
+                tabs.tabs('select', title)
+            } else {
+                tabs.tabs('add', {
+                    title: title,
+                    closable: true,
+                    content: '<iframe src="' + url + '" width="100%" height="100%" frameborder="0"></iframe>'
+                })
+            }
+            return false;
+        });
+
+        //userinfo
+        var userinfo=$(".userinfo");
+        var sUserName=sessionStorage.getItem("userName");
+        userinfo.text(sUserName);
+
+        window.history.forward();
+    });
+
+    /*$(function () {
         // control + g
         var nav = $('#nav');
         var ul = $('.home-menu');
@@ -313,7 +363,7 @@
         userinfo.text(sUserName);
 
         window.history.forward();
-    });
+    });*/
 
 </script>
 
