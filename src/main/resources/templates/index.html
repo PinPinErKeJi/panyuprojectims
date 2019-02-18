@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+    <meta charset="UTF-8">
+    <title>信息管理界面</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../js/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../js/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="../easyui/easyui.css" id="style">
+    <link rel="stylesheet" type="text/css" href="../css/icon.css">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link rel="stylesheet" type="text/css" href="../css/menu.css">
+</head>
+<body class="easyui-layout">
+
+<div class="home-header" data-options="region:'north'">
+    <div class="home-logo">
+        <img src="../css/icons/logo.png" alt="磐羽信息后台管理系统">
+    </div>
+    <div class="home-toolbar">
+        <ul class="login-info">
+            <li><a href="javascript:;" class="personal">管理员：
+                <span id="userinfo"></span></a></li>
+            <li>
+                <a href="javascript:;">消息：5</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="message">
+    <div>
+        <p>admin</p>
+        <p>超级管理员</p>
+    </div>
+    <ul>
+        <li>
+            <a href="../static/personal.html">
+                <i class="panel-icon icon-man"></i>
+                个人资料
+            </a>
+        </li>
+        <li>
+            <a href="../static/edit.html" style="background:
+            url('../static/css/icons/lock.png')no-repeat left center">
+                修改密码
+            </a>
+        </li>
+        <li>
+            <a href="logOutController/logout"style="background:
+            url('../static/css/icons/back.png')no-repeat left center">
+                退出登录
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<div class="home-sidebar" data-options="region:'west'">
+    <div class="home-accordion easyui-accordion" data-options="border:0">
+
+        <div class="accordion-title" title="基站" data-options="iconCls:'icon-save'">
+            <ul class="home-menu">
+                <li>
+                    <i class="panel-icon icon-menu"></i>
+                    <!--<a href="../BS/BS-module-repository.html">基站模块库</a>-->
+                    <a href="skip1">基站模块库</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-avatar"></i>
+                    <!--<a href="BS/BS-project-message.html">基站工程基本信息</a>-->
+                    <a href="skip2">基站工程基本信息</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-section"></i>
+                    <!--<a href="BS/BS-photo-message.html">基站图片库</a>-->
+                    <a href="skip3">基站图片库</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-job"></i>
+                    <!--<a href="BS/BS-project-plan-message.html">基站工程进度信息</a>-->
+                    <a href="skip6">基站工程进度信息</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="accordion-title" title="设备" data-options="iconCls:'icon-save'">
+            <ul class="home-menu">
+                <li>
+                    <i class="panel-icon icon-menu"></i>
+                    <!--<a href="FA/FA-module-repository.html">设备模块库</a>-->
+                    <a href="skip7">设备模块库</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-avatar"></i>
+                    <!--<a href="FA/FA-project-message.html">设备基本信息</a>-->
+                    <a href="skip8">设备基本信息</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-job"></i>
+                    <!--<a href="FA/FA-project-plan-message.html">设备工程进度信息</a>-->
+                    <a href="skip9">设备工程进度信息</a>
+                </li>
+
+
+                <li>
+                    <i class="panel-icon icon-section"></i>
+                    <!--<a href="FA/FA-photo-message.html">设备图片库</a>-->
+                    <a href="skip12">设备图片库</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-section"></i>
+                    <!--<a href="FA/FA-AOG-message.html">设备到货统计信息</a>-->
+                    <a href="skip13">设备到货统计信息</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="accordion-title" title="驻地网" data-options="iconCls:'icon-save'">
+            <ul class="home-menu">
+                <li>
+                    <i class="panel-icon icon-menu"></i>
+                    <!--<a href="HN/HN-module-repository.html">驻地网模块库</a>-->
+                    <a href="skip14">驻地网模块库</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-avatar"></i>
+                    <!--<a href="HN/HN-project-message.html">驻地网工程基本信息</a>-->
+                    <a href="skip15">驻地网工程基本信息</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-section"></i>
+                    <!--<a href="HN/HN-photo-message.html">驻地网图片库</a>-->
+                    <a href="skip16">驻地网图片库</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-job"></i>
+                    <!--<a href="HN/HN-project-plan-message.html">驻地网工程进度信息</a>-->
+                    <a href="skip19">驻地网工程进度信息</a>
+                </li>
+            </ul>
+        </div>
+        <div class="accordion-title" title="室内覆盖" data-options="iconCls:'icon-save'">
+            <ul class="home-menu">
+                <li>
+                    <i class="panel-icon icon-menu"></i>
+                    <!--<a href="IC/IC-module-repository.html">室内覆盖模块库</a>-->
+                    <a href="skip20">室内覆盖模块库</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-avatar"></i>
+                    <!--<a href="IC/IC-project-message.html">室内覆盖工程基本信息</a>-->
+                    <a href="skip21">室内覆盖工程基本信息</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-section"></i>
+                    <!--<a href="IC/IC-photo-message.html">室内覆盖图片库</a>-->
+                    <a href="skip22">室内覆盖图片库</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-job"></i>
+                    <!--<a href="IC/IC-project-plan-message.html">室内覆盖工程进度信息</a>-->
+                    <a href="skip25">室内覆盖工程进度信息</a>
+                </li>
+            </ul>
+        </div>
+        <div class="accordion-title" title="线路" data-options="iconCls:'icon-save'">
+            <ul class="home-menu">
+                <li>
+                    <i class="panel-icon icon-menu"></i>
+                    <!--<a href="LL/LL-module-repository.html">线路模块库</a>-->
+                    <a href="skip26">线路模块库</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-avatar"></i>
+                    <!--<a href="LL/LL-project-message.html">线路工程基本信息</a>-->
+                    <a href="skip27">线路工程基本信息</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-section"></i>
+                    <!--<a href="LL/LL-photo-message.html">线路图片库</a>-->
+                    <a href="skip28">线路图片库</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-job"></i>
+                    <!--<a href="LL/LL-project-plan-message.html">线路工程进度信息</a>-->
+                    <a href="skip31">线路工程进度信息</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="accordion-title" title="电源" data-options="iconCls:'icon-save'">
+            <ul class="home-menu">
+                <li>
+                    <i class="panel-icon icon-menu"></i>
+                    <!--<a href="PS/PS-module-repository.html">电源模块库</a>-->
+                    <a href="skip32">电源模块库</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-avatar"></i>
+                    <!--<a href="PS/PS-project-message.html">电源基本信息</a>-->
+                    <a href="skip33">电源基本信息</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-job"></i>
+                    <!--<a href="PS/PS-project-plan-message.html">电源工程进度信息</a>-->
+                    <a href="skip34">电源工程进度信息</a>
+                </li>
+
+
+                <li>
+                    <i class="panel-icon icon-section"></i>
+                    <!--<a href="PS/PS-photo-message.html">电源图片库</a>-->
+                    <a href="skip35">电源图片库</a>
+                </li>
+
+                <li>
+                    <i class="panel-icon icon-section"></i>
+                    <!--<a href="PS/PS-AOG-message.html">电源到货统计信息</a>-->
+                    <a href="skip38">电源到货统计信息</a>
+                </li>
+                <li>
+                    <i class="panel-icon icon-tpl"></i>
+                    <a href="/menus">开发中...</a>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="accordion-title" title="权限管理" data-options="iconCls:'icon-save'">
+            <ul class="home-menu">
+                <li>
+                    <i class="panel-icon icon-menu"></i>
+                    <!--<a href="AM/AM-userinfo.html">用户信息</a>-->
+                    <a href="skip42">用户信息</a>
+                </li>
+                <li>
+                    <i class="panel-icon icon-menu"></i>
+                    <!--<a href="AM/AM-user.html">用户管理</a>-->
+                    <a href="skip40">用户管理</a>
+                </li>
+                <li>
+                    <i class="panel-icon icon-avatar"></i>
+                    <!--<a href="AM/AM-role.html">角色管理</a>-->
+                    <a href="skip41">角色管理</a>
+                </li>
+                <li>
+                    <i class="panel-icon icon-section"></i>
+                    <!--<a href="AM/AM-limit.html">权限管理</a>-->
+                    <a href="skip39">权限管理</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<div class="home-content" data-options="region:'center'">
+    <div class="easyui-tabs" data-options="fit:true">
+
+    </div>
+</div>
+
+<script>
+    $(function () {
+        // control + g
+        var nav = $('#nav');
+        var ul = $('.home-menu');
+        var tabs = $('.easyui-tabs');
+
+        ul.on('click', 'a', function (ev) {
+            ul.find('li').removeClass('active');
+            $(this).parent().addClass('active');
+
+            var url = $(this).attr('href');
+            var title = $(this).text();
+
+            if (tabs.tabs('exists', title)) {
+                tabs.tabs('select', title)
+            } else {
+                tabs.tabs('add', {
+                    title: title,
+                    closable: true,
+                    content: '<iframe src="' + url + '" width="100%" height="100%" frameborder="0"></iframe>'
+                })
+            }
+            return false;
+        });
+
+        //userinfo
+        var userinfo=$("#userinfo");
+        var sUserName=sessionStorage.getItem("userName");
+        userinfo.text(sUserName);
+
+        window.history.forward();
+    });
+
+</script>
+
+</body>
+</html>
