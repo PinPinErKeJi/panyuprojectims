@@ -121,8 +121,9 @@
     </select>
     <!-- 根据当前登录的用户查询用户所拥有的所有权限 -->
     <select id="queryResByUsername" parameterType="com.panyu.panyuprojectims.entity.PanyuUser" resultType="String" >
-        select s_res.resource_name from shiro_resource s_res ,shiro_role_resource s_r_res ,shiro_amdin_role s_a_r,panyu_user p_y
-        where s_res.resource_id=s_r_res.resource_id and s_r_res.role_resource_id=s_a_r.admin_role_id and s_a_r.user_id=p_y.user_id and
-        p_y.user_name=#{userName,jdbcType=VARCHAR}
+        select  s_res.resource_name from shiro_resource s_res inner join shiro_role_resource s_r_res
+        on s_res.resource_id = s_r_res.resource_id
+        inner join shiro_amdin_role s_a_r on s_a_r.role_id = s_r_res.role_id
+        inner join panyu_user p_y on p_y.user_id = s_a_r.user_id where  p_y.user_name=#{userName,jdbcType=VARCHAR}
     </select>
 </mapper>
