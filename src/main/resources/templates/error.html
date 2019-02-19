@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+      <html lang="en"  xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>error统一错误页面</title>
@@ -7,6 +8,11 @@
 <body>
     <h1>对不起 ⌒_⌒ 出错啦</h1>
     <p>
-   <p><span th:text="${result.message}"></span>（<span th:text="${result.data}"></span>）</p>
+   <!--<span th:text="${result.message}"></span>（<span th:text="${result.data}"></span>）-->
+    </p>
+    <a shiro:hasRole="总监" href="">wo</a>
+    <a href="">他</a>
+    <!--<a shiro:hasPermission="" href="">权限</a>-->
+   <a shiro:hasPermission="基d站" href="">基站权限</a>
 </body>
 </html>
