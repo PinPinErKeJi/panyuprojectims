@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>个人信息</title>
     <style type="text/css">
         *{  margin: 0;padding: 0;}
-        body{background: url("img/002.jpg")no-repeat;background-size: 100%}
+        body{background: url("../../static/img/002.jpg")no-repeat;background-size: 100%}
         /*.personal{background:rgba(0,0,0,0.6);padding: 50px;margin: 100px auto 0;width: 500px;}*/
         form{width: 400px;background: #fff;margin: 100px auto 0;padding: 30px 0 30px 0}
         form>div{overflow: hidden;margin-top: 20px}
@@ -60,9 +60,9 @@
     </div>
 </body>
 <!--地址插件-->
-<script src="js/jquery.min.js" type="text/javascript"
+<script src="../../static/js/jquery.min.js" type="text/javascript"
         charset="utf-8"></script>
-<script src="js/distpicker/distpicker.js" type="text/javascript"
+<script src="../../static/js/distpicker/distpicker.js" type="text/javascript"
         charset="utf-8"></script>
 <script type="text/javascript">
     $("#distpicker3").distpicker({
@@ -75,7 +75,7 @@
             return false;
         })
         $('form .sub').click(function () {
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         })
             $('form').find('input').attr('readonly',true);
             $('form').find('select').attr('disabled',true);
