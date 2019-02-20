@@ -3,7 +3,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.panyu.panyuprojectims.dao.PanyuUserDao;
 
+import com.panyu.panyuprojectims.dao.ShiroRoleDao;
 import com.panyu.panyuprojectims.entity.PanyuUser;
+import com.panyu.panyuprojectims.entity.ShiroRole;
 import com.panyu.panyuprojectims.service.PanyuUserService;
 import com.panyu.panyuprojectims.utils.PageHelperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,14 @@ import java.util.Map;
 public class PanyuUserServiceImpl implements PanyuUserService{
     @Autowired
     private PanyuUserDao panyuUserDao;
+    @Autowired
+    private ShiroRoleDao shiroRoleDao;
+
+    //根据用户名查询用户
+    @Override
+    public PanyuUser selectPanyuUserByName(String userName) {
+        return panyuUserDao.selectPanyuUserByName(userName);
+    }
 
     //根据用户名修改拥有的角色
     @Override
@@ -80,8 +90,13 @@ public class PanyuUserServiceImpl implements PanyuUserService{
     @Override
     public int register(String userProvince, String userCity, String userCounty, String userCompanyName, String userCompanycccNumber, String userName, String userEmail, String userTel, String userPwd,String userlogpwd
             ) {
-
-        return panyuUserDao.register( userProvince,  userCity,  userCounty,  userCompanyName,  userCompanycccNumber,  userName,  userEmail,  userTel,  userPwd, userlogpwd);
+        int i = panyuUserDao.register(userProvince, userCity, userCounty, userCompanyName, userCompanycccNumber, userName, userEmail, userTel, userPwd, userlogpwd);
+        PanyuUser panyuUser = panyuUserDao.selectPanyuUserByName(userName);
+        for (ShiroRole shiroRole : shiroRoleDao.selectAllRole()) {
+            System.out.println("角色集合:"+shiroRole);
+            boolean b1 = panyuUserDao.insertPanyuUserAndRole(panyuUser.getUserId(), shiroRole.getRoleId());
+        };
+        return i;
     }
 
     @Override

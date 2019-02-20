@@ -40,6 +40,11 @@
         </association>
     </resultMap>
 
+    <!--根据用户名查询用户-->
+    <select id="selectPanyuUserByName" resultMap="result_PanyuUser_Map">
+        select * from panyu_user where user_name = #{userName,jdbcType=VARCHAR}
+    </select>
+
     <!--修改用户-->
     <update id="updatePanyuUser">
         update  panyu_user set user_name = #{userName,jdbcType=VARCHAR},user_pwd =#{userPwd,jdbcType=VARCHAR} ,user_log_pwd=#{userlogpwd,jdbcType=VARCHAR},user_tel=#{userTel,jdbcType=VARCHAR},user_email=#{userEmail,jdbcType=VARCHAR}where user_id = #{userId,jdbcType=VARCHAR}

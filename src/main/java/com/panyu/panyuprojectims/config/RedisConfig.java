@@ -1,6 +1,5 @@
 package com.panyu.panyuprojectims.config;
 
-import java.time.Duration;
 
 import com.panyu.panyuprojectims.utils.FastJson2JsonRedisSerializer;
 import com.panyu.panyuprojectims.utils.RedisTemplate;
@@ -17,6 +16,11 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
+
+import java.time.Duration;
+
+//import java.time.Duration;
+
 
 @Configuration
 @PropertySource("classpath:redis.properties")

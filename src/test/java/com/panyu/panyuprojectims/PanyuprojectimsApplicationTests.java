@@ -1,6 +1,7 @@
 package com.panyu.panyuprojectims;
 
 import com.panyu.panyuprojectims.dao.*;
+import com.panyu.panyuprojectims.entity.PanyuUser;
 import com.panyu.panyuprojectims.entity.PowerSupplyModule;
 import com.panyu.panyuprojectims.poi.ExportExcel;
 import com.panyu.panyuprojectims.service.*;
@@ -22,14 +23,18 @@ public class PanyuprojectimsApplicationTests {
 //	@Autowired
 //	private PowerSupplyInformationService powerSupplyInformationService;
 	@Autowired
+	private PanyuUserDao panyuUserDao;
+	@Autowired
 	RedisTemplate re;
 	@Test
 	public void contextLoads() {
 		//操作string类型字符
-		ValueOperations<String, String> valueStr = re.opsForValue();
+		/*ValueOperations<String, String> valueStr = re.opsForValue();
 		valueStr.set("kk","我恨你");
 
 		String goodsname = valueStr.get("kk");
-		System.out.println(goodsname);
+		System.out.println(goodsname);*/
+		PanyuUser panyuUser = panyuUserDao.selectPanyuUserByName("李四");
+		System.out.println("用户:"+panyuUser);
 	}
 }
