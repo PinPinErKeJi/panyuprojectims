@@ -4,7 +4,6 @@
 }
 html,body{
 	font-family:'微软雅黑';
-	background: blue;
 }
 li {
 	list-style: none;
@@ -12,12 +11,12 @@ li {
 
 iframe {
 	padding: 5px;
-	width: calc(100% - 12px);
+	width: calc(100% - 12px);   
 	height: calc(100% - 14px);
 }
 
 .home-header {
-	height: 100px;
+	height: 80px;
 	background: url("./icons/topbg.png") repeat-x;
 	position: relative;
 	overflow: hidden;
@@ -26,8 +25,8 @@ iframe {
 
 .home-logo {
 	float: left;
-	height: 71px;
-	padding: 15px 20px 0 10px;
+	/*height: 71px;*/
+	padding: 6px 20px 0 10px;
 }
 
 .home-nav {
@@ -75,7 +74,7 @@ iframe {
 	/*border-radius:30px;*/
 	color: #b8ceda;
 	margin-right: 100px;
-	margin-top: 10px;
+	/*margin-top: 10px;*/
 	font-size: 14px;
 	/*background-color: #09537a;*/
 }
@@ -183,17 +182,22 @@ iframe {
 
 .message{
 	font-size: 14px;
-	display: none;
+	/*display: none;*/
+	position: absolute;
+	background: #fff;
+	width: 170px;
+	right: 200px;
+	top: 60px;
+	border-radius: 3px;
+	z-index: 100;
 }
-.message div{
-	text-align: center;
-	margin-bottom: 10px;
-}
-.message div>p{
-	line-height: 25px;
-}
+
+/*.message div>p{*/
+	/*line-height: 25px;*/
+/*}*/
 .message ul li{
 	line-height: 30px;
+	position: relative;
 }
 .message ul li:hover{
 	background: lightskyblue;
@@ -202,11 +206,17 @@ iframe {
 	text-decoration: none;
 	color: black;
 	display: block;
-	padding-left: 30px;
+	padding-left: 40px;
 }
 
 .personal{
 	background: url('icons/user.png')no-repeat left;
+}
+.login-info-two a{
+	background: url('../easyui/images/topmail.png')no-repeat left;
+}
+.mesag{
+	background: url("../images/countbg.png") no-repeat right center;
 }
 
 /*左侧栏导航*/
