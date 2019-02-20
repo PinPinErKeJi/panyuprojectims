@@ -9,6 +9,9 @@ import java.util.Map;
 @Mapper
 public interface PanyuUserDao{
 
+    //根据用户名查询用户
+    PanyuUser selectPanyuUserByName(@Param("userName")String userName);
+
     //修改用户
     boolean updatePanyuUser(PanyuUser panyuUser);
     //修改用户时先查询分配的角色个数

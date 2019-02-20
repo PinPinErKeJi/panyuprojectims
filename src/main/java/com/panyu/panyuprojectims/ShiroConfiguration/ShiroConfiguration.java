@@ -210,7 +210,7 @@ public class ShiroConfiguration {
         map.put("/personal.html","anon");
         map.put("/register","anon");
         map.put("/logout","logout");
-        //map.put("/BS/getItemList", "roles[总监]");
+        //map.put("../BS/getItemList", "roles[总监]");
 
         //对所有用户认证
         map.put("/*", "authc");

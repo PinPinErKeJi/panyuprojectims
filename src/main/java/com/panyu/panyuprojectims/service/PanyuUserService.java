@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Param;
 
 public interface PanyuUserService{
 
+    //根据用户名查询用户
+    PanyuUser selectPanyuUserByName(String userName);
     //根据用户名修改角色
     void updatePanyuuserRole(PanyuUser panyuUser,String[] roleIds);
 
