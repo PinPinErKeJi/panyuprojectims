@@ -27,35 +27,36 @@
                     <span class="userinfo"></span>
                     <img src="../easyui/images/combo_arrow.png" alt="" style="vertical-align: bottom">
                 </a></li>
-            <li>
-                <a href="javascript:;" style="background: url('../easyui/images/topmail.png') no-repeat left;vertical-align: bottom">消息</a>
-                <a href="javascript:void(0)" style="background:url('../images/countbg.png')no-repeat right;margin-left: -15px !important;">10</a>
+            <li class="login-info-two">
+                <a href="javascript:;">消息:
+                    <span class="mesag">10</span>
+                </a></li>
             </li>
         </ul>
     </div>
 </div>
 
 <div class="message">
-    <div>
-        <p>admin</p>
-        <p>超级管理员</p>
-    </div>
     <ul>
         <li>
-            <a href="../personal.html">
-                <i class="panel-icon icon-man"></i>
-                个人资料
-            </a>
+            <i class="panel-icon icon-man"></i>
+            <a href="../personal.html">个人信息</a>
         </li>
         <li>
-            <a shiro:hasRole="超级管理员" href="../edit.html" style="background:
-            url('../static/css/icons/lock.png')no-repeat left center">
+            <i class="panel-icon icon-lock"></i>
+            <a href="../edit.html" shiro:hasRole="超级管理员">
                 修改密码
             </a>
         </li>
         <li>
-            <a href="../logOutController/logout"style="background:
-            url('../static/css/icons/back.png')no-repeat left center">
+            <i class="panel-icon icon-help"></i>
+            <a href="#">
+                帮助中心
+            </a>
+        </li>
+        <li>
+            <i class="panel-icon icon-back"></i>
+            <a href="logOutController/logout">
                 退出登录
             </a>
         </li>
@@ -64,6 +65,7 @@
 
 
 <div class="home-sidebar" data-options="region:'west'">
+    <h2 class="sidebar-header"><p>功能导航</p></h2>
     <div class="home-accordion easyui-accordion" data-options="border:0">
 
         <div class="accordion-title" shiro:hasPermission="基站" title="基站" data-options="iconCls:'icon-one'">
@@ -279,6 +281,14 @@
                 <li>
                     <i class="panel-icon icon-menu"></i>
                     <a href="SL/SL-system.html">系统日志</a>
+                </li>
+            </ul>
+        </div>
+        <div class="accordion-title" title="数据分析" data-options="iconCls:'icon-seven'">
+            <ul class="home-menu">
+                <li>
+                    <i class="panel-icon icon-menu"></i>
+                    <a href="DA-data-analysis.html">出勤率</a>
                 </li>
             </ul>
         </div>
