@@ -48,13 +48,13 @@
             </a>
         </li>
         <li>
-            <a href="../edit.html" style="background:
+            <a shiro:hasRole="超级管理员" href="../edit.html" style="background:
             url('../static/css/icons/lock.png')no-repeat left center">
                 修改密码
             </a>
         </li>
         <li>
-            <a href="logOutController/logout"style="background:
+            <a href="../logOutController/logout"style="background:
             url('../static/css/icons/back.png')no-repeat left center">
                 退出登录
             </a>
@@ -66,12 +66,12 @@
 <div class="home-sidebar" data-options="region:'west'">
     <div class="home-accordion easyui-accordion" data-options="border:0">
 
-        <div class="accordion-title" title="基站" data-options="iconCls:'icon-one'">
+        <div class="accordion-title" shiro:hasPermission="基站" title="基站" data-options="iconCls:'icon-one'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
                     <!--<a href="../BS/BS-module-repository.html">基站模块库</a>-->
-                    <a href="skip1">基站模块库</a>
+                    <a  href="skip1">基站模块库</a>
                 </li>
 
                 <li>
@@ -94,7 +94,7 @@
             </ul>
         </div>
 
-        <div class="accordion-title" title="设备" data-options="iconCls:'icon-three'">
+        <div class="accordion-title" shiro:hasPermission="设备"  title="设备" data-options="iconCls:'icon-three'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
@@ -129,7 +129,7 @@
             </ul>
         </div>
 
-        <div class="accordion-title" title="驻地网" data-options="iconCls:'icon-nine'">
+        <div class="accordion-title" shiro:hasPermission="驻地网" title="驻地网" data-options="iconCls:'icon-nine'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
@@ -156,7 +156,7 @@
                 </li>
             </ul>
         </div>
-        <div class="accordion-title" title="室内覆盖" data-options="iconCls:'icon-six'">
+        <div class="accordion-title" shiro:hasPermission="室内覆盖" title="室内覆盖" data-options="iconCls:'icon-six'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
@@ -183,14 +183,13 @@
                 </li>
             </ul>
         </div>
-        <div class="accordion-title" title="线路" data-options="iconCls:'icon-four'">
+        <div class="accordion-title"  shiro:hasPermission="线路" title="线路" data-options="iconCls:'icon-four'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
                     <!--<a href="LL/LL-module-repository.html">线路模块库</a>-->
                     <a href="skip26">线路模块库</a>
                 </li>
-
                 <li>
                     <i class="panel-icon icon-avatar"></i>
                     <!--<a href="LL/LL-project-message.html">线路工程基本信息</a>-->
@@ -211,7 +210,7 @@
             </ul>
         </div>
 
-        <div class="accordion-title" title="电源" data-options="iconCls:'icon-five'">
+        <div class="accordion-title" shiro:hasPermission="电源" title="电源" data-options="iconCls:'icon-five'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
@@ -251,7 +250,7 @@
 
         </div>
 
-        <div class="accordion-title" title="权限管理" data-options="iconCls:'icon-eight'">
+        <div  class="accordion-title"  title="权限管理" data-options="iconCls:'icon-eight'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-man"></i>
@@ -259,23 +258,23 @@
                     <a href="skip42">用户信息</a>
                 </li>
                 <li>
-                    <i class="panel-icon icon-section"></i>
-                    <!--<a href="AM/AM-user.html">用户管理</a>-->
-                    <a href="skip40">用户管理</a>
-                </li>
-                <li>
                     <i class="panel-icon icon-avatar"></i>
                     <!--<a href="AM/AM-role.html">角色管理</a>-->
-                    <a href="skip41">角色管理</a>
+                    <a href="skip41">权限管理</a>
+                </li>
+                <li>
+                    <i class="panel-icon icon-section"></i>
+                    <!--<a href="AM/AM-user.html">用户管理</a>-->
+                    <a href="skip40">角色分配</a>
                 </li>
                 <li>
                     <i class="panel-icon icon-warning"></i>
                     <!--<a href="AM/AM-limit.html">权限管理</a>-->
-                    <a href="skip39">权限管理</a>
+                    <a href="skip39">权限资源</a>
                 </li>
             </ul>
         </div>
-        <div class="accordion-title" title="系统管理" data-options="iconCls:'icon-two'">
+        <div class="accordion-title" shiro:hasPermission="系统管理" title="系统管理" data-options="iconCls:'icon-two'">
             <ul class="home-menu">
                 <li>
                     <i class="panel-icon icon-menu"></i>
@@ -331,39 +330,6 @@
 
         window.history.forward();
     });
-
-    /*$(function () {
-        // control + g
-        var nav = $('#nav');
-        var ul = $('.home-menu');
-        var tabs = $('.easyui-tabs');
-
-        ul.on('click', 'a', function (ev) {
-            ul.find('li').removeClass('active');
-            $(this).parent().addClass('active');
-
-            var url = $(this).attr('href');
-            var title = $(this).text();
-
-            if (tabs.tabs('exists', title)) {
-                tabs.tabs('select', title)
-            } else {
-                tabs.tabs('add', {
-                    title: title,
-                    closable: true,
-                    content: '<iframe src="' + url + '" width="100%" height="100%" frameborder="0"></iframe>'
-                })
-            }
-            return false;
-        });
-
-        //userinfo
-        var userinfo=$("#userinfo");
-        var sUserName=sessionStorage.getItem("userName");
-        userinfo.text(sUserName);
-
-        window.history.forward();
-    });*/
 
 </script>
 
