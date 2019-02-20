@@ -131,3 +131,12 @@
 .icon-nav{
 	background:url('icons/icon0.png') no-repeat center center;
 }
+.icon-lock{
+	background:url('icons/lock.png') no-repeat center center;
+}
+.icon-help{
+	background:url('icons/help.png') no-repeat center center;
+}
+.icon-back{
+	background:url('icons/back.png') no-repeat center center;
+}
