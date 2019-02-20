@@ -27,4 +27,5 @@ public class PanyuprojectimsApplication {
 		factory.setMaxRequestSize("102400KB");
 		return factory.createMultipartConfig();
 	}
+
 }
