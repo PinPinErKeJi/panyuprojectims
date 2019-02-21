@@ -19,19 +19,32 @@ $(function () {
         ready : function() {
         },
         success : function() {
-//		        	alert('验证成功，添加你自己的代码！');
-            //......后续操作
+            //alert('验证成功，添加你自己的代码！');
+            var userEmail =  $("#emailInput",parent.document).val();
+            alert(userEmail);
             $('.slideVerify').hide();
-            $('.verifyTel').show();
+            $.ajax({
+                url:"AM/selectTelByEmail",
+                type:"post",
+                dataType:"json",
+                data:{userEmail:userEmail},
+                success:function (userTel) {
+                    //赋值
+                    $("#tel").val(userTel);
+                    //取值
+                    var tt =  $("#tel").val();
+                    console.log(tt+"tt");
+                    $('.verifyTel').show();
+                }
+            })
         },
         error : function() {
-//		        	alert('验证失败！');
+        //alert('验证失败！');
         }
-
     });
 
     //验证
-    $('.verifyTel .tel').blur(function () {
+    $(".verifyTel .tel").mouseout(function () {
         var tel = $('.tel').val();
         var regTel = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;
         if (tel == ''){
@@ -42,7 +55,7 @@ $(function () {
             $('.error').text('');
             //获取短信验证码
             var validCode=true;
-            $(".msgs").click (function change () {
+            $("#btn").click (function change () {
                 var time=60;
                 var code=$(this);
                 if (validCode) {
@@ -52,10 +65,28 @@ $(function () {
                         time--;
                         code.html(time+"秒");
                         if (time==0) {
+                            $("#btn").removeAttr("disabled");
                             clearInterval(t);
                             code.html("重新获取");
                             validCode=true;
                             code.removeClass("msgs1");
+                        }
+                        if (time==59){
+                            $("#btn").attr('disabled',true);
+                            var userTel = $('.tel').val();
+                            if (userTel!="") {
+                                $.ajax({
+                                    url:"sendCode",
+                                    type:"post",
+                                    dataType:"text",
+                                    data:{userTel:userTel},
+                                    success:function (senCode) {
+                                        alert(senCode);
+                                        /*clearInterval(t);
+                                        code.html("重新获取");*/
+                                    }
+                                })
+                            }
                         }
                     },1000)
                 }
@@ -63,12 +94,29 @@ $(function () {
 
             //下一步
             $("#next").click(function(){
-                $('.verifyTel').hide();
-                $('.verifyPwd').show();
+                var userTel = $('.tel').val();
+                var code = $(".c_code_msg").val();
+                var cookie = $.cookie("cookieName");
+                $.ajax({
+                    url:"messageCheck",
+                    type:"post",
+                    dataType:"json",
+                    data:{code:code,userTel:userTel},
+                    success:function (responseResult) {
+                        if (responseResult.code==0) {
+                            $(".error").text();
+                            $('.verifyTel').hide();
+                            $('.verifyPwd').show();
+                        } else if (cookie==null){
+                            $(".error").text("验证码失效，请重新输入");
+                        } else {
+                            $(".error").text("验证码不正确");
+                        }
+                    }
+                })
             });
         }
     })
-
 
 
     //修改密码
@@ -95,8 +143,22 @@ $(function () {
         if (pwd!=''&&surePwd!=''&&regPwd.test(pwd)==true&&pwd==surePwd){
             $('.error1').text('');
             $('.error2').text('');
-            alert('修改成功！')
             $('.verifyPwd').hide();
+            var userTel =  $("#tel").val();
+            var userlogpwd = $("#userLogPwd").val();
+            $.ajax({
+                url:"AM/updateUserLogpwdAndUserPwd",
+                type:"post",
+                dataType:"json",
+                data:{userTel:userTel,userlogpwd:userlogpwd},
+                success:function (flag) {
+                    if (flag==true) {
+                        alert("修改成功！")
+                    } else {
+                        alert("修改失败！")
+                    }
+                }
+            })
             parent.location.reload();
         }
     });
