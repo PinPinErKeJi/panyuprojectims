@@ -181,22 +181,31 @@ iframe {
 }
 
 .message{
-	font-size: 14px;
 	position: absolute;
+	font-size: 14px;
 	background: #fff;
 	width: 170px;
-	right: 200px;
-	top: 60px;
 	border-radius: 3px;
 	z-index: 100;
 }
-
-/*.message div>p{*/
-	/*line-height: 25px;*/
-/*}*/
+.none1{
+	right: 200px;
+	top: 60px;
+}
+.none2{
+	max-height: 120px;
+	overflow: auto;
+	right: 60px;
+	top: 60px;
+}
+.none2 li{
+	padding-left: 20px;
+}
+.none1 ul li{
+	position: relative;
+}
 .message ul li{
 	line-height: 30px;
-	position: relative;
 }
 .message ul li:hover{
 	background: lightskyblue;
