@@ -1,9 +1,11 @@
 package com.panyu.panyuprojectims.controller.Login_controller;
 
+import com.panyu.panyuprojectims.controller.SE_controller.NetState;
 import com.panyu.panyuprojectims.entity.PanyuUser;
 import com.panyu.panyuprojectims.entity.ShiroResource;
 import com.panyu.panyuprojectims.entity.ShiroRole;
 import com.panyu.panyuprojectims.entity.ShiroTreeResource;
+import com.panyu.panyuprojectims.model.ResponseResult;
 import com.panyu.panyuprojectims.service.PanyuUserService;
 import com.panyu.panyuprojectims.service.ShiroResourceService;
 import com.panyu.panyuprojectims.service.ShiroRoleService;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -425,5 +428,57 @@ public class PanyuUserController {
     @ResponseBody
     public PageHelperUtil queryAllPanyuUser(Integer page, Integer rows,String userName) {
         return panyuUserService.queryAllPanyuUser(page,rows,userName);
+    }
+
+    //判断邮箱是否存在
+    @RequestMapping("selectEmailByUserEmail")
+    @ResponseBody
+    public ResponseResult selectEmailByUserEmail(String userEmail) throws IOException {
+        ResponseResult responseResult = new ResponseResult();
+        NetState netState = new NetState();
+        boolean connect = netState.isConnect();
+        if (connect == true) {
+            String email = panyuUserService.selectEmailByUserEmail(userEmail);
+            if (email!=null&&userEmail.equals(email)) {
+                responseResult.setEmail(email);
+            } else {
+                responseResult.setMsg("邮箱不存在,请重新输入。");
+            }
+        } else {
+            responseResult.setMsg("网络未连接，请检查网络问题。");
+            responseResult.setConnect(false);
+        }
+        return responseResult;
+    }
+
+    //点击发送邮件查询该邮箱关联的手机号
+    @RequestMapping("selectTelByEmail")
+    @ResponseBody
+    public String selectTelByEmail(String userEmail){
+        String userTel = panyuUserService.selectTelByEmail(userEmail);
+        return userTel;
+    }
+
+    //修改明文密码进行加密，然后赋值给暗文密码
+    @RequestMapping("updateUserLogpwdAndUserPwd")
+    @ResponseBody
+    public boolean updateUserLogpwdAndUserPwd(PanyuUser panyuUser){
+        boolean flag = true;
+        try {
+            PanyuUser user = panyuUserService.selectUserLogpwdAndUserPwd(panyuUser.getUserTel());
+            ByteSource salt = ByteSource.Util.bytes(user.getUserName());
+            String newPs = new SimpleHash("MD5", panyuUser.getUserlogpwd(), salt, 1024).toHex();
+            user.setUserPwd(newPs);
+            user.setUserlogpwd(panyuUser.getUserlogpwd());
+            boolean b = panyuUserService.updateUserLogpwdAndUserPwd(user);
+            if (b==true) {
+                return flag;
+            }else {
+                return flag;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return flag;
+        }
     }
 }
