@@ -131,4 +131,24 @@
         inner join shiro_amdin_role s_a_r on s_a_r.role_id = s_r_res.role_id
         inner join panyu_user p_y on p_y.user_id = s_a_r.user_id where  p_y.user_name=#{userName,jdbcType=VARCHAR}
     </select>
+
+    <!--判断邮箱是否存在-->
+    <select id="selectEmailByUserEmail" resultType="String">
+        SELECT USER_EMAIL FROM panyu_user WHERE USER_EMAIL = #{userEmail,jdbcType=VARCHAR}
+    </select>
+    <!--点击发送邮件查询该邮箱关联的手机号-->
+    <select id="selectTelByEmail" resultType="String">
+        SELECT USER_TEL FROM panyu_user WHERE USER_EMAIL = #{userEmail,jdbcType=VARCHAR}
+    </select>
+
+    <!--修改密码前根据用户当前手机号查询旧密码-->
+    <select id="selectUserLogpwdAndUserPwd" resultMap="result_PanyuUser_Map">
+        SELECT * FROM panyu_user WHERE USER_TEL = #{userTel,jdbcType=VARCHAR}
+    </select>
+
+    <!--修改明文密码进行加密，然后赋值给暗文密码-->
+    <update id="updateUserLogpwdAndUserPwd">
+        UPDATE panyu_user SET USER_PWD = #{userPwd,jdbcType=VARCHAR},user_log_pwd = #{userlogpwd,jdbcType=VARCHAR}
+        WHERE USER_TEL = #{userTel,jdbcType=VARCHAR}
+    </update>
 </mapper>
