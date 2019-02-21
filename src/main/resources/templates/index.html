@@ -36,15 +36,15 @@
     </div>
 </div>
 
-<div class="message">
+<div class="message" style="display: none">
     <ul>
         <li>
             <i class="panel-icon icon-man"></i>
             <a href="../personal.html">个人信息</a>
         </li>
-        <li>
+        <li shiro:hasRole="超级管理员">
             <i class="panel-icon icon-lock"></i>
-            <a href="../edit.html" shiro:hasRole="超级管理员">
+            <a href="../edit.html">
                 修改密码
             </a>
         </li>
@@ -338,6 +338,7 @@
         userinfo.text(sUserName);
 
         window.history.forward();
+
     });
 
 </script>
