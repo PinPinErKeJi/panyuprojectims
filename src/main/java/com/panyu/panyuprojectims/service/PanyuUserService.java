@@ -43,4 +43,15 @@ public interface PanyuUserService{
     public PanyuUser queryInfoByUsername(String userName);
     public List<String> queryRolesByUsername(String userName);
     public List<String> queryResByUsername(String userName);
+
+    //判断邮箱是否存在
+    String selectEmailByUserEmail(String userEmail);
+    //点击发送邮件查询该邮箱关联的手机号
+    String selectTelByEmail(String userEmail);
+
+    //修改密码前根据用户当前手机号查询旧密码
+    PanyuUser selectUserLogpwdAndUserPwd(String userTel);
+
+    //修改明文密码进行加密，然后赋值给暗文密码
+    boolean updateUserLogpwdAndUserPwd(PanyuUser panyuUser);
 }
