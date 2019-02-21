@@ -6,20 +6,18 @@
     <style type="text/css">
         .error{color: red}
         form{margin:100px auto;width:380px;background: #fff;border: 1px solid gainsboro;}
-        input{width:180px;height:38px;border-style:none;border:1px solid
+        form>div input{width:180px;height:38px;border-style:none;border:1px solid
         #C8C8C8;outline:none;margin-left: 35px;}
         .msgs{display:inline-block;width:104px;color:#fff;font-size:12px;border:1px solid #0697DA;text-align:center;height:30px;line-height:30px;background:#0697DA;cursor:pointer;margin-left: 10px;}
         form .msgs1{background:#E6E6E6;color:#818080;border:1px solid #CCCCCC;}
         form>p{text-align: center;font-size: 30px;}
-        form .next{
-            background:#0697DA;
-            cursor: pointer;
-            margin: 30px 0 30px 100px;
-        }
         .verifyPwd>div{width: 90%;margin: 0 auto}
         .verifyPwd>div label{line-height: 42px;text-align: right}
         .verifyPwd>div input{width: 220px;
             margin-left: 20px!important;padding-left: 10px}
+        form>a{display: inline-block;border:0;width: 80px;height: 30px;line-height: 30px;background:#0697DA;margin: 30px;color: #fff;text-decoration: none;text-align: center;}
+        form #sure{margin-left: 100px}
+        form #cancel{background: orange}
     </style>
 </head>
 <body style="background: url('img/002.jpg')no-repeat;background-size: 100%">
@@ -41,7 +39,8 @@
         <label>确认密码：</label><input type="password" class="surePwd"><br>
         <span class="error error2"></span>
     </div>
-    <input type="button" value="确定" class="next" id="sure"/>
+    <a href="javascript:void(0)" class="next" id="sure">确定</a>
+    <a href="index.html" class="next" id="cancel">取消</a>
 </form>
 </body>
 <script src="js/jquery.min.js" type="text/javascript"></script>
@@ -69,7 +68,8 @@
                     }
                 })
             })
-            if (pwd!=''&&surePwd!=''&&oldPwd!=''&&regPwd.test(pwd)==true&&pwd==surePwd){
+            if
+            (pwd!=''&&surePwd!=''&&oldPwd!=''&&regPwd.test(pwd)==true&&pwd==surePwd){
                 $('.error1').text('');
                 $('.error2').text('');
                 alert('修改成功！')
