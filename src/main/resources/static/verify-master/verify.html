@@ -27,33 +27,37 @@
 <script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/verify.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/alter.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
+
 <body>
 <div id="mpanel4" style="margin: 100px auto;background:
 		 #fff;width:402px;" class="slideVerify">
 </div>
 <form class="verifyTel" style="display: none">
     <p>安全验证</p>
-    <input type="text" class="tel" placeholder="手机号"
+    <input type="text" class="tel" id="tel" placeholder="手机号"
            style="padding-left:
-			 10px;width: 300px;"> <br>
+			 10px;width: 300px;"><br>
     <span class="error"
           style="margin-left: 32px"></span><br>
-    <input type="text" class="c_code_msg"
+    <input type="text" class="c_code_msg" name="code"
            style="padding-left: 10px;margin-top: 10px;"placeholder="短信验证码">
-    <span class="msgs">获取短信验证码</span>
+    <button type="button" id="btn" class="width-35 pull-right btn btn-sm btn-danger">
+        <i class="ace-icon fa fa-lightbulb-o"></i>
+        获取短信验证码</button>
     <input type="button" value="下一步" class="next" id="next"/>
 </form>
 
-<form class="verifyPwd" style="display: none">
+<form class="verifyPwd" style="display: none" action="updateUserLogpwdAndUserPwd" method="post">
     <p>修改密码</p>
     <div>
-        <label>新密码：</label><input type="password" class="pwd"
+        <label>新密码：</label><input type="password" class="pwd" name="userlogpwd" id="userLogPwd"
                                   style="margin-left: 36px!important;"
                                   placeholder="由6~16位字母和数字组成"><br>
         <span class="error error1"></span>
     </div>
     <div style="margin-top: 20px">
-        <label>确认密码：</label><input type="password" class="surePwd"><br>
+        <label>确认密码：</label><input type="password" class="surePwd" name="userlogpwd" id="suerUserLogPwd"><br>
         <span class="error error2"></span>
     </div>
     <input type="button" value="确定" class="next" id="sure"/>
