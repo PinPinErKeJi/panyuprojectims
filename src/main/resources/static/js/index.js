@@ -1,14 +1,20 @@
 $(function () {
     $('.login-info-one').click(function () {
-        if($(".message").css('display')=='none'){
-            $(".message").css("display","block");
+        $(".none2").css("display","none");
+        if($(".none1").css('display')=='none'){
+            $(".none1").css("display","block");
         }else {
-            $(".message").css("display","none");
+            $(".none1").css("display","none");
         }
     })
-    $('body').click(function () {
-        if($(".message").css('display')=='block'){
-            $(".message").css("display","none");
+
+    $('.login-info-two').click(function () {
+        $(".none1").css("display","none");
+        if($(".none2").css('display')=='none'){
+            $(".none2").css("display","block");
+        }else {
+            $(".none2").css("display","none");
         }
     })
+
 })
