@@ -3,8 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <title>出勤率</title>
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/demo/demo.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+    <script src="../js/easyui-lang-zh_CN.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
-
+<table id="tt" class="easyui-datagrid" style="width:753px;height:500px"
+       url=""
+       toolbar="#tb"
+       rownumbers="true" pagination="true">
+    <thead>
+    <tr>
+        <th field="name" width="100" align="center">姓名</th>
+        <th field="regions" width="150" align="center">部门与区域</th>
+        <th field="duty" width="120" align="center">职务</th>
+        <th field="time" width="150" align="center">时间段</th>
+        <th field="day" width="100" align="center">出勤天数</th>
+        <th field="rate" width="100" align="center">出勤率</th>
+    </tr>
+    </thead>
+</table>
+<div id="tb" style="padding:5px">
+    <span>区域:</span>
+    <input id="regions" class="easyui-textbox">
+    <span>时间:</span>
+    <input id="db"  />
+    <span>姓名:</span>
+    <input id="itemid" class="easyui-textbox">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-search"onclick="doSearch()">搜索</a>
+</div>
 </body>
+<script type="text/javascript">
+    $(function () {
+        function doSearch(){
+            $('#tt').datagrid('load',{
+                name: $('#name').val(),
+                regions: $('#regions').val(),
+            });
+        }
+
+        $('#db').datebox({
+            onShowPanel: function() { //显示日趋选择对象后再触发弹出月份层的事件，初始化时没有生成月份层
+                span.trigger('click'); //触发click事件弹出月份层
+                if(!tds) setTimeout(function() { //延时触发获取月份对象，因为上面的事件触发和对象生成有时间间隔
+                    tds = p.find('div.calendar-menu-month-inner td');
+                    tds.click(function(e) {
+                        e.stopPropagation(); //禁止冒泡执行easyui给月份绑定的事件
+                        var year = /\d{4}/.exec(span.html())[0] //得到年份
+                            ,
+                            month = parseInt($(this).attr('abbr'), 10); //月份，这里不需要+1
+                        $('#db').datebox('hidePanel') //隐藏日期对象
+                            .datebox('setValue', year + '-' + month); //设置日期的值
+                    });
+                }, 0);
+                yearIpt.unbind(); //解绑年份输入框中任何事件
+            },
+            parser: function(s) {
+                if(!s) return new Date();
+                var arr = s.split('-');
+                return new Date(parseInt(arr[0], 10), parseInt(arr[1], 10) - 1, 1);
+            },
+            formatter: function(d) {
+                return d.getFullYear() + '-' + (d.getMonth() + 1);
+            }
+        });
+        var p = $('#db').datebox('panel'), //日期选择对象
+            tds = false, //日期选择对象中月份
+            yearIpt = p.find('input.calendar-menu-year'), //年份输入框
+            span = p.find('span.calendar-text'); //显示月份层的触发控件
+    })
+</script>
 </html>
