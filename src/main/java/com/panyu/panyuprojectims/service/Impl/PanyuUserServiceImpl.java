@@ -114,5 +114,29 @@ public class PanyuUserServiceImpl implements PanyuUserService{
         return panyuUserDao.queryResByUsername(userName);
     }
 
+    //判断邮箱是否存在
+    @Override
+    public String selectEmailByUserEmail(String userEmail) {
+        String email = panyuUserDao.selectEmailByUserEmail(userEmail);
+        return email;
+    }
 
+    //点击发送邮件查询该邮箱关联的手机号
+    @Override
+    public String selectTelByEmail(String userEmail) {
+        String userTel = panyuUserDao.selectTelByEmail(userEmail);
+        return userTel;
+    }
+
+    //修改密码前根据用户当前手机号查询旧密码
+    @Override
+    public PanyuUser selectUserLogpwdAndUserPwd(String userTel) {
+        return panyuUserDao.selectUserLogpwdAndUserPwd(userTel);
+    }
+
+    //修改明文密码进行加密，然后赋值给暗文密码
+    @Override
+    public boolean updateUserLogpwdAndUserPwd(PanyuUser panyuUser) {
+        return panyuUserDao.updateUserLogpwdAndUserPwd(panyuUser);
+    }
 }

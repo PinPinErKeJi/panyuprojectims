@@ -41,7 +41,6 @@ public interface PanyuUserDao{
     //查询所有的用户个数据
     long queryCountPanyuUser(@Param("userName")String userName);
 
-
     public int register(   @Param("userProvince")String userProvince,
                             @Param("userCity")String userCity,
                             @Param("userCounty")String userCounty,
@@ -59,4 +58,13 @@ public interface PanyuUserDao{
     public List<String> queryRolesByUsername(@Param("userName") String userName);
     public List<String> queryResByUsername(@Param("userName")String userName);
 
+    //判断邮箱是否存在
+    String selectEmailByUserEmail(@Param("userEmail")String userEmail);
+    //点击发送邮件查询该邮箱关联的手机号
+    String selectTelByEmail(@Param("userEmail")String userEmail);
+
+    //修改密码前根据用户当前手机号查询旧密码
+    PanyuUser selectUserLogpwdAndUserPwd(@Param("userTel")String userTel);
+    //修改明文密码进行加密，然后赋值给暗文密码
+    boolean updateUserLogpwdAndUserPwd(PanyuUser panyuUser);
 }

@@ -179,13 +179,12 @@
 										输入您的电子邮件和接收指令
 									</p>
 
-									<form>
+									<form action="selectTelByEmail" method="post">
 										<fieldset>
 											<label class="block clearfix">
 														<span
 																class="block input-icon input-icon-right">
-															<input
-																	type="email" class="form-control email" placeholder="Email"/>
+															<input id="emailInput" name="userEmail" type="text" class="form-control email" placeholder="Email"/>
 															<i class="ace-icon fa fa-envelope"></i>
 														</span>
 												<span
@@ -194,7 +193,7 @@
 											</label>
 
 											<div class="clearfix">
-												<button type="button"
+												<button type="button" id="ClickButton"
 														class="width-35 pull-right btn btn-sm btn-danger send">
 													<i class="ace-icon fa fa-lightbulb-o"></i>
 													<span class="bigger-110">发送邮件</span>
