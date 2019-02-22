@@ -24,7 +24,7 @@ $(function () {
             alert(userEmail);
             $('.slideVerify').hide();
             $.ajax({
-                url:"AM/selectTelByEmail",
+                url:"../AM/selectTelByEmail",
                 type:"post",
                 dataType:"json",
                 data:{userEmail:userEmail},
