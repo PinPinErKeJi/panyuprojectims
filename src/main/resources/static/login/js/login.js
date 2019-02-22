@@ -5,7 +5,6 @@ $(function () {
             if(Email.test(userEmail)){
                 $('.error').text('');
             }
-
     })
 
     //邮箱验证
@@ -18,7 +17,7 @@ $(function () {
             $('.error').text('邮箱格式不正确！');
         }else {
             $.ajax({
-                url:"verify-master/AM/selectEmailByUserEmail",
+                url:"AM/selectEmailByUserEmail",
                 type:"post",
                 data:{userEmail:userEmail},
                 dataType:"json",
