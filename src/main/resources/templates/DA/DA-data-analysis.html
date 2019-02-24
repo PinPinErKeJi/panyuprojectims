@@ -1,14 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>出勤率</title>
+    <style type="text/css">
+        *{
+            margin: 0;padding: 0;
+        }
+        #main{
+            position: absolute;
+            right: 80px;
+            top: 40px;
+            width: 600px;
+            height:500px;
+        }
+
+    </style>
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/demo/demo.css">
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
     <script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
-    <script src="../js/easyui-lang-zh_CN.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/easyui-lang-zh_CN.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/echarts.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
 <table id="tt" class="easyui-datagrid" style="width:753px;height:500px"
@@ -32,10 +46,12 @@
     <span>时间:</span>
     <input id="db"  />
     <span>姓名:</span>
-    <input id="itemid" class="easyui-textbox">
-    <a href="#" class="easyui-linkbutton" iconCls="icon-search"onclick="doSearch()">搜索</a>
+    <input id="name" class="easyui-textbox">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search"onclick="doSearch()">搜索</a>
 </div>
+<div id="main"></div>
 </body>
+
 <script type="text/javascript">
     $(function () {
         function doSearch(){
@@ -75,5 +91,74 @@
             yearIpt = p.find('input.calendar-menu-year'), //年份输入框
             span = p.find('span.calendar-text'); //显示月份层的触发控件
     })
+
+
+</script>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 指定图表的配置项和数据
+    option = {
+        title: {
+            text: '出勤率统计表'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            },
+            formatter:'{b}<br />\
+                	<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#c23531"></span>\
+                	{a0}：{c0}%'　　　　//{a}（系列名称），{b}（类目值），{c}（数值）
+
+        },
+        grid: {
+            borderWidth: 0,
+            width:'85%',
+            right:'0%'
+
+
+        },
+        legend: {
+            data:['出勤率']
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: ["数据1","数据2","数据3","数据4","数据5","数据6","数据7","数据8","数据9","数据10"]
+            }
+        ],
+        yAxis:  [
+            {
+                type: 'value',
+                axisLabel: {
+                    show: true,
+                    interval: 'auto',
+                    formatter: '{value} %'
+                },
+                show: true
+            }
+        ],
+        series: [
+            {
+                name: '出勤率',
+                type: 'bar',
+                itemStyle: {
+                    normal:{
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter: '{b}\n{c}%'　　　　//这是关键，在需要的地方加上就行了
+                        }
+                    }
+                },
+                data: [12,21,30,40,52,60,70,80,90,100],
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
 </script>
 </html>
