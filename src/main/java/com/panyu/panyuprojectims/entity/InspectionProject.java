@@ -9,18 +9,18 @@ public class InspectionProject {
     private boolean status;
     private String inspectionContent;
     private List<PhotoResources> photoResourcesList;
-    private String  projectstatus;
+    private String  projectStatus;
     public InspectionProject() {
     }
 
-    public InspectionProject(String projectId, String projectName, String subId, boolean status, String inspectionContent, List<PhotoResources> photoResourcesList, String projectstatus) {
+    public InspectionProject(String projectId, String projectName, String subId, boolean status, String inspectionContent, List<PhotoResources> photoResourcesList, String projectStatus) {
         this.projectId = projectId;
         this.projectName = projectName;
         this.subId = subId;
         this.status = status;
         this.inspectionContent = inspectionContent;
         this.photoResourcesList = photoResourcesList;
-        this.projectstatus = projectstatus;
+        this.projectStatus = projectStatus;
     }
 
     public String getProjectId() {
@@ -71,12 +71,12 @@ public class InspectionProject {
         this.photoResourcesList = photoResourcesList;
     }
 
-    public String getProjectstatus() {
-        return projectstatus;
+    public String getProjectStatus() {
+        return projectStatus;
     }
 
-    public void setProjectstatus(String projectstatus) {
-        this.projectstatus = projectstatus;
+    public void setProjectStatus(String projectStatus) {
+        this.projectStatus = projectStatus;
     }
 
     @Override
@@ -88,7 +88,7 @@ public class InspectionProject {
                 ", status=" + status +
                 ", inspectionContent='" + inspectionContent + '\'' +
                 ", photoResourcesList=" + photoResourcesList +
-                ", projectstatus='" + projectstatus + '\'' +
+                ", projectStatus='" + projectStatus + '\'' +
                 '}';
     }
 }

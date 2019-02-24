@@ -514,6 +514,38 @@
                     }
                     //alert('remove');
                 }
+            },{
+                //标记关键工序
+                iconCls:'icon-ok',
+                handler:function(){
+                    // 标记选中的数据行
+                    if ($("#combobox-module").combobox("getValue")) {
+                        var row=$("#project-check").combobox("getValue");
+                        //console.log(row+"打印出模块id")
+                        $.messager.confirm('标记记录', '确定标记吗?', function (data) {
+                            if (data){
+                                $.ajax({
+                                    url:'../signController/signInspection?moduleId='+row,
+                                    method:'post',
+                                    data:{id:row},
+                                    dataType:'json',
+                                    success:function (data) {
+                                        //console.log(data+"模块")
+                                        if (data==true) {
+                                            alert("标记成功");
+                                        }else{
+                                            alert("标记失败");
+                                        }
+                                    }
+                                })
+                            }
+                            //console.log('移除记录');
+                        });
+                    } else {
+                        alert('请选择一条数据！');
+                    }
+                    //alert('remove');
+                }
             }],
             required:true
         })

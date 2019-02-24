@@ -28,6 +28,7 @@ public class ModuleServiceImpl implements ModuleService{
         if (count == 0){
             int i = moduleDao.insertModule(moduleName);
         }
+
         Module module = moduleDao.selectModuleByName(moduleName);
         return module;
     }
