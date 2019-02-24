@@ -33,115 +33,93 @@ public class PanyuUserController {
     //页面跳转BS
     @RequestMapping("skip1")
     public static String skip1(){
-        System.out.println("controller");
         return "BS/BS-module-repository";
     }
     @RequestMapping("skip2")
     public static String skip2(){
-        System.out.println("controller");
         return "BS/BS-project-message";
     }
     @RequestMapping("skip3")
     public static String skip3(){
-        System.out.println("controller");
         return "BS/BS-photo-message";
     }
     @RequestMapping("skip4")
     public static String skip4(){
-        System.out.println("controller");
         return "BS/BS-dataAdd-get";
     }
     @RequestMapping("skip5")
     public static String skip5(){
-        System.out.println("controller");
         return "BS/BS-picture-repository";
     }
     @RequestMapping("skip6")
     public static String skip6(){
-        System.out.println("controller");
         return "BS/BS-project-plan-message";
     }
     //页面跳转FA
     @RequestMapping("skip7")
     public static String skip7(){
-        System.out.println("controller");
         return "FA/FA-module-repository";
     }
     @RequestMapping("skip8")
     public static String skip8(){
-        System.out.println("controller");
         return "FA/FA-project-message";
     }
     @RequestMapping("skip9")
     public static String skip9(){
-        System.out.println("controller");
         return "FA/FA-project-plan-message";
     }
     @RequestMapping("skip10")
     public static String skip10(){
-        System.out.println("controller");
         return "FA/FA-dataAdd-get";
     }
     @RequestMapping("skip11")
     public static String skip11(){
-        System.out.println("controller");
         return "FA/FA-picture-repository";
     }
     @RequestMapping("skip12")
     public static String skip12(){
-        System.out.println("controller");
         return "FA/FA-photo-message";
     }
     @RequestMapping("skip13")
     public static String skip13(){
-        System.out.println("controller");
         return "FA/FA-AOG-message";
     }
     //页面跳转HN
     @RequestMapping("skip14")
     public static String skip14(){
-        System.out.println("controller");
         return "HN/HN-module-repository";
     }
     @RequestMapping("skip15")
     public static String skip15(){
-        System.out.println("controller");
         return "HN/HN-project-message";
     }
     @RequestMapping("skip16")
     public static String skip16(){
-        System.out.println("controller");
         return "HN/HN-photo-message";
     }
     @RequestMapping("skip17")
     public static String skip17(){
-        System.out.println("controller");
         return "HN/HN-dataAdd-get";
     }
     @RequestMapping("skip18")
     public static String skip18(){
-        System.out.println("controller");
         return "HN/HN-picture-repository";
     }
     @RequestMapping("skip19")
     public static String skip19(){
-        System.out.println("controller");
         return "HN/HN-project-plan-message";
     }
     //室内覆盖IC
     @RequestMapping("skip20")
     public static String skip20(){
-        System.out.println("controller");
         return "IC/IC-module-repository";
     }
     @RequestMapping("skip21")
     public static String skip21(){
-        System.out.println("controller");
         return "IC/IC-project-message";
     }
     @RequestMapping("skip22")
     public static String skip22(){
-        System.out.println("controller");
         return "IC/IC-photo-message";
     }
     @RequestMapping("skip23")
@@ -151,107 +129,87 @@ public class PanyuUserController {
     }
     @RequestMapping("skip24")
     public static String skip24(){
-        System.out.println("controller");
         return "IC/IC-picture-repository";
     }
     @RequestMapping("skip25")
     public static String skip25(){
-        System.out.println("controller");
         return "IC/IC-project-plan-message";
     }
     //线路LL
     @RequestMapping("skip26")
     public static String skip26(){
-        System.out.println("controller");
         return "LL/LL-module-repository";
     }
     @RequestMapping("skip27")
     public static String skip27(){
-        System.out.println("controller");
         return "LL/LL-project-message";
     }
     @RequestMapping("skip28")
     public static String skip28(){
-        System.out.println("controller");
         return "LL/LL-photo-message";
     }
     @RequestMapping("skip29")
     public static String skip29(){
-        System.out.println("controller");
         return "LL/LL-dataAdd-get";
     }
     @RequestMapping("skip30")
     public static String skip30(){
-        System.out.println("controller");
         return "LL/LL-picture-repository";
     }
     @RequestMapping("skip31")
     public static String skip31(){
-        System.out.println("controller");
         return "LL/LL-project-plan-message";
     }
     //电源PS
     @RequestMapping("skip32")
     public static String skip32(){
-        System.out.println("controller");
         return "PS/PS-module-repository";
     }
     @RequestMapping("skip33")
     public static String skip33(){
-        System.out.println("controller");
         return "PS/PS-project-message";
     }
     @RequestMapping("skip34")
     public static String skip34(){
-        System.out.println("controller");
         return "PS/PS-project-plan-message";
     }
     @RequestMapping("skip35")
     public static String skip35(){
-        System.out.println("controller");
         return "PS/PS-photo-message";
     }
     @RequestMapping("skip36")
     public static String skip36(){
-        System.out.println("controller");
         return "PS/PS-dataAdd-get";
     }
     @RequestMapping("skip37")
     public static String skip37(){
-        System.out.println("controller");
         return "PS/PS-picture-repository";
     }
     @RequestMapping("skip38")
     public static String skip38(){
-        System.out.println("controller");
         return "PS/PS-AOG-message";
     }
     //权限管理AM
     @RequestMapping("skip39")
     public static String skip39(){
-        System.out.println("controller");
         return "AM/AM-limit";
     }
     @RequestMapping("skip40")
     public static String skip40(){
-        System.out.println("controller");
         return "AM/AM-user";
     }
     @RequestMapping("skip41")
     public static String skip41(){
-        System.out.println("controller");
         return "AM/AM-role";
     }
     @RequestMapping("skip42")
     public static String skip42(){
-        System.out.println("controller");
         return "AM/AM-userinfo";
     }
 
     //跳转我的桌面
     @RequestMapping("skip43")
     public static String skip43(){
-        System.out.println("controller");
         return "AM/welcome";
     }
 
@@ -259,7 +217,6 @@ public class PanyuUserController {
     //跳转主页面
     @RequestMapping("skip")
     public static String skip(){
-        System.out.println("controller");
         return "index";
     }
 
