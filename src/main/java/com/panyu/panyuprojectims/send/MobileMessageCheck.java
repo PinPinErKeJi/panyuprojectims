@@ -22,8 +22,8 @@ import java.util.List;
  */
 public class MobileMessageCheck {
     private static final String SERVER_URL = "https://api.netease.im/sms/verifycode.action";//校验验证码的请求路径URL
-    private static final String APP_KEY = "";//网易云信分配的账号
-    private static final String APP_SECRET = "";//网易云信分配的密钥
+    private static final String APP_KEY = "13d327cedb29b206bb5634f4d409c7eb";//网易云信分配的账号
+    private static final String APP_SECRET = "610b3a35ac37";//网易云信分配的密钥
     private static final String NONCE = "123456";//随机数
 
     public static String checkMsg(String phone, String code) throws IOException {
