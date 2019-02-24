@@ -1,6 +1,9 @@
 package com.panyu.panyuprojectims.entity;
 
-public class PanyuDTO {
+
+import java.io.Serializable;
+
+public class PanyuDTO implements Serializable{
 
     private String moduleId;
     private String moduleNamedto;
