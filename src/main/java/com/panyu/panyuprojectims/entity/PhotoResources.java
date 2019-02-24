@@ -9,12 +9,16 @@ public class PhotoResources {
     private String subId;
     private String parentId;
     private String projectProgressId;
+    private String  photodate;
+    private Integer photostatus;
+    private String  photoresourcesposiion;
+
 
     public PhotoResources() {
         super();
     }
 
-    public PhotoResources(String photoResourcesId, String photoName, String photoUploadPeople, String qualified, String problemDescription, String moduleId, String subId, String parentId, String projectProgressId) {
+    public PhotoResources(String photoResourcesId, String photoName, String photoUploadPeople, String qualified, String problemDescription, String moduleId, String subId, String parentId, String projectProgressId, String photodate, Integer photostatus, String photoresourcesposiion) {
         this.photoResourcesId = photoResourcesId;
         this.photoName = photoName;
         this.photoUploadPeople = photoUploadPeople;
@@ -24,6 +28,9 @@ public class PhotoResources {
         this.subId = subId;
         this.parentId = parentId;
         this.projectProgressId = projectProgressId;
+        this.photodate = photodate;
+        this.photostatus = photostatus;
+        this.photoresourcesposiion = photoresourcesposiion;
     }
 
     public String getPhotoResourcesId() {
@@ -98,6 +105,30 @@ public class PhotoResources {
         this.projectProgressId = projectProgressId;
     }
 
+    public String getPhotodate() {
+        return photodate;
+    }
+
+    public void setPhotodate(String photodate) {
+        this.photodate = photodate;
+    }
+
+    public Integer getPhotostatus() {
+        return photostatus;
+    }
+
+    public void setPhotostatus(Integer photostatus) {
+        this.photostatus = photostatus;
+    }
+
+    public String getPhotoresourcesposiion() {
+        return photoresourcesposiion;
+    }
+
+    public void setPhotoresourcesposiion(String photoresourcesposiion) {
+        this.photoresourcesposiion = photoresourcesposiion;
+    }
+
     @Override
     public String toString() {
         return "PhotoResources{" +
@@ -110,6 +141,9 @@ public class PhotoResources {
                 ", subId='" + subId + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", projectProgressId='" + projectProgressId + '\'' +
+                ", photodate='" + photodate + '\'' +
+                ", photostatus=" + photostatus +
+                ", photoresourcesposiion='" + photoresourcesposiion + '\'' +
                 '}';
     }
 }
