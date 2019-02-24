@@ -2,19 +2,16 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>出勤率</title>
+    <title>关键工序到位率</title>
     <style type="text/css">
         *{
             margin: 0;padding: 0;
         }
         #main{
-            position: absolute;
-            right: 80px;
-            top: 40px;
             width: 600px;
             height:500px;
+            margin: 50px auto 0
         }
-
     </style>
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">
@@ -25,28 +22,29 @@
     <script src="../../static/js/echarts.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
-<table id="tt" class="easyui-datagrid" style="width:753px;height:500px"
-       url=""
+<table id="tt" class="easyui-datagrid" style="width:100%;height:500px"
+       url="datagrid24_getdata.php"
        toolbar="#tb"
        rownumbers="true" pagination="true">
     <thead>
     <tr>
-        <th field="name" width="100" align="center">姓名</th>
         <th field="regions" width="150" align="center">部门与区域</th>
         <th field="duty" width="120" align="center">职务</th>
-        <th field="time" width="150" align="center">时间段</th>
-        <th field="day" width="100" align="center">出勤天数</th>
-        <th field="rate" width="100" align="center">出勤率</th>
+        <th field="dutyName" width="100" align="center">责任人</th>
+        <th field="day" width="120" align="center">工期</th>
+        <th field="rate" width="150" align="center">站点</th>
+        <th field="rate" width="120" align="center">时间段</th>
+        <th field="rate" width="120" align="center">关键工序数量</th>
+        <th field="rate" width="120" align="center">关键工序到位数</th>
+        <th field="rate" width="120" align="center">关键工序到位率</th>
     </tr>
     </thead>
 </table>
 <div id="tb" style="padding:5px">
-    <span>区域:</span>
+    <span style="margin-left: 100px;">区域:</span>
     <input id="regions" class="easyui-textbox">
     <span>时间:</span>
-    <input id="db"  />
-    <span>姓名:</span>
-    <input id="name" class="easyui-textbox">
+    <input id="db" class="easyui-datebox">
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search"onclick="doSearch()">搜索</a>
 </div>
 <div id="main"></div>
@@ -99,66 +97,69 @@
     var myChart = echarts.init(document.getElementById('main'));
 
     // 指定图表的配置项和数据
+
     option = {
         title: {
-            text: '出勤率统计表'
+            text: '关键工序'
         },
+        color: ['#11a0f8', '#7ace4c', '#f00'],
         tooltip: {
             trigger: 'axis',
-            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            axisPointer: {
+                type: 'shadow'
             },
+
             formatter:'{b}<br />\
-                	<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#c23531"></span>\
-                	{a0}：{c0}%'　　　　//{a}（系列名称），{b}（类目值），{c}（数值）
-
-        },
-        grid: {
-            borderWidth: 0,
-            width:'85%',
-            right:'0%'
-
-
+                	<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#11a0f8"></span>\
+                	{a0}：{c0}<br />\
+                	<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#7ace4c"></span>\
+                	{a1}：{c1}<br />\
+                	<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#f00"></span>\
+                	{a2}：{c2}%<br />'
         },
         legend: {
-            data:['出勤率']
+            data:['关键工序数量','关键工序到位量','关键工序到位率']
         },
+        grid: {
+            left: '0%',
+            right: '0%',
+            bottom: '10%',
+            top:'10%',
+            containLabel: true
+        },
+        calculable: true,
         xAxis: [
             {
                 type: 'category',
-                data: ["数据1","数据2","数据3","数据4","数据5","数据6","数据7","数据8","数据9","数据10"]
+                axisTick: {show: false},
+                data: ["数据1","数据2","数据3","数据4","数据5"]
             }
         ],
-        yAxis:  [
+        yAxis: [
             {
-                type: 'value',
-                axisLabel: {
-                    show: true,
-                    interval: 'auto',
-                    formatter: '{value} %'
-                },
-                show: true
+                type: 'value'
             }
         ],
         series: [
             {
-                name: '出勤率',
+                name: '关键工序数量',
                 type: 'bar',
-                itemStyle: {
-                    normal:{
-                        label: {
-                            show: true,
-                            position: 'top',
-                            formatter: '{b}\n{c}%'　　　　//这是关键，在需要的地方加上就行了
-                        }
-                    }
-                },
-                data: [12,21,30,40,52,60,70,80,90,100],
-            }
+                barGap: 0,
+                data: [9,7,2,10,8,]
+            },
+            {
+                name: '关键工序到位量',
+                type: 'bar',
+                data: [3,6,2,6,4,]
+            },
+            {
+                name: '关键工序到位率',
+                type: 'bar',
+                data: [100,86,100,60,50,]
+            },
         ]
     };
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
-
 </script>
 </html>
