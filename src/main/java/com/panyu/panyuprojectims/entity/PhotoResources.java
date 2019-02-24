@@ -9,16 +9,16 @@ public class PhotoResources {
     private String subId;
     private String parentId;
     private String projectProgressId;
-    private String  photodate;
-    private Integer photostatus;
-    private String  photoresourcesposiion;
+    private String photoDate;
+    private Integer photoStatus;
+    private String  photoResourcesPosition;
 
 
     public PhotoResources() {
         super();
     }
 
-    public PhotoResources(String photoResourcesId, String photoName, String photoUploadPeople, String qualified, String problemDescription, String moduleId, String subId, String parentId, String projectProgressId, String photodate, Integer photostatus, String photoresourcesposiion) {
+    public PhotoResources(String photoResourcesId, String photoName, String photoUploadPeople, String qualified, String problemDescription, String moduleId, String subId, String parentId, String projectProgressId, String photoDate, Integer photoStatus, String photoResourcesPosition) {
         this.photoResourcesId = photoResourcesId;
         this.photoName = photoName;
         this.photoUploadPeople = photoUploadPeople;
@@ -28,9 +28,9 @@ public class PhotoResources {
         this.subId = subId;
         this.parentId = parentId;
         this.projectProgressId = projectProgressId;
-        this.photodate = photodate;
-        this.photostatus = photostatus;
-        this.photoresourcesposiion = photoresourcesposiion;
+        this.photoDate = photoDate;
+        this.photoStatus = photoStatus;
+        this.photoResourcesPosition = photoResourcesPosition;
     }
 
     public String getPhotoResourcesId() {
@@ -105,28 +105,28 @@ public class PhotoResources {
         this.projectProgressId = projectProgressId;
     }
 
-    public String getPhotodate() {
-        return photodate;
+    public String getPhotoDate() {
+        return photoDate;
     }
 
-    public void setPhotodate(String photodate) {
-        this.photodate = photodate;
+    public void setPhotoDate(String photoDate) {
+        this.photoDate = photoDate;
     }
 
-    public Integer getPhotostatus() {
-        return photostatus;
+    public Integer getPhotoStatus() {
+        return photoStatus;
     }
 
-    public void setPhotostatus(Integer photostatus) {
-        this.photostatus = photostatus;
+    public void setPhotoStatus(Integer photoStatus) {
+        this.photoStatus = photoStatus;
     }
 
-    public String getPhotoresourcesposiion() {
-        return photoresourcesposiion;
+    public String getPhotoResourcesPosition() {
+        return photoResourcesPosition;
     }
 
-    public void setPhotoresourcesposiion(String photoresourcesposiion) {
-        this.photoresourcesposiion = photoresourcesposiion;
+    public void setPhotoResourcesPosition(String photoResourcesPosition) {
+        this.photoResourcesPosition = photoResourcesPosition;
     }
 
     @Override
@@ -141,9 +141,9 @@ public class PhotoResources {
                 ", subId='" + subId + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", projectProgressId='" + projectProgressId + '\'' +
-                ", photodate='" + photodate + '\'' +
-                ", photostatus=" + photostatus +
-                ", photoresourcesposiion='" + photoresourcesposiion + '\'' +
+                ", photoDate='" + photoDate + '\'' +
+                ", photoStatus=" + photoStatus +
+                ", photoResourcesPosition='" + photoResourcesPosition + '\'' +
                 '}';
     }
 }
